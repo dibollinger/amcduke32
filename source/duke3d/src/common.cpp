@@ -31,8 +31,13 @@ const char *g_gameNamePtr = NULL;
 
 // grp/con handling
 
+#ifdef AMC_BUILD
+static const char *defaultconfilename                = "CODE/AMC_MAIN.CON";
+#else
 static const char *defaultconfilename                = "GAME.CON";
-#ifndef EDUKE32_STANDALONE
+#endif
+
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
 static const char *defaultgamegrp[GAMECOUNT]         = { "DUKE3D.GRP", "NAM.GRP", "NAPALM.GRP", "WW2GI.GRP" };
 static const char *defaultdeffilename[GAMECOUNT]     = { "duke3d.def", "nam.def", "napalm.def", "ww2gi.def" };
 static const char *defaultgameconfilename[GAMECOUNT] = { "EDUKE.CON", "NAM.CON", "NAPALM.CON", "WW2GI.CON" };
@@ -59,7 +64,7 @@ void clearScriptNamePtr(void)
 
 const char *G_DefaultGrpFile(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     if (DUKE)
         return defaultgamegrp[GAME_DUKE];
     else if (NAPALM)
@@ -76,7 +81,7 @@ const char *G_DefaultGrpFile(void)
 }
 const char *G_DefaultDefFile(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     if (DUKE)
         return defaultdeffilename[GAME_DUKE];
     else if (WW2GI)
@@ -103,7 +108,7 @@ const char *G_DefaultDefFile(void)
 }
 const char *G_DefaultConFile(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     if (DUKE && testkopen(defaultgameconfilename[GAME_DUKE],0))
         return defaultgameconfilename[GAME_DUKE];
     else if (WW2GI && testkopen(defaultgameconfilename[GAME_WW2GI],0))
@@ -289,7 +294,7 @@ void G_ExtInit(void)
         }
     }
 
-#if defined(_WIN32) && !defined(EDUKE32_STANDALONE)
+#if defined(AMC_BUILD) || (defined(_WIN32) && !defined(EDUKE32_STANDALONE))
     if (buildvfs_exists("user_profiles_enabled"))
 #else
     if (g_useCwd == 0 && !buildvfs_exists("user_profiles_disabled"))
@@ -322,7 +327,7 @@ void G_ExtInit(void)
     }
 
     // JBF 20031220: Because it's annoying renaming GRP files whenever I want to test different game data
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     if (g_grpNamePtr == NULL)
     {
         const char *cp = getenv("DUKE3DGRP");
@@ -458,7 +463,7 @@ void G_LoadGroups(int32_t autoload)
     if (g_modDir[0] != '/')
         G_LoadGroupsInDir(g_modDir);
 
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     if (g_defNamePtr == NULL)
     {
         const char *tmpptr = getenv("DUKE3DDEF");
@@ -503,7 +508,7 @@ void G_LoadGroups(int32_t autoload)
 
 static void G_LoadAddon(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     uint32_t crc;
 
     switch (g_addonNum)
@@ -528,7 +533,7 @@ static void G_LoadAddon(void)
 #endif
 }
 
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
 #ifndef EDUKE32_TOUCH_DEVICES
 
 #if defined __linux__ || defined EDUKE32_BSD
@@ -592,7 +597,7 @@ static void Duke_AddSteamPaths(const char *basepath)
 
 void G_AddSearchPaths(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
 #ifndef EDUKE32_TOUCH_DEVICES
 #if defined __linux__ || defined EDUKE32_BSD
     char buf[BMAX_PATH];
