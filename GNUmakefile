@@ -2,6 +2,16 @@
 # EDuke32 Makefile for GNU Make
 #
 
+AMCTC ?= 1
+
+### AMC TC Profile
+ifeq ($(AMCTC),1)
+    APPBASENAME := amctc
+    APPNAME := AMCDuke32
+    NETCODE := 0
+    POLYMER := 0
+endif
+
 ### Global Profiles
 ifeq ($(FURY),1)
     APPBASENAME := fury

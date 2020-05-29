@@ -828,6 +828,9 @@ endif
 ifneq (0,$(POLYMER))
     COMPILERFLAGS += -DPOLYMER
 endif
+ifneq (0,$(AMCTC))
+    COMPILERFLAGS += -DAMC_BUILD
+endif
 
 
 ##### External library paths
