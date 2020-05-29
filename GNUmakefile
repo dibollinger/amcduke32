@@ -13,6 +13,15 @@ ifeq ($(FURY),1)
     USE_LIBVPX := 0
 endif
 
+### AMC TC Profile
+ifneq ($(NO_AMCTC),1)
+    APPBASENAME := amctc
+    APPNAME := EDuke32 (AMC Custom)
+    NETCODE := 0
+    POLYMER := 0
+    AMC_BUILD := 1
+endif
+
 ### Platform and Toolchain Configuration
 include Common.mak
 
