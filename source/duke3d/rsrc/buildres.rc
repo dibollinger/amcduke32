@@ -2,7 +2,7 @@
 #include "../../build/include/windows_inc.h"
 #include "../../build/include/startwin.editor.h"
 
-RSRC_ICON ICON "game_icon.ico"
+RSRC_ICON ICON "build_icon.ico"
 RSRC_BMP BITMAP "build.bmp"
 
 WIN_STARTWIN DIALOGEX DISCARDABLE  20, 40, 260, 200
@@ -10,7 +10,7 @@ STYLE DS_MODALFRAME | DS_CENTER | DS_SETFONT | DS_FIXEDSYS | WS_OVERLAPPED | WS_
 CAPTION "Startup"
 FONT 8, "MS Shell Dlg"
 BEGIN
-	CONTROL "", WIN_STARTWIN_BITMAP, "STATIC", SS_BITMAP | SS_CENTERIMAGE | WS_CHILD | WS_VISIBLE, 0, 0, 66, 172
+	CONTROL "", WIN_STARTWIN_BITMAP, "STATIC", SS_BITMAP | SS_CENTERIMAGE | WS_CHILD | WS_VISIBLE, 0, 0, 140, 400
 	CONTROL "", WIN_STARTWIN_TABCTL, WC_TABCONTROL, WS_CLIPSIBLINGS | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 5, 5, 250, 170
 	CONTROL "&Start", WIN_STARTWIN_START, "BUTTON", BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 154, 180, 48, 14
 	CONTROL "&Cancel", WIN_STARTWIN_CANCEL, "BUTTON", BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 207, 180, 48, 14
@@ -28,7 +28,7 @@ BEGIN
 	CONTROL "&Fullscreen", IDCFULLSCREEN, "BUTTON", BS_CHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 148, 8, 49, 10
 	CONTROL "&3D Video mode:",   -1, "STATIC", SS_LEFT | WS_CHILD | WS_VISIBLE, 5, 24, 50, 8
 	CONTROL "",            IDC3DVMODE, "COMBOBOX", CBS_DROPDOWNLIST | WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_TABSTOP, 60, 22, 80, 56
-	CONTROL "&Always show this window at startup", IDCALWAYSSHOW, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 118, 116, 140, 8
+	CONTROL "&Always show this window at startup", IDCALWAYSSHOW, "BUTTON", BS_AUTOCHECKBOX | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 148, 24, 90, 8
 END
 
 #define VER        2,0,0,4
@@ -56,7 +56,7 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Mapster32 for EDuke32"
+            VALUE "FileDescription", "Mapster32 (AMC Custom) for EDuke32"
             VALUE "FileVersion", VERSTR
             VALUE "InternalName", "Mapster32"
             VALUE "LegalCopyright", "Copyright © EDuke32 contributors. All rights reserved."
