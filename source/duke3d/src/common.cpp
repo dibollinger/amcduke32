@@ -593,6 +593,7 @@ static void Duke_AddSteamPaths(const char *basepath)
 
 void G_AddSearchPaths(void)
 {
+#ifndef AMC_BUILD
 #ifndef EDUKE32_STANDALONE
 #ifndef EDUKE32_TOUCH_DEVICES
 #if defined __linux__ || defined EDUKE32_BSD
@@ -756,6 +757,7 @@ void G_AddSearchPaths(void)
     {
         addsearchpath_user(buf, SEARCHPATH_FURY);
     }
+#endif
 #endif
 #endif
 #endif
