@@ -62,18 +62,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # undef stat
 #endif
 
-const char* AppProperName = "Mapster32";
+const char* AppProperName = "Mapster32 (AMC Fork)";
 const char* AppTechnicalName = "mapster32";
 
 #if defined(_WIN32)
-#define DEFAULT_GAME_EXEC "eduke32.exe"
-#define DEFAULT_GAME_LOCAL_EXEC "eduke32.exe"
+#define DEFAULT_GAME_EXEC "amctc.exe"
+#define DEFAULT_GAME_LOCAL_EXEC "amctc.exe"
 #elif defined(__APPLE__)
-#define DEFAULT_GAME_EXEC "EDuke32.app/Contents/MacOS/eduke32"
-#define DEFAULT_GAME_LOCAL_EXEC "EDuke32.app/Contents/MacOS/eduke32"
+#define DEFAULT_GAME_EXEC "EDuke32.app/Contents/MacOS/amctc"
+#define DEFAULT_GAME_LOCAL_EXEC "EDuke32.app/Contents/MacOS/amctc"
 #else
-#define DEFAULT_GAME_EXEC "eduke32"
-#define DEFAULT_GAME_LOCAL_EXEC "./eduke32"
+#define DEFAULT_GAME_EXEC "amctc"
+#define DEFAULT_GAME_LOCAL_EXEC "./amctc"
 #endif
 
 const char* DefaultGameExec = DEFAULT_GAME_EXEC;
@@ -713,7 +713,7 @@ const char *ExtGetWallCaption(int16_t wallnum)
     static char tempbuf[64];
 
     Bmemset(tempbuf,0,sizeof(tempbuf));
-    
+
     if (editwall[wallnum>>3]&pow2char[wallnum&7])
     {
         Bsprintf(tempbuf,"%d", wallength(wallnum));
@@ -7977,7 +7977,7 @@ static void G_ShowParameterHelp(void)
               "-usecwd\t\t\tRead game data and configuration file from working directory\n"
               "\n-?, -help, --help\t\tDisplay this help message and exit"
               ;
-    Bsprintf(tempbuf, "Mapster32 %s", s_buildRev);
+    Bsprintf(tempbuf, "Mapster32 (AMC Fork) %s", s_buildRev);
     wm_msgbox(tempbuf, "%s", s);
 }
 
@@ -8387,7 +8387,7 @@ int32_t ExtPreInit(int32_t argc,char const * const * argv)
 
     OSD_SetLogFile("mapster32.log");
     OSD_SetVersion("Mapster32",0,2);
-    initprintf("Mapster32 %s\n", s_buildRev);
+    initprintf("Mapster32 (AMC Fork) %s\n", s_buildRev);
     PrintBuildInfo();
 
     G_CheckCommandLine(argc,argv);
@@ -9895,7 +9895,7 @@ int32_t ExtInit(void)
     getmessageleng = 0;
     getmessagetimeoff = 0;
 
-    Bsprintf(apptitle, "Mapster32 %s", s_buildRev);
+    Bsprintf(apptitle, "Mapster32 (AMC Fork) %s", s_buildRev);
     autosavetimer = (int32_t) totalclock+120*autosave;
 
     registerosdcommands();
