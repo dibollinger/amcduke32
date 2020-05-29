@@ -91,7 +91,7 @@ enum rendmode_t {
 
 #define MAXWALLSB ((MAXWALLS>>2)+(MAXWALLS>>3))
 
-#define MAXTILES 30720
+#define MAXTILES 32512 // Increased from 30720
 #define MAXUSERTILES (MAXTILES-256)  // reserve 256 tiles at the end
 
 #define MAXVOXELS 1024
