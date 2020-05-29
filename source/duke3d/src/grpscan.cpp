@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "vfs.h"
 
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
 static void process_vaca13(int32_t crcval);
 static void process_vacapp15(int32_t crcval);
 
@@ -84,7 +84,7 @@ static void LoadList(const char * filename)
     if (!script)
         return;
 
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     scriptfile_addsymbolvalue("GAMEFLAG_DUKE", GAMEFLAG_DUKE);
     scriptfile_addsymbolvalue("GAMEFLAG_ADDON", GAMEFLAG_DUKE|GAMEFLAG_ADDON);
     scriptfile_addsymbolvalue("GAMEFLAG_NAM", GAMEFLAG_NAM);
@@ -216,7 +216,7 @@ static void LoadList(const char * filename)
 
 static void LoadGameList(void)
 {
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
     for (size_t i = 0; i < ARRAY_SIZE(internalgrpfiles); i++)
     {
         grpinfo_t * const fg = (grpinfo_t *)Xcalloc(1, sizeof(grpinfo_t));
@@ -551,7 +551,7 @@ void FreeGroups(void)
     FreeGameList();
 }
 
-#ifndef EDUKE32_STANDALONE
+#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
 static void process_vaca13(int32_t crcval)
 {
     krename(crcval, 0, "ADDREE.VOC");
