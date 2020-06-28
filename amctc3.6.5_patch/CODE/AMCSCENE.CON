@@ -1,0 +1,4272 @@
+
+// *************************************************
+// CUTSCENE CAMERA
+// *************************************************
+
+useractor notenemy 14521
+cstat 32768
+ife RESEARCH_CAMERA YES 
+{
+geta[].ang TEMP
+add TEMP 2
+seta[].ang TEMP
+ife PCINTER 7 set SCIENTIST_CAM THISACTOR else set SCIENTIST_CAM -1
+}
+
+enda
+
+// Cutscene files
+definequote 1300 CUTSC/CUTSCENE-PATCOS.IVF
+definequote 1301 CUTSC/CUTSCENE-GANYMEDE.IVF
+definequote 1302 CUTSC/CUTSCENE-TRITON.IVF
+
+useractor notenemy FMV_PLAYER
+cstat 32768
+
+checkactivatormotion LOTAGSAVED
+ife RETURN 1
+	{
+	ifspritepal 0 // will either play the cutscene and then do case specific stuff, or activate the hitags if playing in classic
+		{
+		ife rendmode 0
+			{
+			operateactivators HITAGSAVED THISACTOR
+			operatemasterswitches HITAGSAVED
+			operaterespawns HITAGSAVED	
+			}
+		else
+			{
+			ife EXTRASAVED 1300 stopallmusic // Stop music for PATCOS fight
+			startcutscene EXTRASAVED
+			// begin ugly case specific stuff, but since there's going to be a handful of FMVs at best no point coding in systems
+			ife EXTRASAVED 1300 // PATCOS CUTSCENE
+				{
+				operateactivators 832 THISACTOR
+				operatemasterswitches 832
+				operaterespawns 832	
+				}
+			ife EXTRASAVED 1302 // TRITON CUTSCENE
+				{
+				operaterespawns 25350
+				operateactivators 991 THISACTOR
+				operatemasterswitches 991
+				operaterespawns 991
+				}
+			}
+		}
+	else
+	ifspritepal 1 // just play a cutscene
+		{
+		stopallmusic
+		startcutscene EXTRASAVED
+		}
+	killit
+	}
+
+enda
+
+onevent EVENT_DISPLAYROOMS
+ifn SCIENTIST_CAM -1
+{
+  geta[SCIENTIST_CAM].x camerax
+  geta[SCIENTIST_CAM].y cameray
+  geta[SCIENTIST_CAM].z cameraz
+  geta[SCIENTIST_CAM].ang cameraang
+  geta[SCIENTIST_CAM].sectnum camerasect
+}
+
+switch PCINTER
+	case 14
+	case 13
+	case 12
+	case 8
+	case 6
+		set RETURN 1
+		break
+endswitch
+
+
+ife CHARSELECT 1
+	{
+	set RETURN 1
+	break
+	}
+else
+ifg cameraend 0
+	{
+	ife SP_FADEA 0 ife SP_FADE 0 ife SP_FADEF 0 screenpal 0 0 0 0
+	set RETURN 1
+	}
+
+ifn player_using_fighter -1
+{
+ife player[].over_shoulder_on 1 
+	{
+	add cameraz 16184
+	set cameradist 227000 // sets the distance for 3rd person view
+	}
+}
+else
+ifn player_using_hovertank -1
+{
+
+	ifvarvarn GUN_RECOIL_COUNT GUN_RECOIL
+		{
+		add camerahoriz 1
+		ifg GUN_RECOIL_COUNT GUN_RECOIL sub GUN_RECOIL_COUNT 1 else
+		add GUN_RECOIL_COUNT 1
+		}
+	else
+		{
+		sub camerahoriz 1
+		sub GUN_RECOIL 1
+		sub GUN_RECOIL_COUNT 1
+		}
+
+ife player[].over_shoulder_on 1 
+	{
+	sub cameraz 8192
+	set cameradist 227000 // sets the distance for 3rd person view
+	}
+	ifn camerasect -1 getceilzofslope camerasect camerax cameray DROOM_TEMP // tempvar is the ceiling height
+	add DROOM_TEMP 1024 // because you don't want the camera to be all the way to the ceiling
+	sub cameraz 8192
+	ifl cameraz DROOM_TEMP set cameraz DROOM_TEMP	
+}
+else
+ifn camerasprite -1
+{
+  geta[camerasprite].x camerax
+  geta[camerasprite].y cameray
+  geta[camerasprite].z cameraz
+  geta[camerasprite].ang cameraang
+  getactorvar[camerasprite].EXTRASAVED camerahoriz
+  geta[camerasprite].sectnum camerasect
+  
+ifvarvarn GUN_RECOIL_COUNT GUN_RECOIL
+	{
+	add camerahoriz 1
+	ifg GUN_RECOIL_COUNT GUN_RECOIL sub GUN_RECOIL_COUNT 1 else
+	add GUN_RECOIL_COUNT 1
+	}
+else
+	{
+	sub camerahoriz 1
+	sub GUN_RECOIL 1
+	sub GUN_RECOIL_COUNT 1
+	}
+  
+}
+else
+ifn player_using_hovercraft -1
+{
+ife player[].over_shoulder_on 1 
+	set cameradist 327000 // sets the distance for 3rd person view
+	else add cameraz 6096
+
+ifn camerasect -1 getceilzofslope camerasect camerax cameray DROOM_TEMP // tempvar is the ceiling height
+add DROOM_TEMP 1024 // because you don't want the camera to be all the way to the ceiling
+sub cameraz 8192
+ifl cameraz DROOM_TEMP set cameraz DROOM_TEMP
+
+}
+else
+ifn player_using_mech -1
+{
+	ifvarvarn GUN_RECOIL_COUNT GUN_RECOIL
+		{
+		add camerahoriz 1
+		ifg GUN_RECOIL_COUNT GUN_RECOIL sub GUN_RECOIL_COUNT 1 else
+		add GUN_RECOIL_COUNT 1
+		}
+	else
+		{
+		sub camerahoriz 1
+		sub GUN_RECOIL 1
+		sub GUN_RECOIL_COUNT 1
+		}
+
+ife player[].over_shoulder_on 1
+	{
+	set cameradist 161072 // sets the distance for 3rd person view
+
+	ifn camerasect -1 getceilzofslope camerasect camerax cameray DROOM_TEMP // tempvar is the ceiling height
+	add DROOM_TEMP 1024 // because you don't want the camera to be all the way to the ceiling
+	sub cameraz 8192
+	ifl cameraz DROOM_TEMP set cameraz DROOM_TEMP
+	}
+
+}
+else
+ifn ANGLE 0
+{
+ife player[].over_shoulder_on 1
+	{
+	set cameradist 161072 // sets the distance for 3rd person view
+
+	ifn camerasect -1 getceilzofslope camerasect camerax cameray DROOM_TEMP // tempvar is the ceiling height
+	add DROOM_TEMP 1024 // because you don't want the camera to be all the way to the ceiling
+	sub cameraz 8192
+	ifl cameraz DROOM_TEMP set cameraz DROOM_TEMP
+	}
+
+}
+else
+ifg GUN_RECOIL 0
+{
+getp[].horiz camerahoriz
+ifvarvarn GUN_RECOIL_COUNT GUN_RECOIL
+	{
+	add camerahoriz 1
+	add GUN_RECOIL_COUNT 1
+	}
+else
+	{
+	sub camerahoriz 1
+	sub GUN_RECOIL 1
+	sub GUN_RECOIL_COUNT 1
+	}
+}
+else
+ifp pstanding
+ ifhitspace
+	{
+	ifg LEAN_COUNT 0
+		{
+		getp[].posx TEMP
+		getp[].posy TEMP2
+
+		set TEMP3 TEMP
+		set TEMP4 LEAN_COUNT
+		mulvar TEMP4 32
+		add TEMP3 TEMP4
+
+		getp[].ang TEMP4
+		sub TEMP4 512
+
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		updatesector TEMP5 TEMP6 TEMP7
+		ifn TEMP7 -1
+			{
+			set camerax TEMP5
+			set cameray TEMP6
+			}
+		}
+	else
+	ifl LEAN_COUNT 0
+		{
+		getp[].posx TEMP
+		getp[].posy TEMP2
+
+		set TEMP3 TEMP
+		set TEMP4 LEAN_COUNT
+		mulvar TEMP4 -1
+		mulvar TEMP4 32
+		add TEMP3 TEMP4
+
+		getp[].ang TEMP4
+		add TEMP4 512
+
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		updatesector TEMP5 TEMP6 TEMP7
+		ifn TEMP7 -1
+			{
+			set camerax TEMP5
+			set cameray TEMP6
+			}
+		}
+	}
+	
+ife skybox 0
+{
+ifn skybox_tile -1
+	{
+	rotatesprite 48 100 NORMALSIZE 0 skybox_tile 0 0 0 0 0 xdim ydim
+	rotatesprite 176 100 NORMALSIZE 0 skybox_tile 0 0 0 0 0 xdim ydim
+	rotatesprite 304 100 NORMALSIZE 0 skybox_tile 0 0 0 0 0 xdim ydim
+	}
+}
+else
+ifg skybox 0 // some parts with revisions by Bloodclaw
+{
+ife skybox 1
+	{
+	ifn camerasprite -1
+	  {
+	  geta[camerasprite].ang skybox_angle
+	  // shiftvarl skybox_angle 16
+	  getactorvar[camerasprite].EXTRASAVED skybox_horiz
+	  // shiftvarl skybox_horiz 16
+	  }
+	  else
+	  ifn CAMID -1
+	  {
+	  geta[CAMID].ang skybox_angle
+	  // shiftvarl skybox_angle 16
+	  geta[CAMID].shade TEMP4
+	  add TEMP4 100
+	  set skybox_horiz TEMP4 
+	  // shiftvarl skybox_horiz 16
+	  }
+	  else
+	  {
+		// set skybox_horiz cameraq16horiz
+		set skybox_horiz camerahoriz
+		getp[].horizoff DROOM_TEMP
+		// shiftvarl DROOM_TEMP 16
+		add skybox_horiz DROOM_TEMP
+		// set skybox_angle cameraq16ang
+		set skybox_angle cameraang
+	  }
+	set TEMP2 skybox_z
+	set TEMP3 skybox_x
+	set TEMP4 skybox_y
+	}
+else
+ife skybox 3
+	{
+	setvarvar TEMP2 skybox_z
+	setvarvar TEMP3 skybox_x
+	setvarvar TEMP4 skybox_y
+
+	getplayer[THISACTOR].horiz skybox_horiz
+	getplayer[THISACTOR].horizoff TEMP
+	addvarvar skybox_horiz TEMP
+	}
+else
+	{
+	ifn camerasprite -1
+	  {
+	  geta[camerasprite].ang skybox_angle
+	  // shiftvarl skybox_angle 16
+	  getactorvar[camerasprite].EXTRASAVED skybox_horiz
+	  // shiftvarl skybox_horiz 16
+	  geta[camerasprite].x TEMP3
+	  geta[camerasprite].y TEMP4
+	  geta[camerasprite].z TEMP2
+	  
+	  
+	  ifvarvarn GUN_RECOIL_COUNT GUN_RECOIL
+		{
+		add skybox_horiz 1
+		add GUN_RECOIL_COUNT 1
+		}
+	else
+		{
+		sub skybox_horiz 1
+		sub GUN_RECOIL 1
+		sub GUN_RECOIL_COUNT 1
+		}
+	  
+	  }
+	  else
+	  ifn CAMID -1
+	  {
+	  geta[CAMID].ang skybox_angle
+	  // shiftvarl skybox_angle 16
+	  geta[CAMID].shade TEMP4
+	  add TEMP4 100
+	  set skybox_horiz TEMP4 
+	  // shiftvarl skybox_horiz 16
+	  geta[CAMID].x TEMP3
+	  geta[CAMID].y TEMP4
+	  geta[CAMID].z TEMP2
+	  }
+	  else
+	  {
+	  // set skybox_horiz cameraq16horiz
+	  set skybox_horiz camerahoriz
+		getp[].horizoff DROOM_TEMP
+		// shiftvarl DROOM_TEMP 16
+		add skybox_horiz DROOM_TEMP
+	  // set skybox_angle cameraq16ang
+	  set skybox_angle cameraang
+	  set TEMP3 camerax
+	  set TEMP4 cameray
+	  set TEMP2 cameraz
+	  ifn skybox_id 0
+		  {
+		  geta[skybox_id].x TEMP5
+		  geta[skybox_id].y TEMP6
+		  geta[skybox_id].z TEMP7
+		  sub TEMP3 TEMP5
+		  sub TEMP4 TEMP6
+		  sub TEMP2 TEMP7
+		  }
+	  }
+	  divvarvar TEMP2 skybox_scale // Z scale 
+	  add TEMP2 skybox_z 
+
+	  divvarvar TEMP3 skybox_scale // X scale
+
+	  divvarvar TEMP4 skybox_scale // Y scale
+
+	  add TEMP3 skybox_x 
+	  add TEMP4 skybox_y 
+  }
+
+
+  ifn skybox_sect -1 
+   ifn PCINTER 13
+    ifn PCINTER 14
+	{
+	showviewunbiased TEMP3 TEMP4 TEMP2 skybox_angle skybox_horiz skybox_sect 0 0 319 199 
+	// ife skybox 3 showviewunbiased TEMP3 TEMP4 TEMP2 skybox_angle skybox_horiz skybox_sect 0 0 319 199 
+	// else showviewq16unbiased TEMP3 TEMP4 TEMP2 skybox_angle skybox_horiz skybox_sect 0 0 319 199 
+	}
+}
+
+ifand GUNFIREMODE 16384 
+	{
+	set VIEW_TEMP viewingrange
+	div VIEW_TEMP 2
+	setaspect VIEW_TEMP yxaspect
+	}
+else ifn SCOPE 0 ife camerasprite -1
+	{
+	set VIEW_TEMP viewingrange
+	ifn ZOOMAMOUNT 0 div VIEW_TEMP ZOOMAMOUNT
+	setaspect VIEW_TEMP yxaspect
+	}
+else setaspect viewingrange yxaspect
+
+endevent
+
+gamevar cameraoffset 0 1
+
+
+move CAMBACK -90
+move CAMSLOWBACK -10
+move CAMFORWARD 90
+move CAMFASTFORWARD 180
+move CAMUP 0 -30
+move CAMSLOWFORWARD 15
+move CAMDOWN 0 30
+move CAMONE 1
+
+defstate roll_camera
+{
+set cameraend 0
+ifn OWNERSAVED -1
+	{
+	getp[].palette TEMP2
+	  ifvarvarn TEMP2 OWNERSAVED
+		{
+		ife OWNERSAVED 0 setgamepalette 0 // normal
+		ife OWNERSAVED 1 setgamepalette 1 // Water/Blue
+		ife OWNERSAVED 2 setgamepalette 2 // Nightvision/Green
+		ife OWNERSAVED 3 setgamepalette 3 // Flashback
+		ife OWNERSAVED 4 setgamepalette 4 // Greyscale
+		ife OWNERSAVED 5 setgamepalette 5 // Heat/Red
+		}
+	}
+ife TEMP7 0
+{
+ifinwater screensound DUKE_UNDERWATER
+set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEA 0
+ifspritepal 21 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 0 } // Clear last pal value, Fade out Black
+ifspritepal 22 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 0 } // Clear last pal value, Fade out White
+ifspritepal 23 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 0 } // Clear last pal value
+ifspritepal 3 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 254 } // Fade in Black, Fade out Black
+ifspritepal 5 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 254 } // Fade in Black, Fade out white
+ifspritepal 6 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADE 254 } // Fade in white, Fade out black
+ifspritepal 9 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADE 254 } // Fade in white, Fade out white
+ifspritepal 20 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 254 } // Fade in black
+ifspritepal 13 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 254 } // Fade in Black
+ifspritepal 14 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADE 254 } // Fade in white
+ifspritepal 40 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADE 254 } // Fade in black
+ifspritepal 41 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADE 254 } // Fade in white
+set TEMP7 1
+}
+ife CHARSELECT 1 { set TEMP5 1 set CHARSELECT 0 }
+ife cameratype 10 globalsound FLYING_AMB
+set camerasprite THISACTOR
+set cameratype YVELSAVED
+}
+ends
+
+spriteflags CUTSCENECAM SFLAG_SMOOTHMOVE SFLAG_NOTELEPORT
+spritenopal CUTSCENECAM
+spritenoshade CUTSCENECAM
+
+useractor notenemy CUTSCENECAM
+cstat 32768
+
+checkactivatormotion HITAGSAVED
+ife RETURN 1
+ife camerasprite -1
+	state roll_camera
+	
+ife camerasprite THISACTOR
+	{
+	setp[].rotscrnang 0
+	ifl cameratime 0 set cameratime 0
+	ifg cameratime 0
+		{
+		ifinwater 
+			{
+			ifg cameratime 2 setp[].sound_pitch -512
+			else setp[].sound_pitch 0
+			}
+		setp[].over_shoulder_on 1
+		ife ZVELSAVED 0 move STOP
+		ifand ZVELSAVED 1 
+			{ 
+			ife YVELSAVED 4 { soundonce AMCSHIP_HOVER move CAMFASTFORWARD geth } else
+			ife YVELSAVED 9 { soundonce AMCSHIP_HOVER move CAMFASTFORWARD geth }  else
+			move CAMFORWARD geth 
+			} 
+		ifand ZVELSAVED 2 move CAMUP getv
+		ifand ZVELSAVED 4 
+			{
+			state getfloordist
+			ifl z 8 move STOP else
+			move CAMDOWN getv
+			}
+		ifand ZVELSAVED 8 // Pitch the camera up
+			{
+			add EXTRASAVED 1
+			}
+		ifand ZVELSAVED 16 // Turn the camera left or right depending on shade
+			{
+			geta[].ang TEMP2
+			add TEMP2 SHADESAVED
+			seta[].ang TEMP2
+			}
+		ifand ZVELSAVED 32 move CAMBACK geth
+		ifand ZVELSAVED 64 move CAMSLOWBACK geth
+		ifand ZVELSAVED 128 move CAMSLOWFORWARD geth
+		ifand ZVELSAVED 256 // Pitch the camera down
+			{
+			sub EXTRASAVED 1
+			}
+		ifand ZVELSAVED 512 // move Camera Left
+			{
+			geta[].ang TEMP6
+			sub TEMP6 512
+			cos TEMP7 TEMP6
+			sin TEMP8 TEMP6
+			set TEMP6 CLIPDISTSAVED
+			mulvar TEMP6 10
+			divvarvar TEMP7 TEMP6
+			divvarvar TEMP8 TEMP6
+			movesprite THISACTOR TEMP7 TEMP8 0 4294901808 TEMP
+			}
+		ifand ZVELSAVED 1024 // move Camera right
+			{
+			geta[].ang TEMP6
+			sub TEMP6 1536
+			cos TEMP7 TEMP6
+			sin TEMP8 TEMP6
+			set TEMP6 CLIPDISTSAVED
+			mulvar TEMP6 10
+			divvarvar TEMP7 TEMP6
+			divvarvar TEMP8 TEMP6
+			movesprite THISACTOR TEMP7 TEMP8 0 4294901808 TEMP
+			}
+		ifand ZVELSAVED 2048 move STOP
+		ifand ZVELSAVED 4096 // move Camera forward/backward depending on shade
+			{
+			move CAMONE geth
+			set TEMP SHADESAVED
+			ifg TEMP 116 mulvar TEMP 10
+			else ifg TEMP 96 mulvar TEMP 5
+			else ifg TEMP 64 mulvar TEMP 4			
+			else ifg TEMP 32 mulvar TEMP 3
+			else ifg TEMP 16 mulvar TEMP 2
+			ifl TEMP -116 mulvar TEMP 10
+			else ifl TEMP -96 mulvar TEMP 5
+			else ifl TEMP -64 mulvar TEMP 4
+			else ifl TEMP -32 mulvar TEMP 3
+			else ifl TEMP -16 mulvar TEMP 2
+			seta[].xvel TEMP
+			}
+		ifand ZVELSAVED 8192
+			{
+			add INTERNALCOUNT 1
+			ifg INTERNALCOUNT 1
+				{
+				set GUN_RECOIL 6
+				set GUN_RECOIL_COUNT 0
+				set INTERNALCOUNT 0
+				}
+			}
+		ifand ZVELSAVED 16384 move STOP
+		ifg cameratype 1 
+			{
+			lockplayer 5 // If camera type 2, lock the player's movement and weapon
+			setp[].weapon_pos 20
+			}
+		ife cameratype 20 set CUSENDLEVEL 1
+		sub cameratime 1 // Take 1 from the Camera time
+		ifand BITS_PRESS 64 
+			{ 
+			palfrom 0 0 0 0 
+			set cameratime 2
+			set cuts_txt -1
+			set activatetext -1
+			set cs_textl 0
+			} 
+			// skip scene if alt-fire is pressed
+		
+		ifn TEMP9 0
+			{
+			geta[].ang TEMP8
+			ifg TEMP8 TEMP9 sub TEMP8 8 else ifl TEMP8 TEMP9 add TEMP8 8
+			seta[].ang TEMP8
+			sub TEMP9 8
+			}
+			
+		ifn XVELSAVED 0
+			{
+			ifg EXTRASAVED XVELSAVED sub EXTRASAVED 1
+			ifl EXTRASAVED XVELSAVED add EXTRASAVED 1
+			ife EXTRASAVED XVELSAVED set XVELSAVED 0
+			}
+		
+		}
+	else
+	ife cameratime 0
+		{
+		ife cameratype 20
+			{
+			move STOP
+				ifhitspace
+					ifn LOTAGSAVED 0 
+					{
+					operateactivators LOTAGSAVED THISACTOR
+					operatemasterswitches LOTAGSAVED
+					operaterespawns LOTAGSAVED
+					setp[].weapon_pos 0
+					ife TEMP5 1 { set CHARSELECT 1 set TEMP5 0  }
+					setgamepalette 0
+					setp[].over_shoulder_on 0 // Put back into 1st person
+					ifn cameratype 0 ifn cameratype 8 ifn cameratype 9 ifn cameratype 4 { set camera_bars 16 set HUDON 1 }
+					set global_trigger LOTAGSAVED
+					set camerasprite -1 // Reset Camera sprite
+					set cameratype -1 // Reset Camera type
+					set CUSENDLEVEL 0
+					killit
+					}
+			}
+		else
+			{
+			set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEA 0
+			ifspritepal 3 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEF 254 }
+			ifspritepal 5 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEF 254 }
+			ifspritepal 6 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEF 254 }
+			ifspritepal 9 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEF 254 }
+			ifspritepal 10 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEF 254 } // Fade out Black
+			ifspritepal 11 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEF 254 } // Fade out White
+			ifspritepal 21 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEF 254 }
+			ifspritepal 22 { set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEF 254 }
+			ifspritepal 23 { set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEF 254 globalsound CL_COMM_LINK }
+			set SP_FADEA 0
+			set cameraend 2
+			ifn LOTAGSAVED 0 
+					{
+					operateactivators LOTAGSAVED THISACTOR
+					operatemasterswitches LOTAGSAVED
+					operaterespawns LOTAGSAVED
+					set global_trigger LOTAGSAVED
+					}
+			ifg cameratype 2 { set cuts_txt -1 set cs_textl -1 }
+			setp[].weapon_pos 0
+			ife TEMP5 1 { set CHARSELECT 1 set TEMP5 0  }
+			setgamepalette 0
+			setp[].over_shoulder_on 0 // Put back into 1st person
+			ifn cameratype 0 ifn cameratype 8 ifn cameratype 9 ifn cameratype 4 { set camera_bars 16 set HUDON 1 }
+			ife cameratype 10 stopsound FLYING_AMB
+			ife OWNERSAVED 10 set cameratime 104
+			set camerasprite -1 // Reset Camera sprite
+			set cameratype -1 // Reset Camera type
+			action 0
+			killit
+			}
+		}
+		
+	ifspritepal 40
+	ife cameratime 37
+		set END_LEVEL 90
+		
+	ifspritepal 41
+	ife cameratime 43
+		set END_LEVEL 90
+		
+	ife cameratype 10
+	 ife cameratime 40
+	  screensound MISSILE_LAUNCH
+		
+	ife cameratime 35
+		{
+		geta[].pal TEMP2
+		switch TEMP2
+		case 3
+		case 6
+		case 21
+			set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEA 254
+			// ifl cameratime 2 palfrom 64 0 0 0
+			break
+		case 5
+		case 9
+		case 22
+			set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEA 254
+			break
+		case 11
+			set SP_R 255 set SP_G 255 set SP_B 255 set SP_FADEA 254
+			break
+		case 0
+		default
+			// screenpal 0 0 0 0
+			set SP_R 0 set SP_G 0 set SP_B 0 set SP_FADEA 0
+			break
+		endswitch
+
+		}
+		
+	}
+	
+enda
+
+// *************************************************
+// CUTSCENE CAMERA CHANGER
+// *************************************************
+
+useractor notenemy CUTSCENECAM_CHANGE
+cstat 32768
+
+ifn camerasprite -1 
+{
+findnearactor3d CUTSCENECAM 512 TEMP6
+
+	ifn TEMP6 -1
+	{
+	ifn LOTAGSAVED 0 
+			{
+			operateactivators LOTAGSAVED THISACTOR
+			operatemasterswitches LOTAGSAVED
+			operaterespawns LOTAGSAVED
+			}
+	ifn OWNERSAVED -1
+		{
+		ife OWNERSAVED 1 setgamepalette 1 // Water/Blue
+		ife OWNERSAVED 2 setgamepalette 2 // Nightvision/Green
+		ife OWNERSAVED 3 setgamepalette 3 // Flashback
+		ife OWNERSAVED 4 setgamepalette 4 // Greyscale
+		ife OWNERSAVED 5 setgamepalette 5 // Heat/Red
+		}
+	ifspritepal 20 palfrom 0 0 0 0 // Clear last pal value
+	ifspritepal 21 palfrom 0 0 0 0 // Clear last pal value, Fade out Black
+	ifspritepal 22 palfrom 0 0 0 0 // Clear last pal value, Fade out White
+	ifspritepal 3 palfrom 62 0 0 0 // Fade in Black, Fade out Black
+	ifspritepal 5 palfrom 62 0 0 0 // Fade in Black, Fade out white
+	ifspritepal 6 palfrom 62 62 62 62 // Fade in white, Fade out black
+	ifspritepal 9 palfrom 62 62 62 62 // Fade in white, Fade out white
+	ifn YVELSAVED 0 { set cameratype YVELSAVED ifg YVELSAVED 2 set cuts_txt -1 set cs_textl -1 }
+	ifn XVELSAVED 0 setactorvar[TEMP6].cameratime XVELSAVED
+	ifspritepal 13 palfrom 62 0 0 0 // Fade in Black
+	ife ZVELSAVED 16384 setactorvar[TEMP6].ZVELSAVED 0 else
+	ifn ZVELSAVED 0 setactorvar[TEMP6].ZVELSAVED ZVELSAVED
+	ifn EXTRASAVED -1 setactorvar[TEMP6].XVELSAVED EXTRASAVED
+	geta[TEMP6].ang TEMP3
+	geta[].ang TEMP4
+	ifn CLIPDISTSAVED 0 setactorvar[TEMP6].CLIPDISTSAVED CLIPDISTSAVED
+	ife HITAGSAVED 1 seta[TEMP6].ang TEMP3 // If the hitag is 1, set the angle instantly
+	else // Make it move to fit
+	{
+	sub TEMP3 TEMP4
+	setactorvar[TEMP6].TEMP9 TEMP3
+	}
+	killit
+	}
+}
+
+enda
+
+
+// *************************************************
+// CUTSCENE SKIP SPRITE
+// *************************************************
+
+defstate turn_off_cutscene
+		setactorvar[camerasprite].cameratime 0
+		ifspritepal 3 setactorvar[camerasprite].LOTAGSAVED LOTAGSAVED
+		set camerasprite -1
+		set cameratype -1
+		set cuts_txt -1
+		setgamepalette 0
+		setp[].over_shoulder_on 0
+		set HUDON 0
+		set cs_textl 1
+		set cs_timer 0
+		set activatetext -1
+		ifn LOTAGSAVED 0
+			{
+			operateactivators LOTAGSAVED THISACTOR
+			operaterespawns LOTAGSAVED
+			operatemasterswitches LOTAGSAVED
+			}
+		ifg EXTRASAVED 0
+			{
+			operateactivators EXTRASAVED THISACTOR
+			operaterespawns EXTRASAVED
+			operatemasterswitches EXTRASAVED
+			}
+ends
+
+useractor notenemy SKIP_CUTSCENE
+cstat 32768
+
+ifspritepal 2
+	{
+	ifn camerasprite -1
+	ifpdistl 1736
+	 ifp pfacing
+	  ifhitspace
+		{
+		stopallsounds
+		state turn_off_cutscene
+		killit
+		}
+	}
+	else
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+		{
+		palfrom 64 0 0 0
+		state turn_off_cutscene
+		stopallsounds 
+		ifspritepal 3 
+			{
+			setp[].over_shoulder_on 0 
+			ife CHAR 20 { set CHAR -1 set CHARSELECT 1 set HUDON 0 }
+			ife CHAR 8 { set CHAR -1 set CHARSELECT 1 }
+			ife CHAR -1 set CHARSELECT 1		
+			}
+		killit
+		}
+	}
+
+enda
+
+// *************************************************
+// ACTIVATE LEVEL START
+// *************************************************
+
+useractor notenemy 7401
+ifn HITAGSAVED 0
+{
+ifaction 0
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1 action ZERO
+	}
+ifaction ZERO
+	{
+	geta[].ang TEMP
+	ifspritepal 3 sub TEMP 8 else
+	add TEMP 8
+	seta[].ang TEMP
+	}
+}
+enda
+
+useractor notenemy 7402
+ifn HITAGSAVED 0
+{
+spritepal 2
+ifaction 0
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1 action ZERO
+	}
+ifaction ZERO
+	{
+	geta[].ang TEMP
+	add TEMP 64
+	seta[].ang TEMP
+	}
+}
+enda
+
+useractor notenemy 7404 // Dis base hellgate end
+ife HITAGSAVED 0
+{
+	ife HELLGKEYSA 63
+	{
+	cstat 16
+	soundonce HELLGATE
+	ifpdistl 824
+	ifaction 0
+		{
+		palfrom 64 64 0 0
+		globalsound DEMON_TELEPORT
+		operateactivators 667 THISACTOR
+		action ZERO
+		}
+	}
+	else
+	{
+	cstat 32768
+	}
+}
+else
+ife HITAGSAVED 1
+	{
+	checkactivatormotion LOTAGSAVED 
+		ife RETURN 1
+			{
+			set TEMP4 0
+			action ZERO
+			resetcount
+			}
+			
+	ifaction ZERO
+		{
+		ifl TEMP4 254 add TEMP4 8
+		set alpha TEMP4
+		state SPRITE_FADE
+		ifcount 128 killit
+		}
+			
+	}
+enda
+
+defstate activate_level_stuff
+ends
+
+useractor notenemy ACTIVATELEVEL
+cstat 32768
+
+ifaction 0
+{
+
+// Workaround to prevent being sent back to the wrong base map
+ife VOLUME 0 
+{
+    ife LEVEL 1 
+    {
+        set base_volume 0
+        set base_level 1
+    }
+    else ife LEVEL 8 
+    {
+        set base_volume 0
+        set base_level 8
+    }
+} 
+else ife VOLUME 1
+{
+    ife LEVEL 1 
+    {
+        set base_volume 1
+        set base_level 1
+    }
+    else ife LEVEL 4 
+    {
+        set base_volume 1
+        set base_level 4
+    } 
+    else ife LEVEL 50 
+    {
+        set base_volume 1
+        set base_level 50
+    }
+} 
+else ife VOLUME 2
+{
+    ife LEVEL 1 
+    {
+        set base_volume 2
+        set base_level 1
+    }
+    else ife LEVEL 4 
+    {
+        set base_volume 2
+        set base_level 4
+    } 
+    else ife LEVEL 14 
+    {
+        set base_volume 2
+        set base_level 14
+    } 
+    else ife LEVEL 26 
+    {
+        set base_volume 2
+        set base_level 26
+    }
+} 
+else ife VOLUME 3 
+{
+    ife LEVEL 1
+    {
+        set base_volume 3
+        set base_level 1
+    }
+    else ife LEVEL 37
+    {
+        set base_volume 3
+        set base_level 37
+    }
+}
+
+ifspritepal 3
+	{
+	ifpdistl 1564
+		{
+		set camerasprite -1
+		set cuts_txt -1
+		readarrayfromfile SKILL_MEDALS 4030
+		setgamepalette 0
+		set HUDON 0
+		ifn base_level -1 ifn base_volume -1 startlevel base_volume base_level else
+		startlevel VOLUME LOTAGSAVED
+		killit
+		}
+	
+	}
+else
+ifspritepal 2
+	{
+	ife sprite[].sectnum player[].cursectnum
+		{
+		ife VOLUME 6
+		{
+			ife LEVEL 14 // Secret Base
+				{
+				ifand BEAT_EPISODES[6] 512 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 512
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}		
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[210] SKILL_LEVEL setarray SKILL_MEDALS[210] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+			ife LEVEL 41 // Shuttle Escape
+				{
+				ifand BEAT_EPISODES[6] 262144 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 262144
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}		
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[219] SKILL_LEVEL setarray SKILL_MEDALS[219] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+			ife LEVEL 43 // Atmospheric Processing
+				{
+				ifand BEAT_EPISODES[6] 1048576 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 1048576
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}		
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[221] SKILL_LEVEL setarray SKILL_MEDALS[221] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+			ife LEVEL 48 // Complex One
+				{
+				ifand BEAT_EPISODES[6] 33554432 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 33554432
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}		
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[226] SKILL_LEVEL setarray SKILL_MEDALS[226] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+			}
+		set skybox 0
+		state save_arrays
+		ife ZVELSAVED 1 nullop else
+		ife ZVELSAVED 2 state budget_system
+		else
+			{
+			state fatigue_system
+			state budget_system
+			}
+		ife XVELSAVED 1 ifn base_level -1 ifn base_volume -1 startlevel base_volume base_level else
+		ife XVELSAVED 2 ifn base_level -1 ifn base_volume -1 ifn base_volume VOLUME startlevel base_volume base_level
+			else
+			startlevel VOLUME LOTAGSAVED
+		killit
+		}
+	}
+	else
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+	{
+	ifspritepal 50 
+		{
+		set SP_R 0
+		set SP_G 0
+		set SP_B 0
+		set SP_FADEA 254
+		endofgame 30
+		}
+	ifspritepal 20 // mission trigger
+		{
+		set camerasprite -1
+		set cuts_txt -1
+		readarrayfromfile SKILL_MEDALS 4030
+		setgamepalette 0
+		set HUDON 0
+		ifn mis_vol -1 ifn mis_lev -1 startlevel mis_vol mis_lev else
+		startlevel base_volume base_level 
+		killit
+		}
+	ifspritepal 0
+		{
+		set camerasprite -1
+		set cuts_txt -1
+		setgamepalette 0
+		set HUDON 0
+		readarrayfromfile BEAT_EPISODES 4053
+		ife VOLUME 3 // Episode 4? =========================================================================================================================================
+			{
+			ife LEVEL 0
+				{
+				set base_volume VOLUME
+				set base_level 1
+				}
+			ife LEVEL 2 // Welcome to Elysion intro
+				{ 
+				ifand BEAT_EPISODES[4] 1 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[4]
+						xorvar TEMP 1
+						setarray BEAT_EPISODES[4] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				} 
+			/*
+			ife LEVEL 18 // The Airport
+				{ 
+					ifand BEAT_EPISODES[3] 1024 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 1024
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[56] SKILL_LEVEL setarray SKILL_MEDALS[56] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			*/
+			/*
+			ife LEVEL 37 // Glacier
+				{ 
+					ifand BEAT_EPISODES[3] 128 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 128
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[54] SKILL_LEVEL setarray SKILL_MEDALS[54] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			*/
+			}
+		ife VOLUME 2 // Episode 3? =========================================================================================================================================
+			{
+			ife LEVEL 46 // X64-2M
+				{ 
+					ifand BEAT_EPISODES[3] 1 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 1
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+						
+				setarray BEATEN_LEVEL_CHAR[2] CHAR // records what character played this level last
+				writearraytofile BEATEN_LEVEL_CHAR 4051
+						
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[40] SKILL_LEVEL setarray SKILL_MEDALS[40] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 6 // Egypt
+				{ 
+					ifand BEAT_EPISODES[3] 2 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 2
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+						
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[43] SKILL_LEVEL setarray SKILL_MEDALS[43] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 12 // Le Sang Pyramid
+				{ 
+				set TRIGGER_BASE_SCENE 1
+					ifand BEAT_EPISODES[3] 4 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 4
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				set base_level 14 
+				set base_volume 2
+				ife SPECIALIST_EQUIPMENT[86] 0 setarray SPECIALIST_EQUIPMENT[86] 1 // give Sang the Seraph shotgun
+				ife SPECIALIST_EQUIPMENT[87] 0 setarray SPECIALIST_EQUIPMENT[87] 1
+				setarray BEATEN_LEVEL_CHAR[3] CHAR // records what character played this level last
+				writearraytofile BEATEN_LEVEL_CHAR 4051
+						
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[44] SKILL_LEVEL setarray SKILL_MEDALS[44] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 39 // Micky Begins
+				{ 
+					ifand BEAT_EPISODES[3] 16 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 16
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[45] SKILL_LEVEL setarray SKILL_MEDALS[45] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 15 // Neutrino
+				{ 
+					ifand BEAT_EPISODES[3] 256 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 256
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[50] SKILL_LEVEL setarray SKILL_MEDALS[50] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 17 // Spooky cut
+				{ 
+					ifand BEAT_EPISODES[3] 512 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 512
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[51] SKILL_LEVEL setarray SKILL_MEDALS[51] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 19 // Jungle pyramid
+				{ 
+					ifand BEAT_EPISODES[3] 8192 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 8192
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[52] SKILL_LEVEL setarray SKILL_MEDALS[52] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 27 // Eviction Notice
+				{ 
+					ifand BEAT_EPISODES[3] 2048 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 2048
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[53] SKILL_LEVEL setarray SKILL_MEDALS[53] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 29 // Xuglop Combined assault
+				{ 
+					ifand BEAT_EPISODES[3] 4096 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 4096
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[55] SKILL_LEVEL setarray SKILL_MEDALS[55] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 35 // Under Attack
+				{ 
+					ifand BEAT_EPISODES[3] 32 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 32
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+						
+				setarray BEATEN_LEVEL_CHAR[4] CHAR // records what character played this level last
+				writearraytofile BEATEN_LEVEL_CHAR 4051
+						
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[46] SKILL_LEVEL setarray SKILL_MEDALS[46] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 37 // Shellshocked
+				{ 
+					ifand BEAT_EPISODES[7] 4 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[7]
+						xorvar TEMP 4
+						setarray BEAT_EPISODES[7] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+					
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[151] SKILL_LEVEL setarray SKILL_MEDALS[151] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}	
+			ife LEVEL 45 set TRIGGER_BASE_SCENE 2
+			ife LEVEL 53 // post-New base
+				{ 
+					ifand BEAT_EPISODES[3] 64 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 64
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				} 
+
+			ife LEVEL 47 // Amazon Rainforest
+				{ 
+					ifand BEAT_EPISODES[3] 16384 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 16384
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[57] SKILL_LEVEL setarray SKILL_MEDALS[57] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 25 // Triton Facility
+				{ 
+					ifand BEAT_EPISODES[3] 65536 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 65536
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[58] SKILL_LEVEL setarray SKILL_MEDALS[58] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				}
+			ife LEVEL 51 // Charon
+				{ 
+					ifand BEAT_EPISODES[3] 524288 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 524288
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[60] SKILL_LEVEL setarray SKILL_MEDALS[60] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+				
+			ife LEVEL 16 // Pipedream
+				{ 
+					ifand BEAT_EPISODES[7] 2 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[7]
+						xorvar TEMP 2
+						setarray BEAT_EPISODES[7] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+					
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[150] SKILL_LEVEL setarray SKILL_MEDALS[150] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}			
+				
+			ife LEVEL 52 // Chaosphere
+				{ 
+					ifand BEAT_EPISODES[3] 262144 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[3]
+						xorvar TEMP 262144
+						setarray BEAT_EPISODES[3] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[59] SKILL_LEVEL setarray SKILL_MEDALS[59] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			}
+		else
+		ife VOLUME 1 // Episode 2? ====================================================================================================================================
+			{
+			ife LEVEL 0 // Intro
+				{ 
+					ifand BEAT_EPISODES[2] 65536 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 65536
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				} 
+			ife LEVEL 3 // City Under siege
+				{ 
+				ifand BEAT_EPISODES[2] 1 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 1
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				setarray BEATEN_LEVEL_CHAR[0] CHAR // records what character played this level last
+				writearraytofile BEATEN_LEVEL_CHAR 4051
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[8] SKILL_LEVEL setarray SKILL_MEDALS[8] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}	
+				} 
+			ife LEVEL 6 // Big Trouble in china
+				{ 
+				
+				ifand BEAT_EPISODES[2] 2 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 2
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						readarrayfromfile FACILITIES_OWNED 4026
+						ife FACILITIES_OWNED[4] 0 setarray FACILITIES_OWNED[4] 1 // China store room
+						ife FACILITIES_OWNED[5] 0 setarray FACILITIES_OWNED[5] 1 // Satellite
+						writearraytofile FACILITIES_OWNED 4026
+						}
+
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[9] SKILL_LEVEL setarray SKILL_MEDALS[9] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				} 
+				
+			ife LEVEL 7 // The Wharf
+				{ 
+				ifand BEAT_EPISODES[2] 4 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 4
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[10] SKILL_LEVEL setarray SKILL_MEDALS[10] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				}
+				
+			ife LEVEL 8 // Chisland
+				{ 
+				ifand BEAT_EPISODES[2] 8 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 8
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+					
+				setarray BEATEN_LEVEL_CHAR[1] CHAR // records what character played this level last
+				writearraytofile BEATEN_LEVEL_CHAR 4051
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[11] SKILL_LEVEL setarray SKILL_MEDALS[11] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				}
+				
+			ife LEVEL 23 // Tower of Life
+				{ 
+				ifand BEAT_EPISODES[2] 16 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 16
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[12] SKILL_LEVEL setarray SKILL_MEDALS[12] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				}
+				
+			ife LEVEL 46 // Shadow Realm
+				{
+				ifand BEAT_EPISODES[2] 32768 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 32768
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[30] SKILL_LEVEL setarray SKILL_MEDALS[30] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}
+				
+			ife LEVEL 56 // Jungle base
+				{
+				ifand BEAT_EPISODES[2] 8192 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 8192
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[29] SKILL_LEVEL setarray SKILL_MEDALS[29] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}
+				
+				
+			ife LEVEL 24 // Hidden Dojo
+				{ 
+					ifand BEAT_EPISODES[2] 32 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 32
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[13] SKILL_LEVEL setarray SKILL_MEDALS[13] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				}
+				
+			ife LEVEL 25 // Oil rig
+				{ 
+				ifand BEAT_EPISODES[2] 256 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 256
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[14] SKILL_LEVEL setarray SKILL_MEDALS[14] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				} 
+				
+			ife LEVEL 20 // GANYMEDE F.O.B
+				{ 
+				ifand BEAT_EPISODES[2] 4096 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 4096
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				} 
+				
+			ife LEVEL 27 // Far mountain reaches
+				{ 
+					ifand BEAT_EPISODES[2] 2048 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 2048
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[25] SKILL_LEVEL setarray SKILL_MEDALS[25] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				} 
+				
+			ife LEVEL 17 // Ghost ship
+				{ 
+				ifand BEAT_EPISODES[2] 128 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 128
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[21] SKILL_LEVEL setarray SKILL_MEDALS[21] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 
+				
+			ife LEVEL 57 // Energeia
+				{ 
+					ifand BEAT_EPISODES[2] 131072 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 131072
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[15] SKILL_LEVEL setarray SKILL_MEDALS[15] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 
+				
+			ife LEVEL 32 // Cohagen mines (end of Mars saga)
+				{ 
+					ifand BEAT_EPISODES[2] 16384 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 16384
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[27] SKILL_LEVEL setarray SKILL_MEDALS[27] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 
+				
+			ife LEVEL 33 // space station
+				{ 
+					ifand BEAT_EPISODES[2] 1024 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[2]
+						xorvar TEMP 1024
+						setarray BEAT_EPISODES[2] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				clearmapstate 14
+				clearmapstate 15				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[26] SKILL_LEVEL setarray SKILL_MEDALS[26] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 
+				
+			ife LEVEL 63 // zeta base
+				{ 
+					ifand BEAT_EPISODES[7] 1 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[7]
+						xorvar TEMP 1
+						setarray BEAT_EPISODES[7] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+					clearmapstate 31
+					clearmapstate 62
+					clearmapstate 63					
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[200] SKILL_LEVEL setarray SKILL_MEDALS[200] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}								
+				
+			}
+		else
+		ife VOLUME 5 // ======================================================================================================================
+			{
+			ife LEVEL 6 // Mansion 649
+					{ 
+					ifand BEAT_EPISODES[8] 2048 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 2048
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[252] SKILL_LEVEL setarray SKILL_MEDALS[252] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 7 // The Dark Gate
+					{ 
+					ifand BEAT_EPISODES[8] 2048 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 4096
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4096
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[253] SKILL_LEVEL setarray SKILL_MEDALS[253] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			}
+		else
+		ife VOLUME 6 // ==================================================================================================================
+			{
+			ife LEVEL 5 // Red
+				{ 
+				ifand BEAT_EPISODES[6] 1 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[6]
+					xorvar TEMP 1
+					setarray BEAT_EPISODES[6] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[201] SKILL_LEVEL setarray SKILL_MEDALS[201] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 
+			ife LEVEL 6 // Wet dream
+				{ 
+				ifand BEAT_EPISODES[6] 2 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[6]
+					xorvar TEMP 2
+					setarray BEAT_EPISODES[6] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}			
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[202] SKILL_LEVEL setarray SKILL_MEDALS[202] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				}
+			ife LEVEL 8 // Clear the coast
+				{ 
+				ifand BEAT_EPISODES[6] 8 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[6]
+					xorvar TEMP 8
+					setarray BEAT_EPISODES[6] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[204] SKILL_LEVEL setarray SKILL_MEDALS[204] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				} 		
+			ife LEVEL 9 // ABBA
+					{ 
+					ifand BEAT_EPISODES[6] 16 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 16
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+										
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[205] SKILL_LEVEL setarray SKILL_MEDALS[205] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 				
+			ife LEVEL 10 // colossus
+				{
+				ifand BEAT_EPISODES[6] 32 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[6]
+					xorvar TEMP 32
+					setarray BEAT_EPISODES[6] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[206] SKILL_LEVEL setarray SKILL_MEDALS[206] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+			ife LEVEL 11 // voices of authority
+				{
+					ifand BEAT_EPISODES[6] 64 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 64
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[207] SKILL_LEVEL setarray SKILL_MEDALS[207] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}				
+				}
+				ife LEVEL 12 // Fantasy hotel
+					{ 
+					ifand BEAT_EPISODES[6] 128 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 128
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[208] SKILL_LEVEL setarray SKILL_MEDALS[208] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 16 // Underground fortress
+					{ 
+					ifand BEAT_EPISODES[6] 1024 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 1024
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[211] SKILL_LEVEL setarray SKILL_MEDALS[211] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 17 // The Pyramid
+					{ 
+					ifand BEAT_EPISODES[6] 2048 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 2048
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[212] SKILL_LEVEL setarray SKILL_MEDALS[212] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 18 // EDF Bureau
+					{ 
+					ifand BEAT_EPISODES[6] 4096 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 4096
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[213] SKILL_LEVEL setarray SKILL_MEDALS[213] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 19 // Hydrostation
+					{ 
+					ifand BEAT_EPISODES[6] 8192 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 8192
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[214] SKILL_LEVEL setarray SKILL_MEDALS[214] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 20 // 2bizarre
+					{ 
+					ifand BEAT_EPISODES[6] 16384 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 16384
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[215] SKILL_LEVEL setarray SKILL_MEDALS[215] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 42 // Passenger jet
+					{ 
+					ifand BEAT_EPISODES[6] 524288 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 524288
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[220] SKILL_LEVEL setarray SKILL_MEDALS[220] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 44 // Beta Two
+					{ 
+					ifand BEAT_EPISODES[6] 2097152 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 2097152
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[222] SKILL_LEVEL setarray SKILL_MEDALS[222] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 45 // Dark Gate
+					{ 
+					ifand BEAT_EPISODES[6] 4194304 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 4194304
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[223] SKILL_LEVEL setarray SKILL_MEDALS[223] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 46 // 47 Fornax
+					{ 
+					ifand BEAT_EPISODES[6] 8388608 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 8388608
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[224] SKILL_LEVEL setarray SKILL_MEDALS[224] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 47 // Cyberduke
+					{ 
+					ifand BEAT_EPISODES[6] 16777216 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 16777216
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[225] SKILL_LEVEL setarray SKILL_MEDALS[225] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+				ife LEVEL 49 // Red Rock
+					{ 
+					ifand BEAT_EPISODES[6] 67108864 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 67108864
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[227] SKILL_LEVEL setarray SKILL_MEDALS[227] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 50 // Big Orbit
+					{ 
+					ifand BEAT_EPISODES[6] 134217728 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 134217728
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[228] SKILL_LEVEL setarray SKILL_MEDALS[228] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 51 // Chinatown
+					{ 
+					ifand BEAT_EPISODES[6] 268435456 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 268435456
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[229] SKILL_LEVEL setarray SKILL_MEDALS[229] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 52 // Redneck Duke
+					{ 
+					ifand BEAT_EPISODES[6] 536870912 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 536870912
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[230] SKILL_LEVEL setarray SKILL_MEDALS[230] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 53 // Alone in the dark with the undead
+					{ 
+					ifand BEAT_EPISODES[6] 1073741824 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 1073741824
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[231] SKILL_LEVEL setarray SKILL_MEDALS[231] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 54 // Near Life Experience
+					{ 
+					ifand BEAT_EPISODES[6] 2147483648 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[6]
+						xorvar TEMP 2147483648
+						setarray BEAT_EPISODES[6] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[232] SKILL_LEVEL setarray SKILL_MEDALS[232] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 55 // Neil's zone
+					{ 
+					ifand BEAT_EPISODES[8] 1 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 1
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[233] SKILL_LEVEL setarray SKILL_MEDALS[233] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 56 // Freeman Houston
+					{ 
+					ifand BEAT_EPISODES[8] 2 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 2
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[234] SKILL_LEVEL setarray SKILL_MEDALS[234] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					} 
+			ife LEVEL 57 // Death at K'oger
+					{ 
+					ifand BEAT_EPISODES[8] 4 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 4
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[235] SKILL_LEVEL setarray SKILL_MEDALS[235] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 58 // Castle Anarchy
+					{ 
+					ifand BEAT_EPISODES[8] 8 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 8
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[236] SKILL_LEVEL setarray SKILL_MEDALS[236] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 59 // Mission Perejil
+					{ 
+					ifand BEAT_EPISODES[8] 16 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 16
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[237] SKILL_LEVEL setarray SKILL_MEDALS[237] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 60 // Pyramid: The Alien beneath
+					{ 
+					ifand BEAT_EPISODES[8] 32 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 32
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[238] SKILL_LEVEL setarray SKILL_MEDALS[238] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 61 // Metropolitan Starlight
+					{ 
+					ifand BEAT_EPISODES[8] 64 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 64
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[239] SKILL_LEVEL setarray SKILL_MEDALS[239] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 62 // JP Chaos Theory
+					{ 
+					ifand BEAT_EPISODES[8] 128 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 128
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[240] SKILL_LEVEL setarray SKILL_MEDALS[240] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			ife LEVEL 63 // The base
+					{ 
+					ifand BEAT_EPISODES[8] 256 nullop else 
+						{ 
+						set TEMP BEAT_EPISODES[8]
+						xorvar TEMP 256
+						setarray BEAT_EPISODES[8] TEMP
+						writearraytofile BEAT_EPISODES 4053
+						}				
+					
+					ifn CHEATED 1
+						{
+						readarrayfromfile SKILL_MEDALS 4030
+						ifl SKILL_MEDALS[241] SKILL_LEVEL setarray SKILL_MEDALS[241] SKILL_LEVEL
+						writearraytofile SKILL_MEDALS 4030		
+						}
+					}
+			}
+		else
+		ife VOLUME 0 // =====================================================================================================================
+			{
+			ife LEVEL 3 // megabase
+				{ 
+			ifand BEAT_EPISODES[1] 1 nullop else 
+				{ 
+				set TEMP BEAT_EPISODES[1]
+				xorvar TEMP 1
+				setarray BEAT_EPISODES[1] TEMP
+				writearraytofile BEAT_EPISODES 4053
+				}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[1] SKILL_LEVEL setarray SKILL_MEDALS[1] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030		
+					}
+				
+				} 
+			// dis base
+			ife LEVEL 4
+			{
+			ifand BEAT_EPISODES[1] 2 nullop else 
+				{ 
+				set TEMP BEAT_EPISODES[1]
+				xorvar TEMP 2
+				setarray BEAT_EPISODES[1] TEMP
+				writearraytofile BEAT_EPISODES 4053
+				}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[2] SKILL_LEVEL setarray SKILL_MEDALS[2] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+			}
+			ife LEVEL 5 // abyss
+				{ 
+				ifand BEAT_EPISODES[1] 4 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 4 
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[3] SKILL_LEVEL setarray SKILL_MEDALS[3] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+				
+				} 
+			ife LEVEL 11 // Millhaven
+				{ 
+				ifand BEAT_EPISODES[1] 16 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 16 
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				clearmapstate 11
+				clearmapstate 14			
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[4] SKILL_LEVEL setarray SKILL_MEDALS[4] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+				
+				} 
+			ife LEVEL 14 // Millhaven
+				{ 
+				ifand BEAT_EPISODES[1] 16 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 16 
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				} 
+			ife LEVEL 12 // Snow base 
+				{ 
+				ifand BEAT_EPISODES[1] 32 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 32 
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[5] SKILL_LEVEL setarray SKILL_MEDALS[5] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+				
+				} 
+			ife LEVEL 10 // Revolution
+				{ 
+				ifand BEAT_EPISODES[1] 64 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 64
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[6] SKILL_LEVEL setarray SKILL_MEDALS[6] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+				
+				} 
+			ife LEVEL 9 // Providence
+				{ 
+				ifand BEAT_EPISODES[1] 128 nullop else 
+					{ 
+					set TEMP BEAT_EPISODES[1]
+					xorvar TEMP 128 
+					setarray BEAT_EPISODES[1] TEMP
+					writearraytofile BEAT_EPISODES 4053
+					}
+				
+				ifn CHEATED 1
+					{
+					readarrayfromfile SKILL_MEDALS 4030
+					ifl SKILL_MEDALS[7] SKILL_LEVEL setarray SKILL_MEDALS[7] SKILL_LEVEL
+					writearraytofile SKILL_MEDALS 4030
+					}
+				
+				} 
+			}
+		ife EXTRASAVED 123 // This is the 'Episode 1 complete' actor
+			{
+			readarrayfromfile BASE_RESEARCH 4003
+			ife BASE_RESEARCH[2] 0 // unlock the arcade
+				{
+				setarray BASE_RESEARCH[2] 2
+				writearraytofile BASE_RESEARCH 4003
+				}
+			setarray BEAT_EPISODES[1] 255 // unlock ALL levels just to be sure
+			writearraytofile BEAT_EPISODES 4053
+			}
+		set skybox 0
+		state save_arrays
+		ife ZVELSAVED 1 nullop else
+		ife ZVELSAVED 2 state budget_system
+		else
+			{
+			state fatigue_system
+			state budget_system
+			}
+		stopallsounds
+		ife XVELSAVED 1 ifn base_level -1 ifn base_volume -1 startlevel base_volume base_level else
+		ife XVELSAVED 2 ifn base_level -1 ifn base_volume -1 ifn base_volume VOLUME startlevel base_volume base_level
+			else
+			startlevel VOLUME LOTAGSAVED
+		killit
+		}
+	else
+		ifspritepal 8
+		{
+		set CHAR -1 
+		set CHARSELECT 1
+		ifn base_level -1 ifn base_volume -1 startlevel base_volume base_level else
+		startlevel VOLUME LOTAGSAVED
+		}
+	else
+		ifspritepal 80
+		{
+		set CHAR -1 
+		set CHARSELECT 1
+		ife VOLUME 3
+			{
+			startlevel base_volume base_level
+			}
+		else
+		startlevel VOLUME LOTAGSAVED
+		}
+	else
+		ifspritepal 1 // takes them to the right briefing map
+		{
+		set camerasprite -1
+		set cuts_txt -1
+		setgamepalette 0
+		set HUDON 0
+		ife VOLUME 0 
+			{
+			ife LEVEL 1 startlevel 0 2
+			else ife LEVEL 8 startlevel 0 6
+			}
+			else
+		ife VOLUME 1
+			{
+			ife LEVEL 1 startlevel 1 2
+			else ife LEVEL 4 startlevel 1 5
+			}
+		killit
+		}
+	else
+	ifspritepal 4 // Take them to the credit map if they haven't unlocked the extended ending
+		{
+		ife VOLUME 0
+			{
+			ife EP1_GOT_PLATINUM 0 readgamevar EP1_GOT_PLATINUM
+			ife EP1_GOT_PLATINUM 1
+				{
+				operateactivators LOTAGSAVED THISACTOR
+				operaterespawns LOTAGSAVED
+				operatemasterswitches LOTAGSAVED
+				}
+			else
+				{
+				set camerasprite -1
+				set cuts_txt -1
+				setgamepalette 0
+				set HUDON 0
+				startlevel 0 42
+				killit
+				}
+			}
+		else
+		ife VOLUME 1
+			{
+			ife EP2_GOT_PLATINUM 0 readgamevar EP2_GOT_PLATINUM
+			ife EP2_GOT_PLATINUM 1
+				{
+				operateactivators LOTAGSAVED THISACTOR
+				operaterespawns LOTAGSAVED
+				operatemasterswitches LOTAGSAVED
+				}
+			else
+				{
+				set camerasprite -1
+				set cuts_txt -1
+				setgamepalette 0
+				set HUDON 0
+				startlevel 1 35
+				killit
+				}
+			}
+		else
+		ife VOLUME 2
+			{
+			ife EP3_GOT_PLATINUM 0 readgamevar EP3_GOT_PLATINUM
+			ife EP3_GOT_PLATINUM 1
+				{
+				operateactivators LOTAGSAVED THISACTOR
+				operaterespawns LOTAGSAVED
+				operatemasterswitches LOTAGSAVED
+				}
+			else
+				{
+				set camerasprite -1
+				set cuts_txt -1
+				setgamepalette 0
+				set HUDON 0
+				startlevel 2 48
+				killit
+				}
+			}
+		}
+	else
+	ifspritepal 5 // Take them to the credit map
+		{
+		set camerasprite -1
+		set cuts_txt -1
+		setgamepalette 0
+		set HUDON 0
+		stopallsounds
+		startlevel 0 42
+		killit
+		}
+	else
+	ifspritepal 6 // change map with effect
+			{
+			set END_LEVEL 60
+			action FORM
+			}
+		}
+	else // if it doesn't have a hitag...
+	ifspritepal 10
+		{
+		 ifpdistl 1536
+		  ifp palive
+			{
+			ife TRIGGER_BASE_SCENE 1 // base assault
+				{
+				screensound BIGBANG
+				palfrom 64 64 64 64
+				startlevel 2 35
+				}
+			ife TRIGGER_BASE_SCENE 2 // ep3 part 2 briefing
+				{
+				palfrom 0 64 64 64
+				startlevel 2 53
+				}
+			set TRIGGER_BASE_SCENE 0
+			killit
+			}
+		}
+	else
+	ifspritepal 11
+		{
+		ifand BEAT_EPISODES[3] 131072 killit // only trigger the map once
+		ifand BEAT_EPISODES[3] 16384 // Beat rainforest?
+		ifand BEAT_EPISODES[3] 256 // Beat Neutrino?
+		ifand BEAT_EPISODES[3] 512 // Beat spooky cut?
+		ifand BEAT_EPISODES[3] 2048 // Beat Cnc?
+		ifand BEAT_EPISODES[3] 4096 // Beat xug_ca?
+		 ifpdistl 1536
+		  ifp palive
+			{
+			ifand BEAT_EPISODES[3] 131072 nullop else 
+				{ 
+				set TEMP BEAT_EPISODES[3]
+				xorvar TEMP 131072
+				setarray BEAT_EPISODES[3] TEMP
+				writearraytofile BEAT_EPISODES 4053
+				}
+			stopallsounds
+			startlevel 2 36
+			killit
+			}
+		}
+	}
+}
+
+ifaction FORM
+{	
+ifg END_LEVEL 0	
+ifl END_LEVEL 6
+	{
+		state save_arrays
+		ife ZVELSAVED 1 nullop else
+		ife ZVELSAVED 2 state budget_system
+		else
+			{
+			state fatigue_system
+			state budget_system
+			}
+		stopallsounds
+		ife XVELSAVED 1 ifn base_level -1 ifn base_volume -1 startlevel base_volume base_level else
+		ife XVELSAVED 2 ifn base_level -1 ifn base_volume -1 ifn base_volume VOLUME startlevel base_volume base_level
+		startlevel VOLUME LOTAGSAVED
+		set END_LEVEL 0
+	}
+}
+
+enda
+
+// *************************************************
+// COMM LINK ACTIVATE
+// *************************************************
+
+defstate comm_popup
+	ifspritepal 1 { set COMM_COUNTD -260 quote 450 } else
+	{ set COMM_COUNTD 260 quote 192 }
+	set COMM_LINK LOTAGSAVED
+	globalsound IN_COMM_LINK
+	killit
+ends
+
+useractor notenemy 3613
+cstat 32768
+
+ifn HITAGSAVED 0
+{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1 state comm_popup
+}
+else
+ifpdistl 1024
+	state comm_popup
+
+enda
+
+//
+// ------------------------------------------------------------
+// Micky Scientist
+// ------------------------------------------------------------
+//
+
+spriteshadow 16580
+
+useractor notenemy 16580
+ifaction 0
+{
+ifn YVELSAVED 0
+	{
+	set alpha 254
+	state SPRITE_FADE
+	}
+sizeat 24 24
+ife EXTRASAVED 1 cstat 32768
+action ACAR
+}
+
+ifaction ACAR
+{
+ifspritepal 3 
+	{ 
+	ife CHAR 13 ife CHARSELECT 0 killit // despawn if playing as micky
+	ife VOLUME 0 killit // despawn if in episode 1
+	ife VOLUME 1 ife LEVEL 1 killit // despawn if in first base map of episode 2
+	}
+ifn HITAGSAVED 0
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+		{
+		ife EXTRASAVED 1 cstat 0 else killit
+		}
+	}
+ifn LOTAGSAVED 0
+	{
+	checkactivatormotion LOTAGSAVED
+	ife RETURN 1
+		{
+		ife EXTRASAVED 1 killit
+		}
+	}
+ifn XVELSAVED 0
+	{
+	checkactivatormotion XVELSAVED
+	ife RETURN 1 set ALLY_MAG 2 // no need to make new vars
+	}
+ifn YVELSAVED 0
+	{
+	checkactivatormotion YVELSAVED
+	ife RETURN 1 { set TEMP4 254 set ALLY_MAG 1 } // no need to make new vars
+	}
+}
+
+ife ALLY_MAG 1
+	{
+	ifg TEMP4 0 
+		{
+		sub TEMP4 8
+		set alpha TEMP4
+		state SPRITE_FADE
+		}
+	else { seta[].blend 0 cstat 0 set ALLY_MAG 0 }
+	}
+
+ife ALLY_MAG 2
+	{
+	ifl TEMP4 254 add TEMP4 8
+	else killit
+		
+	set alpha TEMP4
+	
+	state SPRITE_FADE
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// Micky with Helmet off
+// ------------------------------------------------------------
+//
+
+spriteshadow 16389
+
+useractor notenemy 16389
+ifaction 0
+{
+checkactivatormotion HITAGSAVED
+ife RETURN 1 killit
+}
+enda
+
+spriteshadow 16585
+
+useractor notenemy 16585
+ifaction 0
+{
+ife EXTRASAVED 1 cstat 32768
+action ACAR
+sizeat 23 23
+}
+
+ifaction ACAR
+{
+checkactivatormotion HITAGSAVED
+ife RETURN 1
+	{
+	ife EXTRASAVED 1 
+		{
+		soundonce PUT_ON_EQUIP
+		cstat 0
+		}
+	else
+		{
+		set EXTRASAVED 13
+		soundonce PUT_ON_EQUIP
+		action 0
+		cactor 1404
+		}
+	}
+}
+
+enda
+
+spriteshadow 20888
+
+useractor notenemy 20888
+ifaction 0
+	{
+	ife EXTRASAVED 1 cstat 32768
+	action ACAR
+	ifspritepal 27 nullop else
+	sizeat 21 21
+	}
+
+enda
+
+
+// *************************************************
+// G_ship hologram appear
+// *************************************************
+
+spritenoshade 16560 spritenopal 16560
+
+spritenoshade 19589 spritenopal 19589
+
+spritenoshade 19590 spritenopal 19590
+
+state hologram_appear
+ifaction 0
+	{
+	seta[].shade 30
+	sizeat 1 16
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1 { globalsound HOLOGRAM_APPEAR action ZERO }
+	}
+	
+ifaction ZERO
+	{
+	sizeto 24 16
+	ifn sprite[].shade 0
+		{
+		geta[].shade TEMP
+		sub TEMP 1
+		seta[].shade TEMP
+		}
+	checkactivatormotion LOTAGSAVED
+	ife RETURN 1 action FORM
+	}
+	
+ifaction FORM
+	{
+	sizeto 1 16
+		geta[].shade TEMP
+		add TEMP 1
+		ifg TEMP 30 killit
+		seta[].shade TEMP	
+	}
+ends
+
+useractor notenemy 16560 state hologram_appear enda
+useractor notenemy 19589 state hologram_appear enda
+useractor notenemy 19590 state hologram_appear enda
+
+spritenoshade 17300 spritenopal 17300
+
+useractor notenemy 17300 
+ifaction 0
+	{
+	ifspritepal 3 
+		{
+		seta[].shade 30
+		sizeat 26 1
+		checkactivatormotion LOTAGSAVED
+		ife RETURN 1 { globalsound HOLOGRAM_APPEAR action ZERO }
+		}
+	}
+	
+ifaction ZERO
+	{
+	sizeto 26 44
+	ifn sprite[].shade 0
+		{
+		geta[].shade TEMP
+		sub TEMP 1
+		seta[].shade TEMP
+		}
+	}
+	
+enda
+
+//
+// ------------------------------------------------------------
+// Yakuza
+// ------------------------------------------------------------
+//
+
+useractor notenemy 19194
+ifaction 0
+{
+checkactivatormotion HITAGSAVED
+	ife RETURN 1 { set INTERNALCOUNT 0 action ONE }
+}
+
+ifaction ONE
+	{
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 160 killit
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// Axon
+// ------------------------------------------------------------
+//
+
+action AX_GEST -48 1 5 1 10
+
+useractor notenemy 21233
+ifaction 0 action ACAR
+
+ifaction ACAR
+{
+ife speaker 21 ifrnd 8 action AX_GEST
+}
+
+ifaction AX_GEST
+	{
+	ifrnd 4 action ACAR
+	ifn speaker 21 action ACAR
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// mAGICIAN
+// ------------------------------------------------------------
+//
+
+useractor notenemy 9787
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// EARTH CRASH
+// ------------------------------------------------------------
+//
+
+move EARTH_CRASH 12 0
+move EARTH_BACK -24
+
+useractor notenemy 17338
+ifaction 0 ifspritepal 3 
+	{
+	sleeptime 0
+	checkactivatormotion 1000
+	ife RETURN 1 action ZERO
+	}
+
+ifaction ZERO
+	{
+	sleeptime 0
+	move EARTH_CRASH geth
+	checkactivatormotion 5108
+	ife RETURN 1 action FORM
+	}
+	
+ifaction FORM
+	{
+	move EARTH_BACK geth
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// NOCTURNE
+// ------------------------------------------------------------
+//
+
+move NOCT_UP 0 -16
+
+useractor notenemy 26111
+ifaction 0
+	{
+	sleeptime 0
+	checkactivatormotion LOTAGSAVED
+	ife RETURN 1 
+		{
+		quake 104
+		screensound RUMBLE
+		action ZERO
+		resetcount
+		}
+	}
+
+ifaction ZERO
+	{
+	sleeptime 0
+	add INTERNALCOUNT 1
+	move NOCT_UP getv
+	ifg INTERNALCOUNT 300
+		{
+		espawn 15331
+		setactorvar[RETURN].HITAGSAVED 21695
+		action UNFORM	
+		}
+	}
+	
+ifaction UNFORM
+	{
+	move STOP
+	ife global_trigger 21694
+		{
+		cstat 2
+		set global_trigger 0
+		action FORM
+		}
+	}
+	
+ifaction FORM
+	{
+	geta[].shade TEMP
+	add TEMP 2
+	ife TEMP 30 killit
+	seta[].shade TEMP	
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// JANE
+// ------------------------------------------------------------
+//
+
+spriteshadow 12949
+
+useractor notenemy 12949
+fall
+ifaction 0
+	{
+	action ACAR
+	sizeat 23 23
+	spritepal 12
+	}
+
+enda
+
+spriteshadow 12954
+
+useractor notenemy 12954
+fall
+ifaction 0
+	{
+	action ACAR
+	sizeat 23 23
+	spritepal 12
+	}
+
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy alt James
+// ------------------------------------------------------------
+//
+
+action JHELMET_PUTON 5 3 1 1 24
+
+useractor notenemy 23032
+ifaction 0 { spritepal 12 action ACAR }
+
+checkactivatormotion HITAGSAVED
+ife RETURN 1
+	{
+	add INTERNALCOUNT 1
+	soundonce JMOVE1
+	globalsound DOOMED
+	move STOP faceplayer
+	}
+
+checkactivatormotion LOTAGSAVED
+ife RETURN 1
+	{
+	action JHELMET_PUTON
+	soundonce JMOVE2
+	}
+	
+ifaction JHELMET_PUTON ifactioncount 3 action MINUSONE
+	
+ifaction MINUSONE
+	{
+	checkactivatormotion EXTRASAVED
+	ife RETURN 1
+		{
+		action 0
+		spritepal 12
+		strength 2000
+		cactor 23031
+		}
+	}
+	
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy drone
+// ------------------------------------------------------------
+//
+
+action DRONE_DUMMY -1 1 7 
+
+useractor notenemy 1881
+ifaction 0 action DRONE_DUMMY
+enda
+
+action DRONE_BDUMMY -2 1 5 
+
+useractor notenemy 9313
+ifaction 0 action DRONE_BDUMMY
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Sang
+// ------------------------------------------------------------
+//
+
+spriteshadow 10287
+
+action NEWSANG 13521 1 5
+
+useractor notenemy 10287
+sleeptime 0
+
+ifaction 0 
+	{
+	spawn 6200
+	action ACAR
+	}
+	
+ifaction ACAR
+	{
+	checkactivatormotion 605
+	ife RETURN 1
+		{
+		ifand CHAR_APP 2 nullop else
+		xorvar CHAR_APP 2
+		spawn 8433
+		spawn 18623
+		action NEWSANG
+		}
+	}
+
+enda
+
+useractor notenemy 23745
+
+ifaction 0
+{
+checkactivatormotion HITAGSAVED
+ife RETURN 1 killit
+}
+
+enda
+
+spriteshadow 24011
+
+useractor notenemy 24011
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy dumas
+// ------------------------------------------------------------
+//
+
+spriteshadow 25802
+spriteshadow 25807
+
+useractor notenemy 25802
+ifaction 0 action ACAR
+enda
+
+useractor notenemy 25807
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Zaxtor
+// ------------------------------------------------------------
+//
+
+useractor notenemy 5611
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Maarten
+// ------------------------------------------------------------
+//
+
+useractor notenemy 26280
+ifaction 0 action ACAR
+enda
+
+
+//
+// ------------------------------------------------------------
+// Dummy armless James 
+// ------------------------------------------------------------
+//
+
+spriteshadow 19158
+
+useractor notenemy 19158
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Geoffrey
+// ------------------------------------------------------------
+//
+
+spriteshadow 6456
+
+useractor notenemy 6456
+sizeat 21 21
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Merlijn
+// ------------------------------------------------------------
+//
+
+spriteshadow 6425
+
+useractor notenemy 6425
+ifaction 0 action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Highwire
+// ------------------------------------------------------------
+//
+
+spriteshadow 6073
+
+useractor notenemy 6073
+ifaction 0 action ACAR
+enda
+
+
+//
+// ------------------------------------------------------------
+// Dummy Rusty
+// ------------------------------------------------------------
+//
+
+spriteshadow 6676
+
+useractor notenemy 6676
+ifaction 0 action ACAR
+enda
+
+
+//
+// ------------------------------------------------------------
+// Dummy Sang
+// ------------------------------------------------------------
+//
+
+spriteshadow 13207
+
+useractor notenemy 13207
+ifaction 0 { state spawn_bat action ACAR }
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy James arm
+// ------------------------------------------------------------
+//
+
+useractor notenemy 19163
+ifaction 0
+{
+	cstat 32768
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+	{
+		cstat 0
+		action ZERO
+	}
+}
+
+ifaction ZERO
+{
+	add INTERNALCOUNT 1
+	ife INTERNALCOUNT 45
+	{
+		palfrom 32 64 64 64
+		soundonce GRABTHROAT
+	}
+	
+	ife INTERNALCOUNT 50 
+	{
+		soundonce JGASP
+		set INTERNALCOUNT 0
+		action ONE
+	}
+}
+
+ifaction ONE
+{
+	add INTERNALCOUNT 1
+	ife INTERNALCOUNT 25 sound PATCOS_1
+	ifg INTERNALCOUNT 55
+	{
+		action TWO
+		sound ENDSEQVOL2SND2
+		set INTERNALCOUNT 0
+	}
+}
+ifaction TWO
+{
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 65
+	{
+		palfrom 16 64 0 0
+		stopsound ENDSEQVOL2SND2
+		soundonce VOL4ENDSND2
+		set INTERNALCOUNT 0
+		action THREE
+	}
+}
+ifaction THREE
+{
+	add INTERNALCOUNT 1
+	// note: ife, not ifg - or we spawn a bunch of arms :-)
+	ife INTERNALCOUNT 5 
+	{
+		guts HUMAN_ARM 1
+		sound GIB_LAND2
+	}
+	
+	// don't cut away too quickly
+	ifg INTERNALCOUNT 500 
+	{
+		set INTERNALCOUNT 0
+		action FOUR
+	}
+}
+ifaction FOUR
+{
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 5 
+	{ 
+		action FIVE 
+		set INTERNALCOUNT 0  
+	}
+}
+
+enda
+
+useractor notenemy 19155
+
+ifaction 0
+{
+checkactivatormotion HITAGSAVED
+ife RETURN 1 action ZERO
+}
+
+ifaction ZERO
+{
+add INTERNALCOUNT 1
+ifg INTERNALCOUNT 255 { action ONE set INTERNALCOUNT 0 }
+}
+
+ifaction ONE
+{
+add INTERNALCOUNT 1
+ifg INTERNALCOUNT 20 action FORM
+}
+
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Bikers
+// ------------------------------------------------------------
+//
+
+action BIKER_DRAW_GUN 5 4 1 1 8
+
+state BIKER_TURN
+ifaction 0 action ACAR
+
+ifaction ACAR
+	{
+	ifn HITAGSAVED 0
+		{
+		checkactivatormotion HITAGSAVED
+		ife RETURN 1
+			{
+			geta[].ang TEMP
+			add TEMP 1024
+			seta[].ang TEMP
+			action ACAR2
+			}
+		}
+		
+	ifactor 17268
+		{
+		ifn LOTAGSAVED 0
+			{
+			checkactivatormotion LOTAGSAVED
+			ife RETURN 1
+				{
+				soundonce SELECT_WEAPON
+				action BIKER_DRAW_GUN
+				}
+			}
+		}
+		
+	}
+	
+ifaction ACAR2
+	{
+	checkactivatormotion EXTRASAVED
+	ife RETURN 1 killit
+	}
+	
+ends
+
+spriteshadow 17258 
+
+useractor notenemy 17258 state BIKER_TURN enda
+
+spriteshadow 17263 
+
+useractor notenemy 17263 state BIKER_TURN enda
+
+spriteshadow 17268 
+
+// action BIKER_DRAW_GUN 5 4 1 1 8
+action BIKER_DRAWN 9 1
+action BIKER_LETDOWN 9 3 1 1 8
+action BIKER_LETDOWNED 11 1
+action BIKER_FIRE 12 2 1 1 8
+action BIKER_FIRED 13 1
+
+
+useractor notenemy 17268
+state BIKER_TURN
+
+ifaction BIKER_DRAW_GUN
+	{
+	ifactioncount 5 { sound SAWNOFF_LOAD action BIKER_DRAWN }
+	}
+	
+ifaction BIKER_DRAWN
+	{
+	checkactivatormotion EXTRASAVED
+	ife RETURN 1 action BIKER_LETDOWN
+	}
+	
+ifaction BIKER_LETDOWN
+	{
+	ifactioncount 3 { sound CY_FIGHTER_SHUTDOWN action BIKER_LETDOWNED }
+	}
+	
+ifaction BIKER_LETDOWNED
+	{
+	checkactivatormotion XVELSAVED
+	ife RETURN 1
+		{ 
+		sound SAWNOFF_FIRE
+		sound SAWNOFF_FIRE
+		spawn GUNSMOKE
+		spawn GUNSMOKE
+		action BIKER_FIRE
+		}
+	}
+	
+ifaction BIKER_FIRE
+	{
+	ifactioncount 2 action BIKER_FIRED
+	}
+enda
+
+spriteshadow 1708
+
+action BEFOREHEADEX 7 1 5 1 12
+action HEADEX 0 4 1 1 8
+action HEADEXD 4
+
+useractor notenemy 1708
+fall
+ifaction 0
+	{
+	sizeat 40 40
+	cstat 32768
+	checkactivatormotion LOTAGSAVED
+	ife RETURN 1
+		{
+		cstat 257
+		globalsound PRED_RECOG
+		action BEFOREHEADEX
+		}
+	}
+
+ifaction BEFOREHEADEX
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+		{
+		globalsound DECAPITATE
+		guts JIBS6 4
+		guts JIBS2 2
+		guts JIBS5 1
+		action HEADEX
+		}
+	}
+	
+ifaction HEADEX
+	{
+	ifactioncount 4 { sound BODY_DROP spawn BLOODPOOL action HEADEXD }
+	}
+	
+enda
+
+//
+// ------------------------------------------------------------
+// Mikko statue
+// ------------------------------------------------------------
+//
+
+spriteshadow 20074
+
+useractor notenemy 20074 ifaction 0 action ACAR enda
+
+//
+// ------------------------------------------------------------
+// Dummy Peter Davids
+// ------------------------------------------------------------
+//
+
+spriteshadow 16891
+
+useractor notenemy 16891
+ifaction 0
+{
+sizeat 24 24
+ifspawnedby 14 { spawn TRANSPORTERBEAM sizeat 24 24 globalsound SOMETHINGHITFORCE } 
+action ACAR
+}
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Russian soldier
+// ------------------------------------------------------------
+//
+
+
+spriteshadow 9012
+
+useractor notenemy 9012 
+action ACAR
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Beyonder
+// ------------------------------------------------------------
+//
+
+useractor notenemy 12667 action ACAR enda
+useractor notenemy 12682 action ACAR enda
+
+//
+// ------------------------------------------------------------
+// Dummy Cycloid Emporer
+// ------------------------------------------------------------
+//
+
+action DUMMY_CY_GETUP -0 1 2 -1 0
+
+useractor notenemy 2753
+
+ifaction 0
+	{
+	checkactivatormotion HITAGSAVED
+	 ife RETURN 1
+		{
+		action DUMMY_CY_GETUP
+		resetactioncount
+		}
+	}
+	
+ifaction DUMMY_CY_GETUP
+	{
+	ifactioncount 24
+		{
+		starttrack 47
+		set MIDICHANGES 47
+		quake 26
+		globalsound BOS2_ROAM
+		espawn BOSS2 
+		seta[RETURN].extra 1500
+		setactorvar[RETURN].LOTAGSAVED LOTAGSAVED
+		killit
+		}
+	}
+
+
+enda
+
+//
+// ------------------------------------------------------------
+// Dummy Cycloid High emporer
+// ------------------------------------------------------------
+//
+
+
+spriteshadow 15626
+
+action DUMMY_CY_WALK -10 4 5 1 14
+
+useractor notenemy 15626
+fall
+
+ifaction 0
+{
+action ACAR
+}
+
+ifaction ACAR
+	{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+		{
+		globalsound BOS2_RECOG
+		action DUMMY_CY_WALK
+		ifspritepal 3
+			{
+			geta[].ang TEMP
+			sub TEMP 1024
+			seta[].ang TEMP
+			}
+		}
+	}
+	
+ifaction DUMMY_CY_WALK
+	{
+	move BOSS2WALKVELS geth
+	add INTERNALCOUNT_2 1
+	ifg INTERNALCOUNT_2 16 { ifrnd 128 soundonce BIG_BOSS_WALK2 else soundonce BIG_BOSS_WALK1 quake 8 set INTERNALCOUNT_2 0 }
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 60
+		{
+		action ACAR
+		move STOP
+		spawn TRANSPORTERBEAM 
+		globalsound SOMETHINGHITFORCE
+		seta[].blend 255
+		seta[].htflags 5
+		seta[].cstat 2
+		seta[].shade -32
+		action FORM
+		}
+	}
+	
+ifaction FORM
+	{
+	geta[].shade TEMP
+	add TEMP 2
+	ifg TEMP 90 
+		{
+		operateactivators LOTAGSAVED THISACTOR
+		operaterespawns LOTAGSAVED
+		operatemasterswitches LOTAGSAVED
+		killit
+		}
+	seta[].shade TEMP
+	}
+
+enda
+
+
+
+//
+// ------------------------------------------------------------
+// Dummy MJ12 soldier
+// ------------------------------------------------------------
+//
+
+
+spriteshadow 15020
+
+useractor notenemy 15020 
+action ACAR
+enda
+
+
+//
+// ------------------------------------------------------------
+// Dummy James
+// ------------------------------------------------------------
+//
+
+spriteshadow 11023
+
+action 8FRAME 0 1 8
+
+useractor notenemy 11023 // Dummy James sleep
+sizeat 23 23
+action 8FRAME
+enda
+
+
+spriteshadow 12026
+
+useractor notenemy 12026 // Dummy James
+ifn camerasprite -1 cstat 0 else cstat 32768 
+ife STORY_TRIGGER2 1 action ONE else action ZERO
+enda
+
+spriteshadow 9017
+
+useractor notenemy 9017 // Dummy James2
+sizeat 23 23
+ifspritepal 3 nullop else
+ifand CHAR_APP 1 cactor 25635
+action ACAR
+enda
+
+spriteshadow 25635
+
+action AJAMES_ARM 187 1 8
+
+useractor notenemy 25635 // Dummy James2 bionic arm
+sizeat 23 23
+action AJAMES_ARM
+enda
+
+
+spriteshadow 5363
+
+useractor notenemy 5363 // Dummy injured James 
+ifaction 0
+	{
+	cstat 32768
+	checkactivatormotion 812
+	 ife RETURN 1
+		{
+		cstat 0
+		action ZERO
+		}
+	}
+enda
+
+
+
+//
+// ------------------------------------------------------------
+// Action Highwire! With ducking and rolling positions!
+// ------------------------------------------------------------
+//
+
+spriteshadow 13188
+
+action HIGH_CROUCH 1
+action HIGH_RCROUCH 1
+action HIGH_SHOOT 2 
+action HIGH_ROLL 3 6 1 1 15
+
+move HIGHROLL 100 geth
+
+useractor notenemy 13188
+fall
+sizeat 24 24
+
+ifn camerasprite -1 cstat 0 else cstat 32768
+
+ifaction 0 
+{
+checkactivatormotion HITAGSAVED
+ife RETURN 1
+	{ 
+	action ZERO 
+	resetcount 
+	}
+}
+
+ifaction ZERO
+{
+ifcount 26
+	{
+	action HIGH_CROUCH
+	resetcount
+	}
+}
+
+ifaction HIGH_CROUCH
+{
+checkactivatormotion LOTAGSAVED
+ife RETURN 1
+	{
+	action HIGH_ROLL
+	move HIGHROLL geth
+	soundonce P_ROLL 
+	}
+}
+
+ifaction HIGH_ROLL
+{
+ifactioncount 4 move STOP
+ifactioncount 6
+	{
+	move STOP
+	action HIGH_RCROUCH
+	set TEMP9 0
+	}
+}
+
+ifaction HIGH_RCROUCH
+{
+
+
+ifactioncount 4
+	{
+	ifg PISTOLMAG 0
+		{
+		move STOP
+		action HIGH_SHOOT
+		ife SPECIALIST_EQUIPMENT[10] 2 globalsound KASHTAN_FIRE
+		else ife SPECIALIST_EQUIPMENT[39] 2 globalsound SKORP_FIRE
+		else ife SPECIALIST_EQUIPMENT[32] 2 globalsound AUTOMAG_FIRE
+		else globalsound TOKAROVFIRE
+		set gunsmoke_angle -512
+		state spawn_gunsmoke
+		flash
+		shoot 13772
+		sub PISTOLMAG 1
+		add TEMP9 1
+		resetactioncount
+		}
+	else
+	ife PISTOLMAG 0
+		{
+		move STOP
+		globalsound DRY_FIRE
+		globalsound ROHSHIT
+		action HIGH_CROUCH
+		resetactioncount
+		}
+
+	}
+}
+
+ifaction HIGH_SHOOT
+{
+ifactioncount 2 { ifg TEMP9 2 action HIGH_CROUCH else action HIGH_RCROUCH resetactioncount }
+}
+
+enda
+
+//
+// ------------------------------------------------------------
+// Action Doctor! With pointing his gun and disapearing poses!
+// ------------------------------------------------------------
+//
+
+spriteshadow 11174
+
+useractor notenemy 11174
+sizeat 22 22
+
+ifaction 0 action ACAR
+
+ife LOTAGSAVED 0
+{
+ifn camerasprite -1  cstat 257 else cstat 32768
+}
+
+checkactivatormotion HITAGSAVED
+ife RETURN 1
+	{
+	spawn 8433
+	soundonce PRIEST_APPEAR
+	killit
+	}
+
+enda
+
+// Alejandro
+useractor notenemy 8568 100 0 ifaction 0 { sizeat 26 26 action ACAR } state spawn_cold_breathe enda
+
+// No armour James
+useractor notenemy 11003 100 0 
+ifaction 0 
+	{ 
+	ifand CHAR_APP 1 cactor 25630
+	ifspritepal 4 nullop else sizeat 23 23 
+	action ACAR 
+	} 
+state spawn_cold_breathe 
+enda
+
+// No armour bionic arm James
+useractor notenemy 25630 100 0 
+ifaction 0 
+	{ 
+	ifspritepal 4 nullop else sizeat 23 23 
+	action ACAR 
+	} 
+state spawn_cold_breathe 
+enda
+
+
+//
+// ------------------------------------------------------------
+// Action Fascist! With gunbelt and running like a pussy!
+// ------------------------------------------------------------
+//
+
+action D_VILMOS_IDLE 1 1 5 1 1
+action D_VILMOS_DRAWB 26 1 5 1 15
+action D_VILMOS_SHOOTB 31 1 5 1 10
+action D_VILMOS_FIRED 26 1 5 1 10
+action D_VILMOS_RUN 6 4 5 1 10
+
+move VILMOS_RUN 140
+
+useractor notenemy 13147
+sizeat 24 24
+
+ifn camerasprite -1 cstat 0 else cstat 32768
+
+ifaction 0 { action D_VILMOS_IDLE resetcount }
+
+ifaction D_VILMOS_IDLE
+{
+checkactivatormotion LOTAGSAVED
+	ife RETURN 1
+		{
+		action D_VILMOS_DRAWB
+		soundonce SELECT_WEAPON
+		resetactioncount
+		}
+}
+
+ifaction D_VILMOS_DRAWB
+{
+ifactioncount 3
+	{
+	move STOP
+	globalsound S1911_FIRE
+	set gunsmoke_angle 0
+	state spawn_gunsmoke
+	flash
+	shoot 13772
+	action D_VILMOS_SHOOTB
+	resetactioncount
+	}
+}
+
+ifaction D_VILMOS_SHOOTB
+{
+ifactioncount 2 { action D_VILMOS_FIRED resetactioncount }
+}
+
+ifaction D_VILMOS_FIRED
+{
+ifcount 78
+	{
+	geta[].ang TEMP2
+	sub TEMP2 512
+	seta[].ang TEMP2
+	action D_VILMOS_RUN
+	move VILMOS_RUN geth
+	resetcount
+	}
+}
+
+ifaction D_VILMOS_RUN
+{
+ifcount 13 { ifrnd 128 sound STEP1 else sound STEP2 resetcount }
+ifnotmoving killit
+}
+
+
+
+enda
+
+// *************************************************
+// CUTSCENE TEXT
+// *************************************************
+
+
+defstate cuts_txt_CODE
+ifspritepal 1 ifn CHAR 0 break
+ifspritepal 2 ifn CHAR 1 break
+ifspritepal 3 ifn CHAR 2 break
+ifspritepal 4 ifn CHAR 3 break
+ifspritepal 5 ifn CHAR 4 break
+ifspritepal 6 ifn CHAR 5 break
+ifspritepal 7 ifn CHAR 6 break
+ifspritepal 8 ifn CHAR 7 break
+ifspritepal 10 ifn CHAR 10 break
+ifspritepal 14 ifn CHAR 13 break
+ifspritepal 15 ifn CHAR 14 break
+set cuts_txt LOTAGSAVED
+set cs_timer 0
+set INTERNALCOUNT 0
+ifg EXTRASAVED 0 ife playsound 0 { globalsoundvar EXTRASAVED soundoncevar EXTRASAVED ifn CLIPDISTSAVED 32 globalsound OP_COMM_LINK set playsound 1 }
+ife XVELSAVED 999 set XVELSAVED 0
+set TEMP2 1
+ends
+
+// ZVEL = Text id
+// XVEL = Text id to trigger
+// YVEL = Time to trigger it at
+
+useractor notenemy CUTSCENETEXT
+cstat 32768
+
+ifn HITAGSAVED 0
+ifaction 0
+{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+	{
+	set HUDON 0
+	ifn CLIPDISTSAVED 32 ife TEMP8 0 { soundonce OP_COMM_LINK set TEMP8 1 }
+	state cuts_txt_CODE
+	set INTERNALCOUNT 0
+	set activatetext -1
+	action ZERO
+	}
+}
+else
+ife ZVELSAVED activatetext
+	{
+	state cuts_txt_CODE
+	set INTERNALCOUNT 0
+	set activatetext -1
+	}
+else
+ife HITAGSAVED 0
+ ife ZVELSAVED 0
+   ifpdistl 1524
+    ife TEMP2 0
+	{
+	state cuts_txt_CODE
+	set INTERNALCOUNT 0
+	set activatetext -1
+	}
+	
+ife TEMP2 1
+	{
+	state credits_title
+	set voice_cooldown 600 // easy way to disable character taunts whilst stuff is playing
+	state CUTSCENE_TEXT
+	add cs_timer 1
+	ifn YVELSAVED 0
+		{
+		add INTERNALCOUNT 1
+		ifg INTERNALCOUNT YVELSAVED 
+			{ 
+			ife XVELSAVED 0 
+			{ set HUDON 0 set cuts_txt -1 set cs_textl -1 ifn CLIPDISTSAVED 32 globalsound CL_COMM_LINK }
+			else { set activatetext XVELSAVED }
+			killit
+			}
+		}
+	ifn cuts_txt LOTAGSAVED killit
+	}
+	
+
+
+enda
+
+//
+// ------------------------------------------------------------
+// STORYLINE TRIGGERS
+// ------------------------------------------------------------
+//
+
+useractor notenemy 10324
+cstat 32768
+
+ife LOTAGSAVED 1
+{
+ifpdistl 1024
+	{
+	ife STORY_TRIGGER1 1
+		{
+		quote 192
+		set COMM_COUNTD 260
+		set COMM_LINK 828
+		globalsound IN_COMM_LINK
+		}
+		else 
+		{
+		quote 192
+		set COMM_COUNTD 260
+		set COMM_LINK 829
+		globalsound IN_COMM_LINK
+		}
+	killit
+	}
+}
+else
+ife LOTAGSAVED 2
+{
+updatesectorz player[].posx player[].posy player[].posz TEMP6
+ife sprite[].sectnum TEMP6
+	{
+	ife STORY_TRIGGER1 1
+		{
+		operateactivators HITAGSAVED THISACTOR
+		operaterespawns HITAGSAVED
+		operatemasterswitches HITAGSAVED
+		}
+		else 
+		{ 
+		operateactivators XVELSAVED THISACTOR
+		operaterespawns XVELSAVED
+		operatemasterswitches XVELSAVED
+		}
+	killit
+	}
+}
+else
+ife LOTAGSAVED 3
+{
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1
+		{
+		ife SAVED_LILITH 0 readgamevar SAVED_LILITH
+		ife SAVED_LILITH 1
+			{
+			operateactivators YVELSAVED THISACTOR
+			operaterespawns YVELSAVED
+			operatemasterswitches YVELSAVED
+			}
+			else 
+			{
+			operateactivators XVELSAVED THISACTOR
+			operaterespawns XVELSAVED
+			operatemasterswitches XVELSAVED
+			}
+			killit
+		}
+}
+
+enda
+

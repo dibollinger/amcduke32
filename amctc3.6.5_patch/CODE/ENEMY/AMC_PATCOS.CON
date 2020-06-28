@@ -1,0 +1,336 @@
+// *************************************************
+// PATCOS
+// *************************************************
+
+action A_PATCOS_STAND 0 1 5 1 0
+action A_PATCOS_WALK 5 4 5 1 16
+action A_PATCOS_ATTACK 25 1 5 1 12
+
+move PATCOS_RUN 160 0
+
+ai AI_PATCOS_STAND A_PATCOS_STAND STOP faceplayer
+ai AI_PATCOS_WALK A_PATCOS_WALK PATCOS_RUN seekplayer
+ai AI_PATCOS_ATTACK A_PATCOS_ATTACK STOP faceplayer
+ai AI_PATCOS_PUSH A_PATCOS_STAND STOP faceplayer
+ai AI_PATCOS_ENDFIGHT A_PATCOS_STAND STOP faceplayer
+
+spritenoshade 18157
+
+useractor notenemy 18157
+ifaction 0
+	{
+	ifg SKILL_LEVEL 2 killit
+	seta[].shade -127
+	cstat 403
+	seta[].blend 255
+	sizeat 4 4
+	action MINUSONE
+	set INTERNALCOUNT 9
+	}
+	
+ifaction MINUSONE
+	{
+	sizeto 64 64
+	set TEMP3 sprite[myowner].x
+	add TEMP3 128
+
+	rotatepoint sprite[myowner].x sprite[myowner].y TEMP3 sprite[myowner].y sprite[myowner].ang TEMP5 TEMP6
+
+	updatesector TEMP5 TEMP6 TEMP7
+	ife TEMP7 -1 nullop else
+		{
+		seta[].x TEMP5 
+		seta[].y TEMP6
+		}
+	geta[myowner].z TEMP
+	sub TEMP 14000
+	seta[].z TEMP
+	add INTERNALCOUNT 1
+	ifspritepal 8
+	{
+	ifg INTERNALCOUNT 30 killit
+	}
+	ifg INTERNALCOUNT 55 spritepal 21
+	ifg INTERNALCOUNT 80 killit
+	}
+	
+enda
+
+useractor notenemy 19029
+ifaction 0 
+	{ 
+	sizeat 32 32 
+	cstat 272
+	spritepal 6
+	action ZERO 
+	}
+	
+ifaction ZERO
+	{
+	set TEMP3 sprite[myowner].x
+	add TEMP3 512
+
+	rotatepoint sprite[myowner].x sprite[myowner].y TEMP3 sprite[myowner].y sprite[myowner].ang TEMP5 TEMP6
+	
+	seta[].ang sprite[myowner].ang
+
+	updatesector TEMP5 TEMP6 TEMP7
+
+	geta[myowner].z TEMP
+	sub TEMP 4096
+	
+	setsprite THISACTOR TEMP5 TEMP6 TEMP
+	
+	ifg PATCOS_CHARGE 0
+	cstat 32768
+	else
+	cstat 272
+	
+	}
+enda
+
+spriteshadow 19024
+
+useractor notenemy 19024
+
+ifaction 0
+	{
+	sizeat 20 20
+	cstat 257
+	checkactivatormotion 827
+	 ife RETURN 1
+		{
+		sound PATCOS_START
+		action ZERO
+		resetactioncount
+		}
+	}
+	
+ifaction ZERO
+	{
+	ifactioncount 30 { action ONE resetactioncount }
+	}
+	
+ifaction ONE
+	{
+	ifactioncount 30 { action TWO resetactioncount }
+	}
+	
+ifaction TWO
+	{
+	ifactioncount 30
+		{
+		state monst_glow
+		sizeat 20 20
+		cstat 257
+		set PATCOS_CHARGE 0
+		spawn 19029
+		strength 5000
+		cactor PATCOS
+		ai AI_PATCOS_STAND
+		}
+	}
+
+enda
+
+spriteflags PATCOS SFLAG_NODAMAGEPUSH
+
+useractor enemy PATCOS
+fall
+
+ifaction 0
+{
+	state monst_glow
+	sizeat 20 20
+	cstat 257
+	set PATCOS_CHARGE 0
+	spawn 19029
+	ifspawnedby APLAYER ai AI_PATCOS_WALK else ai AI_PATCOS_STAND 
+	strength 5000
+}
+	
+geta[].extra TEMP2
+	
+// state MECH_DAMAGE_MODIFIER
+	
+ifai AI_PATCOS_ENDFIGHT
+{
+	ifn HITAGSAVED 0
+	{
+		operateactivators HITAGSAVED THISACTOR
+		operatemasterswitches HITAGSAVED
+		operaterespawns HITAGSAVED
+	}
+	else
+	{
+		operateactivators 5108 THISACTOR
+		operatemasterswitches 5108
+		operaterespawns 5108
+	}
+	killit
+}
+else
+ifai AI_PATCOS_STAND
+{
+	ifn LOTAGSAVED 0
+		checkactivatormotion LOTAGSAVED
+	else
+		checkactivatormotion 10018
+		
+	// checkactivatormotion sets RETURN to 1 if that activator is in motion
+	ife RETURN 1 
+	{
+		globalsound PATCOS_1
+		quake 26
+		ai AI_PATCOS_WALK
+	}
+}
+else
+ifai AI_PATCOS_WALK
+{
+	ifcansee
+	{
+		ifrnd 8 state enemyfindtarget
+		add INTERNALCOUNT 1
+			ifg INTERNALCOUNT 19
+			{
+				ifrnd 128 sound PATCOS_STEP else sound PATCOS_STEP
+				ifpdistl 2048 quake 26
+				set INTERNALCOUNT 0
+			}
+		
+		ife PATCOS_CHARGE 0
+			ifrnd 2
+			{
+				ifsound PATCOS_2 nullop
+				else
+				ifsound PATCOS_1 nullop
+				else
+				{
+					globalsound PATCOS_1
+					quake 26
+				}
+			}
+			
+
+		ifpdistl 1024
+			ifrnd 32
+				ifcansee
+					ai AI_PATCOS_PUSH
+			
+		ifg PATCOS_CHARGE 0 sub PATCOS_CHARGE 1
+			ife PATCOS_CHARGE 1 { globalsound PATCOS_2 quake 26 espawn 18157 seta[RETURN].pal 8 }
+				
+		ifrnd 4
+		 ife PATCOS_CHARGE 0
+			{
+			ifcansee
+			 ifcanseetarget
+			  ifpdistl 16384
+					{
+					globalsound PATCOS_4
+					spawn 18157
+					ai AI_PATCOS_ATTACK
+					resetactioncount
+					quake 26
+					}
+			else
+			ifn target -1
+				ifl xydist 16384
+					{
+					globalsound PATCOS_4
+					spawn 18157
+					ai AI_PATCOS_ATTACK
+					resetactioncount
+					quake 26
+					}
+			}
+	}
+	else
+	{
+	
+	}
+}
+else
+ifai AI_PATCOS_ATTACK
+{
+	ifactioncount 14 
+	{
+		ifl ROLL_LEFT 13 nullop
+		else ifl ROLL_RIGHT 13 nullop
+		else ifl ROLL_FORWARDS 26 nullop
+		else
+		{
+			ifl SKILL_LEVEL 3
+			{
+				ifcansee
+				{
+					getp[].posz TEMP
+					sub TEMP 1024
+					setp[].posz TEMP
+					getp[].ang knockbackang
+					set knockbackheight -4096
+					set knockback2 16
+					sound SPUNCHHIT
+					addphealth -5
+					wackplayer
+				}
+			}
+			else
+			{
+				getp[].posz TEMP
+				sub TEMP 1024
+				setp[].posz TEMP
+				getp[].ang knockbackang
+				set knockbackheight -4096
+				set knockback2 16
+				sound SPUNCHHIT
+				addphealth -10
+				wackplayer
+			}
+		
+		}
+		set PATCOS_CHARGE 120
+	ai AI_PATCOS_WALK
+	}
+	ife target -1 
+		{
+		ifcansee ifcanseetarget nullop else
+		ai AI_PATCOS_WALK
+		}
+	ifg xydist 16384 ai AI_PATCOS_WALK
+}
+else ifai AI_PATCOS_PUSH
+{
+ifactioncount 1 
+	{ 
+	getp[].posx mx
+	getp[].posy my
+	geta[].x x
+	geta[].y y
+	sub mx x
+	sub my y
+	getangle knockbackang mx my
+	set knockback 6
+	sound FORCE_BLAST
+	ifpdistl 1024
+		{
+		wackplayer 
+		palfrom 20 30 0 0 
+		addphealth -15
+		}
+	ai AI_PATCOS_WALK
+	resetactioncount
+	}
+}
+
+ifhitweapon sound 4 // does nothing but does not return an error like nullop
+
+ifdead 
+	{
+	ifai AI_PATCOS_ENDFIGHT nullop
+	else ai AI_PATCOS_ENDFIGHT
+	}
+
+
+enda

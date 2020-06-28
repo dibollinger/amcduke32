@@ -1,0 +1,2469 @@
+
+action ZERO 0
+action ONE 1
+action TWO 2
+action THREE 3
+
+// ==========================================================================================
+// TEMPORARY VARS
+// Vars to store temporaty vars
+// ==========================================================================================
+
+var DEBUG_STUFF 0 0
+
+var ALT_TEMP1 0 2
+var ALT_TEMP2 0 2
+var ALT_TEMP3 0 2
+var ALT_TEMP4 0 2
+var ALT_TEMP5 0 2
+
+var GTEMP 0 0 // global temp
+
+var TEMP 0 2
+var TEMP2 0 2
+var TEMP3 0 2
+var TEMP4 0 2
+var TEMP5 0 2
+var TEMP6 0 2
+var TEMP7 0 2
+var TEMP8 0 2
+var TEMP9 0 2
+var TEMP10 0 2
+
+var DISPLAYMENU_TEMP 0 0
+var DISPLAYMENU_TEMP2 0 0
+var DISPLAYMENU_TEMP3 0 0
+var DISPLAYMENU_TEMP4 0 0
+
+var TEX_TEMP_X -1 0
+var TEX_TEMP_Y -1 0
+
+var TEX_TEMP_SX -1 0
+var TEX_TEMP_SY -1 0
+
+var DISP_PULSE 1 1
+
+var VIEW_TEMP 0 1
+
+var DISP_TEMP 0 2
+var DISP_TEMP2 0 2
+var DISP_TEMP3 0 2
+var DISP_TEMP4 0 2
+var DISP_TEMP5 0 2
+var DISP_TEMP6 0 2
+var DISP_TEMP7 0 2
+var DISP_TEMP8 0 2
+var DISP_TEMP9 0 2
+
+var HUD_DISP_PCOLOUR 0 2 // stores player colour for HUD stuff
+var HUD_DISP_PAMMO 0 2 // stores player ammo amount
+var HUD_DISP_FONT 0 2 // stores font
+var HUD_DISP_TEMP 0 2
+var HUD_DISP_TEMP2 0 2
+var HUD_DISP_TEMP3 0 2
+var HUD_DISP_TEMP4 0 2
+var HUD_DISP_TEMP5 0 2
+var HUD_DISP_TEMP6 0 2
+
+var crystal_shade 0 1
+
+var WEAP_DISP_TEMP 0 2
+var WEAP_DISP_TEMP2 0 2
+var WEAP_DISP_TEMP3 0 2
+var WEAP_DISP_TEMP4 0 2
+var WEAP_DISP_TEMP5 0 2
+var WEAP_DISP_TEMP6 0 2
+var WEAP_DISP_TEMP7 0 2
+var WEAP_DISP_TEMP8 0 2
+var WEAP_DISP_TEMP9 0 2
+
+var TSPRITE_TEMP 0 2
+var TSPRITE_TEMP2 0 2
+var TSPRITE_TEMP3 0 2
+var TSPRITE_TEMP4 0 2
+var TSPRITE_TEMP5 0 2
+
+var SP_FADE 0 1 // fade away from colour
+var SP_FADEA 0 1 // fade into colour
+var SP_FADEF 0 1 // fade finish
+var SP_R 0 1
+var SP_G 0 1
+var SP_B 0 1
+
+// ==========================================================================================
+// WORLD DISPLAY VARS
+// Vars to store skybox or visual stuff .etc
+// ==========================================================================================
+
+var skybox 0 0
+var skybox_x 0 0
+var skybox_y 0 0
+var skybox_z 0 0
+var skybox_scale 64 0
+var skybox_sect -1 0
+var skybox_angle 0 1
+var skybox_horiz 0 2
+var skybox_shade 0 0
+var skybox_id 0 0
+var skybox_tile -1 0
+
+var cloud_centre 0 0 // this is just to get it working for now
+
+var SLEFFECT 0 1
+var SLEFFECTX 0 1
+var SLEFFECTY 0 1
+
+var LENS_TEMP4 0 1
+
+// ==========================================================================================
+// DISPLAY VARS
+// Vars to store screen stuff
+// ==========================================================================================
+
+var LOADING_SCREEN_HINT 0 0
+
+var loading 0 0
+var saving 0 0
+
+var prevtick -1 0
+var curtick   0 0
+
+var MAIN_MENU_TRACK 0 0
+
+var GUI_ELEMENT_LOCKED 0 1
+
+var DS_LOCATION 0 1
+var DS_PICNUM 0 0
+
+gamearray HELP_HINT 128
+
+var SHOW_SYSTEM 0 1 // what location the mission command interface is showing
+
+var ROLLOVER_SOUND 0 1 // has the game played the roll over sound?
+
+var BUTTON_COUNTER 0 1 // countdown between button presses
+
+var HIDE_CROSSHAIR 0 1
+
+var DISP_ACC 0 1
+var DISP_VIS 0 1
+
+gamevar HUD_HEALTH_TEMP 0 1
+gamevar HUD_ARMOUR_TEMP 0 1
+
+var MOUSE_HINT -1 1 // Hint line
+var MOUSE_HINT_TIMER 32 1 // how long before hint displays
+
+var PICKED_UP 0 1
+var PICKED_UP_TILE 0 1
+var ITEM_AMOUNT 0 1
+var PU1_PAL 0 1
+
+var PICKED_UP_2 0 1
+var PICKED_UP_TILE_2 0 1
+var ITEM_AMOUNT_2 0 1
+var PU2_PAL 0 1
+
+var PICKED_UP_3 0 1
+var PICKED_UP_TILE_3 0 1
+var ITEM_AMOUNT_3 0 1
+var PU3_PAL 0 1
+
+var SPRITE_PICNUM 0 0
+var WALL_PICNUM 0 2
+var TSPRITE_PICNUM 0 0
+var STATNUM 0 2
+
+// Research screen variables
+// Minimize chance for errors by using unique temp variables for this
+// Color bitmap: LSB = 0 -> normal colors, LSB = 1 --> all gray
+// each bit beyond the LSB stands for one line in the requirements
+gamevar TEMP_RESCOLOR 0 0
+gamevar TEMP_RESINPUT_COND 0 0
+gamevar TEMP_RESINPUT_COST 0 0
+gamevar TEMP_RESSPOOK 0 0
+
+// ==========================================================================================
+// PLAYER VARS
+// Vars to store player stuff
+// ==========================================================================================
+
+var initplayer NO 1
+gamearray player_ranks 8 // each element is a bitfield storing all weapon mods for a player
+var my_rank 0 2 // this is what is saved to the ini file
+
+var player_spritebridge 0 1 // is player on a spritebridge
+
+var kill_count 0 2 // how many kills in this level
+var total_kill_count 0 2 // total kill amount
+
+var CHEATED 0 1 // save if the player's cheated or not
+
+var FAKE_SHRUNK 0 1 // set if player is 'fake' shrunk
+
+var HOLOGRAM_ON 0 1
+
+var HOLD_BREATHE 0 1 // set if player is holding breathe for sniping
+
+var WEAP_SHOW 0 1 // showing weapons?
+
+var THROWING -1 1
+
+var pickup_quote_track 0 1 // keeps track of played quotes
+
+var jib_quote_track 0 1 // keeps track of played quotes
+
+var JUST_INIT 0 1 // Just initialized. JUST INIT BRUV
+
+gamearray AGENT_FATIGUE 32 // holds fatigue rating for characters
+
+// contains what kind of gun type the weapon is
+var WEAPON_TYPE 0 1
+
+// 0 = Standard
+// 1 = armour piercing
+// 2 = soft projectile (shotgun.etc)
+// 3 = Gold-standard rounds
+// 4 = explosive
+// 5 = arrow/bolt
+// 6 = thrown/utility
+// 7 = supernatural bullets
+// 8 = Projectile
+// 9 = Armour-piercing projectile
+// 10 = Nuclear
+// 11 = Melee
+
+// contains the tile for the gun's pickup
+
+var WEAPON0_TILE 3833 2 // temp/kick
+var WEAPON1_TILE 0 2 // pistol
+var WEAPON2_TILE 0 2 // shotgun
+var WEAPON3_TILE 0 2 // chaingun
+var WEAPON4_TILE 0 2 // rpg
+var WEAPON5_TILE 0 2 // pipebomb
+var WEAPON6_TILE 0 2 // shrinker
+var WEAPON7_TILE 0 2 // devistator
+var WEAPON8_TILE 0 2 // tripbomb
+var WEAPON9_TILE 0 2 // freezer
+
+var W1_AMMO_TILE 0 2 // pistol ammo
+var W2_AMMO_TILE 0 2 // shotgun ammo
+var W3_AMMO_TILE 0 2 // chaingun ammo
+var W4_AMMO_TILE 0 2 // rpg ammo
+var W5_AMMO_TILE 0 2 // pipebomb (pack of 5) ammo
+var W6_AMMO_TILE 0 2 // shrinker ammo
+var W7_AMMO_TILE 0 2 // devistator ammo
+var W9_AMMO_TILE 0 2 // freeze ammo
+var W11_AMMO_TILE 0 2 // grow ammo
+
+var CIICON 0 2
+var CMEDIKIT 0 2
+var CSTEROIDS 0 2
+var CHOLODUKE 0 2
+var CJETPACK 0 2
+
+var CNVG 0 1
+var CHEAT 0 1
+
+var DISP_NVG 0 1
+
+var CSCUBA 0 2
+var CBOOTS 0 2
+var C_ARMOUR 0 2
+var C_HEAVY_ARMOUR 0 2
+
+// used for what guns have what attachments and stuff
+gamearray WEAPON_SPECIAL 15
+
+// 1 = Can be used akimbo
+// 2 = Has a 40mm grenade launcher
+// 8 = Has a 40mm caseless grenade launcher
+// 4 = Shotgun uses a box magazine
+// 64 = can be used with a spacesuit
+// 128 = Can overheat
+// 256 = concealable
+// 512 = no expander
+
+gamearray AMMO_AMOUNT 12 // controls how much ammo to give the player
+
+gamearray PICKED_UP_GUN 11
+gamearray PICKED_UP_INVEN 8
+
+var EP2_NEW_CHARACTERS 0 0
+var EP3_NEW_CHARACTERS 0 0
+
+var EP1_GOT_GOLD 0 1
+var EP1_GOT_PLATINUM 0 1
+
+var EP2_GOT_GOLD 0 1
+var EP2_GOT_PLATINUM 0 1
+
+var EP3_GOT_GOLD 0 1
+var EP3_GOT_PLATINUM 0 1
+
+var MUSIC_LEVEL 0 1
+var MUSIC_CHECK 240 1
+var MUSIC_PLAY 0 1
+
+var SANG_HAND1 6389 1
+var SANG_HAND2 6390 1
+
+var INJURED 0 1 // use for sequences or whatever where player is injured
+
+var NEED_TO_FIRE 0 1 // holds if the game needs to temporarily assign ammo to start hardcoded firing process
+var HOLD_AMMO_TEMP 0 1 // holds the player's ammo temporarily (made so it doesn't get polluted by other vars)
+
+// Determines Merlijn's shield, as well as other characters armour pic
+var MSHIELDUP 0 1
+var MERLIJNSHIELD 100 1
+var MSHIELDTYPE 0 1
+
+// Determines riot shield
+var SHIELDUP 0 1
+var RIOTSHIELD 0 1
+var SHIELD_TYPE 0 1
+
+// 0 = riot shield
+// 1 = wood shield
+// 2 = big wood shield
+
+// Determines shield shaking value
+var SHIELD_SHAKE 0 1
+var SHAKE_RAND 0 1
+
+var ARMOURTYPE 0 1
+
+var CURWEAP 0 1
+var CUR_AMMO 0 1
+var GUNSAKIMBO 0 1
+
+var GUNFIREMODE 0 1
+var GUNFIREMODE_2 0 1
+
+var SHOOT_MODE 0 1
+var SCOPE 0 1
+var GL_COUNTDOWN 0 1
+var NUKE_COUNTDOWN 0 1
+
+var GUNUPGRADE 0 1
+
+var JAMES_UPGRADE 0 131073
+var ZAXTOR_UPGRADE 0 131073
+var MERLIJN_UPGRADE 0 131073
+var HIGHWIRE_UPGRADE 0 131073
+var SANG_UPGRADE 0 131073
+var RUSTY_UPGRADE 0 131073
+var GEOFFREY_UPGRADE 0 131073
+var MIKKO_UPGRADE 0 131073
+var MICKY_UPGRADE 0 131073
+var SNOWFALL_UPGRADE 0 131073
+
+var KICKBACKPIC 0 1
+var KICKBACKPIC_2 0 1
+var RELOAD_TYPE 0 1 // What type of reload?
+
+var NEEDS_PUMP 0 1 // Does the player need to pump the shotgun after reloading?
+
+var WEAPSWAYX 0 1
+var WEAPSWAYY 0 1
+
+// ==========================================================================================
+// AMC BASE STUFF
+// Vars to store base equipment, research progress, loadouts .etc
+// ==========================================================================================
+
+var AMC_BASE 0 0 // is player in the amc base?
+
+gamearray WEAPONS_FOUND 64 // temp weapons found
+gamearray MELEES_FOUND 16 // melee weapons found
+
+gamearray EQUIPMENT_FOUND 64 // equipment found
+
+// 1 shotgun loader
+// 2 combat shovel
+// 3 ballistic mask
+// 4 riot shield
+// 5 flippers
+// 6 ghost goggles
+// 7 wooden shield
+// 8 big wooden shield
+
+gamearray ARTIFACTS_FOUND 32 // artifacts found
+gamearray SPECIALIST_EQUIPMENT 128 // specialist loadout found/equipped
+
+gamearray SPECIALIST_CUSTOM 128 // weapon customisation
+
+gamearray BEATEN_LEVEL_CHAR 32 // records what character played this level last
+
+gamearray CONFIG_DATA 128
+
+gamevar NEW_RESEARCH 0 131073 // New research?
+
+// 1 = Weapons
+// 2 = Equipment
+// 4 = Personel
+// 8 = base
+// 16 = Paranormal
+// 32 = Dojo
+
+gamearray WEAPONS_RESEARCH 63
+gamearray EQUIPMENT_RESEARCH 63
+gamearray PERSONEL_RESEARCH 63
+gamearray MYSTICAL_RESEARCH 33
+gamearray MELEE_RESEARCH 33
+gamearray BASE_RESEARCH 33
+gamearray IW_COMPLETE 16
+
+gamearray RESOURCES_FOUND 256
+
+gamearray FACILITIES_OWNED 128
+// 0 = not found, 1 = found, 2 = purchased/built
+// 0 = Default Factory
+
+gamearray TECH_LEVEL_A 128
+
+// 2 = Megabase
+// 3 = Megabase
+// 4 = Megabase
+// 5 = Repent scientist
+// 6 = Repent scientist
+// 7 = jungle base rescued by wolverine
+// 8 = Dis base time portal
+// 9 = Dis base time portal
+// 10 = Snow base teleport room
+// 11 = Snow base teleport room
+// 12 = Snow base hostage
+// 13 = jungle base rescued by wolverine
+// 14 = CNC
+// 15 = CNC
+// 16 = CNC
+// 17 = Sanctuary
+// 18 = Sanctuary
+// 20 = Energeia hostage
+// 21 = Energeia hostage
+// 25 = Energeia
+// 30 = X64-2 Gray
+// 31 = X64-2 Gray
+// 32 = X64-2 Gray
+
+gamearray TEMP_WEAPON_LOADOUT 64
+gamearray MELEE_WEAPON_LOADOUT 32
+
+gamearray EQUIPMENT_LOADOUT 64
+
+// 2 = first aid kit
+
+gamearray CHEST_LOADOUT 64
+
+// 1 = body armour
+// 4 = spirit vest
+
+gamearray BELT_LOADOUT 64
+
+// 5 = shotgun loader
+
+gamearray HELMET_LOADOUT 64
+
+// 1 = ballistic mask
+// 2 = heat vision
+// 3 = night vision
+
+gamearray BOOTS_LOADOUT 64
+
+// 1 = Protective boots
+// 2 = Flippers
+
+gamearray ARTIFACTS_LOADOUT 32
+gamearray AMMO_LOADOUT 32
+gamearray SPECIALIST_LOADOUT 128 
+
+gamearray TEMP_WEAPON_LOADOUT_COST 32
+gamearray MELEE_LOADOUT_COST 32
+
+gamearray EQUIPMENT_LOADOUT_COST 32
+gamearray CHEST_LOADOUT_COST 64
+gamearray BELT_LOADOUT_COST 64
+gamearray HELMET_LOADOUT_COST 64
+gamearray BOOT_LOADOUT_COST 64
+
+gamearray AMMO_LOADOUT_COST 32
+gamearray SPECIALIST_LOADOUT_COST 32
+
+var BASE_COSMETICS 0 0
+
+var AMCSOLDIER_UPGRADES 0 2
+
+gamearray PLAYER_SPAWNPOINT 32 // holds player spawnpoint sprite positions
+
+var MAX_SUPPLY_LEVEL 0 1
+
+
+// ==========================================================================================
+// INTERFACE VARS
+// Vars to store interface stuff
+// ==========================================================================================
+
+var CONV_CHOICE_1 -1 1
+var CONV_CHOICE_2 -1 1
+var CONV_CHOICE_3 -1 1
+var CONV_CHOICE_4 -1 1
+
+// Global bitmap for non-repeatable conversation triggers (e.g. Arsia Mons Arms Dealer door, to replace problematic usage of TEMP9)
+// 1 - Arms Dealer door open
+// 2 - Arms Dealer part 2
+// 4 - Energeia Scientist
+var CONVO_STATE 0 0
+
+gamearray NEW_IN_STORE 128 // will show 'new' bar on weapons player hasn't looked at yet
+
+gamearray SEEN_MAP 512 // will display marker next to maps not looked at yet
+
+// 500 = Garmid
+
+// ==========================================================================================
+// ENEMY VARS
+// Vars to store enemy stuff
+// ==========================================================================================
+
+var HIT_DAMAGE 0 2 // how much the damage hit for
+
+var ENEMY_SHIELD 0 2 // enemy forcefield
+
+gamevar ENEMY_TYPE 0 2
+
+var THROW_GRENADE 0 2 // should enemy throw grenade?
+
+var COMBAT_CHECK -1 0
+var CC_MUSIC 0 0
+var ENEMIES_CLEARED 150 0
+
+var targetlock 0 2
+
+var sightvar 0 2
+
+var temp_size 0 2
+
+var PROJ_UDATA 0 0
+
+var COSMETIC_FLAME 0 2
+
+var MIA_HEALTH 0 2 // holds health when hit by MIA blast
+
+var CLOAK_COUNT 0 2
+
+var CLOAK_FADE 0 2
+
+
+// ==========================================================================================
+// MATH VARS
+// Vars to store mathematical stuff
+// ==========================================================================================
+
+gamearray WALL_X 16384
+gamearray WALL_Y 16384
+
+gamearray FLOOR_X 4096
+gamearray FLOOR_Y 4096
+
+gamearray CEILING_X 4096
+gamearray CEILING_Y 4096
+
+gamearray WALL_PICNUMA 16384
+gamearray MASK_PICNUMA 16384
+gamearray FLOOR_PICNUM 4096
+gamearray CEILING_PICNUM 4096
+
+var mysector -1 2
+
+var SECT_NUM 0 2
+
+// WALL_CLOSE vars
+var WALL_CLOSE 0 1
+var xydist2 0 2
+var zdist 0 2
+var mysin 0 2  // The sine of the angle of the actor using hitscan
+var mycos 0 2
+var hitsector 0 2  // The sector that gets hit by the hitscan
+var hitwall2 0 2
+
+define clipmask 4294901808
+
+var initz 0 2
+
+// ==========================================================================================
+// GAME VARS
+// Vars to store game stuff
+// ==========================================================================================
+
+var LOTAGSAVED 0 2
+var HITAGSAVED 0 2
+var EXTRASAVED 0 2
+var PALSAVED 0 2
+var XVELSAVED 0 2
+var YVELSAVED 0 2
+var ZVELSAVED 0 2
+var CSTATSAVED 0 2
+var CLIPDISTSAVED 0 2
+var OWNERSAVED 0 2
+var SHADESAVED 255 2 // set to impossible shade value by default so we know if it's been accessed
+var ZPOS_SAVED 0 2
+
+var STOP_EFFECTS 0 0
+
+var FORCEFIELD_TURNOFF -1 0
+
+var PLAY_SOUND 0 2
+
+var BELLTIME 0 0 // how long bell must toll
+
+var PC_TURNED_ON 0 0 // has ingame PC been turned on?
+
+var pad_id -1 1 //This stores the id of the keypad that the player is using.
+var pnum 0 1 // This stores the passcode as he enters it.
+
+var param 0 2
+
+var FALL_COUNTER 0 2 // how long thing has been falling
+var FALLING 0 1
+
+var NUMBER_OF_SOULS 4 0 // number of souls Lilith has guarding her remaining
+
+var WAYPOINT 0 2 // holds waypoint id
+
+var BIG_GUN_CHARGE 0 0 // holds g_ship's big gun charge
+
+var ALT_DEVI_CYCLE 0 1
+
+gamearray PLOT_POINTS 256 // holds certain things player does that may affect future levels
+
+gamearray TRAIN 128
+
+var SPRITE_LIFT_TOP 0 2
+var SPRITE_LIFT_BOTTOM 0 2
+var SPRITE_LIFT_SIDE 0 2
+
+var SPRITE_ELEV_MOVEMENT 0 2
+
+var HACKING_PROGRESS -1 1
+var HACK_UNLOCK -1 0
+
+var wallpoint 0 0
+var numwalls 0 0
+var currwall 0 0
+var area 0 0
+
+var SMALLX 0 0
+var SMALLY 0 0
+var BIG_X 0 0
+var BIGY 0 0
+var grasscount 0 0
+var attempts 0 0
+var sect 0 0
+
+var CHARGE_UP 0 0 // global var holding teleporter's charge rating
+
+var LIGHTNING_STRIKE 0 0 // what lightning strike is triggering
+
+var laddersound -1 1
+
+var FOUND_ADS 0 1 // Scanned an advertisement poster?
+
+var CROSSHAIR_X 0 2
+var CROSSHAIR_Y 0 2
+
+var ANGLE 0 2
+
+var TANK_MACHINEGUN 0 1
+
+var ANGLESET 0 2
+var SET 0 2
+
+var RADIO_CONTACT 1 0 // Is player in touch with base?
+
+var PATCOS_CHARGE 0 0
+
+var PAIN_AMOUNT 0 2 // set to how long an enemy is in pain for
+
+var ALARM_ACTIVE 0 0 // is the alarm active in a level
+var ALARM_DETECT 0 1 // if the alarm is actively detecting a player
+var ALARM_COUNTER 0 0 // the 'amount' of alarm active
+
+var GUN_VOLUME 0 1 // how loud a gun is
+var GUN_ACCURACY 16 1 // determines the gun's accuracy
+var GUN_SPREAD 0 1 // determines the gun's spread
+var GUN_MAX_SPREAD 0 1 // determines the max amount of spread
+var GUN_RECOIL 0 1 // determines the camera kick when firing (visual only)
+var GUN_RECOIL_COUNT 0 1
+
+var CUS_WACK 0 1 // own wackplayer since default wrecks skyboxes
+
+gamearray AMMO_TYPES 16 // array holding what ammo a gun is holding
+
+var LAST_SHELL_FIRED 0 1 // holds last shell type fired so gun spawns correct ammo
+var LAST_SHELL_FIRED_2 0 1 // holds last shell type fired so gun spawns correct ammo
+
+var AMMO_TYPE 0 1 // holds what ammo type the current gun is holding
+var AMMO_TYPE_2 0 1 // holds what ammo type the current gun's alt fire is holding
+
+// 1 = Explosive Shells
+// 2 = Silver Bullets
+// 4 = Flechete Shells
+// 8 = Tesla Ammo
+// 16 = Silver bolts
+// 32 = Grenade launcher 40mm MIA
+// 64 = 4/0 magnum shells
+// 128 = Grenade launcher 40mm HE shell
+// 256 = 40mm Plasma Shell
+// 512 = caseless 40mm Slug
+// 1024 = Dragon's breathe shell
+// 2048 = caseless electro
+// 4096 = caseless cryo
+// 8192 = Tek arrow
+
+var GUN_AMMO_TYPES 0 1 // controls what sort of ammo types the gun can use
+
+// how about...
+// 1 = Shotgun shells
+// 2 = .45 ammo (Silver)
+// 4 = Advanced shotgun shells (only be fired by pump-action guns, to give them advantage over semi-auto)
+// 8 = Riot-gun ammo (Ammo that can be used by riotgun)
+// 16 = Bolts
+// 32 = Has GL
+// 1024 = Heat-based (gun can overheat)
+// 2048 = Grenade launcher 40mm (M203 .etc)
+// 64 = Grenade launcher 40mm caseless (GP25 .etc
+
+var GUN_SIZE 1 1 // 0 is short, 1 is medium, 2 is long and 3 is very long
+
+// 0 - 400mm - short or very light
+// 400mm - 750mm - medium or medium weight
+// 750mm - 1250mm - long or heavy
+// 1250mm+ - very long or very heavy
+
+var GUN_HANDS 2 1 // How many hands the player needs to hold the weapon (used for ladders, shields, .etc .etc)
+var HANDS_DRAW 2 1 // used for drawing weapons and stuff, to hide 2nd hand if the player's using it .etc .etc
+
+var GUN_HEAT_VAR 0 1 // gun's temperature
+
+gamearray GUN_HEAT 15
+
+var TECH_LEVEL 1 0 // Lab level
+
+var SUPPLY_LEVEL 1 0 // World Supply levels
+
+gamearray RESOURCES 128
+
+// 1 = Common metals
+// 2 = Precious Metals
+// 3 = Fuel
+// 4 = Organic material
+// 5 = Exotic Material
+// 6 = Rare Earths
+
+
+
+// 20 = Irdium
+// 21 = Mythril
+// 22 = Adamantite
+// 23 = Orichalcum
+// 24 = Neutronium
+// 25 = Turbidium
+// 26 = Abyssium
+
+// 30 = Cycloid Plasma
+// 31 = Anti-matter
+
+var SOLDIER_UPGRADES 0 0
+
+var TREASURE_FOUND 0 0
+var AMC_BUDGET 0 1
+var AMC_BUDGET_INCREASE 0 0 // What to show on the level end screen
+
+var DISP_LOADOUT_COST 0 1
+var LOADOUT_COST 0 1 // Total cost of equipment used
+
+var PLAYER_IDENTITY 0 1
+var force_taunt 0 1
+var voice_comm_menu 0 1
+var fire_mode_menu 0 1
+var player_taunt -1 2
+var voice_cooldown 0 1
+
+var ALLY_MAG 0 2
+
+var INVASION 0 0
+
+var screen_pal 0 0
+
+var camera_bars -18 0
+
+var HIDE_SPRITES 1 0
+
+var TIMEZONE 0 0
+
+var allow_temp_characters 0 0
+var show_next_char 0 1
+
+// laddervars
+var onladder 0 1
+var laddervel 0 1
+var lastladderx 0 1
+var lastladdery 0 1
+var fpress 0 1
+var bpress 0 1
+var spriteid 0 0
+var target -1 2
+
+var LADDERTYPE 0 1
+
+var LADDER_ANIM1 0 1
+var LADDER_ANIM2 0 1
+
+var control_display 0 1 //
+
+var player_in_vehicle 0 1 // 1 if player is in vehicle, 0 if not
+
+var player_using_hovercraft -1 1
+var player_using_fighter -1 1
+var player_using_hovertank -1 1
+var player_using_VR_tank -1 1
+var player_using_mech -1 1
+var player_using_horse -1 1
+
+var player_using_train -1 1
+
+var mech_startup_sequence -1 1
+
+var hc_missile_fire 0 1
+var mech_maingun_fire 0 1
+var hc_gear 2 1
+
+var forward_accelerate 0 2 
+
+var BITS_PRESS 0 1
+var EXTBITS_PRESS 0 1
+
+var mech_hud_shake 0 0
+
+var LEAN_COUNT 0 1
+
+var BULLET_HIT_TYPE 0 2
+
+var PENETRATE_STRENGTH 0 2 // the lower the better
+var MATERIAL_STRENGTH 0 2 // the lower the stronger
+
+var DISP_STUFF 0 1
+
+gamearray BAR_SIZE 21
+gamearray INVEN_BAR_SIZE 9
+
+var JET_TOGGLE 0 1 // player has held jump to toggle jetpack on
+
+var TSPRITE_PLAYER 0 2
+
+var GUN_PUSHBACK_DISPLAY 0 2 // Display code
+var GUN_IS_EMPTY 0 2 // Display var for if gun's mag was emptied
+
+var CHECKBOX -1 1
+
+var CBOXSLOT1 -1 2
+var CBOXSLOT1PAL -1 2
+var CBOXSLOT2 -1 2
+var CBOXSLOT3 -1 2
+var CBOXSLOT4 -1 2
+var CBOXSLOT5 -1 2
+var CBOXSLOT6 -1 2
+
+var SELSLOT 0 1
+
+// ALLY VARIABLES
+
+var ALLYSLOT1 -1 1
+var ALLYSLOT2 -1 1
+var ALLYSLOT3 -1 1
+var ALLYSLOT4 -1 1
+
+var ALLY_VOICE 0 2 // Countdown timer till ally replies
+
+var PLAYER_VOICEOVER 0 1
+
+// 1 = Ally has died
+// 2 = Exerting noise
+// 3 = Need a key 
+// 10 = Using guns machine
+// 11 = Fixing wooden board
+// 12 = Need a toolkit
+// 13 = Fixed something
+// 14 = Character special ability needs something
+// 15 = Character special ability success
+
+var NOISE_SAID 0 1
+
+// 1 = annoying/ladder
+// 2 = alarm active
+// 4 = time portal
+// 8 = char ability
+// 16 = comment on weather
+// 32 = item box
+
+var FOLLOW_PLAYER 0 2
+var ALLY_ORDER 0 2
+
+var HEAL_COUNT 0 2
+
+var GENDER 0 2 // holds the gender of the soldier
+var LAST_NAME 0 2 // holds the name of the soldier
+
+define MALE 0
+define FEMALE 1
+
+var INTERNALCOUNT 0 2
+var INTERNALCOUNT_2 0 2
+var INTERNALCOUNT_3 0 2
+
+var CHAR_APP 0 0 // Character appearence
+
+// 1 = James Bionic hand
+// 2 = Crusader Sang
+// 4 = Berserker Merlijn
+// 8 = Upgraded Mikko
+// 16 = Upg Highwire
+
+var GIVE_ITEM 0 1
+
+var SEEK_ENEMY_COUNT 0 2
+
+// specail actor
+// 1 = don't kill
+var SPEC_ACT 0 2
+
+var MONSTER_FLAGS 0 2
+
+// 1 = Flying enemy
+// 2 = Human
+// 4 = cloaking enemy
+// 8 = ghostly enemy
+// 16 = lava enemy
+
+var ENEMY_TALKING 0 2
+
+var ENEMY_KILLED 0 0 // set this var when dead to trigger speech in enemy allies
+// 1 = Triad
+// 2 = Mercenaries
+// 4 = Russians
+// 16 = MJ12
+// 32 = PE
+
+var lizjumpx 0 1
+var lizjumpy 0 1
+var lizjumpdist 0 1
+var LIZBVAR 0 0
+var LIZBVAR2 0 0
+var LIZBVAR3 0 0
+
+var PIGBVAR 0 0
+var PIGBVAR2 0 0
+var PIGBVAR3 0 0
+var PIGBRESET 0 2
+
+var bossx 0 2
+var bossy 0 2
+var bossang 0 2
+var newx 0 2
+var newy 0 2
+
+
+var DAYNIGHT 0 0 // Is it day or night? 1 if day, 2 if night, 3 if evening/morning
+
+var SLO_MO_SHOWOFF 0 0
+var FISSION_MAILED 0 0
+
+var actor_breathe_count 0 2
+
+// for some HUD bars
+var digx 0 1
+
+// CULTIST CHOKE VARS
+var CHOKE 0 1
+var FCHOKE 0 1
+var cultist_pal 0 1
+var FCHOKESTOP 0 1 // Stops anybody from force choking the player till this is 0 again
+
+// CULTIST SHOTGUN STRUGGLE
+var SHOTGUN_STRUGGLE -1 1
+var SHOTGUN_STRUGGLE_NUM 0 1
+
+// PHANTASM BALL STRUGGLE
+var PHANTASM_STICK -1 1
+var PHANTASM_STRUGGLE 0 1
+
+// FLAGS FOR MENU
+var LOGO_FLAGS 2031619 0
+
+var allies_present 0 0
+var both_present 0 0
+
+// Arrays
+gamearray Player_equip 128
+gamearray James_equip 128
+gamearray Zaxtor_equip 128
+gamearray Merlijn_equip 128
+gamearray Highwire_equip 128
+gamearray Sang_equip 128
+gamearray Rusty_equip 128
+gamearray Geoffrey_equip 128
+gamearray Mikko_equip 128
+gamearray Micky_equip 128
+gamearray Snowfall_equip 128
+
+gamearray secret_count 64
+
+var mission_scare 0 1
+
+var player_spooked 0 1
+var vr_glitched 0 1
+
+// Random Vars
+var swear_random 0 1
+var weap_pick_random 0 1
+var footstep_random 0 1
+var snowprint 0 1
+
+var player_swap 26 1
+var swap_tile -1 1
+
+var give_loadout 1 0
+
+var player_use 26 1
+var player_hitspace 0 1
+var player_fire 26 1
+var player_door 26 1
+var player_ship 26 1
+var player_bipod 26 1
+var player_ninja 26 1
+var player_unlock 26 1
+
+var mission_update 0 1
+
+var door_locked 26 1
+var key_icon -1 1
+var key_pal 0 1
+
+var gunsmoke_angle 96 2
+var gunsmoke_z 6144 2
+var gun_pushback_power 0 2
+
+var wall_pal 0 2
+
+var bomb_throw_power 0 1
+
+var on_tripwire 0 1
+var caught_in_web 0 1
+var caught_in_net 0 1
+var GENERATOR_ACTIVE 0 0
+
+var countdown -1 0
+var countdown_fail -1 0
+var countdown_minutes 0 0
+var countdown_seconds 0 0
+var countdown_type 0 0
+
+var myowner 0 2
+
+// Player hit counter stuff
+var PBEENHIT 0 1
+var PHITANGLE 0 1
+
+gamearray AR_PBEENHIT 17
+gamearray AR_PHITANGLE 17
+
+defstate HIT_IND
+set TEMP4 -1
+whilevarn TEMP4 16
+	{
+	add TEMP4 1
+	ife AR_PBEENHIT[TEMP4] 0
+		{
+		set PBEENHIT 45
+		setarray AR_PBEENHIT[TEMP4] 45
+		
+		geta[].htang TEMP
+		sub TEMP sprite[].ang
+		setarray AR_PHITANGLE[TEMP4] TEMP
+		set TEMP4 16
+		}
+	}
+ends
+
+defstate HIT_IND_ARM
+set TEMP4 -1
+whilevarn TEMP4 16
+	{
+	add TEMP4 1
+	ife AR_PBEENHIT[TEMP4] 0
+		{
+		set PBEENHIT -45
+		setarray AR_PBEENHIT[TEMP4] -45
+		
+		geta[].htang TEMP
+		sub TEMP sprite[].ang
+		setarray AR_PHITANGLE[TEMP4] TEMP
+		set TEMP4 16
+		}
+	}
+ends
+
+
+var water_submerge 0 1
+var water_screen 30 1
+var count_timer 0 2
+
+var hit_key 0 1
+
+var COMM_LINK 0 0
+var COMM_COUNTD 0 0
+
+var HEADSHOT 0 2
+
+// CAMERA VARIABLES
+var camerasprite -1 0 // What number camera
+var cameratime 0 2 // How long to show it for
+var cameratype -1 0 // Should this camera remove the HUD and add a letter box?
+
+var cuts_txt -1 0
+var cs_textl 1 0 // How many lines of text?
+var cs_timer 0 0 // timer of cutscene text
+
+var cameraend 0 0 // hides flicker when cam switches
+
+var speaker 0 0 // who's speaking? used for potential animation stuff
+
+// 0 = James
+// 1 = Zaxtor
+// 2 = Merlijn
+// 3 = Highwire
+// 4 = Sang
+// 5 = Rusty
+// 6 = Geoffrey
+// 7 = Mikko
+// 10 = Bombshell
+// 11 = Maarten
+// 12 = Jane
+// 13 = Micky
+// 14 = Snowfall
+// 15 = Suitless Micky
+// 16 = Skyhv
+// 20 = Cassandra
+// 21 = Axon
+// 22 = Engineer
+
+var CUSENDLEVEL 0 0
+
+var subt_id 0 1 // id of subtitle quote
+
+var gp_subt 0 1 // time to display
+var ally_subt 0 1 // time to display
+
+var SCIENTIST_CAM -1 0
+
+
+
+var DROOM_TEMP 0 1
+
+var activatetext -1 0
+
+var playsound 0 2
+var cutscene_sound 0 2
+
+var just_changed 0 1 // If the player has changed character, this sets the right anim
+
+// Mounted Weapons
+var using_minigun -1 1
+var using_50cal -1 1
+var current_sg_ammo 0 1
+var stationary_gun_ammo 1000 2
+var firing_count 0 1
+
+// Temp weapons
+var temp_weapon 0 1
+var silver_ammo 0 1
+var silver_bolts 0 1
+var explosive_shells 0 1
+var flechete_shells 0 1
+var magnum_shells 0 1
+var dragon_shells 0 1
+var tesla_ammo 0 1
+var micro_torpedo 0 1
+var heat_seek_card 0 1
+var atomic_bomb 0 1
+var DUP_missile_ammo 0 1
+// cased grenades
+var fortymm_grenades 0 1 // standard grenades
+var fortymm_shells 0 1 // HE shells (similar to SW)
+var fortymm_MIA_shells 0 1 // MIA grenades
+var fortymm_plasma 0 1 // Plasma grenade
+// caseless grenades
+var fortymm_caseless 0 1 // GEP caseless
+var fortymm_slug 0 1 // slug
+var fortymm_electro 10 1 // caseless electro
+var fortymm_cryo 0 1 // Cryo grenade
+
+var grenade_counter 0 2
+
+var IS_PLAYER 0 2
+
+var swing_type 0 1
+
+var near_crystal 0 1
+
+var MOVESOUND 0 1
+
+var PLAYER_PROTECTED 0 1
+
+var AIRDROP_LEVELS 0 0
+
+// 2 = Megabase
+
+var MEDIKIT_USING 0 1
+
+var CROUCH 0 1
+
+var JAMES_1911 0 1
+var JAMES_JACKH 0 1
+
+var BOW_PULLBACK 0 1
+
+// GENERAL
+var wp_temp 0 1 
+var temp 0 1
+var x 0 1
+var y 0 1
+var x2 0 1
+var y2 0 1
+var tilenum 0 1
+var tilenum2 0 1
+var orientation 0 1
+
+var pal 0 1
+
+var wep_pal 0 1
+var pal_2 0 1
+
+var shade 0 1
+
+var shoot_countdown 26 2
+
+// MIDI CHANGER
+var MIDICHANGES -1 0
+
+// FOR CAMERA ARROWS
+var PCAMERA 0 1
+var CAMID 0 1
+
+// FOR COMPUTER SCREENS
+var MOUSEUP 0 1
+
+var Q16_MOUSEX 0 1
+var Q16_MOUSEY 0 1
+
+var MOUSEX 0 1
+var MOUSEY 0 1
+
+var INFO_NUMBER 0 1
+
+var INFO_SEL 0 1
+var INFO_SEL_2 0 1
+var INFO_SEL_3 0 1
+
+// bit field for hiding stuff
+var COM_FILTER 319 1
+
+// 1 = Episode 1 missions
+// 2 = Episode 2 missions
+// 4 = Episode 3 missions
+// 8 = Episode 4 missions
+// 16 = Episode 5 missions
+// 32 = Facilities
+// 64 = Information
+// 128 = Help
+// 256 = Resources
+// 512 = Filter screen
+
+// FOR FAKE DOOR
+var ENDPOINTX 0 2
+var ENDPOINTY 0 2
+var ENDPOINTZ 0 2
+
+// READING
+var DOCUMENT -1 1
+var PAGEICON -1 1
+var PAGENUMBER 0 1
+var MAXPAGES 0 1
+var PAGETURNSOUND 0 1
+
+// SAVEABLE VARS
+var EVIDENCE 0 0
+var EVIDENCE_EP2 0 0
+var EVIDENCE_EP3 0 0
+
+var GOT_PASSWORD 0 1 // has the player gotten a password in the level?
+
+// POWERUPS
+
+var SWORD_RAMP 0 1
+var INVINC 0 1
+
+// HITSCAN
+var hitx 0 2
+var hity 0 2
+var hitz 0 2
+var hitsect 0 2
+var hitsprite 0 2
+var hitwall 0 2
+
+var p_hitx 0 1
+var p_hity 0 1
+var tracker -1 1
+
+var total_player_shade_diff 0 1
+var player_shade_diff 0 1
+
+// IF 0, DELETE SOME NON ESSENTIAL SPRITES
+var PERFMODE 1 1
+
+var global_trigger 0 0
+var destruct_trigger 0 0
+
+var INVEN_REPLACE 0 0
+
+// STORY STUFF
+var STORY_TRIGGER1 0 0
+var STORY_TRIGGER2 0 0
+var STORY_TRIGGER3 0 0
+
+var WORLD_TRIGGER 0 0 // use for basic stuff
+
+var CIVS_PANIC 0 0 // set this to 1 to make civilians run around panicking
+
+var SAVED_LILITH 0 0
+var SAVED_MATVEI 0 0
+var NELSON_LICENSE 0 0
+var FAITHFUL_LICENSE 0 0
+// 1 = license
+// 2 = AK47 discount
+// 4 = Gilboa Discount
+// 8 = AS discount
+// 16 = pepsi bottle cap
+// 32 = cola bottle cap
+// 64 = cherry bottle cap
+var EDF_MISSIONS 0 0
+var SAVED_LIZ 0 0
+var SAVED_YUZUKI 0 0
+
+// COMPUTER STUFF
+var PCINTER 0 1
+var JPCMENU 0 1
+var MAINMENUBD 3584 1
+
+var base_level -1 0
+var base_volume -1 0
+
+var mis_lev -1 0
+var mis_vol -1 0
+
+
+// MISSION STUFF
+var MISSIONUP 0 1
+var MISSIONPOS 320 1
+var MISSIONSCREEN 0 1
+var MISSIONLINE1 0 0
+var MISSIONLINE2 0 0
+var MISSIONLINE3 0 0
+var MISSIONLINE4 0 0
+var MISSIONLINE5 0 0
+var MISSIONLINE6 0 0
+var SCAN_MODULE 1 0
+
+var P_CREDITS 0 2
+var CREDITS 0 131073
+
+var THISSHADOW -1 2
+
+// Track active bosses
+gamearray BOSS_STACK 16
+var BOSS_IDX 0 0
+
+var CURBOSS -1 0
+var BOSS_TYPE 0 0
+
+// 0 = Default
+// 1 = Cycloid
+// 2 = Demon
+// 3 = Medievil
+// 4 = Robotic
+// 5 = Paranormal
+// 6 = Shadow Realm
+// 7 = Egyptian
+// 8 = Trenton Solari
+
+var SHIP_INTEGRITY -1 0
+var HUGE_BOSS_HEALTH -1 0
+
+var REACTOR_VAR -1 0
+var REACTOR_BREACH 0 0
+
+var ITEMBITFIELD 0 2
+
+// KEYS ( most of these are bitfields)
+var KEYCARDTYPE 0 1 // Tells the code to display normal access cards or runes for example
+var RUNEKEYS 0 1
+var SCARABKEYS 0 1
+var ACCESSKEY2 0 1
+var SW_KEYS 0 1
+var PLUGKEY 0 1
+var HELLGKEYS 0 0
+var HELLGKEYSA 0 0
+var ABYSS_KEYS 0 1
+var OLDKEYS 0 1
+var NORMAL_KEYS 0 1
+var GENERIC_KEYS 0 1
+var COGS 0 1
+var FLOPPY_DISK 0 1
+var HOLO_ACCESS 0 1
+var SWIPECARDS 0 1
+
+var INV_SEL_X 0 1
+var INV_SEL_Y 0 1
+var P_SWHEEL 0 1
+
+var WHEEL_ROTATE 0 1
+
+var DISP_KEY 40 1
+var DISP_KEY_PIC 0 1
+var DISP_KEY_PAL -1 1
+
+var DISP_MAINMENU 1 0
+
+var DISP_RES 40 1
+var DISP_RES_PIC 0 1
+var DISP_RES_PAL -1 1
+
+var EGYPT_KEYS 0 1
+var EGYPT_ARTIFACTS 0 1
+
+
+var WHEEL1 0 0
+var WHEEL2 0 0
+
+var TEMPLE_KEY 0 1
+// 1 = 1st Half
+// 2 = 2nd Half
+// 4 = put togher
+// 8 = AI uploaded
+
+// 1 = HIGH JUMP SANDALS
+// 2 = OXYGEN MASK
+// 4 = POWER BRACELETS
+// 8 = SLOW-FALL FEATHER
+
+var GOT_EXPLOSIVE 0 1
+var AIRSTRIKE_MARKER 0 1
+var AIR_FILTER 0 1
+var FIRE_SUIT 0 1
+var JUGGERN_SUIT 0 1
+var SPACE_SUIT 0 1
+var LIFE_SUPPORT 14400 1
+var GAS_MASK 0 1
+var GOT_FLIPPER 0 1
+var JUMP_BOOTS 0 1
+var TOOLBOX 0 1
+var HEAT_SINKS 0 1
+var ROPE 0 1
+var GOT_FIREWALL 0 1
+var FIREWALL_ID 0 1 // set to Firewall ID
+
+var DROWN_COUNT 0 1
+var OXYGEN_HIT 0 1 // records HP damage done by drowning
+
+var AUTOAIM_STATUS -1 1
+var AUTORUN_STATUS -1 1
+
+var GAS_MASK_PUTON 26 1
+
+var FORTUNE_QUOTE 0 1
+var FORTUNE_TIMER 0 1
+
+var ingas 0 1
+var infire 0 1
+var inspace 0 1
+var flash_banged 0 1
+
+// Character specific items
+var PS_ITEM 0 1
+
+// 1 = James Forceshield
+// 2 = Geo Bandana
+// 3 = Snowfall shield
+
+// WEAPONMAGS
+var GUNMAG 0 1 // The Var that displays the magazine count on the HUD
+var TEMP_WEAPON_MAG 0 1 // What's in the temp weapon's magazine
+var MAX_TEMP_WEAPON_MAG 0 1 // The maximum amount allowed in the temp weapon's magazine
+var PISTOLMAG 0 1 // What's in the Pistol's magazine
+var MAXPISTOLMAG 0 1 // The maximum amount of ammo in the pistol's mag allowed
+var SHOTGUNMAG 0 1 // How many shells does the shotgun have
+var MAX_SHOTGUNMAG 0 1 // Max number of shells allowed in shotgun
+var SHOTGUNBOXMAG 0 1 // How many shells in the shotgun's magazine
+var MAX_SHOTGUNBOXMAG 0 1
+var MGUNMAG 0 1 // What's in the assault rifle's magazine
+var MAXMGUNMAG 0 1 // The maximum amount of ammo in the assault rifle's mag allowed 
+var ROCKETMAG 0 1 // Rocket launcher's magazine
+var AUTOSHOTMAG 0 1 // The Autoshotgun's magazine
+var SLUGSHOTMAG 0 1 // The Autoshotgun's slug magazine
+var RIFLEMAG 0 1 // The Sniper rifle's magazine
+var MAXRIFLEMAG 0 1 // Max Rifle magazine
+var MACHINE_MAG 0 1 // Machine Gun's magazine
+var MAX_MACHINE_MAG 0 1 // Maximum ammo for machine gun
+var ANBMAG 0 1 // The anti-newbeast gun's magazine
+var ALTMAG 0 1 // Alternate fire's mag
+
+// How drunk the player is
+var INEBRIATION 0 1
+
+var ALT_ANIM 20 1
+var ALT_ANIM_2 20 1
+
+// SKILL LEVELS
+var SKILL_LEVEL 0 1
+var SKILLCHANCE 0 0 // used for determining skill based stuff
+
+var RANDOM_CHANCE 0 2
+
+var ANGVAR 0 2
+
+// Get's the players angle and view angle so it locks when viewing computers
+var PANG 0 1
+var PHORIZ 0 1
+
+// Determines the rotation for some weapon's muzzleflash
+var M60FLASH 0 2
+
+var ZOOMAMOUNT 4 1
+
+var GUI_POS_X 0 1
+var GUI_POS_Y 0 1
+
+var GUI_POS_X_TEMP 0 1
+var GUI_POS_Y_TEMP 0 1
+
+var GUI_POS_X2 0 1
+var GUI_POS_Y2 0 1
+
+var GUI_POS_X_TEMP2 0 1
+var GUI_POS_Y_TEMP2 0 1
+
+var pdestination -1 131073
+var WAIT 0 2
+var playerwait 0 131073
+var xoff 0 131073
+var yoff 0 131073
+var zoff 0 131073
+
+var alpha 0 2
+
+defstate SPAWN_IN_PLAYER_FRONT
+		set TEMP3 player[].posx
+		add TEMP3 512
+		rotatepoint player[].posx player[].posy TEMP3 player[].posy player[].ang TEMP5 TEMP6
+		seta[RETURN].x TEMP5 
+		seta[RETURN].y TEMP6
+		geta[RETURN].ang TEMP4
+		sub TEMP4 -1024
+		seta[RETURN].ang TEMP4
+ends
+
+defstate SPAWN_IN_FRONT
+		set TEMP3 sprite[].x
+		add TEMP3 512
+		rotatepoint sprite[].x sprite[].y TEMP3 sprite[].y sprite[].ang TEMP5 TEMP6
+		seta[RETURN].x TEMP5 
+		seta[RETURN].y TEMP6
+		geta[RETURN].ang TEMP4
+		sub TEMP4 -1024
+		seta[RETURN].ang TEMP4
+ends
+
+defstate GETHITAGLOTAG
+    ifn sprite[].hitag 0 { geta[].hitag HITAGSAVED seta[].hitag 0 }
+    ifn sprite[].lotag 0 { geta[].lotag LOTAGSAVED seta[].lotag 0 }
+ends
+
+defstate GETHITAG
+    ifn sprite[].hitag 0 { geta[].hitag HITAGSAVED seta[].hitag 0 }
+ends
+
+defstate GETLOTAG
+    ifn sprite[].lotag 0 { geta[].lotag LOTAGSAVED seta[].lotag 0 }
+ends
+
+defstate GETEXTRA
+    ifg sprite[].extra 0 { geta[].extra EXTRASAVED seta[].extra -1 }
+ends
+
+defstate GETALLTAGS
+{
+    geta[].hitag HITAGSAVED
+    geta[].lotag LOTAGSAVED
+    geta[].extra EXTRASAVED
+    ifn sprite[].xvel 0 geta[].xvel XVELSAVED
+    ifn sprite[].yvel 0 geta[].yvel YVELSAVED
+    ifn sprite[].zvel 0 geta[].zvel ZVELSAVED
+	geta[].clipdist CLIPDISTSAVED
+    seta[].hitag 0
+    seta[].lotag 0
+    seta[].extra 0
+    seta[].xvel 0
+    seta[].yvel 0
+    seta[].zvel 0
+}
+ends
+
+var IN_DREAM 0 0
+
+gamearray INVENTORY_SLOTS 32
+var WH_SLOT_X 0 2
+var WH_SLOT_Y 0 2
+var THIS_SLOT 0 1
+
+var DISTANCE 0 1
+
+var xydist 0 2
+
+var PIE_TEMP 0 2
+var PIE_TEMP2 0 2
+var PIE_TEMP3 0 2
+
+defstate pythagoras
+// next code gets distance between (x,y) and (hitx,hity), puts result in xydist
+
+set PIE_TEMP x
+set PIE_TEMP2 hitx
+sub PIE_TEMP PIE_TEMP2
+mulvarvar PIE_TEMP PIE_TEMP
+	
+set PIE_TEMP2 y
+set PIE_TEMP3 hity
+sub PIE_TEMP2 PIE_TEMP3
+mulvarvar PIE_TEMP2 PIE_TEMP2
+	
+add PIE_TEMP PIE_TEMP2
+sqrt PIE_TEMP PIE_TEMP
+set xydist PIE_TEMP
+ends
+
+var GUN_CHARGE 0 1
+
+var RUSTY_BAYONET 0 1
+
+var RUSTY_MINE_GUN 0 2
+
+var SWORD_ANIM 0 1
+
+var BLOOD_PAL 0 1
+
+var WEP0_BLOODY 0 1
+var WEP2_BLOODY 0 1
+var WEP3_BLOODY 0 1
+
+gamearray GEO_MEGA_SHOT 10 // name kept for simplicity's sake
+// 0 = Geoffrey's mega pistol shot
+// 1 = Zilla inc Atomic bomb
+// 2 = Zax's Super galil atom bomb
+
+var GEO_CALCULATE_TRAJ 0 1
+
+var DEATH_CAM -1 1
+
+var SWORD_BLOCK 0 1
+
+var CONTROL_VR -1 1
+var VR_ACTION_POINTS 0 1
+
+var SHOOTDYNAMITE -1 0
+var SHOOTGRENADE -1 0
+var SHOOTHOLYG -1 0
+var SHOOTDISCBOMB -1 0
+var SHOOTCLUSTER -1 0
+
+var command 0 2
+var timer 0 131073
+
+// PLAYER HEALTH AND ARMOUR VALUES
+var PMAX_STAMINA 100 1
+var PMAXHEALTH 100 1
+var PHEALTH 0 1
+var PARMOUR 0 1
+var PBOOST 0 1
+
+var P_HAS_SHIELD 0 1
+var P_ENERGYSHIELD 0 1
+var P_MAX_SHIELD 0 1
+var P_REC_DELAY 0 1
+
+var P_SPIRIT_ARMOUR 0 1
+var P_FIRE_ARMOUR 0 1
+
+var ARM_BLEEDOFF 0 1 // holds damage that affects player
+
+var FIRE_DAMAGE 0 2
+var SPIRIT_DAMAGE 0 2
+var ICE_DAMAGE 0 2
+var ENERGY_DAMAGE 0 2
+
+var IFF_COOLD 0 1 // Cooldown of drone IFF
+
+var CURSED 0 1
+var BLINDED 0 1
+
+var COUNTER 0 1
+var COUNTER_2 0 1
+
+var CSPAWNPOSX 0 2
+var CSPAWNPOSY 0 2
+var CSPAWNPOSZ 0 2
+var CSPAWNANG 0 2
+
+var HUDON 0 1
+
+var CUSTOMKEYCARDPOS 0 1
+var CKEYCARDTILE 0 1
+var CKEYCARDTILE2 0 1
+var CKEYCARDTILE3 0 1
+var CKEYCARDPAL 0 1
+var CTRIPBOMB 0 1
+var CKNEE 0 1
+var CDETON 0 1
+var CTIP 0 1
+var CPIPEBOMB 0 1
+var CHOLDING 9431 1 // right hand
+var CHOLDING_2 9431 1 // left hand
+var CHOLDING_3 0 1 // left hand 2 for launcher nades and stuff
+
+var C_ARM_1 0 1 // Holding arm 1 (shorter version)
+var C_ARM_2 0 1 // Holding arm 2 (longer version)
+
+var C_HAND_1 0 1
+var C_HAND_2 0 1
+
+var C_PISTOL_1 0 1 // Right pistol hand
+var C_PISTOL_2 0 1 // Left Pistol hand
+
+var FOOTSTEPCOUNT 0 2
+var FLOORTEX 0 2
+var STEPSOUNDFX 0 2
+
+var CHAR -1 1
+var P_CHAR -1 2
+
+var CHARSELECT 1 1
+var CHARSTART 0 1
+var LOCATION 8448 0
+
+var CHARSHADE 0 1
+
+var QUICKK 13 1
+var GOT_KNIFE 0 1
+var KNIFE_ATTACK 26 1
+var MELEE_GRAPHIC 0 1
+var ROUNDHOUSE_KICK 26 1
+var SLIDE_KICK 26 1
+var SPIN_KICK 26 1
+var TWIRL_KICK 26 1
+var FLYING_KICK 26 1
+var DROP_KICK 26 1
+var WALL_KICK 0 1
+
+var MELEE_LOCKED_ON -1 1
+var UPPER_CUT 20 1
+
+var ZERO_G_ZVEL 0 1
+
+var END_LEVEL 0 1
+
+var ROLL_LEFT 13 1
+var ROLL_RIGHT 13 1
+var ROLL_BACKWARDS 26 1
+var ROLL_FORWARDS 26 1
+
+var SPRINTING 100 1
+var DIVING 0 1
+
+var MERL_SPIN_SLASH 27 1
+
+var knockbackang 0 1
+var knockback 0 1
+var knockback2 0 1
+var knockback_slide 0 1
+var knockbackheight 0 1
+
+var mx 0 2
+var my 0 2
+var mz 0 2
+var z 0 2
+var xvel 0 2
+var yvel 0 2
+
+var PLAYERONTHEBIKE 0 1
+
+
+// Zaxtor game vars
+
+var temp266 0 0
+var temp267 0 0
+var DOOROP_X_1 0 0
+var FFIELDTOLERANCE_LV 0 0
+var FFIELDRESISTANCE 0 0
+var BARRIERPWRLV 0 0
+var POWERINGSOMETHINGX 0 0
+var EX_BEAM 0 0
+var EX_BEAMF 0 0
+var EX_BEAMOPF 0 0
+var EX_BEAMOPF01 0 0
+var EX_BEAMOPF02 0 0
+var EX_BEAMOPF03 0 0
+var EX_BEAMOPF04 0 0
+var EX_BEAMOPF05 0 0
+var EX_BEAMOPF06 0 0
+var EX_BEAMOPF07 0 0
+var EX_BEAMOPF08 0 0
+var EX_BEAMOPF09 0 0
+var EX_BEAMOPF10 0 0
+var JBGENEDEAD 0 0
+var ACCUNLOCKED 0 0
+var SWITC_H_CODES 0 0
+var GIVINGANITEMPAPER 0 0
+var PYRAMIDCODAGE 0 0
+var INSIDEQUICKFALL 0 0
+var G_MOVINGPRT 0 0
+var G_MOVINGPRT2 0 0
+var BEETLECODES01 0 0
+var BEETLECODES02 0 0
+var BEETLECODES03 0 0
+var BEETLECODES04 0 0
+var BEETLECODES05 0 0
+var BEETLECODES06 0 0
+var BEETLECODES07 0 0
+var BEETLECODES08 0 0
+
+defstate PAIN_SKILL_LEVELADJUST // sets amount of time enemy plays pain animation for
+ife SKILL_LEVEL 1 set PAIN_AMOUNT 16
+else ife SKILL_LEVEL 2 set PAIN_AMOUNT 13
+else ife SKILL_LEVEL 3 set PAIN_AMOUNT 6
+else ife SKILL_LEVEL 4 set PAIN_AMOUNT 3
+else ife SKILL_LEVEL 5 set PAIN_AMOUNT 1
+ends
+
+defstate PAIN_SKILL_LEVELADJUST_REV // makes it MORE likely to flinch on high skill levels, for shields or other reasons
+ife SKILL_LEVEL 1 set PAIN_AMOUNT 6
+else ife SKILL_LEVEL 2 set PAIN_AMOUNT 13
+else ife SKILL_LEVEL 3 set PAIN_AMOUNT 16
+else ife SKILL_LEVEL 4 set PAIN_AMOUNT 32
+else ife SKILL_LEVEL 5 set PAIN_AMOUNT 48
+ends
+
+defstate SKILL_SHOOT_LEVELADJUST // chance to shoot depending on skill level
+ife SKILL_LEVEL 1 set SKILLCHANCE 8
+else ife SKILL_LEVEL 2 set SKILLCHANCE 16
+else ife SKILL_LEVEL 3 set SKILLCHANCE 32
+else ife SKILL_LEVEL 4 set SKILLCHANCE 48
+else ife SKILL_LEVEL 5 set SKILLCHANCE 64
+ifn CHAR -1
+{
+ife ARTIFACTS_LOADOUT[CHAR] 1 sub SKILLCHANCE 2
+else ife ARTIFACTS_LOADOUT[CHAR] 2 sub SKILLCHANCE 2
+else ife ARTIFACTS_LOADOUT[CHAR] 5 sub SKILLCHANCE 2
+}
+randvar RANDOM_CHANCE 256
+ends
+
+defstate SKILL_ENEMY_ACCURACY // accuracy penalty based on skill level for enemies
+ifl SKILL_LEVEL 5
+	{
+	geta[].ang TEMP
+	ife SKILL_LEVEL 1 randvar TEMP2 128
+	else ife SKILL_LEVEL 2 randvar TEMP2 96
+	else ife SKILL_LEVEL 3 randvar TEMP2 64
+	else ife SKILL_LEVEL 4 randvar TEMP2 32
+	ifrnd 128 add TEMP TEMP2
+	else sub TEMP TEMP2
+	seta[].ang TEMP
+	}
+ends
+
+defstate DARKNESS_ENEMY_ACCURACY // slight accuracy penalty if player is in a dark area
+	ifg sprite[PLAYER_IDENTITY].shade 20
+		{
+		geta[].ang TEMP3
+		ife SKILL_LEVEL 1 randvar TEMP2 48
+		else ife SKILL_LEVEL 2 randvar TEMP2 32
+		else ife SKILL_LEVEL 3 randvar TEMP2 24
+		else ife SKILL_LEVEL 4 randvar TEMP2 16
+		ifrnd 128 add TEMP3 TEMP2
+		else sub TEMP3 TEMP2
+		seta[].ang TEMP3	
+		}
+ends
+
+defstate DARKNESS_TARGET_ACCURACY // slight accuracy penalty if target is in a dark area
+ifn target -1
+	{
+	ifg sprite[target].shade 20
+		{
+		geta[].ang TEMP3
+		ife SKILL_LEVEL 1 randvar TEMP2 48
+		else ife SKILL_LEVEL 2 randvar TEMP2 32
+		else ife SKILL_LEVEL 3 randvar TEMP2 24
+		else ife SKILL_LEVEL 4 randvar TEMP2 16
+		ifrnd 128 add TEMP3 TEMP2
+		else sub TEMP3 TEMP2
+		seta[].ang TEMP3	
+		}
+	}
+ends
+
+defstate SKILL_LEVELADJUST // reduces chance on lower skill levels
+ife SKILL_LEVEL 1 set SKILLCHANCE 128
+else ife SKILL_LEVEL 2 set SKILLCHANCE 64
+else ife SKILL_LEVEL 3 set SKILLCHANCE 16
+else ife SKILL_LEVEL 4 set SKILLCHANCE 8
+else ife SKILL_LEVEL 5 set SKILLCHANCE 4
+ifn CHAR -1
+{
+ife ARTIFACTS_LOADOUT[CHAR] 1 add SKILLCHANCE 32
+else ife ARTIFACTS_LOADOUT[CHAR] 2 add SKILLCHANCE 32
+else ife ARTIFACTS_LOADOUT[CHAR] 5 add SKILLCHANCE 32
+}
+randvar RANDOM_CHANCE 256
+ends
+
+// Thanks to Hunter_Rus for this code
+// Return between floor and THISACTOR in z variable.
+// Return actual sector in SECT.
+
+// Get sector floor distance (regular and TROR)
+defstate getfloordist
+  updatesectorz sprite[].x sprite[].y sprite[].z TEMP4 
+  ifn TEMP4 -1 getflorzofslope TEMP4 sprite[].x sprite[].y z
+  sub z sprite[].z
+  shiftvarr z 8
+  sub z 1
+ends
+
+// Get distance for all types of floors (sector, TROR and spritebridge)
+defstate getfloordist_sbs
+  updatesectorz sprite[].x sprite[].y sprite[].z TEMP4 
+  
+  // The following is done to check for both spritefloors and TROR floors
+  hitscan sprite[].x sprite[].y sprite[].z TEMP4 0 0 10000 TEMP TEMP TEMP TEMP TEMP TEMP2 4294901808
+  ifn TEMP4 -1 getflorzofslope TEMP4 sprite[].x sprite[].y TEMP3
+  ifl TEMP3 TEMP2 set z TEMP3
+  else set z TEMP2
+  
+  sub z sprite[].z
+  shiftvarr z 8
+  sub z 1
+ends
+
+defstate getceildist
+  updatesector sprite[].x sprite[].y TEMP4 
+  ifn TEMP4 -1 getceilzofslope TEMP4 sprite[].x sprite[].y TEMP5
+  geta[].z z
+  sub z TEMP5
+  shiftvarr z 8
+  sub z 1
+ends
+
+var myspawner -1 2
+var ceiltext -1 0
+
+var weather_type 0 0
+
+/*
+new floor cstats
+8192 = cold breathe
+16384 = electric
+65536 = water
+
+262144 = floor scroll
+
+new ceiling stats
+8192 = no spawn
+16384 = low gravity
+
+*/
+
+var FILLER 0 2
+
+var NUKE_ACTIVE 0 0 // if a Nuclear explosion is present
+
+var RAINREPLACE 0 0
+var rainstart 0 0
+var raining 0 0 // number of rain or snow sprites spawned per tick, negative when snowing
+var rainpal 0 0
+var raincstat 0 0
+var rainradius 0 0
+var snowceiling 0 0
+var mtype 0 2
+
+
+
+defstate checkwall // checks to see if there is a close wall
+
+// WALL_CLOSE will be set to 1 if the answer is yes, 0 otherwise
+set WALL_CLOSE 0
+
+
+// we start by checking for the dreaded slope at feet problem
+
+geta[].z z
+geta[].x x
+geta[].y y
+geta[].sectnum mysector
+geta[].ang ANGVAR
+set zdist 0
+cos mycos ANGVAR
+sin mysin ANGVAR
+
+hitscan x y z mysector mycos mysin zdist hitsector hitwall hitsprite hitx hity hitz clipmask
+state pythagoras
+set xydist2 xydist // saves the distance
+sub z 1536
+hitscan x y z mysector mycos mysin zdist hitsector hitwall2 hitsprite hitx hity hitz clipmask
+state pythagoras
+ifn hitwall -1
+ife hitwall hitwall2 ifg xydist xydist2 break // it's one of those slopes...
+
+sub z 1536 // now we do the first "real" hitscan
+hitscan x y z mysector mycos mysin zdist hitsector hitwall hitsprite hitx hity hitz clipmask
+state pythagoras
+
+ifg xydist 512 break //512
+
+//ife hitwall -1 ifn hitsprite -1 set hitwall hitsprite // treats sprite as wall
+
+// now a second hitscan to see whether the upper body is above the wall
+
+sub z 7168
+hitscan x y z mysector mycos mysin zdist hitsector hitwall2 hitsprite hitx hity hitz clipmask
+
+//ife hitwall2 -1 ifn hitsprite2 -1 set hitwall2 hitsprite2 // treats sprite as wall
+
+state pythagoras
+ifg xydist 512 ifvarvarn hitwall hitwall2 set WALL_CLOSE 1
+
+ends
+
+defstate checkwall_2 // checks to see if there is a close wall
+
+// WALL_CLOSE will be set to 1 if the answer is yes, 0 otherwise
+set WALL_CLOSE 0
+
+
+// we start by checking for the dreaded slope at feet problem
+
+geta[].z z
+geta[].x x
+geta[].y y
+geta[].sectnum mysector
+geta[].ang ANGVAR
+set zdist 0
+cos mycos ANGVAR
+sin mysin ANGVAR
+
+hitscan x y z mysector mycos mysin zdist hitsector hitwall hitsprite hitx hity hitz CLIPMASK0
+state pythagoras
+set xydist2 xydist // saves the distance
+
+hitscan x y z mysector mycos mysin zdist hitsector hitwall2 hitsprite hitx hity hitz CLIPMASK0
+state pythagoras
+ifn hitwall -1
+ife hitwall hitwall2 ifg xydist xydist2 break // it's one of those slopes...
+
+hitscan x y z mysector mycos mysin zdist hitsector hitwall hitsprite hitx hity hitz CLIPMASK0
+state pythagoras
+
+ifg xydist 512 break //512
+ifl xydist 0 break
+
+set WALL_CLOSE 1
+ends
+
+defstate check_actor_hitscan
+geta[].x x
+geta[].y y
+geta[].sectnum TEMP
+geta[].ang TEMP3
+
+sin my TEMP3
+cos mx TEMP3
+geta[].z z
+sub z 4096
+
+hitscan x y z TEMP mx my 0 hitsect hitwall hitsprite hitx hity hitz 16777280
+ends
+
+defstate supply_system
+	readarrayfromfile FACILITIES_OWNED 4026
+	readgamevar SUPPLY_LEVEL
+	ife FACILITIES_OWNED[0] 2 add SUPPLY_LEVEL 1 // Euro factory 1?
+	ife FACILITIES_OWNED[1] 2 add SUPPLY_LEVEL 1 // Africa factory 1?
+	ife FACILITIES_OWNED[2] 2 add SUPPLY_LEVEL 2 // Brazil factory 1?
+	ife FACILITIES_OWNED[3] 2 add SUPPLY_LEVEL 4 // Lunar factory 1?
+	ife FACILITIES_OWNED[7] 2 add SUPPLY_LEVEL 4 // Io factory 1?
+	ife FACILITIES_OWNED[8] 2 add SUPPLY_LEVEL 3 // Ganymede factory 1?
+	set MAX_SUPPLY_LEVEL 100
+	ife FACILITIES_OWNED[4] 2 add MAX_SUPPLY_LEVEL 100 // China Warehouse?	
+	ifg SUPPLY_LEVEL MAX_SUPPLY_LEVEL set SUPPLY_LEVEL MAX_SUPPLY_LEVEL
+	savegamevar SUPPLY_LEVEL
+ends
+
+defstate fatigue_system
+ifg SKILL_LEVEL 1
+ ifn CHAR -1
+	{
+	getp[].player_par TEMP8
+	divvar TEMP8 10
+	set TEMP9 PMAXHEALTH
+	sub TEMP9 PHEALTH // how hurt is the player?
+	ifn TEMP9 0 mulvar TEMP9 10
+	add TEMP8 TEMP9
+	readarrayfromfile AGENT_FATIGUE 4060
+	set TEMP7 AGENT_FATIGUE[CHAR]
+	add TEMP7 TEMP8
+	setarray AGENT_FATIGUE[CHAR] TEMP7
+	set TEMP5 0
+	whilevarn TEMP5 16
+		{
+		ifvarvarn TEMP5 CHAR // cycle through the other characters
+			{
+			set TEMP4 AGENT_FATIGUE[TEMP5]
+			getp[].player_par TEMP8
+			divvar TEMP8 8
+			sub TEMP4 TEMP8 // reduce that agent's fatigue by the rest amount
+			clamp TEMP4 0 15000
+			setarray AGENT_FATIGUE[TEMP5] TEMP4
+			}
+		add TEMP5 1
+		}
+	writearraytofile AGENT_FATIGUE 4060
+	}
+ends
+
+gamevar BUDGET_TEMP 0 1
+
+defstate budget_system
+ife CHEATED 0
+	{
+	state supply_system
+	readgamevar AMC_BUDGET
+	al AMC_BUDGET
+	ifl AMC_BUDGET 0 set AMC_BUDGET 0
+	add AMC_BUDGET 1 // gives 1k initially
+	ifg TREASURE_FOUND 0 add AMC_BUDGET TREASURE_FOUND // add treasure
+	getp[].actors_killed BUDGET_TEMP
+	ife SKILL_LEVEL 1 divvar BUDGET_TEMP 15 // gives 1k extra for every 15 enemies killed
+	else ife SKILL_LEVEL 2 divvar BUDGET_TEMP 12 // gives 1k extra for every 12 enemies killed
+	else ife SKILL_LEVEL 3 divvar BUDGET_TEMP 9 // gives 1k extra for every 9 enemies killed
+	else ife SKILL_LEVEL 4 divvar BUDGET_TEMP 6 // gives 1k extra for every 6 enemies killed
+	else ife SKILL_LEVEL 5 divvar BUDGET_TEMP 3 // gives 1k extra for every 3 enemies killed
+	ifl BUDGET_TEMP 1 set BUDGET_TEMP 1 // gives a minimum of 1
+	add AMC_BUDGET BUDGET_TEMP
+	set AMC_BUDGET_INCREASE BUDGET_TEMP // budget increase reports on the bonus screen
+	ifg TREASURE_FOUND 0 add AMC_BUDGET_INCREASE TREASURE_FOUND 
+	add AMC_BUDGET_INCREASE 1 // add the default 1 budget
+	set BUDGET_TEMP LOADOUT_COST
+	divvar BUDGET_TEMP 1000
+	ifl BUDGET_TEMP 0 set BUDGET_TEMP 0
+	sub AMC_BUDGET BUDGET_TEMP
+	sub AMC_BUDGET_INCREASE BUDGET_TEMP
+	savegamevar AMC_BUDGET
+	al AMC_BUDGET
+	}
+ends
+
+var array_save 0 0 // set to 1 to save arrays on level finish
+
+defstate save_arrays
+ife array_save 1
+	{
+	writearraytofile WEAPONS_RESEARCH 4000
+	writearraytofile EQUIPMENT_RESEARCH 4001
+	writearraytofile PERSONEL_RESEARCH 4002
+	writearraytofile BASE_RESEARCH 4003
+	writearraytofile MYSTICAL_RESEARCH 4004
+	writearraytofile MELEE_RESEARCH 4020
+	set array_save 0
+	}
+ends
+
+var TRIGGER_BASE_SCENE 0 1
+
+// 1 = base assault
+
+// ==========================================================================================
+// PLAYER LOCKABLES
+// ==========================================================================================
+
+gamearray BEAT_EPISODES 10 // slot 0 is an initialisation var to set the initial values from the config files 
+
+var BEATEP1 0 0
+
+// 1 = Megabase 
+// 2 = Dis Base
+// 4 = Abyss
+// 16 = Millhaven
+// 32 = Snow base
+// 64 = Revolution
+// 128 = For Providence
+// 256 = Doom Disco #
+
+var BEATEP2 0 0
+
+// 1 = City Siege
+// 2 = Big Trouble in little China
+// 4 = Wharf
+// 8 = Island Factory
+// 16 = Tower of Life
+// 32 = Hidden Dojo #
+// 64 = Repent #
+// 128 = Ghost Ship
+// 256 = Oilrig #
+// 512 = Xuglop Train
+// 1024 = Mars Space Station END OF EPISODE
+// 2048 = Far mountain reaches
+// 4096 = Ganymede Portal setup
+// 8192 = Jungle Base #
+// 16384 = Arsia mons colony
+// 32768 = Shadow Realm
+// 65536 = Episode 2 intro level
+// 131072 = Energia Map
+
+var BEATEP3 0 0
+
+// 1 = X64-2M
+// 2 = Egypt
+// 4 = Le Sang Pyramid
+// 16 = Micky Begins
+// 32 = Base Attack
+// 64 = New base unveiling
+// 256 = Neutrino
+// 512 = Spooky cut
+// 2048 = Eviction Notice
+// 4096 = Xuglop Combined Assault
+// 8192 = Jungle Pyramid
+// 16384 = Amazon Rainforest
+// 65536 = Fake END OF EPISODE
+// 131072 = beat all ep3 char missions (to trigger fake stuff)
+// 262144 = Chaosphere
+// 524288 = Charon
+
+var BEATEP4 0 0
+
+// 1 = Elysion Intro
+// 2 =
+// 4 =
+// 8 =
+// 16 =
+// 32 =
+// 64 =
+
+// 128 = The Glacier
+// 1024 = Airport
+// 8192 = Corrupted mine
+// 32768 = Stygian Memorial
+
+var BEATEP5 0 0
+
+var BEAT_EXTRA 0 0
+
+// 1 = Zeta base
+// 2 = Pipe dream
+// 4 = Shellshocked
+
+var BEAT_EDF 0 0
+
+// SERIES 1
+
+// 1 = Red series
+// 2 = Wet Dream
+// 4 = Tropical Alien Massacre
+// 8 = Clear the Coast
+// 16 = ABBA
+// 32 = Ice Station colossus
+// 64 = Voices of Authority
+// 128 = Fantasy hotel
+// 256 = The Beach
+// 512 = The Secret base
+// 1024 = West Alien train/Underground fortress
+// 2048 = The Pyramid
+// 4096 = EDF Bureau
+// 8192 = Hydrostation
+// 16384 = 2Bizarre
+// 32768 = Daikarin
+// 65536 = The Final Confrontation
+// 131072 = The Lost Highway
+// 262144 = Shuttle Escape
+// 524288 = Passenger Jet
+// 1048576 = Atmospheric Processing
+// 2097152 = Beta Two
+// 4194304 = Dark Gate
+// 8388608 = 47 Fornax
+// 16777216 = CyberDuke
+// 33554432 = Complex One
+// 67108864 = RedRock
+// 134217728 = Big Orbit
+// 268435456 = Chinatown
+// 536870912 = Redneck Duke
+// 1073741824 = Alone in the dark with the Undead
+// 2147483648 = Near Life Experience
+// 1 = Neil's Zone
+// 2 = Freeman Houston
+// 4 = Death at K'Oger
+// 8 = Castle Anarchy
+// 16 = Mission: Perejil
+// 32 = Pyramid: The Alien Beneath
+// 64 = Metropolitan Starlight
+// 128 = JP Chaos Theory
+// 256 = The Base
+
+// SERIES 2
+
+// 512 = The Asteroid
+// 1024 = DNFOR3VER part two
+// 2048 = Mansion 649
+// 4096 = The Dark Gate
+// 8192 = Savior Trilogy
+
+// ==========================================================================================
+// SKILL MEDALS
+// stores what difficulty players beat maps in
+// ==========================================================================================
+
+gamearray SKILL_MEDALS 256
+
+// 1 = Bronze
+// 2 = Silver
+// 3 = Gold
+// 4 = Platinum
+// 5 = Adamantium
+
+// EPISODE 1 MAPS ================================================================================================
+
+// 1 = Megabase
+// 2 = Dis Base
+// 3 = The Abyss
+// 4 = Millhaven
+// 5 = Snow Base
+// 6 = Revolution
+// 7 = For Providence
+
+// EPISODE 2 MAPS ================================================================================================
+
+// 8 = City Under Siege
+// 9 = Big Trouble in Little China
+// 10 = Wharf
+// 11 = Chisland
+// 12 = Tower of Life
+// 13 = Hidden Dojo
+// 14 = Oilrig
+// 15 = Energia
+// 20 = Repent
+// 21 = Ghost Ship
+
+// 24 = Xuglop Train
+// 25 = Far mountain reaches
+// 26 = Space Station
+// 27 = Mars Colony
+// 29 = Jungle Base
+// 30 = Shadow Realm
+
+// EPISODE 3 MAPS ================================================================================================
+
+// 40 = X64-2
+
+// 43 = Egypt
+// 44 = Le Sang
+// 45 = Micky Begins
+// 46 = Base Invasion
+// 50 = Neutrino
+// 51 = Spookycut
+// 52 = Jungle Pyramid
+// 53 = Eviction Notice
+// 54 = The Glacier
+// 55 = Xuglop Combined Assault
+// 56 = The airport
+// 57 = Amazon Rainforest
+// 58 = Fake
+// 59 = Charon
+
+// EPISODE 4 MAPS ================================================================================================
+
+// 23 = Stygian memorial
+// 28 = Corrupted Mine 
+
+// BONUS MAPS ================================================================================================
+
+// 22 = Ganymede FOB
+// 200 = Zeta base
+// 150 = Pipe dream
+// 151 = Shellshocked
+
+// EDF MISSIONS ================================================================================================
+
+// 201 = Red Series
+// 202 = Wet dream
+// 203 = Tropical Alien Massacre
+// 204 = Clear the Coast
+// 205 = ABBA
+// 206 = Ice Station Colossus
+// 207 = Voices of Authority
+// 208 = Fantasy Hotel
+// 209 = The Beach
+// 210 = Secret base
+// 211 = west alien train
+// 212 = The Pyramid
+// 213 = EDF Bureau 
+// 214 = Hydrostation
+// 215 = 2Bizarre
+// 216 = Daikarin
+// 217 = The Final Confrontation
+// 218 = The Lost Highway
+// 219 = Shuttle Escape
+// 220 = Passenger Jet
+// 221 = Atmospheric Processing
+// 222 = Beta Two
+// 223 = Dark Gate
+// 224 = 47 Fornax
+// 225 = CyberDuke
+// 226 = Complex One
+// 227 = RedRock
+// 228 = Big Orbit
+// 229 = ChinaTown
+// 230 = Redneck Duke
+// 231 = Alone in the dark with the Undead
+// 232 = Near Life Experience
+// 233 = Neil's Zone
+// 234 = Freeman Houston
+// 235 = Death at K-Oger
+// 236 = Castle Anarchy
+// 237 = Mission: Perejil
+// 238 = Pyramid: The Alien Beneath
+// 239 = Metropolitan Starlight
+// 240 = JP Chaos Theory
+// 241 = The Base
+
+// 250 = The Asteroid
+// 251 = DNFOR3VER part two
+// 252 = Mansion 649
+// 253 = The Dark Gate
+// 254 = Savior Trilogy

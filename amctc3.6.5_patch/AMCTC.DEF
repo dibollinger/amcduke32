@@ -1,0 +1,309 @@
+loadgrp AMCART.GRP
+
+cachesize 1048576
+
+basepalette 0 { raw { file "PALS/BPAL_00.RAW" } }
+
+basepalette 1 { raw { file "PALS/BPAL_01.RAW" } }
+basepalette 2 { raw { file "PALS/BPAL_02.RAW" } }
+basepalette 3 { raw { file "PALS/BPAL_03.RAW" } }
+basepalette 4 { raw { file "PALS/BPAL_04.RAW" } }
+basepalette 5 { raw { file "PALS/BPAL_05.RAW" } }
+
+basepalette 7 { raw { file "PALS/BPAL_07.RAW" } }
+basepalette 8 { raw { file "PALS/BPAL_08.RAW" } }
+basepalette 9 { raw { file "PALS/BPAL_09.RAW" } }
+basepalette 11 { raw { file "PALS/BPAL_11.RAW" } }
+
+animsounds logo { 1 814 }
+
+cutscene "CUTSC/CUTSCENE-PATCOS.IVF" { delay 24 }
+cutscene "CUTSC/CUTSCENE-GANYMEDE.IVF" { delay 24 }
+cutscene "CUTSC/CUTSCENE-TRITON.IVF" { delay 24 }
+
+animsounds CUTSC/CUTSCENE-PATCOS.IVF { 1 4100 }
+animsounds CUTSC/CUTSCENE-GANYMEDE.IVF { 1 4101 }
+animsounds CUTSC/CUTSCENE-TRITON.IVF { 1 4102 }
+
+
+palookup 5 { nofloorpal }
+
+nofloorpalrange 10 25
+nofloorpalrange 35 49
+
+numalphatables 128
+
+blendtable 255
+{
+    glblend { both { src ONE dst ONE } }
+}
+
+blendtable 254 // Multiply
+{
+    glblend { both { src ZERO dst SRC_COLOR } }
+}
+
+blendtable 128
+{
+    glblend { both { src ZERO dst SRC_COLOR } }
+}
+
+
+blendtable 190
+{
+    glblend { both { src ONE dst ONE } }
+}
+
+blendtable 168
+{
+    glblend { both { src ONE dst ONE } }
+}
+
+tilefromtexture 3758 { file TILES/3758.PNG }
+
+tilefromtexture 14653 { file TILES/14653.PNG }
+tilefromtexture 14669 { file TILES/14669.PNG }
+
+tilefromtexture 12119 { file TILES/12119.PNG }
+
+tilefromtexture 12119 { file TILES/12119.PNG }
+
+tilefromtexture 13539 { file TILES/13539.PNG }
+
+tilefromtexture 11227 { file TILES/11227.PNG }
+
+tilefromtexture 13388 { file TILES/13569.PNG }
+tilefromtexture 13389 { file TILES/13570.PNG }
+
+tilefromtexture 12140 { file TILES/12140.PNG }
+
+tilefromtexture 12250 { file TILES/12250.PNG }
+tilefromtexture 12251 { file TILES/12251.PNG }
+
+tilefromtexture 3611 { file TILES/3611.PNG }
+tilefromtexture 3631 { file TILES/3631.PNG }
+
+tilefromtexture 6166 { file TILES/6166.PNG }
+tilefromtexture 6390 { file TILES/6390.PNG }
+
+tilefromtexture 10332 { file TILES/10332.PNG }
+tilefromtexture 10333 { file TILES/10333.PNG }
+
+tilefromtexture 17424 { file TILES/17424.PNG yoff -84 xoff 40 }
+tilefromtexture 17425 { file TILES/17425.PNG yoff -84 xoff 40 }
+tilefromtexture 17426 { file TILES/17426.PNG yoff -84 xoff 40 }
+tilefromtexture 17427 { file TILES/17427.PNG yoff -84 xoff 40 }
+tilefromtexture 17428 { file TILES/17428.PNG yoff -84 xoff 40 }
+tilefromtexture 17429 { file TILES/17429.PNG yoff -84 xoff 40 }
+tilefromtexture 17430 { file TILES/17430.PNG yoff -84 xoff 40 }
+tilefromtexture 17431 { file TILES/17431.PNG yoff -84 }
+tilefromtexture 17432 { file TILES/17432.PNG yoff -84 xoff 40 }
+
+tilefromtexture 19874 { file TILES/19874.PNG yoff -84 xoff 40 }
+tilefromtexture 20881 { file TILES/20881.PNG yoff -84 xoff 40 }
+tilefromtexture 21596 { file TILES/21596.PNG }
+tilefromtexture 7096 { file TILES/7096.PNG }
+tilefromtexture 23869 { file TILES/23869.PNG yoff -84 xoff 40 }
+
+tilefromtexture 14651 { file TILES/14651.PNG }
+tilefromtexture 14652 { file TILES/14652.PNG }
+
+tilefromtexture 21217 { file TILES/21217.PNG }
+tilefromtexture 21218 { file TILES/21218.PNG }
+tilefromtexture 21219 { file TILES/21219.PNG }
+
+tilefromtexture 3268 { file TILES/4810.PNG }
+tilefromtexture 3269 { file TILES/4811.PNG }
+tilefromtexture 3270 { file TILES/4812.PNG }
+tilefromtexture 3271 { file TILES/4813.PNG }
+tilefromtexture 5406 { file TILES/5406.PNG }
+
+
+tilefromtexture 10998 { file TILES/10998.PNG }
+tilefromtexture 10999 { file TILES/10999.PNG }
+tilefromtexture 11000 { file TILES/11000.PNG }
+tilefromtexture 11001 { file TILES/11001.PNG }
+tilefromtexture 11002 { file TILES/11002.PNG }
+
+tilefromtexture 16593 { file TILES/16593.PNG }
+
+
+tilefromtexture 21244 { file TILES/21244.PNG }
+tilefromtexture 21245 { file TILES/21245.PNG }
+tilefromtexture 21246 { file TILES/21246.PNG }
+
+tilefromtexture 23786 { file TILES/SATURN.PNG }
+
+include voxels2.def
+
+
+spritecol 3712 1 1
+spritecol 3626 1 1
+spritecol 3658 1 1
+spritecol 3696 1 1
+spritecol 9412 1 1
+spritecol 8432 1 1
+spritecol 3613 1 1
+spritecol 3806 1 1
+spritecol 9695 1 1
+spritecol 3624 1 1
+spritecol 3623 1 1
+spritecol 3629 1 1
+spritecol 3829 1 1
+spritecol 3805 1 1
+spritecol 3614 1 1
+spritecol 8923 1 1
+spritecol 12031 1 1
+spritecol 3803 1 1
+spritecol 3831 1 1
+spritecol 3744 1 1
+spritecol 9456 1 1
+spritecol 3713 1 1
+spritecol 7679 1 1
+spritecol 3729 1 1
+spritecol 3655 1 1
+spritecol 10564 1 1
+spritecol 3745 1 1
+spritecol 10525 1 1
+spritecol 3695 1 1
+spritecol 3694 1 1
+spritecol 3728 1 1
+spritecol 3802 1 1
+spritecol 8939 1 1 
+spritecol 10150 1 1
+spritecol 10151 1 1
+spritecol 3649 1 1
+spritecol 11493 1 1
+spritecol 3828 1 1
+spritecol 3654 1 1
+spritecol 3610 1 1
+spritecol 10742 1 1
+spritecol 12432 1 1
+spritecol 3347 1 1
+spritecol 3788 1 1
+spritecol 14548 1 1
+spritecol 3586 1 1
+spritecol 3592 1 1
+spritecol 3601 1 1
+spritecol 3609 1 1
+spritecol 3832 1 1
+
+spritecol 3807 6 6
+spritecol 3664 7 7
+
+spritecol 1 4 4
+spritecol 2 4 4
+spritecol 3 4 4
+spritecol 4 4 4
+spritecol 5 4 4
+spritecol 6 4 4
+spritecol 7 4 4
+spritecol 8 4 4
+spritecol 9 4 4
+spritecol 10 4 4
+
+// fogpal 30 62 62 62
+// fogpal 31 62 32 0
+// fogpal 32 62 42 30
+// fogpal 33 42 42 62
+// fogpal 34 42 0 42
+// fogpal 35 32 34 20
+// fogpal 36 62 56 6
+
+fogpal 140 62 62 62
+fogpal 141 62 32 0
+fogpal 142 62 42 30
+fogpal 143 42 42 62
+fogpal 144 42 0 42
+fogpal 145 32 34 20
+fogpal 146 62 56 6
+
+texhitscanrange 962 962
+
+texhitscanrange 3482 3482
+
+texhitscanrange 5819 5819
+
+texhitscanrange 7260 7260
+
+texhitscanrange 7945 7949
+
+texhitscanrange 13050 13055
+
+texhitscanrange 913 915
+
+texhitscanrange 7168 7168
+
+texhitscanrange 7349 7350
+
+texhitscanrange 7959 7959
+
+texhitscanrange 8600 8601
+
+texhitscanrange 9136 9136
+
+texhitscanrange 9645 9645
+
+texhitscanrange 9724 9724
+
+texhitscanrange 12396 12396
+
+texhitscanrange 12401 12401
+
+texhitscanrange 10670 10670
+
+texhitscanrange 12492 12492
+
+texhitscanrange 13206 13206
+
+texhitscanrange 3889 3889
+
+texhitscanrange 3906 3906
+
+texhitscanrange 5842 5842
+
+texhitscanrange 8015 8016
+
+texhitscanrange 8668 8668
+
+texhitscanrange 9576 9576
+
+texhitscanrange 16197 16197
+
+texhitscanrange 8172 8172
+
+texhitscanrange 9590 9590
+
+texhitscanrange 18343 18343
+
+texhitscanrange 10578 10578
+
+texhitscanrange 10646 10646
+
+texhitscanrange 12385 12385
+
+texhitscanrange 12429 12429
+
+texhitscanrange 16343 16344
+
+texhitscanrange 17008 17008
+
+texhitscanrange 17089 17091
+
+texhitscanrange 18294 18294
+
+texhitscanrange 11593 11593
+
+texhitscanrange 20384 20385
+
+texhitscanrange 20417 20417
+
+texhitscanrange 20192 20192
+
+texhitscanrange 22429 22429
+
+texhitscanrange 23577 23577
+
+texhitscanrange 23773 23773
+
+

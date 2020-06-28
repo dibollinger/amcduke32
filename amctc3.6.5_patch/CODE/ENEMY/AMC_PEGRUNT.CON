@@ -1,0 +1,402 @@
+// ************************************************************************************
+// PARADIGM ESCHATON GRUNT
+// ************************************************************************************
+
+action APEGRUNT_FROZE 0 1 5 1 10
+action APEGRUNT_GROW 41 1 1 1 10
+action APEGRUNT_IDLE 0 1 5 1 20
+action APEGRUNTRUN  0 4 5 1 12
+action APEGRUNTFIRE 20 2 5 1 12
+action APEGRUNTFLINCH 30 1 1 1 10
+action APEGRUNTDYING 30 5 1 1 16
+action APEGRUNTDEAD 34 1 1 1 10
+
+action APEGRUNT_HEADSHOT 35 5 1 1 16
+action APEGRUNT_HEADDEAD 41 1 1 1 10
+
+
+move PEGRUNTWALKVELS 120 
+move PEGRUNTRUNVELS 160 
+move PEGRUNTSTOP 0
+
+ai AIPEGRUNTSEEKENEMY APEGRUNTRUN PEGRUNTWALKVELS seekplayer
+ai AIPEGRUNTSHOOTENEMY APEGRUNTFIRE PEGRUNTSTOP faceplayer
+ai AIPEGRUNTSHOOT_BOTENEMY APEGRUNTFIRE PEGRUNTSTOP shoottarget
+ai AIPEGRUNTDEAD APEGRUNTDEAD PEGRUNTSTOP faceplayer
+ai AIPEGRUNT_HEADDEAD APEGRUNT_HEADDEAD PEGRUNTSTOP faceplayer
+ai AIPEGRUNTSHRUNK APEGRUNTRUN PEGRUNTRUNVELS furthestdir
+ai AIPEGRUNT_GROW APEGRUNT_GROW STOP faceplayer
+
+
+useractor enemystayput PE_TROOP_STAYPUT 75 APEGRUNT_IDLE
+state monst_glow
+cactor PE_TROOP
+enda
+
+useractor enemy PE_TROOP 75 APEGRUNT_IDLE
+fall
+
+ifai 0
+	{
+		state monst_glow
+		set MONSTER_FLAGS 2
+		set ENEMY_TALKING 0
+		spriteflags NORMAL_ENEMY
+		spawn SHOOTME
+		ifspritepal 24 { strength 200 sizeat 26 26 } else
+		{ spritepal 12 strength 75 sizeat 24 24 }
+		action APEGRUNTRUN
+		 ifcansee
+			{
+			ifrnd 32 soundonce PE_OVERTHERE
+			else ifrnd 32 soundonce PE_AMCSQUAD 
+			else ifrnd 32 soundonce PE_FORTHEPE1
+			else ifrnd 32 soundonce PE_FORTHEPE2
+			else ifrnd 64
+				{
+				ife CHAR 0 soundonce PE_JAMES
+				ife CHAR 1 soundonce PE_ZAXTOR
+				ife CHAR 2 soundonce PE_MERLIJN
+				ife CHAR 3 soundonce PE_HIGHWIRE
+				ife CHAR 4 soundonce PE_SANG
+				ife CHAR 5 soundonce PE_RUSTY
+				ife CHAR 6 soundonce PE_GEOFFREY
+				ife CHAR 7 soundonce PE_MIKKO
+				ife CHAR 13 soundonce PE_MICKY
+				}
+			}
+		set ALLY_MAG 30
+		ai AIPEGRUNTSEEKENEMY
+		cstator 257
+	}
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifg ENEMY_TALKING 0 sub ENEMY_TALKING 1
+
+//ifspritepal 24 state BODYA_DAMAGE_MODIFIER
+
+ifaction APEGRUNT_FROZE state frozen_code 
+else
+ifaction APEGRUNTFLINCH
+{
+	sub PAIN_AMOUNT 1
+	move PEGRUNTSTOP
+	ife PAIN_AMOUNT 0 ai AIPEGRUNTSEEKENEMY
+}
+else
+ifai AIPEGRUNTDEAD
+{
+move PEGRUNTSTOP
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			state standard_jibs
+			state human_jibs
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifai AIPEGRUNT_HEADDEAD
+{
+move PEGRUNTSTOP
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			ife INVASION 0
+				{
+				state standard_jibs
+				state human_jibs
+				}
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifaction APEGRUNTDYING
+{
+	ifactioncount 5 { state BODY_FALL_NOISES spawn BLOODPOOL ai AIPEGRUNTDEAD }
+}
+else
+ifaction APEGRUNT_HEADSHOT
+{
+	ifactioncount 5 { state BODY_FALL_NOISES spawn BLOODPOOL ai AIPEGRUNT_HEADDEAD }
+}
+else
+ifai AIPEGRUNT_GROW state genericgrowcode
+else
+ifai AIPEGRUNTSHRUNK
+{
+    ifcount SHRUNKDONECOUNT
+      ai AIPEGRUNTSEEKENEMY
+    else ifcount SHRUNKCOUNT
+	  {
+	  sound ACTOR_UNSHRINK
+      sizeto 55 55
+	  }
+    else
+      state genericshrunkcode
+    break
+}
+else
+ifai AIPEGRUNTSEEKENEMY
+{	
+	ifg ALLY_MAG 0 sub ALLY_MAG 1
+
+	ife ENEMY_TALKING 0
+	{
+		ifbulletnear ifrnd 16 
+		{
+			ifrnd 128 soundonce PE_LOOKOUT
+			else soundonce PE_TAKECOVER
+			set ENEMY_TALKING 60
+		}
+		else
+		ifand ENEMY_KILLED 32
+		 ifrnd 96
+		{
+			ifrnd 96 sound PE_OHSHIT
+			else ifrnd 96 sound PE_FIGHTEND
+			else 
+			{
+				ife CHAR 12 sound PE_WIPES else sound PE_WIPE
+			}
+			set ENEMY_KILLED 0
+			set ENEMY_TALKING 60
+		}
+	}
+
+	state enemyLocateAnyTarget
+	ifn target -1 
+	 ife ALLY_MAG 0
+		{
+		state SKILL_SHOOT_LEVELADJUST
+		ifl RANDOM_CHANCE SKILLCHANCE 
+			{
+			ife ENEMY_TALKING 0
+				{
+				ifrnd 16 sound PE_LEAVENOSURV
+				else ifrnd 16 soundonce PE_FORTHEPE1
+				else ifrnd 16 soundonce PE_FORTHEPE2
+				else ifrnd 16 soundonce PE_MOREBLOOD
+				set ENEMY_TALKING 60
+				}
+			ai AIPEGRUNTSHOOT_BOTENEMY
+			}
+		}
+	else ife target -1 ifrnd 32 { ai AIPEGRUNTSEEKENEMY  }
+	
+	ifrnd 4
+		{
+		ifcansee nullop else ife ENEMY_TALKING 0
+			{
+			ifrnd 8 soundonce PE_STAYALERT
+			else ifrnd 8 soundonce PE_SHOWYOURSELF
+			set ENEMY_TALKING 60
+			}
+		}
+}
+else
+ifai AIPEGRUNTSHOOT_BOTENEMY
+{
+	ifactioncount 1
+	ifn target -1
+	{ 
+		add ALLY_MAG 1
+
+		ifspritepal 24
+		{
+			set HITSCAN_TO_SHOOT GOLDEN_SHOT_LOW
+			set HITSCAN_FIRING_SOUND M16_FIRE
+			state sang_enemyShootHitscan
+		}
+		else
+		{
+			state SKILL_ENEMY_ACCURACY
+			state DARKNESS_TARGET_ACCURACY
+			set HITSCAN_TO_SHOOT NINEMM_CALIBRE
+			set HITSCAN_FIRING_SOUND M960_FIRE
+			state sang_enemyShootHitscan
+		}
+		
+		ife HITSCAN_SHOT_FIRED 1
+		{
+			ifrnd 4 zshoot TEMP3 13215
+			globalsound DISTANT_RIFLE
+		}
+			
+		ife PERFMODE 1
+		 ifcansee
+		  ife INVASION 0
+			{
+			set gunsmoke_z 8244 
+			set gunsmoke_angle -64
+			state spawn_gunsmoke_z
+			set gunsmoke_z 5344
+			espawn 16115
+			state spawn_muzzleflash
+			shoot 13772 
+			}
+		ifrnd 32 ai AIPEGRUNTSEEKENEMY
+		ifg ALLY_MAG 10 ai AIPEGRUNTSEEKENEMY
+		resetactioncount
+	}
+	else ife target -1 { ifrnd 32 ife ENEMY_TALKING 0 soundonce PE_HAHAHA ai AIPEGRUNTSEEKENEMY }
+}
+else
+ifai AIPEGRUNTSHOOTENEMY
+{
+	ifactioncount 1
+	{ 
+		add ALLY_MAG 1
+		ifspritepal 24
+		{
+			set HITSCAN_TO_SHOOT GOLDEN_SHOT_LOW
+			set HITSCAN_FIRING_SOUND M16_FIRE
+			state sang_enemyShootHitscan
+		}
+		else
+		{
+			state SKILL_ENEMY_ACCURACY
+			state DARKNESS_ENEMY_ACCURACY
+			set HITSCAN_TO_SHOOT SHOTSPARK1
+			set HITSCAN_FIRING_SOUND M960_FIRE
+			state sang_enemyShootHitscan
+		}
+			
+		ife HITSCAN_SHOT_FIRED 1
+			globalsound DISTANT_RIFLE
+
+		ife PERFMODE 1
+		 ifcansee
+		  ife INVASION 0
+			{
+			set gunsmoke_z 8244 
+			set gunsmoke_angle -64
+			state spawn_gunsmoke_z
+			set gunsmoke_z 5344
+			espawn 16115
+			state spawn_muzzleflash
+			shoot 13772
+			}
+		ifg ALLY_MAG 10 ai AIPEGRUNTSEEKENEMY
+		ifrnd 32 ai AIPEGRUNTSEEKENEMY
+		resetactioncount
+	}
+}
+
+ifhitweapon
+{
+	state NEWGUNEFFECTS
+	ife INVASION 0
+	ifcansee
+		{
+		//spawn BLOOD
+		//guts JIBS6 1	
+		state random_wall_jibs
+		}
+	ifdead
+		{
+		set TEMP2 3174
+		whilevarn TEMP2 3202 // This loops through and stops all possible speech from this actor
+			{
+			stopactorsound THISACTOR TEMP2
+			add TEMP2 1
+			}
+		ifand ENEMY_KILLED 32 nullop else xorvar ENEMY_KILLED 32
+		addkills 1
+		state thegames_score
+		  ifwasweapon RADIUSEXPLOSION
+		  {
+			state squish_sounds
+			state standard_jibs
+		  state human_jibs
+		  killit
+		  }
+		else
+		  ifwasweapon RPG
+		  {
+			state squish_sounds
+			state standard_jibs
+		  state human_jibs
+		  killit
+		  }
+		  else
+		ifwasweapon GROWSPARK { cstat 0 sound ACTOR_GROWING ai AIPEGRUNT_GROW break }
+		else ifg ICE_DAMAGE 0 { spritepal 1 strength 1 sound SOMETHINGFROZE action APEGRUNT_FROZE } 
+		else
+			{
+			state rf
+			ife HEADSHOT 2 
+			{
+			    ifg FIRE_DAMAGE 0 set FIRE_DAMAGE 0
+				ifrnd 32 state trigger_showoff
+				state jib_sounds
+				sound DECAPITATE 
+				shoot NJIB 
+				shoot NJIB 
+				guts JIBS6 3 
+				guts JIBS2 2 
+				action APEGRUNT_HEADSHOT
+			}
+			else ifg SPIRIT_DAMAGE 0
+			{
+			shoot SPARK2 shoot SPARK2 shoot SPARK2 
+			spritepal 1
+			guts JIBS3 6
+			spawn SPIRIT_DEATH_GUY
+			killit
+			}
+			else
+			ifg FIRE_DAMAGE 0 
+			{ 		
+				ifrnd 64 sound MERC_ONFIRE1
+				else ifrnd 64 sound MERC_ONFIRE2
+				else ifrnd 64 sound MERC_ONFIRE3
+				else sound MERC_ONFIRE4
+				set PLAYER_VOICEOVER 21
+				spawn ONFIREGUY 
+				killit 
+			}
+			else
+			ifg ENERGY_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 4
+				guts JIBS3 6
+				spawn DISINTIGRATE_GUY
+				killit
+				}
+			else
+				{
+				ifrnd 128 sound PE_PAIN1 else sound PE_PAIN2
+				action APEGRUNTDYING
+				}
+			ifrnd 48 { espawn M960_SPRITE randvar TEMP 50 setactorvar[RETURN].YVELSAVED TEMP }
+			}
+		ifphealthl 50
+			{
+			state SKILL_LEVELADJUST
+			ifl RANDOM_CHANCE SKILLCHANCE spawn HYPOSPRAY
+			}
+		}
+else
+	ifg PAIN_AMOUNT 0 action APEGRUNTFLINCH 
+	else ifrnd 16 { state PAIN_SKILL_LEVELADJUST action APEGRUNTFLINCH }
+	else ifwasweapon SHRINKSPARK { sound ACTOR_SHRINKING ai AIPEGRUNTSHRUNK }
+}
+
+state checksquished
+
+enda

@@ -1,0 +1,516 @@
+// ******************************************************************************
+// FASCIST
+// ******************************************************************************
+
+action A_FASCIST_IDLE     0  1 5 1 10
+action A_FASCIST_FROZEN 0 1 5 1 10
+action A_FASCIST_GROW 35 1 1 1 10
+action A_FASCIST_WALK     5  4 5 1 24
+action A_FASCIST_RUN      5  4 5 1 12
+action A_FASCIST_PREP 25 1 5 1 11
+action A_FASCIST_SHOOT 25 2 5 1 11
+action A_FASCIST_FLINCH 35 1 1 1 10
+action A_FASCIST_DYING 35 5 1 1 12
+action A_FASCIST_DEAD 40 1 1 1 1
+action A_FASCIST_HDYING 41 5 1 1 12
+action A_FASCIST_HDEAD 45 1 1 1 1
+
+move FASCIST_WALKVELS 72
+move FASCIST_RUNVELS 108 
+move FASCIST_JUMPVELS 158
+
+ai AI_FASCIST_IDLE A_FASCIST_IDLE STOP
+ai AI_FASCIST_SEEKENEMY A_FASCIST_WALK FASCIST_WALKVELS seekplayer
+ai AI_FASCIST_RUSHENEMY A_FASCIST_RUN FASCIST_RUNVELS faceplayer
+ai AI_FASCIST_PREP_SHOOT A_FASCIST_PREP STOP faceplayer
+ai AI_FASCIST_SHOOT A_FASCIST_SHOOT STOP faceplayer
+ai AI_FASCIST_SHOOT_BOT A_FASCIST_SHOOT STOP
+ai AI_FASCIST_DEAD A_FASCIST_DEAD STOP faceplayer
+ai AI_FASCIST_HDEAD A_FASCIST_HDEAD STOP faceplayer
+ai AI_FASCIST_SHRUNK A_FASCIST_RUN FASCIST_RUNVELS furthestdir
+ai AI_FASCIST_GROW A_FASCIST_GROW STOP
+
+
+useractor enemystayput FASCIST_STAYPUT 100 A_FASCIST_IDLE
+state monst_glow
+cactor FASCIST
+enda
+
+useractor enemy FASCIST 100 A_FASCIST_IDLE
+fall
+
+state checksquished
+
+ifai 0
+	{
+	set MONSTER_FLAGS 2
+	state monst_glow
+	spawn SHOOTME
+	spriteflags NORMAL_ENEMY_TRU
+	ifspritepal 24 strength 150
+	else strength 100
+	clipdist 48
+	sizeat 25 25
+	randvar TEMP6 50
+	ifspritepal 0 spritepal 36
+	ifspritepal 36
+		{
+		ifl TEMP6 10 soundonce FASCIST_1 else
+		ifl TEMP6 20 soundonce FASCIST_2 else
+		ifl TEMP6 30 soundonce FASCIST_3 else
+		ifl TEMP6 40 soundonce FASCIST_4 else
+		soundonce FASCIST_5
+		}
+	else
+		{
+		ifl TEMP6 10 soundonce MERC_SIGHT1
+		else ifl TEMP6 20 soundonce MERC_SIGHT2
+		else ifl TEMP6 30 soundonce MERC_SIGHT3
+		else ifl TEMP6 40 soundonce MERC_SIGHT4
+		else soundonce MERC_SIGHT5		
+		}
+	ai AI_FASCIST_IDLE
+	cstat 257
+	}
+
+state spawn_cold_breathe
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifaction A_FASCIST_FROZEN
+{
+move 0
+state frozen_code
+}
+else
+ifaction A_FASCIST_FLINCH
+{
+sub PAIN_AMOUNT 1
+move 0
+ife PAIN_AMOUNT 0
+	{
+	ife allies_present 1 state enemyfindtarget
+	ife both_present 1 state enemyfindtarget2
+	ifn target -1 ai AI_FASCIST_SHOOT_BOT
+	else ai AI_FASCIST_SEEKENEMY
+	}
+}
+else
+ifaction A_FASCIST_HDYING
+{
+strength 0
+ifactioncount 4 state BODY_FALL_NOISES_SOUNDONCE 
+ifactioncount 5 { cstat 0 state rf spawn BLOODPOOL ai AI_FASCIST_HDEAD }
+}
+else
+ifaction A_FASCIST_DYING
+{
+strength 0
+ifactioncount 4 state BODY_FALL_NOISES_SOUNDONCE 
+ifactioncount 5 { spawn BLOODPOOL ai AI_FASCIST_DEAD }
+}
+else
+ifai AI_FASCIST_DEAD
+{
+state spawned_by_choppers
+strength 0
+move 0
+    ifhitweapon
+    {
+      ifwasweapon RADIUSEXPLOSION
+      {
+        state squish_sounds
+        state standard_jibs
+		state human_jibs
+        killit
+      }
+      break
+    }
+
+}
+else
+ifai AI_FASCIST_HDEAD
+{
+state spawned_by_choppers
+strength 0
+move 0
+    ifhitweapon
+    {
+      ifwasweapon RADIUSEXPLOSION
+      {
+        state squish_sounds
+        state standard_jibs
+		state human_jibs
+        killit
+      }
+      break
+    }
+
+}
+else
+ifai AI_FASCIST_GROW state genericgrowcode
+else
+ifai AI_FASCIST_SHRUNK
+{
+    ifcount SHRUNKDONECOUNT
+      ai AI_FASCIST_SEEKENEMY
+    else ifcount SHRUNKCOUNT
+	  {
+	  sound ACTOR_UNSHRINK
+      sizeto 16 16
+	  }
+    else
+      state genericshrunkcode
+    break
+}
+else
+ifai AI_FASCIST_IDLE
+{
+ifcansee ai AI_FASCIST_SEEKENEMY
+	else 
+	{
+	ife allies_present 1 state enemyfindtarget
+	ife both_present 1 state enemyfindtarget2
+	ifn target -1 ai AI_FASCIST_SHOOT_BOT
+	}
+}
+else
+ifai AI_FASCIST_SEEKENEMY
+{
+ifand ENEMY_KILLED 4 
+ ifrnd 96
+  ifspritepal 36
+	{
+	ifrnd 128 sound FS_MANDOWN1
+	else ifrnd 128 sound FS_MANDOWN2
+	else sound FS_MANDOWN3
+	set ENEMY_KILLED 0
+	}
+ifg ALLY_MAG 0 set ALLY_MAG 0
+state SKILL_SHOOT_LEVELADJUST
+ifpdistl 5120
+ ifrnd 32
+  {
+   ai AI_FASCIST_RUSHENEMY
+  }
+else
+  ifl RANDOM_CHANCE SKILLCHANCE
+   ifcanshoottarget
+	{
+		state correctcansee
+		ife sightvar YES ai AI_FASCIST_PREP_SHOOT
+		else ai AI_FASCIST_SEEKENEMY
+	}
+else ifrnd 2 ai AI_FASCIST_IDLE
+}
+else
+ifai AI_FASCIST_RUSHENEMY
+{
+ifand ENEMY_KILLED 4 
+ ifrnd 96
+  ifspritepal 36
+	{
+	ifrnd 128 sound FS_MANDOWN1
+	else ifrnd 128 sound FS_MANDOWN2
+	else sound FS_MANDOWN3
+	set ENEMY_KILLED 0
+	}
+	ifp pdead 	
+	{
+	ife allies_present 1 state enemyfindtarget
+	ife both_present 1 state enemyfindtarget2
+	ifn target -1 ai AI_FASCIST_SHOOT_BOT
+	}
+	ifcansee
+	 ifcanseetarget
+	{
+		ifrnd 8 
+		{
+		ife allies_present 1 state enemyfindtarget
+		ife both_present 1 state enemyfindtarget2
+		}
+		ifrnd 16 ai AI_FASCIST_PREP_SHOOT
+	}
+}
+else
+ifai AI_FASCIST_PREP_SHOOT
+{
+ifactioncount 5 
+	{
+	ifn target -1 ai AI_FASCIST_SHOOT_BOT // Fire at target
+	else ai AI_FASCIST_SHOOT // Fire at last known position of target
+	resetactioncount
+	}
+}
+else
+ifai AI_FASCIST_SHOOT // Fire at last known position
+{
+	ifactioncount 1 
+	{
+		ifcansee 
+		 ifcanshoottarget 
+			{ 
+			// As soon as there is a target, switch to AI_FASCIST_SHOOT_BOT
+			state enemyLocateAnyTarget
+			ifn target -1
+				ai AI_FASCIST_SHOOT_BOT
+				
+			add TEMP8 1
+			ifspawnedby MONS_SPAWNER 
+			{ 
+				state SKILL_ENEMY_ACCURACY 
+				state DARKNESS_TARGET_ACCURACY 
+				set HITSCAN_TO_SHOOT SHOTSPARK1
+				set HITSCAN_FIRING_SOUND GEO_AP_FIRE
+				state sang_enemyShootHitscanNoTargetSeek
+			} 
+			else
+			{
+			set gunsmoke_z 6044
+			set gunsmoke_angle 8
+			state spawn_gunsmoke_z
+			set gunsmoke_z 5544
+			ifspritepal 10
+			{
+				ifg TEMP8 8 
+				{ 
+					state SKILL_ENEMY_ACCURACY
+					state DARKNESS_TARGET_ACCURACY
+					
+					set HITSCAN_TO_SHOOT REDLASERSHOT
+					set HITSCAN_FIRING_SOUND LASERGUN_FIRE2
+					state sang_enemyShootHitscanNoTargetSeek
+				
+					ife HITSCAN_SHOT_FIRED 1
+					{
+						set TEMP8 0 		
+						espawn 16113
+						state spawn_muzzleflash					
+					}
+				}
+				else 
+				{ 
+					state SKILL_ENEMY_ACCURACY
+					state DARKNESS_TARGET_ACCURACY
+					set HITSCAN_TO_SHOOT SHOTSPARK1
+					set HITSCAN_FIRING_SOUND MERC3_FIRE
+					state sang_enemyShootHitscanNoTargetSeek
+					
+					ife HITSCAN_SHOT_FIRED 1
+					{
+						espawn 16115
+						state spawn_muzzleflash
+					}
+				}	
+			}
+			else
+			{
+				ifg TEMP8 8 
+				{ 
+					state SKILL_ENEMY_ACCURACY
+					state DARKNESS_TARGET_ACCURACY
+					
+					set HITSCAN_TO_SHOOT BLUELASERSHOT
+					set HITSCAN_FIRING_SOUND LASERGUN_FIRE2
+					state sang_enemyShootHitscanNoTargetSeek
+					
+					ife HITSCAN_SHOT_FIRED 1
+					{
+						set TEMP8 0 		
+						espawn 16113
+						state spawn_muzzleflash				
+					}
+				}
+				else 
+				{ 
+					state SKILL_ENEMY_ACCURACY
+					state DARKNESS_TARGET_ACCURACY
+					
+					set HITSCAN_TO_SHOOT SHOTSPARK1
+					set HITSCAN_FIRING_SOUND GEO_AP_FIRE
+					state sang_enemyShootHitscanNoTargetSeek
+					
+					ife HITSCAN_SHOT_FIRED 1
+					{
+						espawn 16115
+						state spawn_muzzleflash
+					}
+				}	
+			}
+			globalsound DISTANT_RIFLE
+			}
+			ifrnd 64 ai AI_FASCIST_SEEKENEMY
+			resetactioncount 
+			}
+		else ai AI_FASCIST_SEEKENEMY
+		}
+}
+else
+ifai AI_FASCIST_SHOOT_BOT
+{
+ife target -1 ai AI_FASCIST_SEEKENEMY
+	ifactioncount 1 
+	{
+	ifn target -1
+		{
+			geta[target].statnum TEMP ife TEMP 1024 ai AI_FASCIST_SEEKENEMY
+
+			add TEMP8 1
+			ifspritepal 10
+			{
+				ifg TEMP8 16 
+				{ 
+					set HITSCAN_TO_SHOOT REDLASERSHOT
+					set HITSCAN_FIRING_SOUND LASERGUN_FIRE2
+					state sang_enemyShootHitscan
+
+					ife HITSCAN_SHOT_FIRED 1
+						set TEMP8 0 
+				}
+				else 
+				{ 
+					set HITSCAN_TO_SHOOT SHOTSPARK1
+					set HITSCAN_FIRING_SOUND MERC3_FIRE
+					state sang_enemyShootHitscan
+				}
+			}
+			else
+			{
+				ifg TEMP8 16 
+				{ 
+					set HITSCAN_TO_SHOOT BLUELASERSHOT
+					set HITSCAN_FIRING_SOUND LASERGUN_FIRE2
+					state sang_enemyShootHitscan
+					
+					ife HITSCAN_SHOT_FIRED 1
+						set TEMP8 0 
+				}
+				else 
+				{
+					set HITSCAN_TO_SHOOT SHOTSPARK1
+					set HITSCAN_FIRING_SOUND GEO_AP_FIRE
+					state sang_enemyShootHitscan
+				}
+			}
+			
+			ife HITSCAN_SHOT_FIRED 1
+			{
+				add ALLY_MAG 1	
+				globalsound DISTANT_RIFLE
+				ifg ALLY_MAG 40 ai AI_FASCIST_SEEKENEMY
+			}
+			
+			resetactioncount
+		}
+	else
+	ife target -1 { ifrnd 128 ifspritepal 36 soundonce FS_TARGETE ai AI_FASCIST_SEEKENEMY }
+	}
+}
+
+//ifspritepal 24 state BODYA_DAMAGE_MODIFIER
+
+ifhitweapon
+{
+state NEWGUNEFFECTS
+	//spawn BLOOD 
+	guts JIBS6 1
+ifaction A_FASCIST_DYING break
+ifaction A_FASCIST_DEAD break
+ifaction A_FASCIST_HDYING break
+ifaction A_FASCIST_HDEAD break
+state random_wall_jibs
+
+      ifwasweapon RADIUSEXPLOSION
+	ifstrength 0
+	{
+        state squish_sounds
+        state standard_jibs
+		state human_jibs
+        killit
+      }
+
+ifdead 
+	{ 
+	xorvar ENEMY_KILLED 4
+	addkills 1 
+      ifwasweapon RADIUSEXPLOSION
+      {
+	    spawn 18935
+        state squish_sounds
+        state standard_jibs
+		state human_jibs
+        killit
+      }
+      ifstrength -150
+      {
+		spawn 18935
+        state squish_sounds
+        state standard_jibs
+		state human_jibs
+        killit
+      }
+	  
+	ifg ICE_DAMAGE 0 { spritepal 1 strength 1 sound SOMETHINGFROZE action A_FASCIST_FROZEN } 
+	else ifwasweapon GROWSPARK { cstat 0 sound ACTOR_GROWING ai AI_FASCIST_GROW break }
+	else ife HEADSHOT 2 
+		{ 
+		
+		ifrnd 32 state trigger_showoff 
+		sound DECAPITATE 
+		action A_FASCIST_HDYING shoot NJIB shoot NJIB guts JIBS6 3 guts JIBS2 2 
+		} 
+	else ifg SPIRIT_DAMAGE 0
+		{
+		shoot SPARK2 shoot SPARK2 shoot SPARK2 
+		spritepal 1
+		guts JIBS3 6
+		spawn SPIRIT_DEATH_GUY
+		killit
+		}
+	else ifg ENERGY_DAMAGE 0
+		{
+		shoot SPARK2 shoot SPARK2 shoot SPARK2 
+		spritepal 4
+		guts JIBS3 6
+		spawn DISINTIGRATE_GUY
+		killit
+		}
+	else ifg FIRE_DAMAGE 0
+		{ 		
+		ifrnd 64 sound MERC_ONFIRE1
+		else ifrnd 64 sound MERC_ONFIRE2
+		else ifrnd 64 sound MERC_ONFIRE3
+		else sound MERC_ONFIRE4
+		set PLAYER_VOICEOVER 21
+		spawn ONFIREGUY 
+		killit 
+		}
+	else
+		{
+		ifspritepal 36
+			{
+			ifrnd 96 sound FASC_DIE1
+			else ifrnd 96 sound FASC_DIE2
+			else ifrnd 96 sound FASC_DIE3
+			else sound FASC_DIE4
+			}
+		else
+			{
+			ifrnd 96 sound MERC_DIE1
+			else ifrnd 96 sound MERC_DIE2
+			else sound MERC_DIE3
+			}
+		state rf 
+		action A_FASCIST_DYING
+		}
+	state thegames_score
+	} 
+else ifg PAIN_AMOUNT 0 action A_FASCIST_FLINCH
+else ifrnd 64 { state PAIN_SKILL_LEVELADJUST action A_FASCIST_FLINCH }
+ifwasweapon SHRINKSPARK { sound ACTOR_SHRINKING ai AI_FASCIST_SHRUNK }
+}
+enda

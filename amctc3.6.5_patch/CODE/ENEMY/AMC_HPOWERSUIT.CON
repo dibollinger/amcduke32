@@ -1,0 +1,336 @@
+// ******************************************************************************
+// HEAVY POWER SUIT
+// ******************************************************************************
+action AHPSUIT_IDLE 0 1 5 1 10
+action AHPSUIT_MOVE 5 4 5 1 20
+action AHPSUIT_MACHINEG 25 2 5 1 4
+action AHPSUIT_SHOCK 35 1 5 1 4
+action AHPSUIT_MISSILEP 40 1 5 1 10
+action AHPSUIT_MISSILEL 45 1 5 1 20
+action AHPSUIT_DIE 51 1 1 1 20
+action AHPSUIT_DEAD 51 1 1 1 10
+
+move HPSUIT_STOP 0 0
+move HPSUIT_WALK 96 0
+
+ai AIHPSUIT_IDLE AHPSUIT_IDLE HPSUIT_STOP 
+ai AIHPSUIT_MOVE AHPSUIT_MOVE HPSUIT_WALK faceplayerslow dodgebullet
+ai AIHPSUIT_MACHINEG AHPSUIT_MACHINEG HPSUIT_STOP faceplayerslow
+ai AIHPSUIT_MISSILEP AHPSUIT_MISSILEP HPSUIT_STOP faceplayersmart
+ai AIHPSUIT_MISSILEL AHPSUIT_MISSILEL HPSUIT_STOP faceplayersmart
+ai AIHPSUIT_DIE AHPSUIT_DIE HPSUIT_STOP
+
+useractor enemystayput HPOWERSUITSTAYPUT 6000 AHPSUIT_IDLE state monst_glow cactor HPOWERSUIT enda
+
+useractor enemy HPOWERSUIT 6000 AHPSUIT_IDLE
+fall
+
+ifai 0
+	{
+	state monst_glow
+	ifcansee 
+	 ifcanseetarget
+		{
+		ifrnd 128 
+			{
+			set PLAYER_VOICEOVER 7
+			}
+		}
+	spawn SHOOTME
+	spriteflags ROBOT_ENEMY
+	strength 6000
+	sizeat 64 64
+	cstat 257
+	ai AIHPSUIT_IDLE
+	ifspritepal 3 nullop else 
+		{
+		set BOSS_TYPE 4
+		set CURBOSS THISACTOR
+		}
+	}
+	
+ifdead nullop else
+	{
+	ifstrength 2000
+		{
+		ifrnd 64
+			{
+			sound SHORT_CIRCUIT
+			shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+			shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+			}
+		}
+	}
+	
+ifaction AHPSUIT_DEAD
+	{
+	break
+	}
+else
+ifai AIHPSUIT_DIE
+	{
+	ifactioncount 7 
+		{ 
+		ifn XVELSAVED 0 
+				{
+				operateactivators XVELSAVED THISACTOR
+				operatemasterswitches XVELSAVED
+				operaterespawns XVELSAVED
+				set XVELSAVED 0
+				}
+		quake 26 cstat 0 globalsound BOSSFALL action AHPSUIT_DEAD 
+		geta[].pal TEMP2 seta[RETURN].pal TEMP2
+		}
+	}
+else
+ifai AIHPSUIT_IDLE
+{
+	ifcansee
+		ifcanseetarget
+			ai AIHPSUIT_MOVE
+}
+else
+ifai AIHPSUIT_MOVE
+{
+	ifpdistl 16000
+	{
+		add INTERNALCOUNT_2 1
+		ifg INTERNALCOUNT_2 16 
+		{ 
+			quake 13 
+			
+			ifrnd 128 
+				sound PA_FOOTSTEP2 
+			else 
+				sound PA_FOOTSTEP1 
+			
+			set INTERNALCOUNT_2 0 
+		}
+	}
+	state SKILL_SHOOT_LEVELADJUST
+	
+	ifpdistl 10000
+		ifrnd 8
+			ai AIHPSUIT_MACHINEG
+		else
+			ifcanseetarget
+				ifcanshoottarget
+					ifrnd 8
+					{
+						ifp prunning
+							ifl RANDOM_CHANCE SKILLCHANCE
+							{
+								set INTERNALCOUNT 0
+								ai AIHPSUIT_MISSILEP
+							}
+						else ifrnd 32
+						{
+							ai AIHPSUIT_MACHINEG
+						}
+					}
+		
+}
+else
+ifai AIHPSUIT_MISSILEL
+{
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 3
+	{
+		geta[].z TEMP3 sub TEMP3 6096 seta[].z TEMP3	
+		ife player_in_vehicle 1 
+		{ 
+			sound MISSILE_LAUNCH 
+			eshoot MISSILE 
+			setthisprojectile[RETURN].extra 100 
+		} 
+		else
+		{ 
+			sound PA_MISSILEL 
+			eshoot MICRO_MISSILE 
+		}
+		geta[].z TEMP3 add TEMP3 6096 seta[].z TEMP3	
+
+		geta[].x TEMP
+		geta[].y TEMP2
+		set TEMP3 TEMP
+		add TEMP3 256
+		geta[].ang TEMP4
+		add TEMP4 256
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		seta[RETURN].x TEMP5 
+		seta[RETURN].y TEMP6
+		geta[].z TEMP3 sub TEMP3 6096 seta[].z TEMP3	
+
+		ife player_in_vehicle 1 
+		{ 
+			sound MISSILE_LAUNCH 
+			eshoot MISSILE 
+			setthisprojectile[RETURN].extra 100 
+		} 
+		else
+		{ 
+			sound PA_MISSILEL 
+			eshoot MICRO_MISSILE 
+		}
+		
+		geta[].z TEMP3 add TEMP3 6096 seta[].z TEMP3	
+		geta[].x TEMP
+		geta[].y TEMP2
+		set TEMP3 TEMP
+		add TEMP3 256
+		geta[].ang TEMP4
+		sub TEMP4 256
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		seta[RETURN].x TEMP5 
+		seta[RETURN].y TEMP6
+		
+		set INTERNALCOUNT 0
+		ai AIHPSUIT_MOVE 
+	}
+}
+else
+ifai AIHPSUIT_MISSILEP
+	{
+	ifactioncount 5 ai AIHPSUIT_MISSILEL
+	}
+else
+ifai AIHPSUIT_MACHINEG
+{
+	ifcanseetarget
+		ifcanshoottarget
+		{
+			ife player_in_vehicle 1 
+			{
+				ifactioncount 1 
+				{ 
+					set HITSCAN_TO_SHOOT ZRIFLESHOTU
+					set HITSCAN_FIRING_SOUND ASSAULTRIFLEU
+					state sang_enemyShootHitscan
+					resetactioncount 
+				}
+			}
+			else
+			{
+				ifactioncount 1 
+				{ 
+					set HITSCAN_TO_SHOOT SHOTSPARK1
+					set HITSCAN_FIRING_SOUND ASSAULTRIFLE
+					state sang_enemyShootHitscan
+					resetactioncount
+				}
+			}
+			ifrnd 4 ai AIHPSUIT_MISSILEP
+		}
+		else ai AIHPSUIT_MOVE
+}
+	
+
+ifhitweapon
+	{
+	
+    // spawn debris at low health
+    ifstrength 1500 ifrnd 32 { debris SCRAP1 1 debris SCRAP2 1 }
+    
+	ifg TEMP6 POINT_AMOUNT
+	{
+	geta[].htowner TEMP4
+	geta[TEMP4].picnum TEMP5
+	ife TEMP5 1405
+		{
+		getactorvar[TEMP4].P_CREDITS TEMP6
+		add TEMP6 1
+		setactorvar[TEMP4].P_CREDITS TEMP6
+		}
+	}
+	
+	seta[].xvel 0
+		
+	ifdead
+		{
+		ifn YVELSAVED 0 espawnvar YVELSAVED
+		addkills 1
+
+				operateactivators XVELSAVED THISACTOR
+				operatemasterswitches XVELSAVED
+				operaterespawns XVELSAVED
+				set XVELSAVED 0
+				soundonce BLOWUP
+				sound RPG_EXPLODE
+				geta[].x TEMP
+				geta[].y TEMP2
+				set TEMP3 TEMP
+				add TEMP3 256
+				randvar TEMP4 2048
+				rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+				espawn BIG_EXPLOSION
+				seta[RETURN].x TEMP5 
+				seta[RETURN].y TEMP6
+				espawn BIG_SMOKE2
+				seta[RETURN].x TEMP5 
+				seta[RETURN].y TEMP6
+				set TEMP6 0
+				debris SCRAP1 40 
+				debris SCRAP2 32
+				debris SCRAP3 32
+				debris SCRAP4 32
+				debris SCRAP5 32
+				ezshoot 4096 19177
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19177
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19172
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19172
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				globalsound PA_DIE
+				ai AIHPSUIT_DIE
+		}
+	}
+	
+ifsquished
+	{
+		ifn YVELSAVED 0 espawnvar YVELSAVED
+		addkills 1
+		addstrength -10000
+				operateactivators XVELSAVED THISACTOR
+				operatemasterswitches XVELSAVED
+				operaterespawns XVELSAVED
+				set XVELSAVED 0
+				soundonce BLOWUP
+				sound RPG_EXPLODE
+				geta[].x TEMP
+				geta[].y TEMP2
+				set TEMP3 TEMP
+				add TEMP3 256
+				randvar TEMP4 2048
+				rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+				espawn BIG_EXPLOSION
+				espawn BIG_EXPLOSION
+				seta[RETURN].x TEMP5 
+				seta[RETURN].y TEMP6
+				espawn BIG_SMOKE2
+				espawn BIG_SMOKE2
+				seta[RETURN].x TEMP5 
+				seta[RETURN].y TEMP6
+				set TEMP6 0
+				ezshoot 4096 19177
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19177
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19172
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				ezshoot 4096 19172
+				randvar TEMP 2048
+				seta[RETURN].ang TEMP
+				globalsound PA_DIE
+				killit
+	}
+
+enda

@@ -1,0 +1,7116 @@
+// *************************************************
+// *************************************************
+// ALLIES AND VEHICLES CODE
+// *************************************************
+
+onevent EVENT_CHECKFLOORDAMAGE 
+ifn player_in_vehicle 0 set RETURN 0
+endevent
+
+useractor notenemy SHOOTME // Target for allies to shoot at
+ife DEBUG_STUFF 0 cstat 32768
+sizeat 32 32
+
+ife sprite[myowner].statnum -1 killit
+ife sprite[myowner].cstat 32768 killit
+ife sprite[myowner].statnum 1024 killit
+ife sprite[myowner].statnum 2 { ifg MUSIC_LEVEL 0 ifg MUSIC_CHECK 238 set MUSIC_CHECK 0 }
+ifl sprite[myowner].extra 1 { set MUSIC_CHECK 0 killit }
+ifcansee
+	{
+	ifg sprite[myowner].extra 50 ifl MUSIC_LEVEL 1 set MUSIC_LEVEL 1
+	else ifg sprite[myowner].extra 100 ifl MUSIC_LEVEL 2 set MUSIC_LEVEL 2
+	else ifg sprite[myowner].extra 300 ifl MUSIC_LEVEL 3 set MUSIC_LEVEL 3
+	else ifg sprite[myowner].extra 600 ifl MUSIC_LEVEL 4 set MUSIC_LEVEL 4
+	}
+ifg ENEMIES_CLEARED 0 set ENEMIES_CLEARED 0
+geta[myowner].picnum TEMP7
+
+geta[myowner].x TEMP
+geta[myowner].y TEMP2
+geta[myowner].z TEMP3
+ifspawnedby TERMINATORCRAWLING setvar ALLY_MAG 1 else // re-using a variable rather than making a new one just for this
+sub TEMP3 4096 // adjust it to sprite's center roughly
+setsprite THISACTOR TEMP TEMP2 TEMP3
+	
+ifaction 0
+	{
+	ifmultiplayer
+		ife COOP 1
+			{
+			ifcansee
+			 ifp pfacing
+			  ifpdistl 8000
+			   ifrnd 32
+				{
+				ife CHAR 0 globalsound J_INCOMING
+				ife CHAR 1 globalsound Z_INCOMING
+				ife CHAR 2 globalsound M_INCOMING
+				ife CHAR 3 globalsound R_INCOMING
+				ife CHAR 4 globalsound S_INCOMING
+				ife CHAR 5 globalsound RN_INCOMING
+				ife CHAR 6 globalsound G_INCOMING
+				ife CHAR 7 globalsound MS_INCOMING
+				ife CHAR 12 globalsound JA_INCOMING
+				qgetsysstr 356 STR_PLAYERNAME
+				qstrcat 356 643
+				userquote 356
+				}
+			}
+	action ZERO
+	}
+		
+enda
+
+useractor notenemy SHOOTME3 // Targets for everybody to shoot at
+cstat 32768
+sizeat 32 32
+
+geta[myowner].statnum TEMP6
+ife TEMP6 1024 killit
+geta[myowner].extra TEMP6
+ifl TEMP6 1 killit
+
+geta[myowner].x TEMP
+geta[myowner].y TEMP2
+geta[myowner].z TEMP3
+setsprite THISACTOR TEMP TEMP2 TEMP3
+	
+enda
+
+
+useractor notenemy SHOOTME2 // Target for enemies to shoot at
+cstat 32768
+sizeat 32 32
+
+geta[myowner].statnum TEMP6
+ife TEMP6 1024 killit
+geta[myowner].extra TEMP6
+ifl TEMP6 1 killit
+
+geta[myowner].x TEMP
+geta[myowner].y TEMP2
+geta[myowner].z TEMP3
+setsprite THISACTOR TEMP TEMP2 TEMP3
+
+// Workaround for a TROR Bug. Sectnum doesn't update correctly when traversing TROR Layers, in such cases do this manually.
+geta[myowner].sectnum TEMP
+geta[].sectnum TEMP2
+
+ifn TEMP TEMP2
+	seta[].sectnum TEMP
+
+	
+enda
+
+useractor notenemy 9462
+cstat 256
+
+ifaction 0
+{
+spawn SHOOTME
+strength 150
+sizeat 64 64
+action ZERO
+}
+
+ifcount 190 killit
+
+ifdead killit
+
+
+enda
+
+defstate rand_lookaround
+		ifrnd 2
+		 ife camerasprite -1 // if it's not a cutscene
+		{
+		ifrnd 64 soundonce JMOVE1 else
+		ifrnd 64 soundonce JMOVE2 else
+		ifrnd 64 soundonce JMOVE3 else
+		soundonce JMOVE4
+		geta[].ang TEMP5
+		randvar TEMP4 128
+		ifrnd 128 add TEMP4 TEMP5 else sub TEMP4 TEMP5
+		seta[].ang TEMP4
+		}
+ends
+
+
+defstate botfindtarget
+ife both_present 1
+{
+set target -1
+findnearactorz SHOOTME3 2048 16384 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME3 4096 32768 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME3 8192 65536 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME3 12288 98304 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME3 18432 147456 target
+ifn target -1 state validatetarget
+findnearactorz SHOOTME3 32768 262144 target
+ifn target -1 state validatetarget
+}
+set target -1
+findnearactorz SHOOTME 2048 16384 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME 4096 32768 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME 8192 65536 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME 12288 98304 target
+ifn target -1 state validatetarget
+ifn target -1 break
+findnearactorz SHOOTME 18432 147456 target
+ifn target -1 state validatetarget
+findnearactorz SHOOTME 32768 262144 target
+ifn target -1 state validatetarget
+ends
+
+defstate ALLY_STATUS_STUFF
+	ifn ALLYSLOT1 -1
+	{
+	ife ALLYSLOT1 -1 break
+	geta[ALLYSLOT1].statnum DISP_TEMP
+	ife DISP_TEMP 1024 set ALLYSLOT1 -1
+	
+	geta[ALLYSLOT1].extra DISP_TEMP
+	geta[ALLYSLOT1].picnum DISP_TEMP2
+	geta[ALLYSLOT1].pal DISP_TEMP4
+	ife DISP_TEMP2 AMCSOLDIER_ACTIVE ifand AMCSOLDIER_UPGRADES 16 divvar DISP_TEMP 2
+	ife DISP_TEMP2 EDFSOLDIER_ACTIVE ife DISP_TEMP4 16 divvar DISP_TEMP 2
+	ife DISP_TEMP2 MSSOLDIER_ACTIVE divvar DISP_TEMP 3
+	ife DISP_TEMP2 JANE divvar DISP_TEMP 15
+	ife DISP_TEMP2 VLADMIR divvar DISP_TEMP 15
+	ifg DISP_TEMP 99 set DISP_TEMP3 9291 else
+	ifg DISP_TEMP 90 set DISP_TEMP3 9292 else
+	ifg DISP_TEMP 80 set DISP_TEMP3 9293 else
+	ifg DISP_TEMP 70 set DISP_TEMP3 9294 else
+	ifg DISP_TEMP 60 set DISP_TEMP3 9295 else
+	ifg DISP_TEMP 50 set DISP_TEMP3 9296 else
+	ifg DISP_TEMP 40 set DISP_TEMP3 9297 else
+	ifg DISP_TEMP 30 set DISP_TEMP3 9298 else
+	ifg DISP_TEMP 20 set DISP_TEMP3 9299 else
+	ifg DISP_TEMP 10 set DISP_TEMP3 9300 else
+	ifg DISP_TEMP 0 set DISP_TEMP3 9301
+	ife DISP_TEMP2 JANE rotatesprite 20 40 INVENSIZE 0 5366 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 VLADMIR rotatesprite 20 40 INVENSIZE 0 11817 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 RUSSIAN rotatesprite 20 40 QUARTERSIZE 0 DISP_TEMP2 0 0 256 0 0 xdim ydim else
+	rotatesprite 20 40 9000 0 DISP_TEMP2 0 DISP_TEMP4 256 0 0 xdim ydim
+	rotatespritea 20 40 45538 0 DISP_TEMP3 0 0 256 -255 0 0 xdim ydim // Health Bar
+	ifl DISP_TEMP 1 set ALLYSLOT1 -1
+
+	getactorvar[ALLYSLOT1].INTERNALCOUNT_3 DISP_TEMP4
+	ifg DISP_TEMP4 0
+		{
+		rotatesprite 20 40 INVENSIZE DISP_TEMP4 9026 0 0 256 0 0 xdim ydim
+		}
+		
+	getactorvar[ALLYSLOT1].ALLY_ORDER DISP_TEMP6
+	ifand DISP_TEMP6 1 rotatesprite 30 50 NORMALSIZE 0 12912 0 0 256 0 0 xdim ydim
+	ifand DISP_TEMP6 2 rotatesprite 20 50 NORMALSIZE 0 12913 0 0 256 0 0 xdim ydim
+	
+        geta[ALLYSLOT1].x mx
+        geta[ALLYSLOT1].y my
+        getp[].posx x
+        getp[].posy y
+        sub mx x
+        sub my y
+        getangle DISP_TEMP8 mx my
+		getp[].ang DISP_TEMP7
+		sub DISP_TEMP8 DISP_TEMP7
+		getactorvar[ALLYSLOT1].FOLLOW_PLAYER DISP_TEMP
+		ife DISP_TEMP 0 rotatesprite 20 40 45538 DISP_TEMP8 9289 0 0 256 0 0 xdim ydim // compass 
+		else rotatesprite 20 40 45538 DISP_TEMP8 9290 0 0 256 0 0 xdim ydim // compass
+		
+	
+	}
+	
+	ifn ALLYSLOT2 -1
+	{
+	ife ALLYSLOT2 -1 break
+	geta[ALLYSLOT2].statnum DISP_TEMP
+	ife DISP_TEMP 1024 set ALLYSLOT2 -1
+	
+	geta[ALLYSLOT2].extra DISP_TEMP
+	geta[ALLYSLOT2].picnum DISP_TEMP2
+	geta[ALLYSLOT2].pal DISP_TEMP4
+	ife DISP_TEMP2 EDFSOLDIER_ACTIVE ife DISP_TEMP4 16 divvar DISP_TEMP 2
+	ife DISP_TEMP2 MSSOLDIER_ACTIVE divvar DISP_TEMP 3
+	ife DISP_TEMP2 JANE divvar DISP_TEMP 15
+	ife DISP_TEMP2 VLADMIR divvar DISP_TEMP 15
+	ifg DISP_TEMP 99 set DISP_TEMP3 9291 else
+	ifg DISP_TEMP 90 set DISP_TEMP3 9292 else
+	ifg DISP_TEMP 80 set DISP_TEMP3 9293 else
+	ifg DISP_TEMP 70 set DISP_TEMP3 9294 else
+	ifg DISP_TEMP 60 set DISP_TEMP3 9295 else
+	ifg DISP_TEMP 50 set DISP_TEMP3 9296 else
+	ifg DISP_TEMP 40 set DISP_TEMP3 9297 else
+	ifg DISP_TEMP 30 set DISP_TEMP3 9298 else
+	ifg DISP_TEMP 20 set DISP_TEMP3 9299 else
+	ifg DISP_TEMP 10 set DISP_TEMP3 9300 else
+	ifg DISP_TEMP 0 set DISP_TEMP3 9301
+	ife DISP_TEMP2 JANE rotatesprite 20 70 INVENSIZE 0 5366 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 VLADMIR rotatesprite 20 70 INVENSIZE 0 11817 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 RUSSIAN rotatesprite 20 70 QUARTERSIZE 0 DISP_TEMP2 0 0 256 0 0 xdim ydim else
+	rotatesprite 20 70 9000 0 DISP_TEMP2 0 DISP_TEMP4 256 0 0 xdim ydim
+	rotatespritea 20 70 45538 0 DISP_TEMP3 0 0 256 -255 0 0 xdim ydim // Health Bar
+	ifl DISP_TEMP 1 set ALLYSLOT2 -1
+
+	getactorvar[ALLYSLOT2].INTERNALCOUNT_3 DISP_TEMP4
+	ifg DISP_TEMP4 0
+		{
+		rotatesprite 20 70 INVENSIZE DISP_TEMP4 9026 0 0 256 0 0 xdim ydim
+		}
+		
+	getactorvar[ALLYSLOT2].ALLY_ORDER DISP_TEMP6
+	ifand DISP_TEMP6 1 rotatesprite 30 80 NORMALSIZE 0 12912 0 0 256 0 0 xdim ydim
+		
+        geta[ALLYSLOT2].x mx
+        geta[ALLYSLOT2].y my
+        getp[].posx x
+        getp[].posy y
+        sub mx x
+        sub my y
+        getangle DISP_TEMP8 mx my
+		getp[].ang DISP_TEMP7
+		sub DISP_TEMP8 DISP_TEMP7
+		getactorvar[ALLYSLOT2].FOLLOW_PLAYER DISP_TEMP
+		ife DISP_TEMP 0 rotatesprite 20 70 45538 DISP_TEMP8 9289 0 0 256 0 0 xdim ydim // compass
+		else rotatesprite 20 70 45538 DISP_TEMP8 9290 0 0 256 0 0 xdim ydim // compass
+		
+	}
+
+	ifn ALLYSLOT3 -1
+	{
+	ife ALLYSLOT3 -1 break
+	geta[ALLYSLOT3].statnum DISP_TEMP
+	ife DISP_TEMP 1024 set ALLYSLOT3 -1
+
+	geta[ALLYSLOT3].extra DISP_TEMP
+	geta[ALLYSLOT3].picnum DISP_TEMP2
+	geta[ALLYSLOT3].pal DISP_TEMP4
+	ife DISP_TEMP2 EDFSOLDIER_ACTIVE ife DISP_TEMP4 16 divvar DISP_TEMP 2
+	ife DISP_TEMP2 MSSOLDIER_ACTIVE divvar DISP_TEMP 3
+	ife DISP_TEMP2 JANE divvar DISP_TEMP 15
+	ife DISP_TEMP2 VLADMIR divvar DISP_TEMP 15
+	ifg DISP_TEMP 99 set DISP_TEMP3 9291 else
+	ifg DISP_TEMP 90 set DISP_TEMP3 9292 else
+	ifg DISP_TEMP 80 set DISP_TEMP3 9293 else
+	ifg DISP_TEMP 70 set DISP_TEMP3 9294 else
+	ifg DISP_TEMP 60 set DISP_TEMP3 9295 else
+	ifg DISP_TEMP 50 set DISP_TEMP3 9296 else
+	ifg DISP_TEMP 40 set DISP_TEMP3 9297 else
+	ifg DISP_TEMP 30 set DISP_TEMP3 9298 else
+	ifg DISP_TEMP 20 set DISP_TEMP3 9299 else
+	ifg DISP_TEMP 10 set DISP_TEMP3 9300 else
+	ifg DISP_TEMP 0 set DISP_TEMP3 9301
+	ife DISP_TEMP2 JANE rotatesprite 20 100 INVENSIZE 0 5366 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 VLADMIR rotatesprite 20 100 INVENSIZE 0 11817 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 RUSSIAN rotatesprite 20 100 QUARTERSIZE 0 DISP_TEMP2 0 0 256 0 0 xdim ydim else
+	rotatesprite 20 100 9000 0 DISP_TEMP2 0 DISP_TEMP4 256 0 0 xdim ydim
+	rotatespritea 20 100 45538 0 DISP_TEMP3 0 0 256 -255 0 0 xdim ydim // Health Bar
+	ifl DISP_TEMP 1 set ALLYSLOT3 -1
+
+	getactorvar[ALLYSLOT3].INTERNALCOUNT_3 DISP_TEMP4
+	ifg DISP_TEMP4 0
+		{
+		rotatesprite 20 100 INVENSIZE DISP_TEMP4 9026 0 0 256 0 0 xdim ydim
+		}
+		
+	getactorvar[ALLYSLOT3].ALLY_ORDER DISP_TEMP6
+	ifand DISP_TEMP6 1 rotatesprite 30 110 NORMALSIZE 0 12912 0 0 256 0 0 xdim ydim
+	
+        geta[ALLYSLOT3].x mx
+        geta[ALLYSLOT3].y my
+        getp[].posx x
+        getp[].posy y
+        sub mx x
+        sub my y
+        getangle DISP_TEMP8 mx my
+		getp[].ang DISP_TEMP7
+		sub DISP_TEMP8 DISP_TEMP7
+		getactorvar[ALLYSLOT3].FOLLOW_PLAYER DISP_TEMP
+		ife DISP_TEMP 0 rotatesprite 20 100 45538 DISP_TEMP8 9289 0 0 256 0 0 xdim ydim 
+		else rotatesprite 20 100 45538 DISP_TEMP8 9290 0 0 256 0 0 xdim ydim // compass
+	}
+	
+	ifn ALLYSLOT4 -1
+	{
+	ife ALLYSLOT4 -1 break
+	geta[ALLYSLOT4].statnum DISP_TEMP
+	ife DISP_TEMP 1024 set ALLYSLOT4 -1
+	
+	geta[ALLYSLOT4].extra DISP_TEMP
+	geta[ALLYSLOT4].picnum DISP_TEMP2
+	geta[ALLYSLOT4].pal DISP_TEMP4
+	ife DISP_TEMP2 EDFSOLDIER_ACTIVE ife DISP_TEMP4 16 divvar DISP_TEMP 2
+	ife DISP_TEMP2 MSSOLDIER_ACTIVE divvar DISP_TEMP 3
+	ife DISP_TEMP2 JANE divvar DISP_TEMP 15
+	ife DISP_TEMP2 VLADMIR divvar DISP_TEMP 15
+	ifg DISP_TEMP 99 set DISP_TEMP3 9291 else
+	ifg DISP_TEMP 90 set DISP_TEMP3 9292 else
+	ifg DISP_TEMP 80 set DISP_TEMP3 9293 else
+	ifg DISP_TEMP 70 set DISP_TEMP3 9294 else
+	ifg DISP_TEMP 60 set DISP_TEMP3 9295 else
+	ifg DISP_TEMP 50 set DISP_TEMP3 9296 else
+	ifg DISP_TEMP 40 set DISP_TEMP3 9297 else
+	ifg DISP_TEMP 30 set DISP_TEMP3 9298 else
+	ifg DISP_TEMP 20 set DISP_TEMP3 9299 else
+	ifg DISP_TEMP 10 set DISP_TEMP3 9300 else
+	ifg DISP_TEMP 0 set DISP_TEMP3 9301
+	ife DISP_TEMP2 JANE rotatesprite 20 130 INVENSIZE 0 5366 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 VLADMIR rotatesprite 20 130 INVENSIZE 0 11817 0 0 256 0 0 xdim ydim else
+	ife DISP_TEMP2 RUSSIAN rotatesprite 20 130 QUARTERSIZE 0 DISP_TEMP2 0 0 256 0 0 xdim ydim else
+	rotatesprite 20 130 9000 0 DISP_TEMP2 0 DISP_TEMP4 256 0 0 xdim ydim
+	rotatespritea 20 130 45538 0 DISP_TEMP3 0 0 256 -255 0 0 xdim ydim // Health Bar
+	ifl DISP_TEMP 1 set ALLYSLOT4 -1
+
+	getactorvar[ALLYSLOT4].INTERNALCOUNT_3 DISP_TEMP4
+	ifg DISP_TEMP4 0
+		{
+		rotatesprite 20 130 INVENSIZE DISP_TEMP4 9026 0 0 256 0 0 xdim ydim
+		}
+		
+	getactorvar[ALLYSLOT4].ALLY_ORDER DISP_TEMP6
+	ifand DISP_TEMP6 1 rotatesprite 30 140 NORMALSIZE 0 12912 0 0 256 0 0 xdim ydim
+	
+	
+        geta[ALLYSLOT4].x mx
+        geta[ALLYSLOT4].y my
+        getp[].posx x
+        getp[].posy y
+        sub mx x
+        sub my y
+        getangle DISP_TEMP8 mx my
+		getp[].ang DISP_TEMP7
+		sub DISP_TEMP8 DISP_TEMP7
+		getactorvar[ALLYSLOT4].FOLLOW_PLAYER DISP_TEMP
+		ife DISP_TEMP 0 rotatesprite 20 130 45538 DISP_TEMP8 9289 0 0 256 0 0 xdim ydim 
+		else rotatesprite 20 130 45538 DISP_TEMP8 9290 0 0 256 0 0 xdim ydim // compass
+	}
+	
+ends
+
+// ========================================================AMC SOLDIER=====================================================
+
+action A_AMCSOLDIERIDLE 20 1 5 1 11
+action A_AMCSOLDIERMOVE 0 4 5 1 11
+action A_AMCSOLDIERFIRE 20 2 5 1 3
+action A_AMCSOLDIERPAIN 30 1 5 1 8
+action A_AMCSOLDIERDYING 35 7 1 1 11
+action A_AMCSOLDIERDEAD 42 1 1 1 1
+action A_AMCSOLDIERTELEPORT 0 1 5 1 11
+
+move AMCSTILL 0
+move AMCMOVE 266
+move AMCMOVESLOW 96
+
+ai AIAMCSOLDIERIDLE A_AMCSOLDIERIDLE AMCSTILL 0
+ai AIAMCSOLDIERMOVE A_AMCSOLDIERMOVE AMCMOVE faceplayer seekplayer 
+ai AIAMCSOLDIERRELOAD A_AMCSOLDIERMOVE AMCMOVESLOW seekplayer
+ai AIAMCSOLDIERFIRE A_AMCSOLDIERFIRE AMCSTILL 0
+ai AIAMCSOLDIERDYING A_AMCSOLDIERDYING AMCSTILL 0
+
+ai AIAMCSOLDIER_TELEPORT A_AMCSOLDIERTELEPORT AMCSTILL 0
+ai AIAMCSOLDIER_TELEPORT_F A_AMCSOLDIERTELEPORT AMCSTILL 0
+
+spriteshadow AMCSOLDIER_ACTIVE
+spritenvg AMCSOLDIER_ACTIVE
+
+useractor notenemy AMCSOLDIER_ACTIVE
+fall
+
+ifai 0
+	{
+	ifrnd 128 { sizeat 20 23 set GENDER FEMALE } else { sizeat 24 24 set GENDER MALE } 
+	randvar LAST_NAME 63
+	readarrayfromfile PERSONEL_RESEARCH 4002
+	ife PERSONEL_RESEARCH[1] 2 xorvar AMCSOLDIER_UPGRADES 1 // has the player researched laser guns for AMC soldiers?
+	ife PERSONEL_RESEARCH[2] 2 xorvar AMCSOLDIER_UPGRADES 2 // has the player researched better armour for AMC soldiers?
+	ife PERSONEL_RESEARCH[3] 2 xorvar AMCSOLDIER_UPGRADES 4 // has the player researched bigger magazines for AMC soldiers?
+	
+	ife PERSONEL_RESEARCH[10] 2
+		{
+		strength 200
+		xorvar AMCSOLDIER_UPGRADES 16 // has the player researched nutrient solution?
+		}
+	else strength 100
+	
+	ife PERSONEL_RESEARCH[7] 2  { ifspritepal 3 nullop else ifspritepal 5 nullop 
+	else xorvar AMCSOLDIER_UPGRADES 8 } // has the player researched teleporter devices for AMC Soldiers?
+	ifn EXTRASAVED 0
+		{
+		readarrayfromfile BASE_RESEARCH 4003
+		ifn BASE_RESEARCH[7] 2 killit
+		}
+	spawn SHOOTME2
+	strength 100
+	cstat 257
+	ifand AMCSOLDIER_UPGRADES 4 set ALLY_MAG 50 else set ALLY_MAG 25
+	ai AIAMCSOLDIERIDLE
+	ifspawnedby RESPAWN spawn TRANSPORTERBEAM
+	ifspawnedby APLAYER 
+		{ 
+		spawn TRANSPORTERBEAM
+		ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+		ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+		ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+		ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR
+		set FOLLOW_PLAYER 1 
+		set INTERNALCOUNT_3 960
+		} 
+	else set INTERNALCOUNT_3 -1
+	}
+	
+	
+state AMCSOLDIER_MOVE_VOICE
+
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+//ifand AMCSOLDIER_UPGRADES 2 state BODYA_DAMAGE_MODIFIER
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+
+	ife PERSONEL_RESEARCH[8] 2 // player has thermal weaving research? make fire die down quicker
+		{
+		ifg FIRE_DAMAGE 5 sub FIRE_DAMAGE 1
+		}
+
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifg INTERNALCOUNT_2 0 sub INTERNALCOUNT_2 1
+
+ifn INTERNALCOUNT_3 -1
+	{
+	ifg INTERNALCOUNT_3 0 sub INTERNALCOUNT_3 1
+	else ife INTERNALCOUNT_3 0 
+		{ 
+		spawn TRANSPORTERBEAM 
+		ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+		ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+		ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+		ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+		killit 
+		}
+	}
+
+ifg targetlock 0 sub targetlock 1
+ifspritepal 5 ifn camerasprite -1
+
+ifaction A_AMCSOLDIERDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifai AIAMCSOLDIERDYING
+	{
+	ifactioncount 7 { spawn 2284 action A_AMCSOLDIERDEAD }
+	}
+ifai AIAMCSOLDIERFIRE
+	{
+	ifactioncount 3
+	ifn target -1
+			{ 
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			ife actorvar[target].ALLY_MAG 1 sub TEMP3 256 else
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP 0 divvarvar TEMP3 TEMP
+			ifand AMCSOLDIER_UPGRADES 1 // is the soldier using a lasergun?
+			{
+			sound LASERGUN_FIRE
+			zshoot TEMP3 ZRIFLESHOT
+			ifrnd 8 zshoot TEMP3 BLUELASERSHOT
+			
+			ife PERFMODE 1
+			 ifcansee
+				{
+				set gunsmoke_z 4244 
+				set gunsmoke_angle 220
+				state spawn_gunsmoke_z
+				set gunsmoke_z 3144
+				espawn 16113
+				state spawn_muzzleflash
+				}
+			}
+			else
+			{
+			sound SMAC10FIRE
+			zshoot TEMP3 CHAINGUN 
+			ifrnd 8 zshoot TEMP3 13215
+			
+			ife PERFMODE 1
+			 ifcansee
+				{
+				set gunsmoke_z 4244 
+				set gunsmoke_angle 220
+				state spawn_gunsmoke_z
+				set gunsmoke_z 3144
+				espawn 16115
+				state spawn_muzzleflash
+				}
+				
+			}
+			ifspritepal 3 nullop else shoot 13772
+			sub ALLY_MAG 1
+			ife ALLY_MAG 0 
+				{ 
+				sound MSRIFLE_MAGOUT 
+				shoot SMGMAGAZINE 
+				ife GENDER MALE ifn AMC_BASE 1 state AMCSOLD_RELOADING		
+				ai AIAMCSOLDIERRELOAD
+				}
+			resetactioncount
+			}
+	ife target -1 ai AIAMCSOLDIERIDLE
+	}
+else
+ifai AIAMCSOLDIERMOVE
+	{
+		geta[PLAYER_IDENTITY].xvel TEMP
+		ifg TEMP 10
+			{
+			mul TEMP 3
+			seta[].xvel TEMP
+			}
+	ife FOLLOW_PLAYER 0 ai AIAMCSOLDIERIDLE
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifpdistl 1536 
+		{ 
+		ifphealthl 25 
+		ifrnd 2 state AMCSOLD_YOUR_HURT
+		ai AIAMCSOLDIERIDLE 
+		}
+	ifnotmoving operate
+	
+	ifpdistg 8098
+	ife target -1
+	 ifrnd 16
+	 ifand AMCSOLDIER_UPGRADES 8
+		{
+		getp[].posx TEMP
+		getp[].posy TEMP2
+		set TEMP3 TEMP
+		add TEMP3 1024
+		randvar TEMP4 2048
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		updatesector TEMP5 TEMP6 TEMP7
+		ifn TEMP7 -1
+			{
+			orvar ALLY_ORDER 2
+			set INTERNALCOUNT 0
+			ai AIAMCSOLDIER_TELEPORT_F
+			resetcount
+			}
+		}
+	
+	}
+else
+ifai AIAMCSOLDIERRELOAD
+	{
+	ifspritepal 3 move 0
+	ifand AMCSOLDIER_UPGRADES 4
+		{
+		add ALLY_MAG 2
+		ife ALLY_MAG 40 sound MSRIFLE_MAGIN
+		ife ALLY_MAG 50 { ife FOLLOW_PLAYER 1 ai AIAMCSOLDIERMOVE else ai AIAMCSOLDIERIDLE }
+		}
+	else
+		{
+		add ALLY_MAG 1
+		ife ALLY_MAG 20 sound MSRIFLE_MAGIN
+		ife ALLY_MAG 25 { ife FOLLOW_PLAYER 1 ai AIAMCSOLDIERMOVE else ai AIAMCSOLDIERIDLE }
+		}
+	}
+else
+ifai AIAMCSOLDIERIDLE
+	{
+	sleeptime 0
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIAMCSOLDIERMOVE }
+		ifstrength 100 ifcount 6 { addstrength 1 resetcount }
+	state rand_lookaround
+	}
+	
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT_2 0 
+			{ 
+			set hit_key 30
+			ifspritepal 3 break
+			ifspritepal 5 break
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT_2 26
+			}
+		}
+else
+ifai AIAMCSOLDIER_TELEPORT_F
+{
+add INTERNALCOUNT 1
+	spawn FRAMEEFFECT1
+	ife INTERNALCOUNT 4 { sound SOMETHINGHITFORCE cstat 2 }
+	ife INTERNALCOUNT 26
+		{
+			cstat 32768
+			getp[].posx TEMP
+			getp[].posy TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			getp[].posz TEMP8
+			updatesectorz TEMP5 TEMP6 TEMP8 TEMP7
+			ifn TEMP7 -1
+				{
+				spawn TRANSPORTERSTAR
+				sub TEMP8 256
+				setsprite THISACTOR TEMP5 TEMP6 TEMP8 
+				}
+			else { ifand ALLY_ORDER 2 xorvar ALLY_ORDER 2 cstat 257 ai AIAMCSOLDIERIDLE }
+		} 
+	ife INTERNALCOUNT 27 { sound SOMETHINGHITFORCE cstat 2 spawn TRANSPORTERSTAR }
+	ife INTERNALCOUNT 40 { ifand ALLY_ORDER 2 xorvar ALLY_ORDER 2 cstat 257 ai AIAMCSOLDIERIDLE }
+}
+else
+ifai AIAMCSOLDIER_TELEPORT
+{
+ife target -1 { cstat 257 ife FOLLOW_PLAYER 0 ai AIAMCSOLDIERIDLE else ai AIAMCSOLDIER_TELEPORT_F }
+ifn target -1 geta[target].statnum TEMP8
+ife TEMP8 1024 { cstat 257 ife FOLLOW_PLAYER 0 ai AIAMCSOLDIERIDLE else ai AIAMCSOLDIER_TELEPORT_F }
+
+add INTERNALCOUNT 1
+	spawn FRAMEEFFECT1
+	ife INTERNALCOUNT 4 { sound SOMETHINGHITFORCE cstat 2 }
+	ife INTERNALCOUNT 26
+		{
+			cstat 32768
+			geta[target].x TEMP
+			geta[target].y TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			geta[target].z TEMP8
+			updatesectorz TEMP5 TEMP6 TEMP8 TEMP7
+			ife sector[TEMP7].floorpicnum PURPLELAVA set TEMP7 -1 // don't teleport if its purple lava
+			ifn TEMP7 -1
+				{
+				spawn TRANSPORTERSTAR
+				sub TEMP8 128
+				setsprite THISACTOR TEMP5 TEMP6 TEMP8
+				}
+			else { ifand ALLY_ORDER 2 xorvar ALLY_ORDER 2 cstat 257 ai AIAMCSOLDIERIDLE }
+		} 
+	ife INTERNALCOUNT 27 { sound SOMETHINGHITFORCE cstat 2 spawn TRANSPORTERSTAR }
+	ife INTERNALCOUNT 40 { ifand ALLY_ORDER 2 xorvar ALLY_ORDER 2 cstat 257 ai AIAMCSOLDIERFIRE  }
+}
+else
+ifaction A_AMCSOLDIERPAIN
+	{
+	ifrnd 16 state AMCSOLD_PAIN
+	ifactioncount 4 { ife FOLLOW_PLAYER 1 ai AIAMCSOLDIERMOVE else ai AIAMCSOLDIERIDLE }
+	}
+
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIAMCSOLDIERRELOAD break
+	ifspritepal 5 
+	ife camerasprite -1
+	{
+	state botfindtarget
+	ifn target -1 
+		{ 
+		ai AIAMCSOLDIERFIRE 
+		}
+	}
+	else
+	{
+	state botfindtarget
+	ifai AIAMCSOLDIER_TELEPORT break
+	ifai AIAMCSOLDIER_TELEPORT_F break
+	ifn target -1 
+		{ 
+		state AMCSOLDIER_TARGET_VOICE
+			
+		ifrnd 64
+		ifand AMCSOLDIER_UPGRADES 8
+		{
+		ldist xydist THISACTOR target
+		ifrnd 64
+			ifg xydist 2048 // 192 512
+			{
+			geta[target].x TEMP
+			geta[target].y TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				set INTERNALCOUNT 0
+				orvar ALLY_ORDER 2
+			    ife GENDER MALE state AMCSOLD_PHASING
+				ai AIAMCSOLDIER_TELEPORT
+				resetcount
+				}
+			}
+		}
+		else	
+		ai AIAMCSOLDIERFIRE 
+		}
+	}
+	set SEEK_ENEMY_COUNT 13
+	}
+	
+ifhitweapon
+	{
+	spawn BLOOD
+	ifrnd 96 action A_AMCSOLDIERPAIN
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+
+			ifg ENERGY_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 4
+				guts JIBS3 6
+				spawn DISINTIGRATE_GUY
+				killit
+				}
+			else
+			ifg SPIRIT_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 1
+				guts JIBS3 6
+				spawn SPIRIT_DEATH_GUY
+				killit
+				}
+			else
+			ifg FIRE_DAMAGE 0 
+			{ 		
+				ifrnd 64 sound MERC_ONFIRE1
+				else ifrnd 64 sound MERC_ONFIRE2
+				else ifrnd 64 sound MERC_ONFIRE3
+				else sound MERC_ONFIRE4
+				spawn ONFIREGUY 
+				killit 
+			}
+			else
+			{
+			ifpdistl 8192 set PLAYER_VOICEOVER 1
+			randvar TEMP 30
+			ife GENDER MALE // male
+			{
+			ifl TEMP 10 sound EDFSOLD_DIE1 else
+			ifl TEMP 20 sound EDFSOLD_DIE2 else
+			sound EDFSOLD_DIE3
+			}
+			else
+			ife GENDER FEMALE // female
+			{
+			ifl TEMP 10 sound AMCSOLDF_DIE1 else
+			ifl TEMP 20 sound AMCSOLDF_DIE2 else
+			sound AMCSOLDF_DIE3
+			}
+			ai AIAMCSOLDIERDYING
+			ifrnd 76 spawn BLOODPOOL
+			}
+		}
+	}
+
+enda
+
+// ========================================================EDF SOLDIER=====================================================
+
+action A_EDFSOLDIERIDLE 20 1 5 1 11
+action A_EDFSOLDIERMOVE 0 4 5 1 4
+action A_EDFSOLDIERFIRE 20 2 5 1 8
+action A_EDFSOLDIERPAIN 30 1 5 1 8
+action A_EDFSOLDIERDYING 35 5 1 1 11
+action A_EDFSOLDIERDEAD 39 1 1 1 1
+action A_EDFSOLDIERDEAD2 98 1 1 1 1
+
+move EDFSTILL 0
+move EDFMOVE 266
+move EDFMOVESLOW 96
+
+ai AIEDFSOLDIERIDLE A_EDFSOLDIERIDLE EDFSTILL 0
+ai AIEDFSOLDIERMOVE A_EDFSOLDIERMOVE EDFMOVE faceplayer seekplayer 
+ai AIEDFSOLDIERRELOAD A_EDFSOLDIERMOVE EDFMOVESLOW seekplayer
+ai AIEDFSOLDIERFIRE A_EDFSOLDIERFIRE EDFSTILL 0
+ai AIEDFSOLDIERDYING A_EDFSOLDIERDYING EDFSTILL 0
+
+spriteshadow EDFSOLDIER_ACTIVE
+spritenvg EDFSOLDIER_ACTIVE
+
+useractor notenemy EDFSOLDIER_ACTIVE
+fall
+
+ifai 0
+	{
+	spawn SHOOTME2
+	ifspritepal 16 
+		{
+		strength 200 
+		set ALLY_MAG 100
+		}
+	else
+		{
+		strength 100
+		set ALLY_MAG 30
+		}
+	cstat 257
+	sizeat 22 22
+	randvar LAST_NAME 65
+	ifspawnedby BLACK_HAWK { set ALLY_MAG 0 ai AIEDFSOLDIERRELOAD } else
+	state botfindtarget
+	ifn target -1 ai AIEDFSOLDIERFIRE else ai AIEDFSOLDIERIDLE
+	}
+	
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+//state BODYA_DAMAGE_MODIFIER
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+state EDF_SOLDIER_MOVE_VOICE
+
+ifg targetlock 0 sub targetlock 1
+
+ifaction A_EDFSOLDIERDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifaction A_EDFSOLDIERDEAD2
+	{
+	strength 0
+	break
+	}
+else
+ifai AIEDFSOLDIERDYING
+	{
+	set ALLY_VOICE 0
+	ifactioncount 5 { ifrnd 128 action A_EDFSOLDIERDEAD2 else action A_EDFSOLDIERDEAD }
+	}
+ifai AIEDFSOLDIERFIRE
+	{
+	ifactioncount 1
+	ifn target -1
+			{ 
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP3 0 ifn TEMP 0 divvarvar TEMP3 TEMP
+			ifspritepal 16
+				{
+				sound M60_FIRE
+				sound EAT_CHAIN
+				zshoot TEMP3 MSCORP_SHOT
+				randvar TEMP 1024
+				zshoot TEMP SHELL_LINK			
+				}
+			else
+				{
+				sound M16_2_FIRE
+				zshoot TEMP3 ZRIFLESHOT 
+				}
+			ifrnd 8 zshoot TEMP3 13215
+			shoot RIFLESHELL
+			
+			ife PERFMODE 1
+			 ifcansee
+				{
+				set gunsmoke_z 7244 
+				set gunsmoke_angle 256
+				state spawn_gunsmoke_z
+				set gunsmoke_z 4044
+				state spawn_enemy_ARFLASH
+				state spawn_muzzleflash
+				}
+			
+			sub ALLY_MAG 1
+			ife ALLY_MAG 0 
+				{ 
+				ifspritepal 16 // M60 guy!
+					{
+					spawn 6781
+					sound M60_RELOAD1
+					}
+				else
+					{
+					sound MSRIFLE_MAGOUT 
+					shoot RIFLEMAGAZINE
+					}
+				ai AIEDFSOLDIERRELOAD 
+				}
+			resetactioncount
+			}
+	ife target -1 
+		{
+		state EDFSOLD_TARGET_DOWN
+		state botfindtarget
+		ai AIEDFSOLDIERRELOAD
+		}
+	}
+else
+ifai AIEDFSOLDIERMOVE
+	{
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifpdistl 1536 
+		{ 
+		ifphealthl 25 
+		 ifrnd 8 
+			state EDFSOLD_YOUR_HURT
+		ai AIEDFSOLDIERIDLE 
+		}
+	ifnotmoving operate
+	}
+else
+ifai AIEDFSOLDIERRELOAD
+	{
+	ife ALLY_MAG 2 state EDFSOLD_RELOAD
+	
+	ifspritepal 16 // M60 guy?
+		{
+		add ALLY_MAG 2
+		ife ALLY_MAG 40 globalsound M60_RELOAD2
+		ifg ALLY_MAG 98 { ife FOLLOW_PLAYER 1 ai AIEDFSOLDIERMOVE else ai AIEDFSOLDIERIDLE }
+		ifg ALLY_MAG 100 set ALLY_MAG 100
+		}
+	else
+		{
+		add ALLY_MAG 1
+		ife ALLY_MAG 15 globalsound M16IN
+		ife ALLY_MAG 30 { ife FOLLOW_PLAYER 1 ai AIEDFSOLDIERMOVE else ai AIEDFSOLDIERIDLE }
+		ifg ALLY_MAG 30 set ALLY_MAG 30
+		}
+	}
+else
+ifai AIEDFSOLDIERIDLE
+	{
+	sleeptime 0
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIEDFSOLDIERMOVE }
+	ifstrength 200 ifcount 6 { addstrength 1 resetcount }
+	state rand_lookaround
+	}
+	
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT 0 
+			{ 
+			set hit_key 30
+			ifspritepal 3 break
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT 26
+			}
+		}
+else
+ifaction A_EDFSOLDIERPAIN
+	{
+	ifactioncount 4 { ife FOLLOW_PLAYER 1 ai AIEDFSOLDIERMOVE else ai AIEDFSOLDIERIDLE }
+	}
+ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIEDFSOLDIERRELOAD break
+	state botfindtarget
+	ifn target -1 
+		{
+		state EDFSOLD_INCOMING
+		ai AIEDFSOLDIERFIRE
+		}
+	set SEEK_ENEMY_COUNT 13
+	}
+	
+ifhitweapon
+	{
+	spawn BLOOD
+	ifrnd 76 action A_EDFSOLDIERPAIN
+	state ENEMYKNOCKBACKS
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+		ifpdistl 8192 set PLAYER_VOICEOVER 1
+		randvar TEMP 30
+		ifl TEMP 10 sound EDFSOLD_DIE1 else
+		ifl TEMP 20 sound EDFSOLD_DIE2 else
+		sound EDFSOLD_DIE3
+		ifrnd 76 ifspritepal 16 { espawn M60_SPRITE setactorvar[RETURN].YVELSAVED ALLY_MAG }
+		else ifrnd 76 { espawn M16SPRITE add ALLY_MAG 30 setactorvar[RETURN].YVELSAVED ALLY_MAG }
+		ai AIEDFSOLDIERDYING
+		ifrnd 76 spawn BLOODPOOL
+		}
+	}
+
+enda
+
+// ========================================================MS SOLDIER=====================================================
+
+action A_MSSOLDIERIDLE 0 1 5 1 11
+action A_MSSOLDIERMOVE 0 4 5 1 11
+action A_MSSOLDIERFIRE 20 2 5 1 3
+action A_MSSOLDIERDYING 30 6 1 1 11
+action A_MSSOLDIERDEAD 35 1 1 1 1
+
+move MSSTILL 0
+move MSMOVE 266
+move MSMOVESLOW 96
+
+ai AIMSSOLDIERIDLE A_MSSOLDIERIDLE MSSTILL 0
+ai AIMSSOLDIERMOVE A_MSSOLDIERMOVE MSMOVE faceplayer seekplayer 
+ai AIMSSOLDIERRELOAD A_MSSOLDIERMOVE MSMOVESLOW seekplayer
+ai AIMSSOLDIERFIRE A_MSSOLDIERFIRE MSSTILL 0
+ai AIMSSOLDIERDYING A_MSSOLDIERDYING MSSTILL 0
+
+spriteshadow MSSOLDIER_ACTIVE
+spritenvg MSSOLDIER_ACTIVE
+
+useractor notenemy MSSOLDIER_ACTIVE
+fall
+
+ife CHAR 7
+{
+getp[].palookup TEMP
+ife TEMP 0 set TEMP 11
+seta[].pal TEMP
+}
+else spritepal 11
+
+ifai 0
+	{
+	spawn SHOOTME2
+	set ALLY_MAG 25
+	strength 200
+	cstat 257
+	sizeat 25 25
+	ai AIMSSOLDIERIDLE
+	}
+	
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+//state BODYA_DAMAGE_MODIFIER
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+
+	ife PERSONEL_RESEARCH[8] 2 // player has thermal weaving research? make fire die down quicker
+		{
+		ifg FIRE_DAMAGE 5 sub FIRE_DAMAGE 1
+		}
+
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifg ALLY_VOICE 0
+	{
+	sub ALLY_VOICE 1
+	ife ALLY_VOICE 1
+		{
+		ife CHAR 7 
+			{ 
+			ifrnd 128 
+				{
+				ife ally_subt 0
+					{
+					qputs 7501 ^1Ms-Corp Sardaukar: ^0As Lord Sandt commands.
+					set ally_subt 70
+					}						
+				soundonce MS_SOLD_MMOVE1 
+				}
+			else 
+				{
+				ife ally_subt 0
+					{
+					qputs 7501 ^1Ms-Corp Sardaukar: ^0Hail lord Mikko.
+					set ally_subt 60
+					}		
+				soundonce MS_SOLD_MMOVE2
+				}
+			}
+		else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0Lord Mikko bid that I follow your will.
+				set ally_subt 70
+				}		
+			soundonce MS_SOLD_MOVE1
+			}
+		}
+	}
+else
+ifl ALLY_VOICE 0
+	{
+	add ALLY_VOICE 1
+	ife ALLY_VOICE -1
+		{
+		ife CHAR 7 ifrnd 128 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0I shall guard this area with my life Master.
+				set ally_subt 90
+				}		
+			soundonce MS_SOLD_MSTAY1 
+			}
+		else
+		ifrnd 128 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0I will maintain vigil here.
+				set ally_subt 80
+				}	
+			soundonce MS_SOLD_STAY1
+			}
+		else
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0As you wish.
+				set ally_subt 70
+				}	
+			soundonce MS_SOLD_STAY2
+			}
+		}
+	}
+
+ifg targetlock 0 sub targetlock 1
+
+ifaction A_MSSOLDIERDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifai AIMSSOLDIERDYING
+	{
+	ifactioncount 5 action A_MSSOLDIERDEAD
+	}
+ifai AIMSSOLDIERFIRE
+	{
+	ifactioncount 3
+	ifn target -1
+			{ 
+			
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP 0 divvarvar TEMP3 TEMP
+			// MS Corp soldiers use the same AR as Mikko, so they can use Armour piercing mode as well
+			getactorvar[target].myowner TEMP6
+			geta[TEMP6].picnum TEMP7
+				switch TEMP7
+				default
+					sound MACYFIRE 
+					zshoot TEMP3 MSCORP_SHOT 
+				break
+				case LPOWERSUIT
+				case HPOWERSUIT
+				case GWBOSS
+				case VILMOS_ROBOT
+				case CYBERTOUR
+				case CYBERDEMON
+				case OGRE
+					sound MSRIFLE_AP 
+					zshoot TEMP3 ARMOUR_PIERCING_SHOT
+				break
+				endswitch
+			ifrnd 8 zshoot TEMP3 13215
+			shoot RIFLESHELL
+			
+			ife PERFMODE 1
+			 ifcansee
+				 {
+				set gunsmoke_z 7244 
+				set gunsmoke_angle 256
+				state spawn_gunsmoke_z
+				set gunsmoke_z 4344
+				state spawn_enemy_ARFLASH
+				state spawn_muzzleflash
+				}
+			
+			
+			sub ALLY_MAG 1
+			ife ALLY_MAG 0 { sound MSRIFLE_MAGOUT spawn 6781 ai AIMSSOLDIERRELOAD }
+			resetactioncount
+			}
+	ife target -1 ai AIMSSOLDIERIDLE
+	}
+else
+ifai AIMSSOLDIERMOVE
+	{
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifpdistl 1536 
+		{ 
+		ife CHAR 7 
+		 ifphealthl 25 
+		  ifrnd 16 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0Forgive my insolence Master, but you need healing.
+				set ally_subt 143
+				}	
+			soundonce MS_SOLD_YHURT
+			}
+		ai AIMSSOLDIERIDLE 
+		}
+	ifnotmoving operate
+	}
+else
+ifai AIMSSOLDIERRELOAD
+	{
+	add ALLY_MAG 1
+	ife ALLY_MAG 20 globalsound MSRIFLE_MAGIN
+	ife ALLY_MAG 25 { ife FOLLOW_PLAYER 1 ai AIMSSOLDIERMOVE else ai AIMSSOLDIERIDLE }
+	}
+else
+ifai AIMSSOLDIERIDLE
+	{
+	sleeptime 0
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIMSSOLDIERMOVE }
+	ifstrength 300 ifcount 3 { addstrength 1 resetcount }
+	state rand_lookaround
+	}
+	
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT 0 
+			ife ZVELSAVED 0
+			{ 
+			set hit_key 30
+			ifspritepal 3 break
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT 26
+			}
+		}
+else
+ifhitweapon
+	{
+	spawn BLOOD
+	state ENEMYKNOCKBACKS
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifrnd 2
+		{
+		ife ally_subt 0
+			{
+			qputs 7501 ^1Ms-Corp Sardaukar: ^0Lord Mikko protect me!
+			set ally_subt 78
+			}	
+		soundonce MS_SOLD_HURT
+		}
+	ifdead
+		{
+		state rf
+		ifpdistl 8192 set PLAYER_VOICEOVER 1
+		randvar TEMP 30
+		ifl TEMP 10 sound EDFSOLD_DIE1 else
+		ifl TEMP 20 sound EDFSOLD_DIE2 else
+		sound EDFSOLD_DIE3
+		ai AIMSSOLDIERDYING
+		ifrnd 76 spawn BLOODPOOL
+		}
+	}
+
+ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIMSSOLDIERRELOAD break
+	state botfindtarget
+	ifn target -1 
+		{ 
+		ifrnd 2 
+			{
+			ife ally_subt 0
+			 ifcansee
+				{
+				qputs 7501 ^1Ms-Corp Sardaukar: ^0More enemies to bring our Lord's wrath onto.
+				set ally_subt 120
+				}	
+			soundonce MS_SOLD_INC 
+			}
+		ai AIMSSOLDIERFIRE 
+		}
+	set SEEK_ENEMY_COUNT 13
+	}
+
+enda
+
+
+// ========================================================JANE=====================================================
+
+action A_JANEIDLE 0 1 5 1 11
+action A_JANEMOVE 10 4 5 1 11
+action A_JANEFIRE 0 2 5 1 3
+action A_JANEDYING 70 6 1 1 11
+action A_JANEDEAD 76 1 1 1 1
+action A_JANEJUMP 40 3 5 1 20
+action A_JANEFALL 50 1 5 1 30
+
+move JANESTILL 0
+move JANEMOVE 266
+move JANEMOVESLOW 128
+
+ai AIJANEIDLE A_JANEIDLE JANESTILL 0
+ai AIJANEMOVE A_JANEMOVE JANEMOVE faceplayer seekplayer
+ai AIJANERELOAD A_JANEMOVE JANEMOVESLOW seekplayer 
+ai AIJANEFIRE A_JANEFIRE JANESTILL 0
+ai AIJANEDYING A_JANEDYING JANESTILL 0
+ai AIJANEJUMPING A_JANEJUMP JANEMOVE jumptoplayer
+ai AIJANEFALL A_JANEFALL JANEMOVE seekplayer
+
+spriteshadow JANE
+spritenvg JANE
+
+useractor notenemy 12800
+sizeat 48 48
+geta[TEMP4].x TEMP5 seta[].x TEMP5
+geta[TEMP4].y TEMP5 seta[].y TEMP5
+geta[TEMP4].ang TEMP5 seta[].ang TEMP5
+geta[TEMP4].pal TEMP6 seta[].pal TEMP6
+
+getuserdef[].overhead_on TEMP
+ife TEMP 2
+	{
+	action ZERO
+	cstat 32
+	}
+else
+	{
+	cstat 32768
+	}
+enda
+
+useractor notenemy JANE
+fall
+
+ifai 0
+	{
+	spawn SHOOTME2
+	spawn 12800
+	spritepal 12
+	strength 1500
+	cstat 257
+	sizeat 24 24
+	ai AIJANEIDLE
+	}
+	
+state ignore_ally_damage
+	
+geta[].zvel TEMP
+ifg TEMP 40 { ifstrength 0 break else ai AIJANEFALL }
+
+ifg targetlock 0 sub targetlock 1
+
+ifg ALLY_VOICE 0
+	{
+	sub ALLY_VOICE 1
+	ife ALLY_VOICE 1
+		{
+		ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0I've got your six.
+				set ally_subt 32
+				}
+			soundonce JA_FOLLOW1
+			}
+		else 
+		ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0I'll follow you.
+				set ally_subt 27
+				}
+			soundonce JA_FOLLOW2
+			}
+		else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0Following.
+				set ally_subt 17
+				}
+			soundonce JA_FOLLOW3
+			}
+		}
+	}
+else
+ifl ALLY_VOICE 0
+	{
+	add ALLY_VOICE 1
+	ife ALLY_VOICE -1
+		{
+		ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0Alright, I'll watch this area.
+				set ally_subt 52
+				}
+			soundonce JA_WAIT1
+			}
+		else 
+		ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0Copy that.
+				set ally_subt 27
+				}
+			soundonce JA_ROGER
+			}
+		else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Jane: ^0Alrighty.
+				set ally_subt 27
+				}
+			soundonce JA_ROGER2
+			}
+		}
+	}
+
+ifaction A_JANEDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifai AIJANEDYING
+	{
+	set ALLY_VOICE 0
+	ifactioncount 6 { state BODY_FALL_NOISES action A_JANEDEAD }
+	}
+ifai AIJANEFIRE
+	{
+	ifactioncount 1 
+		{ 
+		ifoutside { gets[].ceilingshade TEMP seta[].shade TEMP spriteflags 4 } else
+		{ gets[].floorshade TEMP seta[].shade TEMP spriteflags 4 } 
+		}
+	ifactioncount 3
+	ifn target -1
+			{ 
+			spriteflags 4
+			seta[].shade -64
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			divvarvar TEMP3 TEMP
+			// JANE can fire Armour-piercing laser shots as well as standard ones
+			getactorvar[target].myowner TEMP6
+			geta[TEMP6].picnum TEMP7
+				switch TEMP7
+				default
+					zshoot TEMP3 BLUELASERSHOT  
+					sound LASERGUN_FIRE
+				break
+				case LPOWERSUIT
+				case HPOWERSUIT
+				case GWBOSS
+				case VILMOS_ROBOT
+				case CYBERTOUR
+				case CYBERDEMON
+				case OGRE
+					zshoot TEMP3 REDLASERSHOT 
+					sound LASERGUN_FIRE3
+				break
+				endswitch
+			resetactioncount
+			}
+	ife target -1
+		{
+		ifoutside { gets[].ceilingshade TEMP seta[].shade TEMP spriteflags 4 } else
+		{ gets[].floorshade TEMP seta[].shade TEMP spriteflags 4 }
+		ife ALLY_ORDER 0
+			{
+			ifrnd 16 soundonce JA_TAUNT_1 else
+			ifrnd 16 soundonce JA_TAUNT_2 else
+			ifrnd 16 soundonce JA_TAUNT_3 else
+			ifrnd 16 soundonce JA_TAUNT_4 else
+			ifrnd 16 soundonce JA_TAUNT_5 else
+			ifrnd 16 soundonce JA_TAUNT_6 else
+			ifrnd 16 soundonce JA_TAUNT_7 
+			}
+		ai AIJANEIDLE
+		}
+	}
+else
+ifai AIJANEFALL
+	{
+	iffloordistl 8
+		{
+		soundonce LANDNORMAL
+		ai AIJANEMOVE
+		}
+	}
+else
+ifai AIJANEJUMPING
+	{
+	soundonce SERVO
+	ifactioncount 3 ai AIJANEFALL
+	}
+else
+ifai AIJANEMOVE
+	{
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		sound BIG_BOOT_STEP
+		resetactioncount
+		}
+	ifnotmoving operate
+	ifp phigher ifnotmoving ifrnd 128 ai AIJANEJUMPING else
+	ifpdistl 1024 
+		{
+		ifphealthl 30 ifrnd 32
+			{
+			ife CHAR 0
+				{
+				ifrnd 128 
+					{
+					ife ally_subt 0
+					 ifcansee
+						{
+						qputs 7501 ^1Jane: ^0You don't look so good, be careful.
+						set ally_subt 67
+						}
+					soundonce JA_JS_HURT1
+					}
+					else
+					{
+					ife ally_subt 0
+					 ifcansee
+						{
+						qputs 7501 ^1Jane: ^0You're hurt...don't over do it okay?
+						set ally_subt 90
+						}
+					soundonce JA_JS_HURT2 
+					}
+				}
+				else
+				ifrnd 128 
+					{
+					ife ally_subt 0
+					 ifcansee
+						{
+						qputs 7501 ^1Jane: ^0You don't look so good, be careful.
+						set ally_subt 76
+						}
+					soundonce JA_HURT1
+					}
+					else
+					{
+					ife ally_subt 0
+					 ifcansee
+						{
+						qputs 7501 ^1Jane: ^0You're hurt...don't over do it okay?
+						set ally_subt 89
+						}
+					soundonce JA_HURT2 
+					}
+			}
+		ai AIJANEIDLE
+		}
+	}
+else
+ifai AIJANEIDLE
+	{
+	sleeptime 0
+	state rand_lookaround
+	add TEMP7 1
+	ife FOLLOW_PLAYER 1
+		{ 		
+		ifpdistg 1735 
+		 ifcansee 
+		  ifcanseetarget 
+		   ai AIJANEMOVE 
+		}
+	else
+	 ifn camerasprite -1
+		{
+		checkactivatormotion HITAGSAVED
+		 ife RETURN 1 move JANESTILL faceplayer
+		checkactivatormotion LOTAGSAVED
+		 ife RETURN 1 killit
+		checkactivatormotion XVELSAVED
+		 ife RETURN 1 killit
+		}
+	ifstrength 1499 ifcount 6 { addstrength 1 resetcount }
+	}
+	
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT 0 
+			{ 
+			set hit_key 30
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT 26
+			}
+		}
+else
+ifhitweapon
+	{
+	spawn BLOOD
+	state ENEMYKNOCKBACKS
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+		ai AIJANEDYING
+		ifrnd 76 spawn BLOODPOOL
+		ifmultiplayer nullop else
+			{
+			palfrom 63 63 63 63
+			set SLO_MO_SHOWOFF 70
+			set FISSION_MAILED 1
+			}
+		}
+	}
+
+ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+ifg player_taunt 0 sub player_taunt 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIJANERELOAD break
+	state botfindtarget
+	ifn target -1 
+		{
+		ife player_taunt 0
+			{
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7501 ^1Jane: ^0Contact!
+					set ally_subt 26
+					}
+				soundonce JA_INCOMING
+				}
+			else
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7501 ^1Jane: ^0Hostiles!
+					set ally_subt 29
+					}
+				soundonce JA_INCOMING2
+				}
+			else ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7501 ^1Jane: ^0We've got company!
+					set ally_subt 40
+					}
+				soundonce JA_INCOMING3
+				}
+			set player_taunt 600
+			}
+		ai AIJANEFIRE
+		}
+	set SEEK_ENEMY_COUNT 13
+	}
+
+enda
+
+// ========================================================VLADMIR=====================================================
+
+action A_VLADMIRIDLE 0 1 5 1 11
+action A_VLADMIRMOVE 5 4 5 1 11
+action A_VLADMIRFIRE 25 2 5 1 3
+action A_VLADMIRPAIN 35 1 1 1 8
+action A_VLADMIRDYING 35 5 1 1 11
+action A_VLADMIRDEAD 40 1 1 1 1
+
+ai AIVLADMIRIDLE A_VLADMIRIDLE EDFSTILL 0
+ai AIVLADMIRMOVE A_VLADMIRMOVE EDFMOVE faceplayer seekplayer 
+ai AIVLADMIRRELOAD A_VLADMIRMOVE EDFMOVESLOW seekplayer
+ai AIVLADMIRFIRE A_VLADMIRFIRE EDFSTILL 0
+ai AIVLADMIRDYING A_VLADMIRDYING EDFSTILL 0
+
+spriteshadow VLADMIR
+spritenvg VLADMIR
+
+useractor notenemy VLADMIR
+fall
+
+ifai 0
+	{
+	spawn SHOOTME2
+	set ALLY_MAG 50
+	strength 1500
+	cstat 257
+	sizeat 23 23
+	ai AIVLADMIRIDLE
+	
+		ifn EXTRASAVED -1
+			{
+			ife EXTRASAVED 1 set ALLYSLOT1 THISACTOR
+			ife EXTRASAVED 2 set ALLYSLOT2 THISACTOR 
+			ife EXTRASAVED 3 set ALLYSLOT3 THISACTOR
+			ife CHAR 3 ife EXTRASAVED 4 set ALLYSLOT4 THISACTOR 
+			set FOLLOW_PLAYER 1 
+			}
+	
+	}
+	
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifg targetlock 0 sub targetlock 1
+
+ifg ALLY_VOICE 0
+	{
+	sub ALLY_VOICE 1
+	ife ALLY_VOICE 1
+		{
+		ife CHAR 3 ifrnd 96 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0To victory Highwire!
+				set ally_subt 45
+				}
+			sound VLAD_VICTORY
+			}
+			else
+		ifrnd 128 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0Yes comrade.
+				set ally_subt 45
+				}
+			sound VLAD_COMRADE
+			}
+			else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0For the people.
+				set ally_subt 45
+				}
+			sound VLAD_FORPEOP
+			}
+		}
+	}
+else
+ifl ALLY_VOICE 0
+	{
+	add ALLY_VOICE 1
+	ife ALLY_VOICE -1
+		{
+		ifrnd 96 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0I'll keep watch here.
+				set ally_subt 45
+				}
+			sound VLAD_ILLKEEP 
+			}
+			else ifrnd 96 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0Dah, I'll wait here.
+				set ally_subt 55
+				}
+			sound VLAD_ILLWAIT 
+			}
+			else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0Stay safe comrade.
+				set ally_subt 45
+				}
+			sound VLAD_STAYSAFE
+			}
+		}
+	}
+
+ifaction A_VLADMIRDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifai AIVLADMIRDYING
+	{
+	ifactioncount 5 action A_VLADMIRDEAD
+	}
+ifai AIVLADMIRFIRE
+	{
+	ifactioncount 2
+	ifn target -1
+			{ 
+			sound VLAD_RIFLE 
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			divvarvar TEMP3 TEMP
+			zshoot TEMP3 ARMOUR_PIERCING_SHOT
+			ifrnd 8 zshoot TEMP3 13215
+			shoot RIFLESHELL
+			
+			set gunsmoke_z 7244 
+			set gunsmoke_angle 220
+			state spawn_gunsmoke_z
+			set gunsmoke_z 5044
+			espawn 16115
+			state spawn_muzzleflash
+			
+			sub ALLY_MAG 1
+			ife ALLY_MAG 0 { sound M16OUT shoot SMGMAGAZINE ai AIVLADMIRRELOAD }
+			resetactioncount
+			}
+	ife target -1 
+		{
+		ifrnd 32 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0Cover is for the weak!
+				set ally_subt 65
+				}
+			soundonce VLAD_COVER
+			}
+		else ifrnd 32 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0Die vermin!
+				set ally_subt 45
+				}
+			soundonce VLAD_DIE
+			}
+		else ifrnd 32 
+			{
+			ife ally_subt 0
+				{
+				qputs 7501 ^1Vladmir: ^0For Russia! Die pig dog!
+				set ally_subt 65
+				}
+			soundonce VLAD_RUSKY
+			}
+		ai AIVLADMIRIDLE
+		}
+	}
+else
+ifai AIVLADMIRMOVE
+	{
+	geta[PLAYER_IDENTITY].xvel TEMP
+	ifg TEMP 10
+		{
+		mul TEMP 3
+		seta[].xvel TEMP
+		}
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifn ANGLE 0 ifpdistl 32768 ai AIVLADMIRIDLE else
+	ifpdistl 1536 ai AIVLADMIRIDLE
+	ifnotmoving operate
+	}
+else
+ifai AIVLADMIRRELOAD
+	{
+	add ALLY_MAG 1
+	ife ALLY_MAG 25 globalsound M16IN
+	ife ALLY_MAG 50 { ife FOLLOW_PLAYER 1 ai AIVLADMIRMOVE else ai AIVLADMIRIDLE }
+	}
+else
+ifai AIVLADMIRIDLE
+	{
+	sleeptime 0
+	add HEAL_COUNT 1
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIVLADMIRMOVE }
+		ifstrength 1500 ifg HEAL_COUNT 6 { addstrength 1 set HEAL_COUNT 0 }
+		ifspritepal 3 nullop else state rand_lookaround
+		}
+	
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT 0 
+			{ 
+			set hit_key 30
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT 26
+			}
+		}
+else
+ifhitweapon
+	{
+	spawn BLOOD
+	ifrnd 76 action A_VLADMIRPAIN
+	state ENEMYKNOCKBACKS
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+		sound RUSSIAN_DIE1
+		ai AIVLADMIRDYING
+		ifrnd 76 spawn BLOODPOOL
+		ifmultiplayer nullop else
+			{
+			palfrom 63 63 63 63
+			set SLO_MO_SHOWOFF 70
+			set FISSION_MAILED 1
+			}
+		}
+	}
+else
+ifaction A_VLADMIRPAIN
+	{
+	ifactioncount 4 { ife FOLLOW_PLAYER 1 ai AIVLADMIRMOVE else ai AIVLADMIRIDLE }
+	}
+ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIVLADMIRRELOAD break
+	state botfindtarget
+	ifn target -1 ai AIVLADMIRFIRE
+	set SEEK_ENEMY_COUNT 13
+	}
+
+enda
+
+// ========================================================RUSSIAN=====================================================
+
+action A_RUSSIANIDLE 0 1 5 1 11
+action A_RUSSIANIDLE2 -1955 1 5 1 11
+action A_RUSSIANMOVE 5 4 5 1 11
+action A_RUSSIANFIRE 25 2 5 1 8
+action A_RUSSIANPAIN 35 1 1 1 8
+action A_RUSSIANDYING 35 4 1 1 11
+action A_RUSSIANDEAD 39 1 1 1 1
+
+ai AIRUSSIANIDLE A_RUSSIANIDLE EDFSTILL 0
+ai AIRUSSIANIDLE2 A_RUSSIANIDLE2 EDFSTILL 0
+ai AIRUSSIANMOVE A_RUSSIANMOVE EDFMOVE faceplayer seekplayer 
+ai AIRUSSIANRELOAD A_RUSSIANMOVE EDFMOVESLOW seekplayer
+ai AIRUSSIANFIRE A_RUSSIANFIRE EDFSTILL 0
+ai AIRUSSIANDYING A_RUSSIANDYING EDFSTILL 0
+
+spriteshadow RUSSIAN
+spritenvg RUSSIAN
+
+useractor notenemy RUSSIAN
+fall
+
+ifai 0
+	{
+	set allies_present 1 
+	ifspritepal 0 ifrnd 128 spritepal 51
+	spawn SHOOTME2
+	randvar LAST_NAME 20
+	set ALLY_MAG 30
+	strength 100
+	cstat 257
+	sizeat 23 23
+	ifspawnedby MI_24_HIND { set ALLY_MAG 0 ai AIRUSSIANRELOAD } else
+	ai AIRUSSIANIDLE
+	
+		ifg EXTRASAVED 0
+			{
+			ife EXTRASAVED 1 set ALLYSLOT1 THISACTOR
+			ife EXTRASAVED 2 set ALLYSLOT2 THISACTOR 
+			ife EXTRASAVED 3 set ALLYSLOT3 THISACTOR
+			ife CHAR 3 ife EXTRASAVED 4 set ALLYSLOT4 THISACTOR 
+			set FOLLOW_PLAYER 1 
+			}
+	
+	ifspawnedby APLAYER 
+		{ 
+		spawn TRANSPORTERBEAM
+		ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+		ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+		ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+		ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR
+		set FOLLOW_PLAYER 1 
+		set INTERNALCOUNT 960
+		} 
+	else set INTERNALCOUNT -1
+	}
+	
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+ifn INTERNALCOUNT -1
+{
+	ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+	else ife INTERNALCOUNT 0 
+		{ 
+		spawn TRANSPORTERBEAM 
+		ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+		ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+		ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+		ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+		killit 
+		}
+}
+	
+ifg INTERNALCOUNT_2 0 sub INTERNALCOUNT_2 1
+
+ifg targetlock 0 sub targetlock 1
+
+ifg ALLY_VOICE 0
+	{
+	state RUS_SOLDIER_NAMES
+	sub ALLY_VOICE 1
+	ife ALLY_VOICE 1
+		{
+		ifn CHAR 3
+			{
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Whatever you say tovarish.
+					qsprintf 7501 7502 573
+					set ally_subt 55
+					}
+				sound RUS_OT1
+				}
+			else
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0If you say so...sir.
+					qsprintf 7501 7502 573
+					set ally_subt 65
+					}
+				sound RUS_OT2
+				}
+				else
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Reporting.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					}
+				sound RUSSIAN_MOVE1
+				}
+			}
+			else
+			{
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Yes sir Highwire.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					}
+				sound RUS_HW1
+				}
+				else
+			ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Reporting.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					}
+				sound RUSSIAN_MOVE1
+				}
+				else 
+				ifrnd 96
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Reporting for Duty sir.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					}
+				sound RUSSIAN_MOVE2
+				}
+				else 
+				{
+				ife ally_subt 0
+					{
+					qputs 7502 ^1%s: ^0Comdrade.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					}
+				sound RUSMOV3
+				}
+			}
+		}
+	}
+else
+ifl ALLY_VOICE 0
+	{
+	state RUS_SOLDIER_NAMES
+	add ALLY_VOICE 1
+	ife ALLY_VOICE -1
+		{
+		ife CHAR 3
+		ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7502 ^1%s: ^0Yes sir Highwire.
+				qsprintf 7501 7502 573
+				set ally_subt 40
+				}
+			sound RUS_HW1
+			}
+			else
+		ifn CHAR 3
+		 ifrnd 96
+			{
+			ife ally_subt 0
+				{
+				qputs 7502 ^1%s: ^0Fine...I guess.
+				qsprintf 7501 7502 573
+				set ally_subt 45
+				}
+			sound RUS_OTS1
+			}		 
+			else
+		ifrnd 128 
+			{
+			ife ally_subt 0
+				{
+				
+				qputs 7502 ^1%s: ^0Acknowledged.
+				qsprintf 7501 7502 573
+				set ally_subt 40
+				}
+			sound RUSSIAN_STAY1
+			}
+			else 
+			{
+			ife ally_subt 0
+				{
+				qputs 7502 ^1%s: ^0Affirmative.
+				qsprintf 7501 7502 573
+				set ally_subt 40
+				}
+			sound RUSSIAN_STAY2
+			}
+		}
+	}
+
+ifaction A_RUSSIANDEAD
+	{
+	strength 0
+	break
+	}
+else
+ifai AIRUSSIANDYING
+	{
+	set ALLY_VOICE 0
+	ifactioncount 5 { spawn 2284 action A_RUSSIANDEAD }
+	}
+ifai AIRUSSIANFIRE
+	{
+	ifactioncount 1
+	ifn target -1
+			{ 
+			sound AK104FIRE
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			divvarvar TEMP3 TEMP
+			zshoot TEMP3 CHAINGUN 
+			ifrnd 8 zshoot TEMP3 13215
+			shoot 13772
+
+			set gunsmoke_z 7244 
+			set gunsmoke_angle 220
+			state spawn_gunsmoke_z
+			set gunsmoke_z 5044
+			espawn 16115
+			state spawn_muzzleflash
+			
+			sub ALLY_MAG 1
+			ife ALLY_MAG 0 
+				{ 
+				sound AK47_RELOAD 
+				shoot RIFLEMAGAZINE 
+				ife ally_subt 0
+				ifrnd 16
+					{
+					state RUS_SOLDIER_NAMES
+					qputs 7502 ^1%s: ^0Reloading.
+					qsprintf 7501 7502 573
+					set ally_subt 40
+					sound RUS_REL1
+					}
+				ai AIRUSSIANRELOAD 
+				}
+			resetactioncount
+			}
+	ife target -1 
+		{
+		ife ally_subt 0
+			{
+			state RUS_SOLDIER_NAMES
+			ifrnd 16
+				{
+				qputs 7502 ^1%s: ^7^One, Two - You're on top!^
+				qsprintf 7501 7502 573
+				set ally_subt 98
+				sound RUS_KILL1
+				}
+			else
+			ifrnd 16
+				sound RUS_KILL2
+			else
+			ifrnd 16
+				{
+				qputs 7502 ^1%s: ^0Enemy down!
+				qsprintf 7501 7502 573
+				set ally_subt 45
+				sound RUS_KILL3
+				}
+			else
+			ifrnd 16
+				{
+				qputs 7502 ^1%s: ^0Don't look so smug with a faceful of holes do you?
+				qsprintf 7501 7502 573
+				set ally_subt 90
+				sound RUS_KILL4
+				}
+			else
+			ifrnd 16
+				{
+				qputs 7502 ^1%s: ^0That uniform looks better in red!
+				qsprintf 7501 7502 573
+				set ally_subt 90
+				sound RUS_KILL5
+				}
+			}
+		ai AIRUSSIANIDLE
+		}
+	}
+else
+ifai AIRUSSIANMOVE
+	{
+	geta[PLAYER_IDENTITY].xvel TEMP
+	ifg TEMP 10
+		{
+		mul TEMP 3
+		seta[].xvel TEMP
+		}
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifn ANGLE 0 ifpdistl 8192 ai AIRUSSIANIDLE else
+	ifpdistl 1536 ai AIRUSSIANIDLE
+	ifnotmoving operate
+	}
+else
+ifai AIRUSSIANRELOAD
+	{
+	add ALLY_MAG 1
+	ife ALLY_MAG 25 globalsound M16IN
+	ife ALLY_MAG 30 { ife FOLLOW_PLAYER 1 ai AIRUSSIANMOVE else ai AIRUSSIANIDLE }
+	}
+else
+ifai AIRUSSIANIDLE
+	{
+	sleeptime 0
+	state rand_lookaround
+	add HEAL_COUNT 1
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIRUSSIANMOVE }
+	ifstrength 100 ifg HEAL_COUNT 6 { addstrength 1 set HEAL_COUNT 0 }
+	ifrnd 1 { sound JMOVE6 ai AIRUSSIANIDLE2 }
+	}
+else
+ifai AIRUSSIANIDLE2
+	{
+	sleeptime 0
+	state rand_lookaround
+	add HEAL_COUNT 1
+	ife FOLLOW_PLAYER 1
+		{ ifpdistg 1535 ifcansee ifcanseetarget ai AIRUSSIANMOVE }
+	ifstrength 100 ifg HEAL_COUNT 6 { addstrength 1 set HEAL_COUNT 0 }
+	}
+	
+
+	ifpdistl 1024 
+		  ifp pfacing 
+		  {
+		  set player_use 0
+		   ifhitspace 
+		    ife INTERNALCOUNT_2 0 
+			{ 
+			set hit_key 30
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+				{
+				ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+				ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+				ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+				ife CHAR 3 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+				break
+				}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT_2 26
+			}
+		}
+else
+ifhitweapon
+	{
+	spawn BLOOD
+	ifrnd 76 action A_RUSSIANPAIN
+	state ENEMYKNOCKBACKS
+	state random_wall_jibs
+	state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+		ifpdistl 8192 set PLAYER_VOICEOVER 1
+		sound RUSSIAN_DIE1
+		ifrnd 76 { espawn AK114SPRITE add ALLY_MAG 30 setactorvar[RETURN].YVELSAVED ALLY_MAG }
+		ai AIRUSSIANDYING
+		ifrnd 76 spawn BLOODPOOL
+		}
+	}
+else
+ifaction A_RUSSIANPAIN
+	{
+	move STOP
+	ifactioncount 2 { ife FOLLOW_PLAYER 1 ai AIRUSSIANMOVE else ai AIRUSSIANIDLE }
+	}
+ifg INTERNALCOUNT 0 sub INTERNALCOUNT 1
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifdead break
+	ifai AIRUSSIANRELOAD break
+	state botfindtarget
+	ifn target -1 
+		{
+		ife ally_subt 0
+			{
+			state RUS_SOLDIER_NAMES
+			ifrnd 8
+				{
+				qputs 7502 ^1%s: ^0Pig dogs!
+				qsprintf 7501 7502 573
+				set ally_subt 40
+				sound RUS_SIG1
+				}
+			else
+			ifrnd 8
+				{
+				qputs 7502 ^1%s: ^0Egh, fascist filth!
+				qsprintf 7501 7502 573
+				set ally_subt 75
+				sound RUS_SIG2
+				}
+			}
+		ai AIRUSSIANFIRE
+		}
+	set SEEK_ENEMY_COUNT 13
+	}
+
+enda
+
+// ========================================================TURRET=====================================================
+
+spriteshadow 10595
+spriteshadow 10605
+
+useractor notenemy 10605 sizeat 24 24 cstator 257 action ACAR enda
+
+useractor notenemy 10595
+
+ifaction 0
+{
+sleeptime 0
+strength 250
+spawn SHOOTME2
+ifn HITAGSAVED 0 set ALLY_MAG HITAGSAVED else
+set ALLY_MAG 2000
+sizeat 24 24
+ifn LOTAGSAVED 0 action ACAR else
+action ATURRET_IDLE
+}
+
+//state MECH_DAMAGE_MODIFIER
+
+ifg targetlock 0 sub targetlock 1
+
+ifaction ACAR
+{
+sleeptime 0
+checkactivatormotion LOTAGSAVED
+ife RETURN 1
+	{
+	state botfindtarget
+	action ATURRET_IDLE
+	}
+}
+
+
+ifaction ATURRET_IDLE
+{
+ife ALLY_MAG 0 action ATURRET_EMPTY
+ifspritepal 0 soundonce AUTOTURRET_SCAN
+}
+
+ifaction ATURRET_FIRE
+{
+	ifactioncount 2
+	ifn target -1
+			{ 
+			sound AUTOTURRET_FIRE
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP3 0 ifn TEMP 0 divvarvar TEMP3 TEMP
+			ifspritepal 21 zshoot TEMP3 ARMOUR_PIERCING_SHOT
+			else zshoot TEMP3 ZRIFLESHOTU
+			sub ALLY_MAG 1
+			resetactioncount
+			}
+	ife target -1
+		{
+		action ATURRET_IDLE
+		}
+}
+
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifaction ACAR break
+	ifaction ATURRET_EMPTY break
+	state botfindtarget
+	ifn target -1 ifg ALLY_MAG 0 action ATURRET_FIRE
+	set SEEK_ENEMY_COUNT 13
+	}
+
+	
+ifhitweapon
+{
+debris SCRAP1 2
+	ifdead
+	{
+	spawn EXPLOSION2
+	sound PIPEBOMB_EXPLODE
+	debris SCRAP1 4
+	debris SCRAP2 5
+	debris SCRAP3 6
+	killit
+	}
+}
+
+
+enda
+
+// ========================================================MICKY TURRET=====================================================
+
+action ATURRET3 0 1 5
+action ATURRET3_EMPTY 0 1 5
+action ATURRET3_FIRE 5 1 5
+
+spriteshadow 22677
+
+useractor notenemy 22677
+
+ifaction 0
+	{
+	sleeptime 0
+	spawn SHOOTME2
+	ife PERSONEL_RESEARCH[1] 2 xorvar AMCSOLDIER_UPGRADES 1 // has the player researched laser guns for AMC soldiers?
+	ife PERSONEL_RESEARCH[2] 2 strength 300 else strength 150 // has the player researched better armour for AMC soldiers?
+	ife PERSONEL_RESEARCH[3] 2 set ALLY_MAG 400 // has the player researched bigger magazines for AMC soldiers?
+	else set ALLY_MAG 200
+	sizeat 18 18
+	action ATURRET3
+	}
+
+//state MECH_DAMAGE_MODIFIER
+
+state ignore_ally_damage
+
+ifg targetlock 0 sub targetlock 1
+
+ifaction ATURRET3
+{
+ife ALLY_MAG 0 action ATURRET3_EMPTY
+soundonce AUTOTURRET_SCAN
+}
+
+ifaction ATURRET3_FIRE
+{
+	ifactioncount 2
+	ifn target -1
+			{ 
+			sound AUTOTURRET_FIRE
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP3 0 ifn TEMP 0 divvarvar TEMP3 TEMP
+			ifand AMCSOLDIER_UPGRADES 1
+			zshoot TEMP3 BLUELASERSHOT
+			else
+			zshoot TEMP3 SHOTSPARK1
+			sub ALLY_MAG 1
+			resetactioncount
+			}
+	ife target -1
+		{
+		action ATURRET3
+		}
+}
+
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifaction ATURRET3_EMPTY break
+	state botfindtarget
+	ifn target -1 ifg ALLY_MAG 0 action ATURRET3_FIRE
+	set SEEK_ENEMY_COUNT 13
+	}
+
+	
+ifhitweapon
+{
+debris SCRAP1 2
+	ifdead
+	{
+	spawn EXPLOSION2
+	sound PIPEBOMB_EXPLODE
+	debris SCRAP1 4
+	debris SCRAP2 5
+	debris SCRAP3 6
+	killit
+	}
+}
+
+
+enda
+
+// ========================================================SNOWFALL TURRET=====================================================
+
+spriteshadow 20862
+
+action ATURRET2_EMPTY 0 1 5
+
+useractor notenemy 20862
+fall
+ifaction 0
+{
+sleeptime 0
+strength 250
+spawn SHOOTME2
+sizeat 24 24
+ifn LOTAGSAVED 0 action ACAR else
+action ATURRET_IDLE
+}
+
+ifg targetlock 0 sub targetlock 1
+
+state ignore_ally_damage
+
+ifaction ACAR
+{
+sleeptime 0
+checkactivatormotion LOTAGSAVED
+ife RETURN 1
+	{
+	state botfindtarget
+	action ATURRET_IDLE
+	}
+}
+
+
+ifpdistl 1536
+ ifp pfacing
+  ifp palive
+   ife CHAR 14
+	{
+	set player_use 0
+	ifhitspace
+		{
+		set hit_key 30
+		stopsound AUTOTURRET_SCAN
+		addweapon FREEZE_WEAPON 0
+		getp[].ammo_amount 9 TEMP4
+		add TEMP4 ALLY_MAG
+		ifg TEMP4 500 set TEMP4 500 // Don't let it go over his max ammo
+		setp[].ammo_amount 9 TEMP4
+		
+		setarray PICKED_UP_GUN[9] 30
+		set WEAP_SHOW 130
+		state PICKUP_DISPLAY
+		getactorvar[PLAYER_IDENTITY].WEAPON9_TILE PICKED_UP_TILE
+		set ITEM_AMOUNT ALLY_MAG
+		globalsound GET_GUN
+		killit
+		}
+	}
+
+
+ifaction ATURRET_IDLE
+{
+ife ALLY_MAG 0 action ATURRET2_EMPTY
+ifspritepal 0 soundonce AUTOTURRET_SCAN
+}
+
+ifaction ATURRET_FIRE
+{
+	ifactioncount 3
+	ifn target -1
+	ifg ALLY_MAG 0
+			{ 
+			sound SF_HMG
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			divvarvar TEMP3 TEMP
+			zshoot TEMP3 RMAXREVOLVERSHOT
+			sub ALLY_MAG 1
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					state spawn_enemy_ARFLASH
+					state spawn_muzzleflash
+					shoot RIFLESHELL
+					shoot SHELL_LINK
+					}
+			resetactioncount
+			}
+	ife ALLY_MAG 0 action ATURRET2_EMPTY
+	ife target -1
+		{
+		action ATURRET_IDLE
+		}
+}
+
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+
+	ife SEEK_ENEMY_COUNT 0
+	{
+	ifaction ACAR break
+	ifaction ATURRET2_EMPTY break
+	state botfindtarget
+	ifn target -1 ifg ALLY_MAG 0 action ATURRET_FIRE
+	set SEEK_ENEMY_COUNT 13
+	}
+
+	
+ifhitweapon
+{
+debris SCRAP1 2
+	ifdead
+	{
+	spawn EXPLOSION2
+	sound PIPEBOMB_EXPLODE
+	debris SCRAP1 4
+	debris SCRAP2 5
+	debris SCRAP3 6
+	killit
+	}
+}
+
+enda
+
+//
+// ------------------------------------------------------------
+// FLAMER SENTRY TURRET
+// ------------------------------------------------------------
+//
+
+spriteshadow 12972
+
+
+action ASTURRET 0 1 5
+action ASTURRET_EMPTY 5 1 5
+action ASTURRET_PICKUP 5 1 5
+
+useractor notenemy 12972 250
+sizeat 16 16
+fall
+
+ifaction 0
+{
+spawn SHOOTME2
+ifn LOTAGSAVED 0 set ALLY_MAG LOTAGSAVED else
+set ALLY_MAG 500
+action ASTURRET
+}
+
+//state MECH_DAMAGE_MODIFIER 
+
+ifaction ASTURRET
+{
+cstat 257
+ife ALLY_MAG 0 action ASTURRET_EMPTY
+add INTERNALCOUNT 1
+
+ifpdistl 1024
+ ifp pfacing
+  ifp palive
+  {
+  set TEMP9 ALLY_MAG
+  divvar TEMP9 10
+  	qsprintf 1053 1050 TEMP9
+	quote 1053
+  set player_use 0
+   ifhitspace
+    ifcount 13
+	{
+	set hit_key 30
+	set PLAYER_VOICEOVER 2
+	sound METALB_PICKUP
+	action ASTURRET_PICKUP
+	resetcount
+	}
+  }
+
+ifg INTERNALCOUNT 6
+{
+	findnearactor SHOOTME 3072 TEMP
+	findnearactor SHOOTME3 3072 TEMP2
+	ifn TEMP -1
+	{
+			geta[TEMP].x mx
+			geta[TEMP].y my
+			geta[].x TEMP5
+			geta[].y TEMP6
+			sub mx TEMP5
+			sub my TEMP6
+			getangle ANGVAR mx my
+			seta[].ang ANGVAR
+			ifg ALLY_MAG 0
+				{
+				spawn 3296
+				soundonce FLAMETH_START
+				sub ALLY_MAG 1
+				}
+	}
+
+	ifn TEMP2 -1
+	{
+			geta[TEMP2].x mx
+			geta[TEMP2].y my
+			geta[].x TEMP5
+			geta[].y TEMP6
+			sub mx TEMP5
+			sub my TEMP6
+			getangle ANGVAR mx my
+			seta[].ang ANGVAR
+			ifg ALLY_MAG 0
+				{
+				spawn 3296
+				soundonce FLAMETH_START
+				sub ALLY_MAG 1
+				}
+	}
+set INTERNALCOUNT 0
+}
+
+  
+}
+else
+ifaction ASTURRET_EMPTY
+{
+cstat 257
+ifg ALLY_MAG 0 action ASTURRET
+
+ifpdistl 1024
+ ifp pfacing
+  ifp palive
+  {
+	quote 1051
+  set player_use 0
+   ifhitspace
+    ifcount 13
+	{
+	set hit_key 30
+	set PLAYER_VOICEOVER 2
+	sound METALB_PICKUP
+	action ASTURRET_PICKUP
+	resetcount
+	}
+  }
+
+}
+else
+ifaction ASTURRET_PICKUP
+	{
+	setp[].runspeed 45200
+	getp[].posx TEMP
+	getp[].posy TEMP2
+
+	set TEMP3 TEMP
+	add TEMP3 512
+
+	getp[].ang TEMP4
+
+	rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+
+	updatesector TEMP5 TEMP6 TEMP7
+	ife TEMP7 -1 action ASTURRET else
+	{
+	seta[].x TEMP5 
+	seta[].y TEMP6
+	}
+	getp[].posz TEMP
+	add TEMP 5600
+	seta[].z TEMP
+	setp[].weapon_pos 10
+	getp[].ang TEMP
+	seta[].ang TEMP
+
+	ifhitspace
+	 ifcount 13
+		{
+		sound METALB_PICKUP
+		setp[].runspeed RUNNINGSPEED
+		action ASTURRET
+		resetcount
+		}
+
+	ifpdistg 1024 { sound METALB_PICKUP setp[].runspeed RUNNINGSPEED action ASTURRET }
+	ifp pjumping { sound METALB_PICKUP setp[].runspeed RUNNINGSPEED action ASTURRET }
+
+}
+
+
+ifhitweapon
+{
+debris SCRAP1 2
+ifdead
+	{
+	spawn EXPLOSION2
+	sound PIPEBOMB_EXPLODE
+	debris SCRAP1 4
+	debris SCRAP2 5
+	debris SCRAP3 6
+	killit
+	}
+}
+
+ifinwater
+{
+spawn EXPLOSION2
+sound PIPEBOMB_EXPLODE
+debris SCRAP1 4
+debris SCRAP2 5
+debris SCRAP3 6
+killit
+}
+
+enda
+
+// ===================================OBLIVION_STAFF_SENTRY====================================
+
+spriteshadow OBLIVION_STAFF_SENTRY
+
+action OB_TURRET_IDLE 0 1 1 1 10
+action OB_TURRET_FIRE 0 1 1 1 2
+
+spritenoshade OBLIVION_STAFF_SENTRY
+
+useractor notenemy OBLIVION_STAFF_SENTRY
+
+ifaction 0
+{
+		 geta[].mdflags TEMP
+		 orvar TEMP 16
+		 seta[].mdflags TEMP
+		 seta[].shade -127
+		 set command 32768
+sizeat 24 24
+action OB_TURRET_IDLE
+}
+
+ifg targetlock 0 sub targetlock 1
+
+ifaction OB_TURRET_IDLE
+{
+ifl ALLY_MAG 0 set ALLY_MAG 0
+ifg ALLY_MAG 0 soundonce SPELL8AMB // If it has ammo, make the creepy ambience noise
+}
+
+
+ifaction OB_TURRET_FIRE
+{
+	ifcount 15
+	ifn target -1
+	ifg ALLY_MAG 0
+			{ 
+			sound SPELL8FIRE
+			ldist TEMP THISACTOR target	
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3				
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			divvarvar TEMP3 TEMP
+			zshoot TEMP3 SPELL8
+			sub ALLY_MAG 1
+			resetcount
+			}
+	ife target -1
+		{
+		action OB_TURRET_IDLE
+		}
+}
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+
+   ife SEEK_ENEMY_COUNT 0
+	ifg ALLY_MAG 0
+	{
+	state botfindtarget
+	ifn target -1 { sound SPELL8CHARGE action OB_TURRET_FIRE }
+	set SEEK_ENEMY_COUNT 13
+	}
+
+ifpdistl 1024
+ ifp pfacing
+  ifp palive
+   ife CHAR 4
+	{
+	set player_use 0
+	ifhitspace
+		{
+		addweapon FREEZE_WEAPON 0
+		divvar ALLY_MAG 3 // Divide the ammo by 3
+		getp[].ammo_amount 9 TEMP4
+		add TEMP4 ALLY_MAG
+		stopactorsound THISACTOR SPELL8AMB
+		ifg TEMP4 20 set TEMP4 20 // Don't let it go over his max ammo
+		setp[].ammo_amount 9 TEMP4
+		palfrom 32 0 32
+		globalsound GET_GUN
+		killit
+		}
+	}
+	
+enda
+
+// ===================================NEMESIS STAFF SENTRY====================================
+
+spriteshadow 18085
+spritenoshade 18085
+
+useractor notenemy 18085
+
+ifaction 0
+	{		
+	 geta[].mdflags TEMP
+	orvar TEMP 16
+	seta[].mdflags TEMP
+	seta[].shade -127
+	set command 32768
+	sizeat 24 24
+	action OB_TURRET_IDLE
+	}
+
+ifaction OB_TURRET_IDLE
+{
+ifl ALLY_MAG 0 set ALLY_MAG 0
+ifpdistl 3072
+ ifg ALLY_MAG 0 
+		action ONE
+}
+
+ifaction ONE
+{
+	soundonce PORTAL_AMBIENCE
+	set PLAYER_PROTECTED 1
+		palfrom 10 10 10 10
+	ifcount 30 { sub ALLY_MAG 1 resetcount }
+	ifl ALLY_MAG 1 { action OB_TURRET_IDLE set PLAYER_PROTECTED 0 soundonce MAGIC_FIELD_DOWN stopactorsound THISACTOR PORTAL_AMBIENCE } 
+	ifpdistg 3072 { action OB_TURRET_IDLE set PLAYER_PROTECTED 0 soundonce MAGIC_FIELD_DOWN stopactorsound THISACTOR PORTAL_AMBIENCE }
+}
+
+
+
+ifpdistl 1024
+ ifp pfacing
+  ifp palive
+   ife CHAR 4
+	{
+	set player_use 0
+	ifhitspace
+		{
+		addweapon FREEZE_WEAPON 0
+		set PLAYER_PROTECTED 0
+		getp[].ammo_amount 9 TEMP4
+		add TEMP4 ALLY_MAG
+		ifg TEMP4 60 set TEMP4 60 // Don't let it go over his max ammo
+		setp[].ammo_amount 9 TEMP4
+		palfrom 32 0 32
+		globalsound GET_GUN
+		soundonce MAGIC_FIELD_DOWN
+		stopactorsound THISACTOR PORTAL_AMBIENCE
+		killit
+		}
+	}
+	
+enda
+
+
+// *************************************************
+//  
+// *************************************************
+
+action HOVERCRAFT_IDLE 0 1 5 1 10
+
+action HOVERCRAFT_INACTION 5 1 1 1 10
+
+move BOAT_FORWARD 10 0
+
+
+spriteflags HOVERCRAFT 16384
+
+useractor notenemy HOVERCRAFT
+fall
+ifaction 0
+{
+cstat 257
+strength 5000
+clipdist 180
+sizeat 40 40
+action HOVERCRAFT_IDLE
+}
+
+ifstrength 1000
+{
+espawn BIG_SMOKE
+setactorvar[RETURN].YVELSAVED 1
+seta[RETURN].pal 17
+}
+
+ifaction HOVERCRAFT_IDLE
+{
+ifpdistl 3024
+ife player_in_vehicle 0
+ ifp palive
+  ifp pfacing
+	{
+	ife SCOPE 1 break
+	ifand GUNFIREMODE 16384 break
+	
+	set player_use 0
+		ifhitspace
+		 ifcount 26
+			{
+			palfrom 64 0 0 0
+			soundonce HOVERCRAFT_START
+			set player_in_vehicle 1
+			set control_display 150
+			set player_using_hovercraft THISACTOR
+			action HOVERCRAFT_INACTION
+			set PLAYER_VOICEOVER 18
+			resetcount
+			}
+	}
+	
+ifstrength 4999
+	{
+	soundonce AUTOTURRET_SCAN
+	addstrength 2
+	}
+	
+}
+
+ifaction HOVERCRAFT_INACTION
+{
+setp[].weapon_pos 10
+setp[].movement_lock 15 
+geta[].x TEMP
+setp[].posx TEMP
+geta[].y TEMP2
+setp[].posy TEMP2
+geta[].z TEMP3
+sub TEMP3 8096
+setp[].posz TEMP3
+updatesectorz TEMP TEMP2 TEMP3 TEMP4
+ifn TEMP4 -1 // Make sure it's a a valid sector
+	{
+	changespritesect APLAYER TEMP4
+	setp[].cursectnum TEMP4
+	}
+	
+ifinwater
+	{
+	seta[].zvel -128
+	spawn WATERBUBBLE
+	spawn WATERBUBBLE
+	set TEMP9 1
+	}
+else
+ ifonwater
+ ife TEMP9 1
+	{
+	seta[].zvel 0
+	sound WAVECRASH
+	quake 26
+	set TEMP9 0
+	}
+	
+geta[].zvel TEMP7
+ifg TEMP7 3500 add FALL_COUNTER 5
+iffloordistl 16 
+		{ 
+		ifg FALL_COUNTER 40 
+			{
+			sound WAVECRASH
+			quake 26
+			spawn 18138
+			spawn 18138 
+			spawn 18138
+			seta[].htextra FALL_COUNTER
+			set FALL_COUNTER 0
+			}
+		set FALL_COUNTER 0
+		}
+	
+
+	geta[].ang TEMP
+	setp[].ang TEMP
+	
+getinput[].avel TEMP3 // Get their mouse movements
+
+ifg TEMP3 0
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else
+ifl TEMP3 0
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else
+ifand EXTBITS_PRESS 4
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else
+ifand EXTBITS_PRESS 16
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else
+ifand EXTBITS_PRESS 8
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else
+ifand EXTBITS_PRESS 32
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 100
+		divvarvar TEMP3 TEMP2
+		}
+		else divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	ifonwater nullop else soundonce METAL_SCRAPE
+	}
+else ifsound METAL_SCRAPE stopsound METAL_SCRAPE
+
+
+ifand EXTBITS_PRESS 1
+	{
+	set TEMP4 hc_gear
+	mulvar TEMP4 200
+	ifl forward_accelerate TEMP4 add forward_accelerate 4
+	ifg forward_accelerate TEMP4 sub forward_accelerate 8
+	}
+	else ifg forward_accelerate 0 sub forward_accelerate 8
+	
+ifand EXTBITS_PRESS 2
+	{
+	ifg forward_accelerate -400 sub forward_accelerate 4
+	}
+	else ifl forward_accelerate 0 add forward_accelerate 4
+	
+	ifg forward_accelerate 0
+	ifn sprite[].pal 27
+	{
+	soundonce BOAT_RUN
+	set TEMP2 forward_accelerate
+	setactorsoundpitch THISACTOR BOAT_RUN TEMP2
+	move BOAT_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP forward_accelerate
+	ifonwater nullop else divvar TEMP 2
+	seta[].xvel TEMP
+	ifonwater
+		{
+	   	espawn 8435
+		seta[RETURN].xrepeat 16
+		seta[RETURN].yrepeat 16
+		geta[RETURN].z TEMP3
+		add TEMP3 -512
+		seta[RETURN].z TEMP3
+		}
+	ifnotmoving
+	 ifg forward_accelerate 128
+		{
+		ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+		addstrength -100
+		ifg forward_accelerate 800
+		soundonce CARSMASH else soundonce CAR_HIT
+		set forward_accelerate 0
+		}
+	}
+	else
+	ifl forward_accelerate -1
+	ifn sprite[].pal 27
+	{
+	soundonce BOAT_RUN
+	move BOAT_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP forward_accelerate
+	seta[].xvel TEMP
+	}
+	else
+	ife forward_accelerate 0
+		{
+		stopsound BOAT_RUN
+		soundonce BOAT_IDLE
+		 ifhitspace
+		  ifcount 26
+			{
+			palfrom 64 0 0 0
+			soundonce HOVERCRAFT_STOP
+			move 0
+			set player_in_vehicle 0
+			set player_using_hovercraft -1
+			setp[].over_shoulder_on 0
+			setp[].movement_lock 0
+			set just_changed 1
+			action HOVERCRAFT_IDLE
+			cstat 257
+			resetcount
+			}
+		}
+		
+ifp pdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_hovercraft -1
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	action HOVERCRAFT_IDLE
+	resetcount
+	}
+	
+	ifdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_hovercraft -1
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	addphealth -1000
+	spawn EXPLOSION2
+	quake 26
+	globalsound BLOWUP
+	shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL
+	strength 1
+	action HOVERCRAFT_IDLE
+	resetcount
+	}
+	
+	ifhitweapon
+	{
+	sound ALARM
+	palfrom 10 10 0 0
+	}
+
+
+}
+
+
+enda
+
+// *************************************************
+// CYCLOID FIGHTER
+// *************************************************
+
+action CYCLOID_FIGHTER_IDLE 0 1 1 1 10
+
+action CYCLOID_FIGHTER_INACTION 1 1 1 1 10
+
+move FIGHTER_MOVE 1 1
+
+useractor notenemy 15342
+ifaction 0
+	{
+	cstat 257
+	strength 5000
+	clipdist 220
+	sizeat 80 80
+	ife HITAGSAVED 0 action CYCLOID_FIGHTER_IDLE
+	else action ZERO
+	}
+
+ifstrength 1000
+	{
+	espawn BIG_SMOKE
+	setactorvar[RETURN].YVELSAVED 1
+	seta[RETURN].pal 17
+	}
+
+ifaction ZERO
+	{
+	fall
+	checkactivatormotion HITAGSAVED
+	 ife RETURN 1 action CYCLOID_FIGHTER_IDLE
+	}
+
+ifaction CYCLOID_FIGHTER_IDLE
+{
+seta[].pal sector[].floorpal
+fall
+ifpdistl 3072
+ ifp palive
+  ifp pfacing
+   ife player_in_vehicle 0
+	{
+	ife SCOPE 1 break
+	ifand GUNFIREMODE 16384 break
+	
+	set player_use 0
+		ifhitspace
+		 ifcount 26
+			{
+			set hit_key 30
+			palfrom 64 0 0 0
+			soundonce CY_FIGHTER_STARTUP
+			set player_in_vehicle 1
+			set control_display 150
+			set player_using_fighter THISACTOR
+			action CYCLOID_FIGHTER_INACTION
+			set PLAYER_VOICEOVER 32
+			resetcount
+			}
+	}
+	
+ifstrength 4999
+	{
+	soundonce AUTOTURRET_SCAN
+	addstrength 2
+	}
+	
+}
+
+ifaction CYCLOID_FIGHTER_INACTION
+{
+geta[].x TEMP
+setp[].posx TEMP
+geta[].y TEMP2
+setp[].posy TEMP2
+setp[].falling_counter 0
+geta[].z TEMP3
+sub TEMP3 16394
+setp[].posz TEMP3
+updatesectorz TEMP TEMP2 TEMP3 TEMP4
+ifn TEMP4 -1 // Make sure it's a a valid sector
+	{
+	changespritesect APLAYER TEMP4
+	setp[].cursectnum TEMP4
+	}
+	
+
+	geta[].ang TEMP
+	setp[].ang TEMP
+
+getinput[].avel TEMP3 // Get their mouse movements
+ifg TEMP3 0
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 200
+		divvarvar TEMP3 TEMP2
+		}
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifl TEMP3 0
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 200
+		divvarvar TEMP3 TEMP2
+		}
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 16
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 200
+		divvarvar TEMP3 TEMP2
+		}
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 32
+	{
+	geta[].ang TEMP
+	ifg forward_accelerate 300
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 200
+		divvarvar TEMP3 TEMP2
+		}
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+	
+ifand EXTBITS_PRESS 4 // strafe left
+	{
+	soundonce CY_FIGHTER_RISE
+	geta[].x TEMP2
+	geta[].y TEMP3
+	geta[].ang TEMP4
+	sub TEMP4 512
+	cos TEMP2 TEMP4
+	sin TEMP3 TEMP4
+	shiftvarr TEMP2 6 
+	shiftvarr TEMP3 6 
+	movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+	}
+else
+ifand EXTBITS_PRESS 8 // strafe right
+	{
+	soundonce CY_FIGHTER_RISE
+	geta[].x TEMP2
+	geta[].y TEMP3
+	geta[].ang TEMP4
+	add TEMP4 512
+	cos TEMP2 TEMP4
+	sin TEMP3 TEMP4
+	shiftvarr TEMP2 6 
+	shiftvarr TEMP3 6 
+	movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+	}
+	
+ifand BITS_PRESS 1 // go up
+	{
+	state thisactor_getzrange
+	soundonce CY_FIGHTER_RISE
+	gets[].ceilingz TEMP3
+	geta[].z TEMP2
+	sub TEMP2 4096
+	ifg TEMP2 TEMP3 
+	seta[].z TEMP2
+	// seta[].zvel -8096
+	}
+	else
+ifand BITS_PRESS 2 // go down
+	{
+	state thisactor_getzrange
+	soundonce CY_FIGHTER_RISE
+	gets[].floorz TEMP3
+	geta[].z TEMP2
+	add TEMP2 4096
+	ifl TEMP2 TEMP3 
+	seta[].z TEMP2
+	// seta[].zvel -8096
+	}
+	
+	ifg forward_accelerate 300
+	{
+	state thisactor_getzrange
+		getp[].horiz TEMP
+		sub TEMP 100 // 100 horiz equals straight ahead, so take away 100 and make 0 'straight ahead' for this
+		mulvar TEMP -60
+		geta[].z TEMP2
+		add TEMP2 TEMP
+		seta[].z TEMP2
+	}
+	
+ifand EXTBITS_PRESS 1
+	{
+	set TEMP4 hc_gear
+	mulvar TEMP4 200
+	ifl forward_accelerate TEMP4 add forward_accelerate 4
+	ifg forward_accelerate TEMP4 sub forward_accelerate 8
+	}
+	else ifg forward_accelerate 0 sub forward_accelerate 8
+	
+ifand EXTBITS_PRESS 2
+	{
+	ifg forward_accelerate -400 sub forward_accelerate 4
+	}
+	else ifl forward_accelerate 0 add forward_accelerate 4
+	
+	soundonce CY_FIGHTER_FLOAT
+	ifg forward_accelerate 0
+	{
+	set TEMP2 forward_accelerate
+	divvar TEMP2 2
+	setactorsoundpitch THISACTOR CY_FIGHTER_FLOAT TEMP2
+	move FIGHTER_MOVE geth getv
+	geta[].xvel TEMP
+	mulvar TEMP 3
+	divvar TEMP 2
+	add TEMP forward_accelerate
+	seta[].xvel TEMP
+	ifnotmoving
+	 ifg forward_accelerate 128
+		{
+		ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+		addstrength -100
+		ifg forward_accelerate 800
+		soundonce CARSMASH else soundonce CAR_HIT
+		set forward_accelerate 0
+		}
+	}
+	else
+	ifl forward_accelerate -1
+	{
+	soundonce CY_FIGHTER_FLOAT
+	move FIGHTER_MOVE geth getv
+	geta[].xvel TEMP
+	add TEMP forward_accelerate
+	seta[].xvel TEMP
+	}
+	else
+	ife forward_accelerate 0
+		{
+		 ifhitspace
+		  ifcount 26
+			{
+			palfrom 64 0 0 0
+			move 0
+			set player_in_vehicle 0
+			set player_using_fighter -1
+			soundonce CY_FIGHTER_SHUTDOWN
+			stopactorsound THISACTOR CY_FIGHTER_FLOAT
+			stopactorsound THISACTOR CY_FIGHTER_RISE
+			setp[].jetpack_on 0
+			setp[].over_shoulder_on 0
+			setp[].movement_lock 0
+			set just_changed 1
+			action CYCLOID_FIGHTER_IDLE
+			cstat 257
+			resetcount
+			}
+		}
+		
+ifvarvarn player_using_fighter THISACTOR // if player has been removed from vehicle by force
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_fighter -1
+	setp[].jetpack_on 0
+	set just_changed 1
+	stopactorsound THISACTOR CY_FIGHTER_FLOAT
+	stopactorsound THISACTOR CY_FIGHTER_RISE
+	action CYCLOID_FIGHTER_IDLE
+	resetcount
+	}
+		
+ifp pdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_fighter -1
+	setp[].jetpack_on 0
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	stopactorsound THISACTOR CY_FIGHTER_FLOAT
+	stopactorsound THISACTOR CY_FIGHTER_RISE
+	action CYCLOID_FIGHTER_IDLE
+	resetcount
+	}
+	
+ifdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_fighter -1
+	setp[].jetpack_on 0
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	stopactorsound THISACTOR CY_FIGHTER_FLOAT
+	stopactorsound THISACTOR CY_FIGHTER_RISE
+	addphealth -1000
+	spawn EXPLOSION2
+	quake 26
+	globalsound BLOWUP
+	shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL
+	strength 1
+	action CYCLOID_FIGHTER_IDLE
+	resetcount
+	}
+	
+	ifhitweapon
+	{
+	sound ALARM
+	set GUN_RECOIL 10
+	palfrom 10 10 0 0
+	}
+
+
+}
+
+enda
+
+// *************************************************
+// HOVERTANK
+// *************************************************
+
+action HOVERTANK_IDLE 0 1 1 1 10
+
+action HOVERTANK_INACTION 1 1 1 1 10
+
+spritenoshade 21594
+
+useractor notenemy 21594
+
+state ignore_ally_damage
+//state HEAVY_MECH_DAMAGE_MODIFIER
+
+ifaction 0
+{
+	cstat 257
+	strength 5000
+	clipdist 220
+	sizeat 64 64
+	ifspritepal 3 // only show up if 'Eviction Notice' is completed
+	{
+		ifand BEAT_EPISODES[3] 2048 nullop else killit
+	}
+	ife HITAGSAVED 0 action HOVERTANK_IDLE
+	else action ZERO
+}
+
+	seta[].shade sector[].floorshade
+
+ifaction ZERO
+{
+	fall
+	checkactivatormotion HITAGSAVED
+	ife RETURN 1 action HOVERTANK_IDLE
+}
+
+ifaction HOVERTANK_IDLE
+{
+	seta[].htextra -1
+	seta[].htpicnum -1
+	fall
+	ifpdistl 3096
+		ifp palive
+			ifp pfacing
+				ife player_in_vehicle 0
+				{
+					ife SCOPE 1 break
+					ifand GUNFIREMODE 16384 break
+
+					set player_use 0
+					ifhitspace
+					ifcount 26
+					{
+						palfrom 64 0 0 0
+						soundonce HOVERTANK_START
+						set player_in_vehicle 1
+						set control_display 150
+						set player_using_hovertank THISACTOR
+						action HOVERTANK_INACTION
+						resetcount
+					}
+				}
+	
+	ifstrength 4999
+	{
+		soundonce AUTOTURRET_SCAN
+		addstrength 2
+	}
+}
+
+ifaction HOVERTANK_INACTION
+{
+	// Bind player's X and Y coordinates to the tank
+	geta[].x TEMP
+	setp[].posx TEMP
+	geta[].y TEMP2
+	setp[].posy TEMP2
+	
+	// Do the same for Z coordinate
+	// We should use updatedsectorz/getflorzofslope for sloped sectors
+	// VULNERABLE HACK
+	// EXCEPT CNC.MAP has some special TROR shit going on so we need to exempt floors with tile number 19508 from this rule
+	// For those floors, simply use Floor Z 
+	// This is obtuse and liable to break if art is changed around. Plz don't drive to my house if you end up with a bug because of this.
+	gets[].floorpicnum TEMP4
+	ife TEMP4 19508
+	{
+		gets[].floorz TEMP6
+	}
+	else
+	{
+		updatesectorz player[].posx player[].posy player[].posz TEMP4 
+		al TEMP4
+		ifn TEMP4 -1 getflorzofslope TEMP4 player[].posx player[].posy TEMP6
+		al TEMP6
+	}
+	ifonwater sub TEMP6 2048 else
+	
+	sub TEMP6 1024
+	seta[].z TEMP6
+	cstat 256
+	
+	// Put the player above the "clipping detection" point for the Hovertank voxel.
+	// If this value is changed, it will break hovertank movement.
+	sub TEMP6 23300
+	setp[].posz TEMP6
+	setp[].oposz TEMP6
+	setp[].falling_counter 0
+	
+	updatesectorz TEMP TEMP2 TEMP3 TEMP4
+	ifn TEMP4 -1 // Make sure it's a a valid sector
+	{
+		changespritesect APLAYER TEMP4
+		setp[].cursectnum TEMP4
+	}
+	
+	geta[].ang TEMP
+	setp[].ang TEMP
+
+	getinput[].avel TEMP3 // Get their mouse movements
+
+	ifg TEMP3 0
+	{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+		{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+		}
+		add TEMP TEMP3
+		seta[].ang TEMP
+	}
+	else
+	ifl TEMP3 0
+	{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+		{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+		}
+		add TEMP TEMP3
+		seta[].ang TEMP
+	}
+
+	ifand EXTBITS_PRESS 4 // strafe left
+	{
+		soundonce EBIKE_RUN
+		geta[].x TEMP2
+		geta[].y TEMP3
+		geta[].ang TEMP4
+		sub TEMP4 512
+		cos TEMP2 TEMP4
+		sin TEMP3 TEMP4
+		shiftvarr TEMP2 5 
+		shiftvarr TEMP3 5
+		movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+	}
+	else
+	ifand EXTBITS_PRESS 16
+	{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+		{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+		}
+		add TEMP TEMP3
+		seta[].ang TEMP
+	}
+	else
+	ifand EXTBITS_PRESS 8 // strafe right
+	{
+		soundonce EBIKE_RUN
+		geta[].x TEMP2
+		geta[].y TEMP3
+		geta[].ang TEMP4
+		add TEMP4 512
+		cos TEMP2 TEMP4
+		sin TEMP3 TEMP4
+		shiftvarr TEMP2 5 
+		shiftvarr TEMP3 5 
+		movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+	}
+	else
+	ifand EXTBITS_PRESS 32
+	{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+		{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+		}
+		add TEMP TEMP3
+		seta[].ang TEMP
+	}
+	
+	ifg forward_accelerate 300 
+	{
+		state thisactor_getzrange
+
+		set TEMP8 0 
+		findnearsprite3d SHOOTME 2048 TEMP9 
+		ifn TEMP9 -1 
+		{
+			getactorvar[TEMP9].myowner TEMP8
+			seta[TEMP8].htextra 250 
+		}
+		else
+		ife TEMP9 -1
+		{
+			findnearsprite3d SHOOTME3 2048 TEMP9 
+			ifn TEMP9 -1 
+			{
+				getactorvar[TEMP9].myowner TEMP8
+				seta[TEMP8].htextra 250 
+			}
+		}
+
+	}
+	
+	ifand EXTBITS_PRESS 1
+	{
+		set TEMP4 hc_gear
+		mulvar TEMP4 200
+		ifl forward_accelerate TEMP4 add forward_accelerate 4
+		ifg forward_accelerate TEMP4 sub forward_accelerate 8
+	}
+	else ifg forward_accelerate 0 sub forward_accelerate 8
+	
+	ifand EXTBITS_PRESS 2
+	{
+		ifg forward_accelerate -400 sub forward_accelerate 4
+	}
+	else ifl forward_accelerate 0 add forward_accelerate 4
+	
+	soundonce HOVERTANK_ACTIVE
+	ifg forward_accelerate 0
+	{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 2
+		setactorsoundpitch THISACTOR HOVERTANK_ACTIVE TEMP2
+		move FIGHTER_MOVE geth getv
+		geta[].xvel TEMP
+		mulvar TEMP 4
+		divvar TEMP 2
+		add TEMP forward_accelerate
+		seta[].xvel TEMP
+		ifnotmoving
+			ifg forward_accelerate 128
+			{
+				ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+				ifg forward_accelerate 800
+				soundonce CARSMASH else soundonce CAR_HIT
+				set forward_accelerate 0
+			}
+	}
+	else
+	ifl forward_accelerate -1
+	{
+		soundonce HOVERTANK_ACTIVE
+		move FIGHTER_MOVE geth getv
+		geta[].xvel TEMP
+		add TEMP forward_accelerate
+		seta[].xvel TEMP
+	}
+	else
+	ife forward_accelerate 0
+	{
+		ifhitspace
+			ifcount 26
+			{
+				palfrom 64 0 0 0
+				move 0
+				set player_in_vehicle 0
+				set player_using_hovertank -1
+				soundonce HOVERTANK_STOP
+				stopactorsound THISACTOR HOVERTANK_ACTIVE
+				geta[].z TEMP
+				sub TEMP 48000
+				setp[].posz TEMP
+				setp[].jetpack_on 0
+				setp[].over_shoulder_on 0
+				setp[].movement_lock 0
+				set just_changed 1
+				action HOVERTANK_IDLE
+				cstat 257
+				resetcount
+			}
+	}
+		
+	ifvarvarn player_using_hovertank THISACTOR // if player has been removed from vehicle by force
+	{
+		move 0
+		set player_in_vehicle 0
+		set player_using_hovertank -1
+		setp[].jetpack_on 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		action HOVERTANK_IDLE
+		resetcount
+	}
+		
+	ifp pdead
+	{
+		move 0
+		set player_in_vehicle 0
+		set player_using_hovertank -1
+		setp[].jetpack_on 0
+		setp[].over_shoulder_on 0
+		setp[].movement_lock 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		action HOVERTANK_IDLE
+		resetcount
+	}
+	
+	ifhitweapon
+	{
+		sound ALARM
+		set GUN_RECOIL 10
+		palfrom 10 10 0 0
+	}
+	
+	ifdead
+	{
+		move 0
+		set player_in_vehicle 0
+		set player_using_hovertank -1
+		setp[].jetpack_on 0
+		setp[].over_shoulder_on 0
+		setp[].movement_lock 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		addphealth -1000
+		spawn EXPLOSION2
+		quake 26
+		globalsound BLOWUP
+		shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+		shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL
+		strength 1
+		action HOVERTANK_IDLE
+		resetcount
+	}
+}
+
+ifstrength 1000
+{
+	espawn BIG_SMOKE
+	setactorvar[RETURN].YVELSAVED 1
+	seta[RETURN].pal 17
+}
+
+enda
+
+// *************************************************
+// VR HOVERTANK
+// *************************************************
+
+spritenoshade 22433
+
+useractor notenemy 22433
+ifaction 0
+{
+cstat 257
+strength 30000
+clipdist 220
+sizeat 64 64
+ife HITAGSAVED 0 action HOVERTANK_IDLE
+else action ZERO
+}
+
+seta[].shade sector[].floorshade
+
+ifstrength 1000
+{
+espawn BIG_SMOKE
+setactorvar[RETURN].YVELSAVED 1
+seta[RETURN].pal 17
+}
+
+ifaction ZERO
+{
+fall
+checkactivatormotion HITAGSAVED
+ ife RETURN 1 action HOVERTANK_IDLE
+}
+
+ifaction HOVERTANK_IDLE
+{
+fall
+ifpdistl 3096
+ ifp palive
+  ifp pfacing
+   ife player_in_vehicle 0
+	{
+	ife SCOPE 1 break
+	ifand GUNFIREMODE 16384 break
+	
+	set player_use 0
+		ifhitspace
+		 ifcount 26
+			{
+			palfrom 64 0 0 0
+			soundonce VR_TANK_START
+			seta[].htextra -1
+			set player_in_vehicle 1
+			set control_display 150
+			set player_using_VR_tank THISACTOR
+			action HOVERTANK_INACTION
+			set PLAYER_VOICEOVER 32
+			resetcount
+			}
+	}
+	
+ifstrength 30000
+	{
+	soundonce AUTOTURRET_SCAN
+	addstrength 2
+	}
+	
+}
+
+ifaction HOVERTANK_INACTION
+{
+	seta[].htextra -1
+	geta[].x TEMP
+	setp[].posx TEMP
+	geta[].y TEMP2
+	setp[].posy TEMP2
+	setp[].falling_counter 0
+	
+	gets[].floorz TEMP6
+	ifonwater sub TEMP6 2048 else
+	sub TEMP6 1024
+	seta[].z TEMP6
+	cstat 0
+	sub TEMP6 16394
+	setp[].posz TEMP6
+	updatesectorz TEMP TEMP2 TEMP3 TEMP4
+	ifn TEMP4 -1 // Make sure it's a a valid sector
+		{
+		changespritesect APLAYER TEMP4
+		setp[].cursectnum TEMP4
+		}
+		
+		geta[].ang TEMP
+		setp[].ang TEMP
+
+	getinput[].avel TEMP3 // Get their mouse movements
+	ifg TEMP3 0
+		{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+			{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+			}
+		add TEMP TEMP3
+		seta[].ang TEMP
+		}
+	else
+	ifl TEMP3 0
+		{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+			{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+			}
+		add TEMP TEMP3
+		seta[].ang TEMP
+		}
+
+	ifand EXTBITS_PRESS 4 // strafe left
+		{
+		soundonce EBIKE_RUN
+		geta[].x TEMP2
+		geta[].y TEMP3
+		geta[].ang TEMP4
+		sub TEMP4 512
+		cos TEMP2 TEMP4
+		sin TEMP3 TEMP4
+		shiftvarr TEMP2 5 
+		shiftvarr TEMP3 5
+		movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+		}
+	else
+	ifand EXTBITS_PRESS 16
+		{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+			{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+			}
+		add TEMP TEMP3
+		seta[].ang TEMP
+		}
+	else
+	ifand EXTBITS_PRESS 8 // strafe right
+		{
+		soundonce EBIKE_RUN
+		geta[].x TEMP2
+		geta[].y TEMP3
+		geta[].ang TEMP4
+		add TEMP4 512
+		cos TEMP2 TEMP4
+		sin TEMP3 TEMP4
+		shiftvarr TEMP2 5 
+		shiftvarr TEMP3 5 
+		movesprite THISACTOR TEMP2 TEMP3 0 CLIPMASK0 TEMP5
+		}
+	else
+	ifand EXTBITS_PRESS 32
+		{
+		geta[].ang TEMP
+		ifg forward_accelerate 300
+			{
+			set TEMP2 forward_accelerate
+			divvar TEMP2 200
+			divvarvar TEMP3 TEMP2
+			}
+		add TEMP TEMP3
+		seta[].ang TEMP
+		}
+		
+		ifg forward_accelerate 300 
+			{
+			state thisactor_getzrange
+			
+			set TEMP8 0 
+			 findnearsprite3d SHOOTME 2048 TEMP9 
+				ifn TEMP9 -1 
+					{
+					getactorvar[TEMP9].myowner TEMP8
+					seta[TEMP8].htextra 250 
+					}
+				 else
+				 ife TEMP9 -1
+					{
+					 findnearsprite3d SHOOTME3 2048 TEMP9 
+				ifn TEMP9 -1 
+						{
+						getactorvar[TEMP9].myowner TEMP8
+						seta[TEMP8].htextra 250 
+						}
+					}
+			
+			}
+		
+	ifand EXTBITS_PRESS 1
+		{
+		set TEMP4 hc_gear
+		mulvar TEMP4 200
+		ifl forward_accelerate TEMP4 add forward_accelerate 4
+		ifg forward_accelerate TEMP4 sub forward_accelerate 8
+		}
+		else ifg forward_accelerate 0 sub forward_accelerate 8
+		
+	ifand EXTBITS_PRESS 2
+		{
+		ifg forward_accelerate -400 sub forward_accelerate 4
+		}
+		else ifl forward_accelerate 0 add forward_accelerate 4
+		
+		soundonce HOVERTANK_ACTIVE
+		ifg forward_accelerate 0
+		{
+		set TEMP2 forward_accelerate
+		divvar TEMP2 2
+		setactorsoundpitch THISACTOR HOVERTANK_ACTIVE TEMP2
+		move FIGHTER_MOVE geth getv
+		geta[].xvel TEMP
+		mulvar TEMP 3
+		divvar TEMP 2
+		add TEMP forward_accelerate
+		seta[].xvel TEMP
+		/*
+		ifnotmoving
+		 ifg forward_accelerate 128
+			{
+			// This doesn't work well anymore with current clipping code, and the fix for that messes up tank aiming
+			// Lazy fix is to just disable this.
+			ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+			soundonce VR_TANK_CRASH
+			set forward_accelerate 0
+			}
+		*/
+		}
+		else
+		ifl forward_accelerate -1
+		{
+		soundonce HOVERTANK_ACTIVE
+		move FIGHTER_MOVE geth getv
+		geta[].xvel TEMP
+		add TEMP forward_accelerate
+		seta[].xvel TEMP
+		}
+		else
+		ife forward_accelerate 0
+			{
+			 ifhitspace
+			  ifcount 26
+				{
+				palfrom 64 0 0 0
+				move 0
+				set player_in_vehicle 0
+				set player_using_VR_tank -1
+				soundonce VR_TANK_STOP
+				stopactorsound THISACTOR HOVERTANK_ACTIVE
+				geta[].z TEMP
+				sub TEMP 8192
+				setp[].posz TEMP
+				setp[].jetpack_on 0
+				setp[].over_shoulder_on 0
+				setp[].movement_lock 0
+				set just_changed 1
+				action HOVERTANK_IDLE
+				cstat 257
+				resetcount
+				}
+			}
+			
+	ifvarvarn player_using_VR_tank THISACTOR // if player has been removed from vehicle by force
+		{
+		move 0
+		set player_in_vehicle 0
+		set player_using_VR_tank -1
+		setp[].jetpack_on 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		action HOVERTANK_IDLE
+		resetcount
+		}
+			
+	ifp pdead
+		{
+		move 0
+		set player_in_vehicle 0
+		set player_using_VR_tank -1
+		setp[].jetpack_on 0
+		setp[].over_shoulder_on 0
+		setp[].movement_lock 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		action HOVERTANK_IDLE
+		resetcount
+		}
+		
+		ifdead
+		{
+		move 0
+		set player_in_vehicle 0
+		set player_using_VR_tank -1
+		setp[].jetpack_on 0
+		setp[].over_shoulder_on 0
+		setp[].movement_lock 0
+		set just_changed 1
+		stopactorsound THISACTOR HOVERTANK_ACTIVE
+		addphealth -1000
+		spawn EXPLOSION2
+		quake 26
+		globalsound RETRO_DEAD
+		shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+		shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL
+		strength 1
+		action HOVERTANK_IDLE
+		resetcount
+		}
+		ifhitweapon
+		{
+		sound ALARM
+		set GUN_RECOIL 10
+		palfrom 10 10 0 0
+		}
+}
+
+enda
+
+// *************************************************
+// MS CORP MECH SUIT
+// *************************************************
+
+action MS_CORP_MECH_IDLE 0 1 5 1 10
+action MS_CORP_MECH_DEAD 0 1 5 1 10
+
+action MS_CORP_MECH_INACTION 0 1 5 1 10
+action MS_CORP_MECH_WALK 5 4 5 1 30
+action MS_CORP_FIRE_MISSILES 40 1 5 1 20
+action MS_CORP_COOLD_MISSILES 35 1 5 1 20
+action MS_CORP_FIRE_GUN 30 1 5 1 20
+action MS_CORP_COOL_GUN 25 1 5 1 20
+
+move MECH_FORWARD 0
+move MECH_IDLE 0
+
+spriteshadow MS_CORP_MECH
+
+useractor notenemy MS_CORP_MECH
+fall
+
+		ife ALLY_MAG 1
+			{
+			ife PBOOST 0
+				{
+				move 0
+				palfrom 60 0 0 0
+				seta[].htextra -1
+				set player_in_vehicle 0
+				set player_using_mech -1
+				setp[].movement_lock 0
+				set just_changed 1
+				soundonce MS_MECH_EXIT 
+				globalsound SOMETHINGHITFORCE
+				spawn TRANSPORTERBEAM
+				action MS_CORP_MECH_IDLE
+				killit
+				}
+			}
+
+state ignore_ally_damage
+//state HEAVY_MECH_DAMAGE_MODIFIER // Modifier for Heavy armour
+
+ifhitweapon { }
+
+ife CHAR 7
+{
+getp[].palookup TEMP
+ife TEMP 0 set TEMP 11
+seta[].pal TEMP
+}
+else spritepal 11
+
+ifaction 0
+{
+  geta[].mdflags TEMP
+  orvar TEMP 16
+  seta[].mdflags TEMP
+cstat 257
+ifn LOTAGSAVED 0 seta[].extra LOTAGSAVED else
+strength 15000
+clipdist 220
+sizeat 50 50
+action MS_CORP_MECH_IDLE
+}
+
+
+ifstrength 1000
+{
+espawn BIG_SMOKE
+
+	geta[].x TEMP
+	geta[].y TEMP2
+
+	set TEMP3 TEMP
+	randvarvar TEMP4 256
+	add TEMP3 TEMP4
+	randvar TEMP4 2048
+
+	rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+
+
+seta[RETURN].x TEMP5 
+seta[RETURN].y TEMP6
+
+geta[].z TEMP
+sub TEMP 16048
+seta[RETURN].z TEMP
+
+setactorvar[RETURN].YVELSAVED 1
+seta[RETURN].pal 17
+}
+
+ifaction MS_CORP_MECH_IDLE
+{
+ifspawnedby APLAYER
+ ife player_in_vehicle 0
+  ife ALLY_MAG 0
+	{
+	set ALLY_MAG 1
+	ifspawnedby APLAYER soundonce MS_MECH_START else
+	ife mech_startup_sequence -1 set mech_startup_sequence 185
+	else soundonce MS_MECH_START
+	palfrom 60 0 0 0
+	set control_display 150
+	set player_in_vehicle 1
+	set player_using_mech THISACTOR
+	getp[].i TEMP2
+	}
+
+ifpdistl 2048
+ ifp palive
+  ifp pfacing
+   ife player_in_vehicle 0
+	{
+	ife SCOPE 1 break
+	ifand GUNFIREMODE 16384 break
+	ifl mech_startup_sequence 1 set player_use 0
+		ifhitspace
+		 ifcount 26
+			{
+			ifspawnedby APLAYER soundonce MS_MECH_START else
+			ife mech_startup_sequence -1 set mech_startup_sequence 185
+			else soundonce MS_MECH_START
+			palfrom 60 0 0 0
+			set control_display 150
+			set player_in_vehicle 1
+			set player_using_mech THISACTOR
+			getp[].i TEMP2
+			resetcount
+			}
+	}
+	
+ifstrength 14999
+ife HITAGSAVED 0
+	{
+	soundonce AUTOTURRET_SCAN
+	addstrength 20
+	}
+else
+ifmultiplayer
+ifstrength 1000
+	{
+	soundonce AUTOTURRET_SCAN
+	addstrength 20	
+	}
+	
+}
+
+ifonwater
+	{
+	ifaction MS_CORP_MECH_DEAD nullop else
+		{
+		soundonce SHORT_CIRCUIT
+		soundonce ALARM
+		
+		ife player_using_mech THISACTOR { quake 13 palfrom 20 60 0 0 }
+		addstrength -50
+		}
+	}
+
+ife player_using_mech THISACTOR
+{
+ifg mech_startup_sequence 0 sub mech_startup_sequence 1
+ifl mech_startup_sequence 20
+{
+setp[].weapon_pos 10
+setp[].movement_lock 15 
+
+setp[].poszv 0
+
+geta[].x TEMP
+setp[].posx TEMP
+geta[].y TEMP2
+setp[].posy TEMP2
+geta[].z TEMP3
+sub TEMP3 24000
+setp[].posz TEMP3
+updatesectorz TEMP TEMP2 TEMP3 TEMP4
+ifn TEMP4 -1 // Make sure it's a a valid sector
+	{
+	changespritesect APLAYER TEMP4
+	setp[].cursectnum TEMP4
+	}
+
+	
+	geta[].ang TEMP
+	setp[].ang TEMP
+	
+getinput[].avel TEMP3 // Get their mouse movements
+ifg TEMP3 0
+	{
+	geta[].ang TEMP
+	divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifl TEMP3 0
+	{
+	geta[].ang TEMP
+	divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 4
+	{
+	geta[].ang TEMP
+	sub TEMP 16
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 16
+	{
+	geta[].ang TEMP
+	divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 8
+	{
+	geta[].ang TEMP
+	add TEMP 16
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 32
+	{
+	geta[].ang TEMP
+	divvar TEMP3 2
+	add TEMP TEMP3
+	seta[].ang TEMP
+	}
+	
+	ifaction MS_CORP_MECH_WALK
+	{
+	add TEMP8 1
+	ife TEMP8 4
+		{
+		set mech_hud_shake 5
+		ifrnd 32 sound MS_MECH_SERV1
+		else ifrnd 32 sound MS_MECH_SERV2
+		}
+	ifg TEMP8 16 
+		{ 
+		quake 13 
+		set mech_hud_shake 5
+		ifrnd 96 sound MS_MECH_FS1 
+		else ifrnd 96 sound MS_MECH_FS2
+		else ifrnd 96 sound MS_MECH_FS3
+		else sound MS_MECH_FS4
+		ifrnd 16 soundonce MS_MECH_GROAN
+		set TEMP8 0 
+		 findnearsprite3d SHOOTME 1596 TEMP9 
+			ifn TEMP9 -1 
+				{
+				getactorvar[TEMP9].myowner TEMP8
+				seta[TEMP8].htextra 50 
+				}
+			 else
+			 ife TEMP9 -1
+				{
+				 findnearsprite3d SHOOTME3 1596 TEMP9 
+			ifn TEMP9 -1 
+					{
+					getactorvar[TEMP9].myowner TEMP8
+					seta[TEMP8].htextra 50 
+					}
+				}
+	
+		}
+	}
+	
+	ifaction MS_CORP_FIRE_MISSILES
+	{
+	ifactioncount 6 action MS_CORP_COOLD_MISSILES
+	}
+	
+	ifaction MS_CORP_COOLD_MISSILES
+	{
+	ife hc_missile_fire 0 action MS_CORP_MECH_INACTION
+	}
+	
+	ifaction MS_CORP_FIRE_GUN
+	{
+	ifactioncount 3 action MS_CORP_COOLD_MISSILES
+	}
+	
+	ifaction MS_CORP_COOL_GUN
+	{
+	ife mech_maingun_fire 0 action MS_CORP_MECH_INACTION
+	}
+		
+	ifand EXTBITS_PRESS 1
+	{
+	ifaction MS_CORP_COOLD_MISSILES break
+	ifaction MS_CORP_COOL_GUN break
+	ifonwater break
+	ifaction MS_CORP_MECH_IDLE action MS_CORP_MECH_WALK
+	ifaction MS_CORP_MECH_INACTION action MS_CORP_MECH_WALK
+	move MECH_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP 200
+	seta[].xvel TEMP
+	}
+	else
+	ifand EXTBITS_PRESS 2
+	{
+	ifaction MS_CORP_COOLD_MISSILES break
+	ifaction MS_CORP_COOL_GUN break
+	ifonwater break
+	ifaction MS_CORP_MECH_IDLE action MS_CORP_MECH_WALK
+	ifaction MS_CORP_MECH_INACTION action MS_CORP_MECH_WALK
+	move MECH_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP -200
+	seta[].xvel TEMP
+	}
+	 else
+		{
+		action MS_CORP_MECH_INACTION
+		move MECH_IDLE
+		 ifand BITS_PRESS 1
+		 ife hc_missile_fire 0
+		 ife mech_maingun_fire 0
+			{
+			move 0
+			palfrom 60 0 0 0
+			seta[].htextra -1
+			set player_in_vehicle 0
+			set player_using_mech -1
+			setp[].movement_lock 0
+			set just_changed 1
+			soundonce MS_MECH_EXIT
+			action MS_CORP_MECH_IDLE
+			}
+		}
+		
+	ifp pstanding
+	{
+	ifg hc_missile_fire 26 action MS_CORP_FIRE_MISSILES
+	else ifg hc_missile_fire 0 action MS_CORP_COOLD_MISSILES
+	
+	ifg mech_maingun_fire 26 action MS_CORP_FIRE_GUN
+	else ifg mech_maingun_fire 0 action MS_CORP_COOL_GUN
+	}
+}
+		
+ifp pdead
+	{
+	set player_in_vehicle 0
+	set player_using_mech -1
+	setp[].movement_lock 0
+	set just_changed 1
+	move 0
+	action MS_CORP_MECH_IDLE
+	resetcount
+	}
+		
+	ifhitweapon
+	{
+	sound ALARM
+	palfrom 10 10 0 0
+	}
+
+
+}
+
+	ifdead
+	{
+	ife player_using_mech THISACTOR
+		{
+		set player_in_vehicle 0
+		set player_using_mech -1
+		addphealth -1000
+		setp[].movement_lock 0
+		set just_changed 1
+		geta[].htowner TEMP8
+		seta[PLAYER_IDENTITY].htowner TEMP8
+		}
+	spawn EXPLOSION2
+	quake 26
+	globalsound BLOWUP
+	shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL shoot LAVABALL
+	strength 1
+	move 0
+	action MS_CORP_MECH_DEAD
+	resetcount
+	}
+
+
+enda
+
+// ******************************************************************************
+// FRIENDLY SUMMONED SORCERER
+// ******************************************************************************
+
+action AFSORCERER_FROZEN 6 1 5 1 10
+action AFSORCERERFLOAT 1 1 5 1 10
+action AFSORCERERCAST 11 3 5 1 20
+action AFSORCERERPAIN 6 1 5 1 10
+action AFSORCERERDIE 26 8 1 1 15
+
+move MFSORCERERFLOAT 210
+
+ai AIFSORCERERSTOP AFSORCERERFLOAT STOP faceplayer
+ai AIFSORCERERFLOAT AFSORCERERFLOAT MFSORCERERFLOAT faceplayer seekplayer
+ai AIFSORCERERFLOATUP AFSORCERERFLOAT MSORCERERFLOATUP faceplayer getv
+ai AIFSORCERERFLOATDOWN AFSORCERERFLOAT MSORCERERFLOATDOWN faceplayer getv
+ai AIFSORCERERSHOOT AFSORCERERCAST MSORCERERSTOP 
+ai AIFSORCERERPAIN AFSORCERERPAIN MSORCERERSTOP faceplayer
+ai AIFSORCERERTELEPORT AFSORCERERPAIN MSORCERERSTOP faceplayer
+ai AIFSORCERERTELEPORT_ENEMY AFSORCERERPAIN MSORCERERSTOP faceplayer
+ai AIFSORCERERDYING AFSORCERERDIE MSORCERERSTOP faceplayer
+
+useractor notenemy 9771
+
+ifaction 0
+{
+spritepal 40
+spawn SHOOTME2
+strength 250
+sizeat 24 24
+action AFSORCERERFLOAT
+ai AIFSORCERERFLOAT
+randvar LAST_NAME 22
+	ifspawnedby APLAYER 
+		{ 
+		spawn 13950
+	    globalsound DEMON_TELEPORT
+		soundonce SORC_SPAWN
+		ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+		ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+		ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+		ife CHAR 4 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR
+		set FOLLOW_PLAYER 1 
+		set INTERNALCOUNT_3 960
+		} 
+	else ifspawnedby RESPAWN
+		{ 
+		spawn 13950
+	    globalsound DEMON_TELEPORT
+		soundonce SORC_SPAWN
+		ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+		ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+		ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+		ife CHAR 4 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR
+		set FOLLOW_PLAYER 1 
+		set INTERNALCOUNT_3 -1
+		} 
+		else
+		set INTERNALCOUNT_3 -1
+cstat 256
+}
+
+	ifg INTERNALCOUNT_2 0 sub INTERNALCOUNT_2 1
+
+ifn INTERNALCOUNT_3 -1
+	{
+	ifg INTERNALCOUNT_3 0 sub INTERNALCOUNT_3 1
+	else ife INTERNALCOUNT_3 0 
+		{ 
+		globalsound UNMADE
+		spawn SKULLEXPLOSION
+		ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+		ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+		ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+		ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+		killit 
+		}
+	}
+
+ifg targetlock 0 sub targetlock 1
+
+//state SUPERNATURAL_DAMAGE_MODIFIER
+state ignore_ally_damage
+
+ifaction AFSORCERER_FROZEN state frozen_code else
+ifai AIFSORCERERDYING
+	{
+	cstat 0
+	spriteflags 7
+	seta[].shade -64
+	ifactioncount 7 fall
+	ifactioncount 8 killit
+	}
+else
+ifai AIFSORCERERPAIN
+	{
+	move MSORCERERSTOP
+	ifactioncount 3 ai AIFSORCERERFLOAT
+	}
+else
+ifhitweapon
+	{
+	soundonce PRIEST_PAIN 
+	spawn BLOOD 
+	guts JIBS6 1
+	state random_wall_jibs
+    ifwasweapon RPG 
+	{ seta[].xvel 5 }
+	ifdead
+		{
+		ifwasweapon 7159 { spritepal 1 strength 1 sound SOMETHINGFROZE action AFSORCERER_FROZEN } 
+		else ifwasweapon 6875 { set WEP3_BLOODY 21 sound STAB }
+		else ifwasweapon FREEZEBLAST { spritepal 1 strength 1 sound SOMETHINGFROZE action AFSORCERER_FROZEN } 
+		else
+			{
+			sound PRIEST_DEATH
+			ai AIFSORCERERDYING
+			state rf
+			}
+		}
+	else ifrnd 16 ai AIFSORCERERPAIN
+	}
+else
+ifai AIFSORCERERSHOOT
+{
+spriteflags 7
+seta[].shade -64
+
+ife target -1 ai AIFSORCERERFLOAT
+
+ifactioncount 3
+			{
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			sub TEMP3 8192 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP3 0 ifn TEMP 0 divvarvar TEMP3 TEMP
+			ezshoot TEMP3 PRIEST_BLAST
+			setthisprojectile[RETURN].extra 140
+			ai AIFSORCERERFLOAT
+			resetactioncount
+			}
+}
+
+else
+ifai AIFSORCERERSTOP
+{
+
+	ifpdistl 1024 
+		  ifp pfacing 
+		   ifhitspace 
+		    ife INTERNALCOUNT_2 0 
+			{ 
+			ife FOLLOW_PLAYER 0
+				{
+				ife ALLYSLOT1 THISACTOR nullop else
+				ife ALLYSLOT2 THISACTOR nullop else
+				ife ALLYSLOT3 THISACTOR nullop else
+				ife ALLYSLOT4 THISACTOR nullop else
+					{
+					ife ALLYSLOT1 -1 set ALLYSLOT1 THISACTOR else
+					ife ALLYSLOT2 -1 set ALLYSLOT2 THISACTOR else
+					ife ALLYSLOT3 -1 set ALLYSLOT3 THISACTOR else
+					ife CHAR 4 ife ALLYSLOT4 -1 set ALLYSLOT4 THISACTOR else
+					break
+					}
+				state follow_sounds
+				set FOLLOW_PLAYER 1 
+				}
+			else 
+			ife FOLLOW_PLAYER 1 
+				{
+				ife ALLYSLOT1 THISACTOR set ALLYSLOT1 -1 else
+				ife ALLYSLOT2 THISACTOR set ALLYSLOT2 -1 else
+				ife ALLYSLOT3 THISACTOR set ALLYSLOT3 -1 else
+				ife ALLYSLOT4 THISACTOR set ALLYSLOT4 -1
+				state stay_sounds
+				set FOLLOW_PLAYER 0
+				}
+			set INTERNALCOUNT_2 26
+			}
+			
+ifstrength 250 ifcount 3 { addstrength 1 resetcount }
+
+ifpdistg 1568 ife FOLLOW_PLAYER 1 ai AIFSORCERERFLOAT
+}
+else
+ifai AIFSORCERERFLOAT
+{
+ife FOLLOW_PLAYER 0 ai AIFSORCERERSTOP
+sizeto 24 24
+spriteflags 3
+
+ifpdistg 8098
+ife target -1
+ ifrnd 16
+	{
+	getp[].posx TEMP
+	getp[].posy TEMP2
+	set TEMP3 TEMP
+	add TEMP3 1024
+	randvar TEMP4 2048
+	rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+	updatesector TEMP5 TEMP6 TEMP7
+	ifn TEMP7 -1
+		{
+		set INTERNALCOUNT 0
+		ai AIFSORCERERTELEPORT
+		resetcount
+		}
+	}
+	else
+ifrnd 128
+	{
+	 ifp phigher
+        ai AIFSORCERERFLOATUP
+      else
+		{
+		geta[].z z
+		getp[].posz TEMP
+		ifg TEMP z ai AIFSORCERERFLOATDOWN
+		}
+	}
+	else
+	ifpdistl 1568 ai AIFSORCERERSTOP
+}
+else
+ifai AIFSORCERERTELEPORT
+{
+add INTERNALCOUNT 1
+	spawn FRAMEEFFECT1
+	ife INTERNALCOUNT 4 { cstat 2 sizeto 2 24 }
+	ife INTERNALCOUNT 26
+		{
+			cstat 32768
+			getp[].posx TEMP
+			getp[].posy TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				spawn 8433
+				seta[].x TEMP5 
+				seta[].y TEMP6
+				getp[].posz TEMP8
+				sub TEMP8 1754
+				seta[].z TEMP8
+				}
+			else { cstat 257 sizeat 24 24 ai AIFSORCERERFLOAT }
+		} 
+	ife INTERNALCOUNT 27 { soundonce PRIEST_APPEAR cstat 2 sizeto 24 24 spawn 8433 }
+	ife INTERNALCOUNT 40 { cstat 257 sizeat 24 24 ai AIFSORCERERFLOAT }
+}
+else
+ifai AIFSORCERERTELEPORT_ENEMY
+{
+add INTERNALCOUNT 1
+	spawn FRAMEEFFECT1
+	ife INTERNALCOUNT 4 { cstat 2 soundonce PRIEST_CAST02 sizeto 2 24 }
+	ife INTERNALCOUNT 26
+		{
+			cstat 32768
+			geta[target].x TEMP
+			geta[target].y TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				spawn 8433
+				seta[].x TEMP5 
+				seta[].y TEMP6
+				geta[target].z TEMP8
+				sub TEMP8 1754
+				seta[].z TEMP8
+				}
+			else { cstat 257 sizeat 24 24 ai AIFSORCERERFLOAT }
+		} 
+	ife INTERNALCOUNT 27 { soundonce PRIEST_APPEAR cstat 2 sizeto 24 24 spawn 8433 }
+	ife INTERNALCOUNT 40 { cstat 257 sizeat 24 24 ai AIFSORCERERFLOAT }
+}
+else
+ifai AIFSORCERERFLOATUP
+{
+ifrnd 16 ai AIFSORCERERFLOAT
+}
+else
+ifai AIFSORCERERFLOATDOWN
+{
+ifrnd 16 ai AIFSORCERERFLOAT
+}
+
+	ifcount 13
+	{
+	ifdead break
+	state botfindtarget
+	ifai AIFSORCERERTELEPORT_ENEMY break
+	ifai AIFSORCERERTELEPORT break
+	ifai AIFSORCERERSHOOT break
+	ifn target -1 
+		{ 
+		ldist xydist THISACTOR target
+		ifrnd 64
+			ifg xydist 2048 // 192 512
+			{
+			geta[target].x TEMP
+			geta[target].y TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				set INTERNALCOUNT 0
+				ai AIFSORCERERTELEPORT_ENEMY
+				resetcount
+				}
+			}
+			else
+			{
+			state SORCERER_ATTACK_VOICES
+			soundonce PRIEST_CAST01 
+			ai AIFSORCERERSHOOT 
+			}
+		}
+	resetcount
+	}	
+	
+state SORCERER_FOLLOW_VOICES
+	
+state ENEMYKNOCKBACKS
+
+enda
+
+// *************************************************
+// RIPPER HEART ALLY
+// *************************************************
+
+action RH_JAMES -12801 4 5 1 12
+action RH_ZAXTOR -12545 4 5 1 12
+action RH_MERLIJN -11666 4 5 1 12
+action RH_HIGHWIRE -12038 4 5 1 12
+action RH_SANG -11730 4 5 1 12
+action RH_SANG2 5742 4 5 1 12
+action RH_RUSTY -11405 4 5 1 12
+action RH_GEOFFREY -11636 4 5 1 12
+action RH_MIKKO -11154 4 5 1 12
+action RH_MICKY -1672 4 5 1 12
+action RH_SNOWFALL 2670 4 5 1 12
+
+move RH_WANDER 120 0
+
+spriteshadow 18066
+
+useractor notenemy 18066
+fall
+
+ifmove 0
+	{
+	spawn SHOOTME2
+	ife CHAR 0
+		{
+		sizeat 23 23
+		action RH_JAMES
+		}
+	ife CHAR 1
+		{
+		sizeat 23 23
+		action RH_ZAXTOR
+		}
+	ife CHAR 2
+		{
+		sizeat 22 22
+		spritepal 21
+		action RH_MERLIJN
+		}
+	ife CHAR 3
+		{
+		sizeat 22 22
+		spritepal 11
+		action RH_HIGHWIRE
+		}
+	ife CHAR 4
+		{
+		sizeat 23 23
+		spritepal 21
+		ifand CHAR_APP 2 action RH_SANG2 else
+		action RH_SANG
+		}
+	ife CHAR 5
+		{
+		sizeat 24 24
+		spritepal 12
+		action RH_RUSTY
+		}
+	ife CHAR 6
+		{
+		sizeat 24 24
+		spritepal 21
+		action RH_GEOFFREY
+		}
+	ife CHAR 7
+		{
+		sizeat 25 25
+		spritepal 11
+		action RH_MIKKO
+		}
+	ife CHAR 13
+		{
+		sizeat 22 22
+		spritepal 3
+		action RH_MICKY
+		}
+	ife CHAR 14
+		{
+		sizeat 23 23
+		spritepal 3
+		action RH_SNOWFALL
+		}
+	strength 150
+	move RH_WANDER seekplayer
+	cstat 259
+	}
+	
+	
+state ignore_ally_damage
+
+ifhitweapon
+	{
+	ifdead
+		{
+		sound BLOOD_EXPLOSION
+		spawn 18935
+		killit
+		}
+	}
+	
+ifmove RH_WANDER
+	{
+	add INTERNALCOUNT 1
+	ifg INTERNALCOUNT 600
+		{
+		sound BLOOD_EXPLOSION
+		spawn 18935
+		killit
+		}
+	state botfindtarget
+	ifn target -1 
+		{
+		ifaction RH_JAMES
+			{
+			ifcount 4
+				{
+				sound TMPFIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 CHAINGUN 
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 5144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_ZAXTOR
+			{
+			ifcount 5
+				{
+				sound ASSAULTRIFLE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOT
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_MERLIJN
+			{
+			ifcount 60
+				{
+				sound BLUNDERBUSS
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				zshoot TEMP3 ZRIFLESHOT
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_HIGHWIRE
+			{
+			ifcount 5
+				{
+				sound AK47FIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOTU
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 5144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_SANG
+			{
+			ifcount 3
+				{
+				sound UZIFIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 CHAINGUN 
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_SANG2
+			{
+			ifcount 3
+				{
+				sound UZIFIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 CHAINGUN 
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_RUSTY
+			{
+			ifcount 5
+				{
+				sound FG42_FIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOTU
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 5144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_GEOFFREY
+			{
+			ifcount 4
+				{
+				sound GEO_SMGFIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 CHAINGUN 
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_MIKKO
+			{
+			ifcount 4
+				{
+				sound MACYFIRE
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOT
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_MICKY
+			{
+			ifcount 4
+				{
+				sound MC_AP_AR
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOT
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		ifaction RH_SNOWFALL
+			{
+			ifcount 4
+				{
+				sound SF_ASSAULTR
+				ldist TEMP THISACTOR target
+				geta[].z TEMP2
+				sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+				geta[target].z TEMP3
+				sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+				sub TEMP3 TEMP2
+				shiftvarl TEMP3 8
+				ifn TEMP 0 divvarvar TEMP3 TEMP
+				zshoot TEMP3 ZRIFLESHOTU
+				ifrnd 8 zshoot TEMP3 13215
+				
+				ife PERFMODE 1
+				 ifcansee
+					{
+					set gunsmoke_z 4244 
+					set gunsmoke_angle 220
+					state spawn_gunsmoke_z
+					set gunsmoke_z 4144
+					espawn 16115
+					state spawn_muzzleflash
+					}
+				resetcount
+				}
+			}
+		}
+	}
+
+enda
+
+appendevent EVENT_STRAFELEFT
+ifn player_using_horse -1 set RETURN 1
+endevent
+
+appendevent EVENT_STRAFERIGHT
+ifn player_using_horse -1 set RETURN 1
+endevent
+
+appendevent EVENT_TURNLEFT
+ifn player_using_horse -1 set RETURN 1
+endevent
+
+appendevent EVENT_TURNRIGHT
+ifn player_using_horse -1 set RETURN 1
+endevent
+
+// *************************************************
+// HORSE
+// *************************************************
+
+action HORSE_INACTION 5
+
+define HORSE 21760
+
+spriteshadow HORSE
+
+useractor notenemy HORSE
+fall
+ifaction 0
+{
+cstat 257
+strength 500
+clipdist 40
+sizeat 29 29
+action ACAR
+ifspritepal 3 // starts player on horse
+	{
+	ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+	sound PUT_ON_EQUIP
+	sound HORSE_RUN
+	set player_in_vehicle 2
+	move BOAT_FORWARD geth
+	set forward_accelerate 1600
+	set player_using_horse THISACTOR
+	action HORSE_INACTION
+	resetcount	
+	}
+}
+
+ifaction ACAR
+{
+ifcansee ifrnd 2 sound HORSE_NEIGH2
+ifpdistl 1524
+ife player_in_vehicle 0
+ ifp palive
+  ifp pfacing
+	{
+	ife SCOPE 1 break
+	ifand GUNFIREMODE 16384 break
+	
+	set player_use 0
+		ifhitspace
+		 ifcount 26
+			{
+			ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+			sound PUT_ON_EQUIP
+			set player_in_vehicle 2
+			set player_using_horse THISACTOR
+			action HORSE_INACTION
+			resetcount
+			}
+	}
+}
+
+ifaction HORSE_INACTION
+{
+cstat 0
+ ife GUN_HANDS 2 { setp[].weapon_pos -9 set HANDS_DRAW 2 }
+ else ife GUN_HANDS 1  set HANDS_DRAW 1
+
+setp[].movement_lock 15 
+geta[].x TEMP
+setp[].posx TEMP
+geta[].y TEMP2
+setp[].posy TEMP2
+geta[].z TEMP3
+sub TEMP3 8192
+updatesectorz TEMP TEMP2 TEMP3 TEMP4
+ifn TEMP4 -1 // Make sure it's a a valid sector
+	{
+	changespritesect APLAYER TEMP4
+	setp[].cursectnum TEMP4
+	}
+sub TEMP3 8192
+
+getp[].falling_counter TEMP4
+geta[].zvel TEMP7
+ifg TEMP7 3500  add FALL_COUNTER 5
+
+// if the player is currently not falling 
+ifl TEMP4 1 
+{
+	// set their Z position to simulate being on horseback 
+	setp[].posz TEMP3
+	setp[].oposz TEMP3
+	// and equate their Z velocity to that of the horse actor.
+	setp[].poszv TEMP7
+	
+	// and connect the player's falling_counter to the horse actor's FALL_COUNTER
+	setp[].falling_counter FALL_COUNTER
+}
+
+iffloordistl 16 
+		{ 
+		ifg FALL_COUNTER 40 
+			{
+			sound LAND_HEAVY
+			quake 26
+			seta[].htextra FALL_COUNTER
+			set FALL_COUNTER 0
+			}
+		set FALL_COUNTER 0
+		}
+
+ifand EXTBITS_PRESS 4
+	{
+	geta[].ang TEMP
+	sub TEMP 16
+	ifg TEMP 2048 sub TEMP 2048
+	ifl TEMP -2048 add TEMP 2048
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 16
+	{
+	geta[].ang TEMP
+	sub TEMP 16
+	ifg TEMP 2048 sub TEMP 2048
+	ifl TEMP -2048 add TEMP 2048
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 8
+	{
+	geta[].ang TEMP
+	add TEMP 16
+	ifg TEMP 2048 sub TEMP 2048
+	ifl TEMP -2048 add TEMP 2048
+	seta[].ang TEMP
+	}
+else
+ifand EXTBITS_PRESS 32
+	{
+	geta[].ang TEMP
+	add TEMP 16
+	ifg TEMP 2048 sub TEMP 2048
+	ifl TEMP -2048 add TEMP 2048
+	seta[].ang TEMP
+	}
+	
+
+	
+ifand EXTBITS_PRESS 1
+	{
+	ifand BITS_PRESS P_SPRINTING
+		{
+		state HORSE_START
+		ifl forward_accelerate 2400 add forward_accelerate 8
+		ifg forward_accelerate 2400 sub forward_accelerate 16
+		}
+	else
+		{
+		ifg TEMP5 0 sub TEMP5 1
+		ifl forward_accelerate 1600 add forward_accelerate 4
+		ifg forward_accelerate 1600 sub forward_accelerate 8
+		}
+	}
+	
+ifand EXTBITS_PRESS 2
+	{
+	 ifand BITS_PRESS P_SPRINTING
+		 ife TEMP5 0 
+		{
+		state HORSE_STOP
+		sound HORSE_NEIGH1 sound HORSE_CRACK 
+		ife skybox 0 wackplayer else set CUS_WACK 10 
+		set TEMP5 60
+		stopactorsound THISACTOR HORSE_GALLOP
+		stopactorsound THISACTOR HORSE_RUN
+		stopactorsound THISACTOR HORSE_WALK
+		ifg forward_accelerate 16 set forward_accelerate 16
+		}
+	else
+		{
+		ifg TEMP5 0 sub TEMP5 1
+		ifg forward_accelerate -4200 sub forward_accelerate 8
+		}
+	}
+	else ifl forward_accelerate 0 add forward_accelerate 4
+	
+	ifand BITS_PRESS 1
+	 ifg forward_accelerate 1000
+		{
+		sound HORSE_NEIGH2
+		stopsound HORSE_GALLOP
+		stopsound HORSE_RUN
+		stopsound HORSE_WALK
+		setp[].jumping_counter 0 
+		soundonce NINJA_JUMP 
+		getp[].posxv TEMP
+		mulvar TEMP 2
+		setp[].posxv TEMP
+		setp[].poszv -6536
+		move 0
+		set player_in_vehicle 0
+		set player_using_horse -1
+		setp[].over_shoulder_on 0
+		setp[].movement_lock 0
+		set just_changed 1
+		action ACAR
+		cstat 257
+		resetcount
+		}
+	
+	ifl forward_accelerate 50
+	ifg forward_accelerate -50
+		{
+		 ifhitspace
+		  ifcount 26
+			{
+			move 0
+		stopsound HORSE_GALLOP
+		stopsound HORSE_RUN
+		stopsound HORSE_WALK
+			set player_in_vehicle 0
+			set player_using_horse -1
+			setp[].over_shoulder_on 0
+			setp[].movement_lock 0
+			set just_changed 1
+			action ACAR
+			cstat 257
+			resetcount
+			}
+		}
+	else
+	ifg forward_accelerate 0
+	{
+	set TEMP2 forward_accelerate
+	move BOAT_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP forward_accelerate
+	ifonwater divvar TEMP 4 else divvar TEMP 2
+	seta[].xvel TEMP
+	
+	ifl forward_accelerate 400
+		{
+		ifrnd 4 sound HORSE_NEIGH2
+		}
+	ifg forward_accelerate 1600 
+		{
+		ifactorsound THISACTOR HORSE_RUN stopactorsound THISACTOR HORSE_RUN
+		soundonce HORSE_GALLOP
+		}
+	else
+	ifg forward_accelerate 800 
+		{
+		ifactorsound THISACTOR HORSE_GALLOP stopactorsound THISACTOR HORSE_GALLOP
+		ifactorsound THISACTOR HORSE_WALK stopactorsound THISACTOR HORSE_WALK
+		soundonce HORSE_RUN
+		}
+	else
+	ifg forward_accelerate 50 
+		{
+		ifactorsound THISACTOR HORSE_RUN stopactorsound THISACTOR HORSE_RUN
+		soundonce HORSE_WALK
+		}
+
+	ifnotmoving
+	 ifg forward_accelerate 128
+		{
+		ifrnd 64 sound HORSE_NEIGH2
+		ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+		stopactorsound THISACTOR HORSE_GALLOP
+		stopactorsound THISACTOR HORSE_RUN
+		stopactorsound THISACTOR HORSE_WALK
+		set forward_accelerate 0
+		}
+	}
+	else
+	ifl forward_accelerate -1
+	{
+	move BOAT_FORWARD geth
+	geta[].xvel TEMP
+	add TEMP forward_accelerate
+	seta[].xvel TEMP
+	}
+		
+ifp pdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_horse -1
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	action ACAR
+	resetcount
+	}
+	
+	ifdead
+	{
+	move 0
+	set player_in_vehicle 0
+	set player_using_horse -1
+	setp[].over_shoulder_on 0
+	setp[].movement_lock 0
+	set just_changed 1
+	strength 1
+	action ACAR
+	resetcount
+	}
+}
+
+enda
+
+// *************************************************
+// TOWN GUARD
+// *************************************************
+
+action A_TOWNGUARD_IDLE 0 1 5 1 11
+action A_TOWNGUARD_MOVE 0 4 5 1 11
+action A_TOWNGUARD_ATTACK 25 3 5 1 12
+action A_TOWNGUARD_DYING 40 5 1 1 12
+action A_TOWNGUARD_PAIN 40 1
+action A_TOWNGUARD_DEAD 45 1 1 1 1
+
+ai AI_TOWNGUARD_GUARD A_TOWNGUARD_IDLE AMCSTILL 0
+ai AI_TOWNGUARD_IDLE A_TOWNGUARD_IDLE AMCSTILL 0
+ai AI_TOWNGUARD_MOVE A_TOWNGUARD_MOVE AMCMOVE geth seekenemy
+ai AI_TOWNGUARD_ATTACK A_TOWNGUARD_ATTACK AMCSTILL shootenemy
+ai AI_TOWNGUARD_DYING A_TOWNGUARD_DYING AMCSTILL 0
+
+spriteshadow TOWN_GUARD
+
+useractor notenemy TOWN_GUARD
+fall
+ifai 0
+	{
+	sizeat 24 24
+	strength 300
+	clipdist 60
+	spawn SHOOTME2
+	cstat 257
+	ai AI_TOWNGUARD_GUARD
+	}
+
+state spawn_cold_breathe
+	
+state ignore_ally_damage
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+ifdead nullop else
+{
+ifg SEEK_ENEMY_COUNT 0 sub SEEK_ENEMY_COUNT 1
+	ife SEEK_ENEMY_COUNT 0
+	{
+	state botfindtarget
+	ifn target -1 
+		{
+		ai AI_TOWNGUARD_MOVE
+		}
+	set SEEK_ENEMY_COUNT 13
+	}
+
+ifg targetlock 0 sub targetlock 1
+}
+
+ifaction A_TOWNGUARD_DEAD
+	{
+	move STOP
+	break
+	}
+else
+ifai AI_TOWNGUARD_DYING
+	{
+	ifactioncount 5 { state BODY_FALL_NOISES action A_TOWNGUARD_DEAD resetactioncount break }
+	}
+else
+ifaction A_TOWNGUARD_PAIN
+	{
+	ifdead ai AI_TOWNGUARD_DYING else
+	ifactioncount 2 ai AI_TOWNGUARD_MOVE
+	}
+else
+ifai AI_TOWNGUARD_ATTACK
+	{
+	state botfindtarget
+	ifactioncount 1 soundonce BERSERK_SWING
+	ifactioncount 2
+	ifn target -1
+			{ 
+			ldist TEMP THISACTOR target
+			geta[].z TEMP2
+			sub TEMP2 8192 // Offset the Z. Assumes the center of the actor is the same as the player
+			geta[target].z TEMP3
+			ife actorvar[target].ALLY_MAG 1 sub TEMP3 256 else
+			sub TEMP3 8592 // Offset the Z. assumes the center of the actor is the same as the player
+			sub TEMP3 TEMP2
+			shiftvarl TEMP3 8
+			ifn TEMP 0 divvarvar TEMP3 TEMP
+			ifrnd 96 { shoot SPARK shoot SPARK sound SWORD_CLASH }
+			sound BERSERK_SWING
+			zshoot TEMP3 11742
+
+			resetactioncount
+			}
+	ife target -1 ai AI_TOWNGUARD_MOVE
+	}
+else
+ifai AI_TOWNGUARD_MOVE
+	{
+	ifrnd 16 state botfindtarget
+	ifn target -1
+		{
+		ldist TEMP THISACTOR target
+			ifl TEMP 768
+			ai AI_TOWNGUARD_ATTACK
+		}
+		else
+		ife target -1 ai AI_TOWNGUARD_IDLE
+	ifactioncount 3 
+		{
+		ifrnd 128 sound NPC_STEP1 else sound NPC_STEP2
+		resetactioncount
+		}
+	ifnotmoving operate
+	}
+else
+ifai AI_TOWNGUARD_IDLE
+	{
+	state rand_lookaround
+	sleeptime 0
+	
+		ifstrength 300 ifcount 6 { addstrength 1 resetcount }
+	}
+else
+ifai AI_TOWNGUARD_GUARD
+	{
+	 ifstrength 300 ifcount 6 { addstrength 1 resetcount }
+	}
+	
+ifhitweapon
+	{
+	spawn BLOOD
+	ifaction A_TOWNGUARD_DEAD break
+	ifai AI_TOWNGUARD_DYING break
+	ifrnd 64 action A_TOWNGUARD_PAIN
+	state random_wall_jibs
+	ifdead
+		{
+		state rf
+
+			ifg ENERGY_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 4
+				guts JIBS3 6
+				spawn DISINTIGRATE_GUY
+				killit
+				}
+			else
+			ifg SPIRIT_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 1
+				guts JIBS3 6
+				spawn SPIRIT_DEATH_GUY
+				killit
+				}
+			else
+			ifg FIRE_DAMAGE 0 
+			{ 		
+				ifrnd 64 sound MERC_ONFIRE1
+				else ifrnd 64 sound MERC_ONFIRE2
+				else ifrnd 64 sound MERC_ONFIRE3
+				else sound MERC_ONFIRE4
+				spawn ONFIREGUY 
+				killit 
+			}
+			else
+			{
+			ifpdistl 8192 set PLAYER_VOICEOVER 1
+			randvar TEMP 30
+			ifl TEMP 10 sound EDFSOLD_DIE1 else
+			ifl TEMP 20 sound EDFSOLD_DIE2 else
+			sound EDFSOLD_DIE3
+			ai AI_TOWNGUARD_DYING
+			resetactioncount
+			ifrnd 76 spawn BLOODPOOL
+			}
+		}
+	}
+
+
+enda
+
+
+// *************************************************
+// PRIEST Phereclus
+// *************************************************
+
+spriteshadow 25600
+
+useractor notenemy 25600
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// *************************************************
+// Alea Ilivalur
+//*************************************************
+
+spriteshadow 25605
+
+useractor notenemy 25605
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// *************************************************
+// Rozalia Mondragon
+//*************************************************
+
+spriteshadow 25610
+
+useractor notenemy 25610
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// *************************************************
+// FREIJA RAGNULF
+//*************************************************
+
+spriteshadow 25615
+
+useractor notenemy 25615
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// *************************************************
+// WIZARD DRABEUS
+//*************************************************
+
+spriteshadow 25620
+
+useractor notenemy 25620
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// *************************************************
+// MAGE OVEUS PELLENAS
+//*************************************************
+
+spriteshadow 25625
+
+useractor notenemy 25625
+
+ifaction 0
+	{
+	action ACAR
+	}
+	
+enda
+
+// ========================================AMC SOLDIER/SCIENTIST
+
+spriteshadow AMCSOLDIER
+spritenvg AMCSOLDIER
+spriteshadow AMCSCIENTIST
+spriteshadow AMCSCIENTIST_ACTIVE
+spritenvg AMCSCIENTIST
+spriteshadow EDFSOLDIER
+spritenvg EDFSOLDIER
+spriteshadow AMCSCIENTIST_2
+spriteshadow AMCSCIENTIST_3
+spriteshadow AMCSCIENTIST_4
+spriteshadow AMCSCIENTIST_5
+spriteshadow MSSOLDIER
+spritenvg MSSOLDIER
+spriteshadow 22956
+spriteshadow 22950
+spritenvg 8568
+spritenvg 9404
+spriteshadow 10993
+spriteshadow 10998
+spriteshadow 11003
+
+move SCI_WALK 64
+move SCI_RUN 128
+
+action SCIENTIST_IDLE -6347 1 5 1 1
+action SCIENTIST_WALK 0 4 5 1 16
+action SCIENTIST_PANIC 0 4 5 1 8
+action SCI_CHECK2 27 1 5 1 1
+action SCIENTIST_DIE 20 6 1 1 12
+action SCIENTIST_DEAD 25
+
+useractor notenemy AMCSCIENTIST_ACTIVE
+fall
+
+ifhitweapon
+ {
+  ifn AMC_BASE 2
+	{
+	palfrom 64 64 64 64
+	set SLO_MO_SHOWOFF 70
+	set FISSION_MAILED 1
+	}
+	else
+	{
+	ifl TEMP 10 sound EDFSOLD_DIE1 else
+	ifl TEMP 20 sound EDFSOLD_DIE2 else
+	sound EDFSOLD_DIE3
+	spawn BLOODPOOL
+	action SCIENTIST_DIE
+	}
+ }
+
+ifaction SCIENTIST_DEAD
+{
+cstat 0
+move STOP
+}
+else
+ifaction SCIENTIST_DIE
+{
+move STOP
+ifactioncount 6 action SCIENTIST_DEAD
+}
+ 
+ 
+ifaction 0 
+	{
+	clipdist 8
+	cstat 257
+	spawn SHOOTME2
+	sizeat 23 23
+	ife AMC_BASE 2 action SCIENTIST_PANIC else
+	action SCIENTIST_WALK
+	}
+	
+ifaction SCI_CHECK2
+	{
+	move STOP
+	ifrnd 8 action SCIENTIST_IDLE
+	}
+
+ifaction SCIENTIST_IDLE
+	{
+	ifrnd 8 action SCI_CHECK2
+	move STOP
+	}
+		
+ifaction SCIENTIST_WALK
+	{
+	move SCI_WALK geth
+	ifnotmoving move SCI_WALK geth randomangle
+	}
+	
+ifaction SCIENTIST_PANIC
+	{
+	move SCI_RUN geth
+	ifnotmoving move SCI_RUN geth randomangle
+	}
+	
+ifn AMC_BASE 2
+ifg TEMP5 0
+	{
+	sub TEMP5 1
+	ifg TEMP5 30 
+		{
+		ifaction SCIENTIST_WALK
+			{
+			ifrnd 32 action SCI_CHECK2
+			else action SCIENTIST_IDLE
+			}
+		}
+	else
+		{
+		ifaction SCI_CHECK2 action SCIENTIST_WALK
+		ifaction SCIENTIST_IDLE action SCIENTIST_WALK
+		seta[].ang TEMP3
+		}
+	}
+	
+enda
+
+
+useractor notenemy AMCSCIENTIST_WAYPOINT // Scientist waypoint
+cstat 32768
+
+ifg TEMP6 0 sub TEMP6 1
+
+ifcount 6
+{
+findnearactor AMCSCIENTIST_ACTIVE 256 TEMP
+
+	ifn TEMP -1
+		{
+		getactorvar[TEMP].LOTAGSAVED TEMP4
+		ife TEMP4 LOTAGSAVED
+			{
+				ife TEMP6 0
+					{
+					seta[TEMP].x sprite[].x
+					seta[TEMP].y sprite[].y
+					ifspritepal 3
+					set TEMP6 96
+					else
+					set TEMP6 30
+					}
+			
+			
+			ifspritepal 2 // If it's spritepal is 2, make it a 'random' waypoint
+				{
+				 ifrnd 64 seta[TEMP].ang sprite[].ang
+				}
+			else
+			ifspritepal 3 // If it's spritepal is 3, make it a 'random' interest waypoint
+				{
+				getactorvar[TEMP].TEMP5 TEMP5 // get scientists 'interest' counter
+				ife TEMP5 0 // if it's zero
+				 ifrnd 128
+					{
+					geta[TEMP].ang TEMP3 // get scientist's angle
+					setactorvar[TEMP].TEMP3 TEMP3 // store scientist's angle in a temp var
+					setactorvar[TEMP].TEMP5 96 // set countdown timer
+					seta[TEMP].ang sprite[].ang // set scientist to face this actor
+					}
+				}
+			else
+				{
+				seta[TEMP].ang sprite[].ang
+				}
+			}
+			
+		}
+resetcount
+}
+
+enda
+
+action AEDFSTAND 0 1 5 1 1
+
+action AMC_SALUTE -169 1 5 1 1
+
+action RAINCOAT 10437 1 5 1 1
+
+useractor notenemy AMCSOLDIER 100 0
+fall
+ifaction 0
+{
+cstator 257
+sizeat 24 24
+ifg raining 0
+ ifoutside
+ action RAINCOAT else
+action ACAR
+}
+
+ifaction ACAR
+{
+ifpdistl 4096
+ ifcanseetarget
+  ifn CHAR 9 // I tells ya, can't get no respect!
+	{
+	sound JMOVE6
+	action AMC_SALUTE
+	resetactioncount
+	}
+}
+
+ifaction AMC_SALUTE
+{
+ifactioncount 130
+	{
+	sound JMOVE7
+	action AEDFSTAND
+	}
+}
+
+ifpdistl 1536
+ ifp pfacing
+  ifmove 0
+   {
+   ifhitspace
+		{
+				gettimedate TEMP TEMP TEMP2 TEMP TEMP TEMP TEMP TEMP
+				ife CHAR 4 ifrnd 32 soundonce AMCS_M_SANG else
+				ifrnd 128
+				{
+				ifg TEMP2 18 soundonce AMCS_M_EVENIN else // Night
+				ifl TEMP2 12 soundonce AMCS_M_MORN else // Morning
+				soundonce AMCS_M_AFTERN  // Daytime
+				}
+				else
+				{
+				ife CHAR 10 soundonce AMCS_M_MAAM 
+				else ife CHAR 12 soundonce AMCS_M_MAAM 
+				else ife CHAR 20 soundonce AMCS_M_MAAM 
+				else soundonce AMCS_M_SIR
+				}
+		move STOP
+		}
+	}
+
+state spawn_cold_breathe
+
+ifcount 52
+	{
+	findnearspritez SHOOTME 6432 107456 TEMP
+	ifn TEMP -1 { spawn AMCSOLDIER_ACTIVE killit }
+	resetcount
+	}
+
+enda
+
+useractor notenemy EDFSOLDIER 100 0
+fall
+ifaction 0
+{
+cstator 257
+sizeat 22 22
+action AEDFSTAND
+}
+
+state spawn_cold_breathe
+
+ifspritepal 46
+	{
+	ifrnd 2 move STOP randomangle
+	else move STOP
+	checkactivatormotion 21711
+	ife RETURN 1
+		{
+		spawn BLOODPOOL
+		killit
+		}
+	}
+else
+	{
+	ifcount 26
+		{
+		findnearspritez SHOOTME 6432 107456 TEMP
+		ifn TEMP -1 { spawn EDFSOLDIER_ACTIVE killit }
+		resetcount
+		}
+	}
+
+enda
+
+
+action MSSOLDIER_ID_DIE 2118 6 1 1 11
+action MSSOLDIER_ID_DEAD 2123 1 1 1 11
+
+useractor notenemy MSSOLDIER 100 0
+fall
+ifaction 0
+{
+ifspritepal 21 sizeat 28 28 else
+sizeat 25 25
+ifn HITAGSAVED 0 cstator 256
+action AEDFSTAND
+}
+
+state spawn_cold_breathe
+
+ife HITAGSAVED 0
+{
+ifspritepal 21 nullop
+else
+	{
+	ife CHAR 7
+	{
+	getp[].palookup TEMP
+	ife TEMP 0 set TEMP 11
+	seta[].pal TEMP
+	}
+	else spritepal 11
+	}
+
+ifcount 26
+	{
+	findnearspritez SHOOTME 6432 107456 TEMP
+	ifn TEMP -1 { spawn MSSOLDIER_ACTIVE killit }
+	resetcount
+	}
+}
+else
+ifn HITAGSAVED 0
+{
+ifaction AEDFSTAND
+	{
+	sleeptime 0
+	ifhitweapon
+		{
+		action MSSOLDIER_ID_DIE
+		spawn BLOOD
+		spawn BLOODPOOL
+		randvar TEMP 30
+		ifsound MS_PRAET3 stopsound MS_PRAET3
+		ifl TEMP 10 sound EDFSOLD_DIE1 else
+		ifl TEMP 20 sound EDFSOLD_DIE2 else
+		sound EDFSOLD_DIE3
+		}
+	}
+	else
+	ifaction MSSOLDIER_ID_DIE
+		{
+		ifactioncount 5
+			{
+			action MSSOLDIER_ID_DEAD
+			cstat 0
+			soundonce BODY_DROP
+			}
+		}
+}
+
+enda
+
+move SAIDONCE 0
+
+action SCI_CHECK 6374 1 5 1 1
+
+defstate AMCSCIENTIST_CODE
+fall
+clipdist 8
+sizeat 21 21
+
+ifg INTERNALCOUNT_2 0 sub INTERNALCOUNT_2 1
+
+ifcount 256
+ife EXTRASAVED -1
+ife camerasprite -1
+	{
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM1 }
+	else
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM2 }
+	else
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM3 }
+	else
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM4 }
+	else
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM5 }
+	else
+	ifrnd 2 { action SCI_CHECK soundonce SCIENTIST_RANDOM6 }
+	else
+	ifrnd 2 ife WEAPONS_FOUND[1] 1 { action SCI_CHECK soundonce SCI_SPEC2 } // Found the mini shrinker?
+	else
+	ifrnd 2 ife WEAPONS_RESEARCH[3] 2 { action SCI_CHECK soundonce SCI_SPEC3 } // researched the MIA gun?
+	resetcount
+	}
+
+ifn XVELSAVED 0
+{
+readgamevar TECH_LEVEL
+ifl TECH_LEVEL XVELSAVED killit
+}
+
+ifaction 0
+{
+sizeat 23 23
+ife EXTRASAVED 10
+	{
+	readarrayfromfile TECH_LEVEL_A 4025
+	ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+	}
+action AEDFSTAND
+}
+
+ifaction AEDFSTAND
+ifrnd 8 action SCI_CHECK
+
+ifaction SCI_CHECK
+	{
+	add INTERNALCOUNT 1
+	
+	ifg INTERNALCOUNT 36 { action AEDFSTAND set INTERNALCOUNT 0 }
+	}
+
+ifpdistl 1024
+ifp pfacing
+{
+ife EXTRASAVED 10 set player_use 0
+ifhitspace
+	{
+	ife EXTRASAVED 10
+		{
+		set hit_key 30
+		readarrayfromfile TECH_LEVEL_A 4025
+		ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+		ifrnd 32 soundonce SCIENTIST_RESCUE1
+		else ife CHAR 4 ifrnd 32 soundonce SCIRES_S
+		else ifrnd 32 soundonce SCIENTIST_RESCUE2
+		else ifrnd 32 soundonce SCIRES3
+		else ifrnd 32 soundonce SCIRES4
+		else ifrnd 32 soundonce SCIRES5
+		else ifrnd 32 soundonce SCIRES6
+		else ifrnd 16 soundonce SCIRES7
+		state addbabeachievement
+		setarray TECH_LEVEL_A[HITAGSAVED] 1
+		writearraytofile TECH_LEVEL_A 4025
+		killit
+		}
+	else
+	ifn EXTRASAVED 2
+	 ife INTERNALCOUNT_2 0
+		{
+		ifmove 0
+		   {
+		   set hit_key 30
+		    ife CHAR 0 ifrnd 32 soundonce MSCI_JAMES
+			else ife CHAR 1 ifrnd 32 soundonce MSCI_ZAX
+			else ife CHAR 2 ifrnd 32 soundonce MSCI_MERLJ
+			else ife CHAR 3 ifrnd 32 soundonce MSCI_HIGHW
+			else ife CHAR 4 
+				{
+				ifrnd 32 soundonce MSCI_SANG
+				else soundonce SCIENTIST_HELLO4
+				}
+			else ife CHAR 5 ifrnd 32 soundonce MSCI_RUSTY
+			else ife CHAR 6 ifrnd 32 soundonce MSCI_GEOF
+			else ife CHAR 7 ifrnd 32 soundonce MSCI_MIKKO
+			else ife CHAR 10 ifrnd 32 soundonce MSCI_BOMBS
+			else ife CHAR 12 ifrnd 32 soundonce MSCI_JANE
+			else ife CHAR 13 
+				{
+				ifn NEW_RESEARCH 0 soundonce MSCI_MICKY
+				else ifrnd 128 soundonce MSCI_MICKY2
+				else soundonce SCIENTIST_HELLO5
+				}
+			else ife CHAR 14 ifrnd 32 soundonce MSCI_SNOWF
+			else
+				{
+				ifrnd 96 soundonce SCIENTIST_HELLO1
+				else ifrnd 96 soundonce SCIENTIST_HELLO2
+				else soundonce SCIENTIST_HELLO3
+				}
+			move SAIDONCE
+			set INTERNALCOUNT_2 90
+		   }
+		else
+		ifmove SAIDONCE
+		  {
+		  set hit_key 30
+		  ifrnd 32 soundonce SCI_SPEC1
+		  else ifrnd 32 soundonce SCI_SPEC4
+		  else ifrnd 32 soundonce SCI_SPEC5
+		  else ifrnd 32 soundonce SCI_SPEC6
+		  else ife CHAR 4 ifrnd 32 soundonce SCI_SPEC7
+		  set INTERNALCOUNT_2 90
+		  }
+		}
+	}
+}
+
+ends
+
+defstate AMCSCIENTIST2_CODE
+fall
+clipdist 8
+
+ifcount 356
+ife EXTRASAVED -1
+ife camerasprite -1
+{
+ifrnd 2 soundonce FSCI_MUSE1
+else
+ifrnd 2 soundonce FSCI_MUSE2
+else
+ifrnd 2 soundonce FSCI_MUSE3
+resetcount
+}
+
+ifn XVELSAVED 0
+{
+readgamevar TECH_LEVEL
+ifl TECH_LEVEL XVELSAVED killit
+}
+
+ifaction 0
+{
+sizeat 21 21
+ife EXTRASAVED 10
+	{
+	readarrayfromfile TECH_LEVEL_A 4025
+	ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+	}
+action AEDFSTAND
+}
+
+ifpdistl 1024
+ifp pfacing
+{
+ife EXTRASAVED 10 set player_use 0
+ifhitspace
+	ifmove 0
+	{
+	set hit_key 30
+	ife EXTRASAVED 10
+		{
+		readarrayfromfile TECH_LEVEL_A 4025
+		ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+		state addbabeachievement
+		setarray TECH_LEVEL_A[HITAGSAVED] 1
+		writearraytofile TECH_LEVEL_A 4025
+		killit
+		}
+		else
+		ifn EXTRASAVED 2
+			{
+				ife CHAR 4 soundonce FSCI_SANG 
+				else ife CHAR 13 ifrnd 96 soundonce FSCI_MICKY
+				else
+					{
+					ifrnd 128 soundonce FSCI_HELLO1
+					else  soundonce FSCI_HELLO2
+					}
+				move SAIDONCE
+			}
+	}
+}
+
+ends
+
+// male
+useractor notenemy AMCSCIENTIST state AMCSCIENTIST_CODE enda
+useractor notenemy AMCSCIENTIST_2 state AMCSCIENTIST_CODE enda
+
+// female
+useractor notenemy AMCSCIENTIST_3 state AMCSCIENTIST2_CODE enda
+useractor notenemy AMCSCIENTIST_4 state AMCSCIENTIST2_CODE enda
+useractor notenemy AMCSCIENTIST_5 state AMCSCIENTIST2_CODE enda
+
+// grey/sectoid
+useractor notenemy 22956
+fall
+clipdist 8
+
+	ifaction 0
+	{
+	sizeat 22 22
+	readarrayfromfile TECH_LEVEL_A 4025
+	set TEMP TECH_LEVEL_A[HITAGSAVED]
+	ife EXTRASAVED 10	
+	    {
+		ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+		action AEDFSTAND
+		}
+	else
+	    {
+		ifn TECH_LEVEL_A[HITAGSAVED] 1 killit
+		action AEDFSTAND
+		}
+	}
+
+	ifaction AEDFSTAND
+	ifpdistl 1024
+	ifp pfacing
+	ifmove 0
+	{
+	ife EXTRASAVED 10 set player_use 0
+	ifhitspace
+		{
+		set hit_key 30
+		ife EXTRASAVED 10
+			{
+			readarrayfromfile TECH_LEVEL_A 4025
+			ife TECH_LEVEL_A[HITAGSAVED] 1 killit
+			state addbabeachievement
+			setarray TECH_LEVEL_A[HITAGSAVED] 1
+			writearraytofile TECH_LEVEL_A 4025
+			killit
+			}
+		}
+	}
+enda
+
+

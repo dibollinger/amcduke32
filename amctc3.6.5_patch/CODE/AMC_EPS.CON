@@ -1,0 +1,336 @@
+// Volume titles cannot exceed 32 characters.
+
+definevolumename 0 THE MEN WHO WERE AMC
+definevolumename 1 SHOWDOWN IN HONG KONG
+definevolumename 2 QUEST FOR THE GOLDEN SANG
+
+// Skill titles cannot exceed 32 characters.
+
+defineskillname 0 EASY
+defineskillname 1 NORMAL
+defineskillname 2 EXPERT
+defineskillname 3 PROFESSIONAL
+defineskillname 4 '
+
+// Level file names cannot exceed 128 characters.
+// Level par cannot exceed 5 characters (min:sec)
+// Level titles cannot exceed 32 characters.
+
+// =====================================================================================================================
+// EPISODE ONE STUFF
+// =====================================================================================================================
+
+definelevelname 0 0 MAPS/EP1/INTRO.MAP 00:00 00:00 THE AMC TEAM
+definelevelname 0 1 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 0 2 MAPS/EP1/BRIEF.MAP 00:00 00:00 BRIEFING FILE 1
+definelevelname 0 3 MAPS/EP1/MEGABASE.MAP 00:00 00:00 THE MEGABASE
+definelevelname 0 4 MAPS/EP1/DISB.MAP 00:00 00:00 DIS BASE
+definelevelname 0 5 MAPS/EP1/ABYSS.MAP 00:00 00:00 ABYSS
+definelevelname 0 6 MAPS/EP1/BRIEF2.MAP 00:00 00:00 BRIEFING FILE 2
+definelevelname 0 7 -.map 00:00 00:00 ---
+definelevelname 0 8 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 0 9 MAPS/EP1/SNOW.MAP 00:00 00:00 FOR PROVIDENCE
+definelevelname 0 10 MAPS/EP1/REVOL.MAP 00:00 00:00 REVOLUTION
+definelevelname 0 11 MAPS/EP1/MILLH_OU.MAP 00:00 00:00 WELCOME TO MILLHAVEN
+definelevelname 0 12 MAPS/EP1/AMCMIKKO.MAP 00:00 00:00 SNOW BASE
+definelevelname 0 14 MAPS/EP1/MILLH_IN.MAP 00:00 00:00 MILLHAVEN INSIDES
+definelevelname 0 15 MAPS/EP1/DDISCO.MAP 00:00 00:00 DOOM DISCO
+// music stuff
+definelevelname 0 17 MAPS/EP1/EP1END.MAP 00:00 00:00 EPILOGUE
+definelevelname 0 20 MAPS/EP1/BOAT.MAP 00:00 00:00 SEVERAL WEEKS AGO...
+definelevelname 0 22 MAPS/EP1/BUNKER.MAP 00:00 00:00 PALACE BUNKER
+definelevelname 0 26 MAPS/EP1/TRAINING.MAP 00:00 00:00 BASIC TRAINING
+// music stuff
+// music stuff
+definelevelname 0 42 MAPS/EP1/CREDITS.MAP 00:00 00:00 EPISODE ONE CREDITS 
+// 43 music slot ghosts 2
+// 44 -
+// EPISODE 3 shit
+// 45 snowfall theme
+// 46 ep3 ext theme
+// 47 beat le sang theme
+// 48 fake end
+// 49 X64-2 virus scene
+// 50 surreal truth
+// 51 elements
+
+// =====================================================================================================================
+// EPISODE TWO STUFF
+// =====================================================================================================================
+
+definelevelname 1 0 MAPS/EP2/INTRO2.MAP 00:00 00:00 THE STORY CONTINUES
+definelevelname 1 1 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 1 2 MAPS/EP2/BRIEF3.MAP 00:00 00:00 BRIEFING FILE 3
+definelevelname 1 3 MAPS/EP2/CITY_SI.MAP 00:00 00:00 CITY UNDER SIEGE
+definelevelname 1 4 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 1 5 MAPS/EP2/BRIEF4.MAP 00:00 00:00 BRIEFING FILE 4
+definelevelname 1 6 MAPS/EP2/CHINA.MAP 00:00 00:00 BIG TROUBLE IN CHINA
+definelevelname 1 7 MAPS/EP2/FISH.MAP 00:00 00:00 THE WHARF
+definelevelname 1 8 MAPS/EP2/CHISLAND.MAP 00:00 00:00 ISLAND FACILITY
+// 9 Ghost ship part 1
+definelevelname 1 10 MAPS/EP2/REPENT.MAP 00:00 00:00 EDF BASE REPENT
+definelevelname 1 11 MAPS/EP2/MARS_HUB2.MAP 00:00 00:00 UPPER COLONY AREA
+// 12 leave blank
+// 13 leave blank
+definelevelname 1 14 MAPS/EP2/MARS_ST.MAP 00:00 00:00 MARS STATION LOWER
+definelevelname 1 15 MAPS/EP2/MARS_ST2.MAP 00:00 00:00 MARS STATION UPPER
+definelevelname 1 16 MAPS/EP2/G_SHIP1.MAP 00:00 00:00 EAF RESEARCH BASE
+definelevelname 1 17 MAPS/EP2/G_SHIP2.MAP 00:00 00:00 THE GHOST SHIP
+definelevelname 1 18 MAPS/EP2/XTRAIN.MAP 00:00 00:00 TRAIN ON XUGLOP
+// 19 leave blank
+// 20 city siege part 2
+definelevelname 1 21 MAPS/EP2/BRIEF5.MAP 00:00 00:00 BRIEFING FILE 5
+definelevelname 1 22 MAPS/EP2/MOON_DX.MAP 00:00 00:00 NEW L.A
+definelevelname 1 23 MAPS/EP2/LIFET.MAP 00:00 00:00 TOWER OF LIFE
+definelevelname 1 24 MAPS/EP2/JAPAN.MAP 00:00 00:00 HIDDEN PAGODA
+definelevelname 1 25 MAPS/EP2/OILRIG.MAP 00:00 00:00 OFFSHORE OIL RIG
+definelevelname 1 26 MAPS/EP2/AMCLOKE1.MAP 00:00 00:00 FAR MOUNTAIN REACHES
+definelevelname 1 27 MAPS/EP2/AMCLOKE2.MAP 00:00 00:00 DARK TRUTHS
+definelevelname 1 28 MAPS/EP2/CYSHIP.MAP 00:00 00:00 CYCLOID MOTHERSHIP
+definelevelname 1 29 MAPS/EP2/AMCLOKES.MAP 00:00 00:00 THE LURKING FEAR
+definelevelname 1 30 MAPS/EP2/VTEST.MAP 00:00 00:00 VEHICLE TEST SITE
+definelevelname 1 31 MAPS/EP2/ZBASE3.MAP 00:00 00:00 ZETA BASE BIO-LAB
+definelevelname 1 32 MAPS/EP2/MARS.MAP 00:00 00:00 COHAGEN MINES
+definelevelname 1 33 MAPS/EP2/FALL.MAP 00:00 00:00 TOUCHING THE SKY
+definelevelname 1 34 MAPS/EP2/EP2END.MAP 00:00 00:00 EPILOGUE
+definelevelname 1 35 MAPS/EP2/CREDITS2.MAP 00:00 00:00 EPISODE TWO CREDITS
+// 36 music slot 'Mars mission meeting music'
+// 37 music slot 'Dark blue'
+definelevelname 1 38 MAPS/EP2/MELEV.MAP 00:00 00:00 ORBITAL ELEVATOR
+definelevelname 1 39 MAPS/EP2/MARS_TV.MAP 00:00 00:00 ARSIA MONS SUBWAY
+definelevelname 1 40 MAPS/EP2/MARS_HUB.MAP 00:00 00:00 ARSIA MONS COLONY
+// 41 music slot 'Mars attacked'
+// 42 music slot 'Rise of Spirit'
+// 43 music slot 'Mars combat ambience'
+// 44 music slot 'Trenton boss fight'
+definelevelname 1 45 MAPS/EP2/BTRAN.MAP 00:00 00:00 ON THE WAY TO THE ISLAND...
+definelevelname 1 46 MAPS/EP2/SHADOWRM.MAP 00:00 00:00 THE SHADOW REALM
+// 47 music slot 'cycloid boss fight'
+// 48 music slot 'cycloid ship escape'
+// 49 music slot 'ghost ship boss'
+// after China levels base
+definelevelname 1 50 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+// 51 music slot 'total recall theme'
+// 52 music slot 'warboss'
+// 53 music slot 'Infinity' (IW theme)
+definelevelname 1 54 MAPS/EP2/MARS_TV2.MAP 00:00 00:00 ARSIA MONS BROADCASTING
+definelevelname 1 55 MAPS/EP2/JUNGLE_B.MAP 00:00 00:00 THE JUNGLE BASE
+definelevelname 1 56 MAPS/EP2/JB2.MAP 00:00 00:00 JUNGLE BASE INTERIOR
+definelevelname 1 57 MAPS/EP2/ENERGEIA.MAP 00:00 00:00 ENERGEIA
+// 58 music slot 'Energeia map escape sequence'
+// 59 music slot 'Shadow realm boss music'
+// 60 music slot 'second part of Chisland'
+// 61 music slot 'chisland boss music'
+definelevelname 1 62 MAPS/EP2/ZBASE1.MAP 00:00 00:00 ZETA BASE LOWER
+definelevelname 1 63 MAPS/EP2/ZBASE2.MAP 00:00 00:00 ZETA BASE UPPER
+
+// =====================================================================================================================
+// EPISODE THREE STUFF
+// =====================================================================================================================
+
+definelevelname 2 0 MAPS/EP3/INTRO3.MAP 00:00 00:00 THE CONTINUED ADVENTURES
+definelevelname 2 1 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 2 2 MAPS/EP3/BRIEF6.MAP 00:00 00:00 BRIEFING FILE 6
+definelevelname 2 3 MAPS/EP3/X64-2M.MAP 00:00 00:00 ASSAULT ON X64-2M
+definelevelname 2 4 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 2 5 MAPS/EP3/EINTRO.MAP 00:00 00:00 ENTER EGYPT
+definelevelname 2 6 MAPS/EP3/EGYPT.MAP 00:00 00:00 EGYPT F.O.B
+definelevelname 2 7 MAPS/EP3/CATAC.MAP 00:00 00:00 THE CATACOMBS
+definelevelname 2 8 MAPS/EP3/SS.MAP 00:00 00:00 THE SANCTUARY
+definelevelname 2 9 MAPS/EP3/EGYPTLOKE_PART1.MAP 00:00 00:00 AQUADUCT
+definelevelname 2 10 MAPS/EP3/EGYPTLOKE_PART2.MAP 00:00 00:00 DEEP WATERWAY
+definelevelname 2 11 MAPS/EP3/SANGTOMB1A.MAP 00:00 00:00 THE TOMB
+definelevelname 2 12 MAPS/EP3/LESANG.MAP 00:00 00:00 LE SANG'S PYRAMID
+definelevelname 2 13 MAPS/EP3/SS2.MAP 00:00 00:00 INNER SANCTUARY
+definelevelname 2 14 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 2 15 MAPS/EP3/NEUTRINO.MAP 00:00 00:00 NEUTRINO
+definelevelname 2 16 MAPS/EP3/PIPEDREAM.MAP 00:00 00:00 PIPE DREAM
+definelevelname 2 17 MAPS/EP3/SPOOKYCUT.MAP 00:00 00:00 FORGOTTEN TOMB
+//
+definelevelname 2 19 MAPS/EP3/JUNGPYRA.MAP 00:00 00:00 THE JUNGLE PYRAMID
+// 20 Jungle pyramid calm music
+// 21 jungle pyramid boss music
+// 22 NULL, leave empty
+definelevelname 2 23 MAPS/EP3/FAKE-VER.MAP 00:00 00:00 ???
+definelevelname 2 24 MAPS/EP3/FAKE-BOT.MAP 00:00 00:00 WAKING
+definelevelname 2 25 MAPS/EP3/FAKE-TOP.MAP 00:00 00:00 TRITON FACILITY
+definelevelname 2 26 MAPS/AMCB2.MAP 00:00 00:00 AMC BASE
+definelevelname 2 27 MAPS/EP3/CNC.MAP 00:00 00:00 EVICTION NOTICE
+// 28 mechanical man
+definelevelname 2 29 MAPS/EP3/XUG_CA.MAP 00:00 00:00 XUGLOP ASSAULT
+// 30 spookycut track 2
+// 31 spookycut boss battle
+definelevelname 2 32 MAPS/EP3/GARMID.MAP 00:00 00:00 GARMID SECTOR 14B
+// 33 Neutrino escape
+// 34 Beyonder theme
+definelevelname 2 35 MAPS/EP3/AMCB_INV.MAP 00:00 00:00 UNDER ATTACK
+definelevelname 2 36 MAPS/EP3/FAKE_INT.MAP 00:00 00:00 -
+definelevelname 2 37 MAPS/EP3/1998.MAP 00:00 00:00 SHELLSHOCKED
+// SPARE
+definelevelname 2 39 MAPS/EP3/MB_OUTRO.MAP 00:00 00:00 MICKY WRAPPING UP
+definelevelname 2 40 MAPS/EP3/MB_INTRO.MAP 00:00 00:00 MICKY BEGINS
+definelevelname 2 41 MAPS/EP3/MICKYBEGINS.MAP 00:00 00:00 MAIN AREA ASSAULT
+definelevelname 2 42 MAPS/EP3/MICKYBEGINS2.MAP 00:00 00:00 ABOVE GROUND...
+definelevelname 2 43 MAPS/EP3/MICKYBEGINS3.MAP 00:00 00:00 MICKY BEGINS
+definelevelname 2 44 MAPS/EP3/MICKYBEGINS4.MAP 00:00 00:00 THE LIBRARY
+definelevelname 2 45 MAPS/EP3/AX_SCENE.MAP 00:00 00:00 CAST A FLICKER OF LIGHT....
+definelevelname 2 46 MAPS/EP3/X64-2M_2.MAP 00:00 00:00 UNDER THE SURFACE OF X64-2
+definelevelname 2 47 MAPS/EP3/RAINF.MAP 00:00 00:00 GUERILLAS IN THE MIST
+definelevelname 2 48 MAPS/EP3/CREDITS3.MAP 00:00 00:00 EPISODE THREE CREDITS
+definelevelname 2 49 MAPS/EP3/EP3END.MAP 00:00 00:00 EPILOGUE
+// 50 rainforest VR fight
+definelevelname 2 51 MAPS/EP3/CHARON.MAP 00:00 00:00 CHARON
+definelevelname 2 52 MAPS/EP3/CHAOSPHERE.MAP 00:00 00:00 CHAOSPHERE
+definelevelname 2 53 MAPS/EP3/BRIEF7.MAP 00:00 00:00 BRIEFING FILE 7
+// 54 fake boss fight
+// 55 xug_ca boss fight
+// 56 micky begins final part
+// 57 chaosphere boss fight
+// 58 
+// 59 Law in the City
+// 60 
+// 61 
+// 62
+// 63
+
+
+// =====================================================================================================================
+// EPISODE FOUR STUFF
+// =====================================================================================================================
+
+// =====================================================================================================================
+// EPISODE FIVE STUFF
+// =====================================================================================================================
+
+// =====================================================================================================================
+// EDF MISSIONS
+// =====================================================================================================================
+
+definelevelname 5 0 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 5 1 DUKEUSERM2/AST_1.MAP 00:00 00:00 The Crash
+definelevelname 5 2 DUKEUSERM2/AST_2.MAP 00:00 00:00 Tarkanium Mine
+definelevelname 5 3 DUKEUSERM2/AST_3.MAP 00:00 00:00 Pandora Complex
+definelevelname 5 4 DUKEUSERM2/AST_4.MAP 00:00 00:00 Pandora Meltdown
+definelevelname 5 5 DUKEUSERM2/DNF2.MAP 00:00 00:00 DNFOR3VER Moonbase
+definelevelname 5 6 DUKEUSERM2/649.MAP 00:00 00:00 Mansion 649
+
+definelevelname 5 8 DUKEUSERM2/AREA51.MAP 00:00 00:00 Area 51
+definelevelname 5 9 DUKEUSERM2/911.MAP 00:00 00:00 911
+definelevelname 5 10 DUKEUSERM2/SAVIOR.MAP 00:00 00:00 The Savior
+definelevelname 5 11 DUKEUSERM2/GOOGOL.MAP 00:00 00:00 Googolplex Comm. Facility
+
+// =====================================================================================================================
+// EDF MISSIONS
+// =====================================================================================================================
+
+definelevelname 6 0 MAPS/AMCB.MAP 00:00 00:00 AMC BASE
+definelevelname 6 1 DUKEUSERM/RED1.MAP 00:00 00:00 Poisoned lands
+definelevelname 6 2 DUKEUSERM/RED2REM2014.MAP 00:00 00:00 Alien occupation
+definelevelname 6 3 DUKEUSERM/RED3.MAP 00:00 00:00 Cursed Nights
+definelevelname 6 4 DUKEUSERM/RED4.MAP 00:00 00:00 Boat trippin'
+definelevelname 6 5 DUKEUSERM/RED5.MAP 00:00 00:00 Lonely mountain Complex
+definelevelname 6 6 DUKEUSERM/WETD.MAP 00:00 00:00 Wet Dream
+definelevelname 6 7 DUKEUSERM/TAM.MAP 00:00 00:00 Tropical Alien Massacre
+definelevelname 6 8 DUKEUSERM/CLCOAST.MAP 00:00 00:00 Clear the Coast
+definelevelname 6 9 DUKEUSERM/ABBA.MAP 00:00 00:00 Another big base attacked
+definelevelname 6 10 DUKEUSERM/COLOSSUS.MAP 00:00 00:00 Ice station Colossus
+definelevelname 6 11 DUKEUSERM/VOA.MAP 00:00 00:00 Voices of Authority
+definelevelname 6 12 DUKEUSERM/HOTELFAN.MAP 00:00 00:00 The Fantasy hotel
+definelevelname 6 13 DUKEUSERM/BCBP.MAP 00:00 00:00 The Beach
+definelevelname 6 14 DUKEUSERM/SECRET_B.MAP 00:00 00:00 Secret Base
+definelevelname 6 15 DUKEUSERM/WESTATRN.MAP 00:00 00:00 West Alien Train
+definelevelname 6 16 DUKEUSERM/UNDER_FT.MAP 00:00 00:00 Underground Fortress
+definelevelname 6 17 DUKEUSERM/ZPYRAMID.MAP 00:00 00:00 The Pyramid
+definelevelname 6 18 DUKEUSERM/EDFBURO.MAP 00:00 00:00 EDF Bureau
+definelevelname 6 19 DUKEUSERM/HYDROST.MAP 00:00 00:00 HydroStation
+definelevelname 6 20 DUKEUSERM/2BIZARRE.MAP 00:00 00:00 Operation 2Bizarre
+definelevelname 6 21 DUKEUSERM/DK1.MAP 00:00 00:00 Down in the Kaos
+definelevelname 6 22 DUKEUSERM/DK2.MAP 00:00 00:00 A dark passage
+definelevelname 6 23 DUKEUSERM/DK3.MAP 00:00 00:00 Noldor's Castle
+definelevelname 6 24 DUKEUSERM/DK4.MAP 00:00 00:00 From the Heart to the Moon
+definelevelname 6 25 DUKEUSERM/DK5.MAP 00:00 00:00 Polaris Outpost
+definelevelname 6 26 DUKEUSERM/DK6.MAP 00:00 00:00 Daikarin
+definelevelname 6 27 DUKEUSERM/TFC01.MAP 00:00 00:00 The Invitation
+definelevelname 6 28 DUKEUSERM/TFC02.MAP 00:00 00:00 The Compound
+definelevelname 6 29 DUKEUSERM/TFC03.MAP 00:00 00:00 Moving Death
+definelevelname 6 30 DUKEUSERM/TFC04.MAP 00:00 00:00 Wonderland Hell
+definelevelname 6 31 DUKEUSERM/TFC05.MAP 00:00 00:00 The Naval complex
+definelevelname 6 32 DUKEUSERM/TFC06.MAP 00:00 00:00 The Alien Pyramid
+definelevelname 6 33 DUKEUSERM/TFC07.MAP 00:00 00:00 Another World
+definelevelname 6 34 DUKEUSERM/LH1.MAP 00:00 00:00 Highway Problem
+definelevelname 6 35 DUKEUSERM/LH2.MAP 00:00 00:00 Stinking Motel
+definelevelname 6 36 DUKEUSERM/LH3.MAP 00:00 00:00 Toxic Gas
+definelevelname 6 37 DUKEUSERM/LH4.MAP 00:00 00:00 Dark Tunnel
+definelevelname 6 38 DUKEUSERM/LH5.MAP 00:00 00:00 Bloody Mountains
+definelevelname 6 39 DUKEUSERM/LH6.MAP 00:00 00:00 Devil Visit
+definelevelname 6 40 DUKEUSERM/LHS.MAP 00:00 00:00 Jde O Hovno
+definelevelname 6 41 DUKEUSERM/IMPERIAL.MAP 00:00 00:00 Shuttle Escape
+definelevelname 6 42 DUKEUSERM/JET.MAP 00:00 00:00 Passenger Jet
+definelevelname 6 43 DUKEUSERM/ALIENS2.MAP 00:00 00:00 Atmospheric Processing
+definelevelname 6 44 DUKEUSERM/BETATWO.MAP 00:00 00:00 Beta Two
+definelevelname 6 45 DUKEUSERM/DARKGATE.MAP 00:00 00:00 Dark Gate
+definelevelname 6 46 DUKEUSERM/47FORNAX.MAP 00:00 00:00 47 Fornax
+definelevelname 6 47 DUKEUSERM/CYDUKE.MAP 00:00 00:00 CyberDuke
+definelevelname 6 48 DUKEUSERM/NCOM1_NT.MAP 00:00 00:00 Complex One
+definelevelname 6 49 DUKEUSERM/REDROCK.MAP 00:00 00:00 Red Rock
+definelevelname 6 50 DUKEUSERM/BIGORBIT.MAP 00:00 00:00 Big Orbit
+definelevelname 6 51 DUKEUSERM/1HK.MAP 00:00 00:00 Chinatown
+definelevelname 6 52 DUKEUSERM/DUKENECK.MAP 00:00 00:00 Redneck Duke
+definelevelname 6 53 DUKEUSERM/ALLUNDED.MAP 00:00 00:00 Alone in the dark with Undead
+definelevelname 6 54 DUKEUSERM/NELIEX.MAP 00:00 00:00 Near Life Experience
+definelevelname 6 55 DUKEUSERM/AARDVARK.MAP 00:00 00:00 Neil's Zone
+definelevelname 6 56 DUKEUSERM/FREEMAN.MAP 00:00 00:00 Freeman Houston
+definelevelname 6 57 DUKEUSERM/JOB1.MAP 00:00 00:00 Death at K-oger
+definelevelname 6 58 DUKEUSERM/CASTLEA.MAP 00:00 00:00 Castle of Anarchy
+definelevelname 6 59 DUKEUSERM/PEREJIL.MAP 00:00 00:00 Mission: Perejil
+definelevelname 6 60 DUKEUSERM/PYRAMIDTAB.MAP 00:00 00:00 Pyramid: The Alien Beneath
+definelevelname 6 61 DUKEUSERM/CBP8.MAP 00:00 00:00 Metropolitan Starlight
+definelevelname 6 62 DUKEUSERM/JP_CT.MAP 00:00 00:00 Jurassic Park: Chaos Theory 2
+definelevelname 6 63 DUKEUSERM/THE_BASE.MAP 00:00 00:00 The Base
+
+// Music will not play if the .MID file excedes 72000 bytes.
+
+// If you are an owner of a Gravis Ultrasound and wish to change the
+// MIDI files, you may want to delete the ULTRAMID.INI file that we
+// supply since it does not contain a full General MIDI patch saet.
+// Deleting the ULTRAMID.INI will cause the game to use the file found
+// in your Ultrasound directory.  Remember to keep a backup of ours,
+// or the music might not sound as good!
+
+// Music for title and end
+music 0 MUSIC/NULL.OGG BRIEFING.MID
+
+// Music for the individual levels
+music 1 MUSIC/EP1/INTRO.OGG MUSIC/BASE/AMCB.OGG MUSIC/EP1/BRIEF.OGG MUSIC/EP1/MEGABASE.OGG MUSIC/EP1/DISB.OGG
+        MUSIC/EP1/ABYSS.OGG MUSIC/EP1/BATTLE1.OGG MUSIC/NULL.OGG MUSIC/BASE/AMCB_2.OGG MUSIC/EP1/SNOW.OGG MUSIC/EP1/GMGS.OGG
+	   MUSIC/EP1/RNWEST.OGG MUSIC/EP1/AMCMIKKO2.OGG MUSIC/EP1/MINE.OGG MUSIC/EP1/GHOSTSI.OGG MUSIC/EP1/CLUBDOOM.OGG MUSIC/EP1/DARKG.OGG MUSIC/EP1/OVE_EISWH.OGG 
+	   MUSIC/EP1/SBOSS.OGG MUSIC/EP1/ABYSSB.OGG MUSIC/EP1/MISSION.OGG MUSIC/EP1/PALACE.OGG MUSIC/EP1/BUNKER.OGG MUSIC/EP1/MHLIB1.OGG MUSIC/EP1/FSTAND.OGG MUSIC/EP1/RBOSS.OGG MUSIC/EP1/TRAINING.OGG
+	  MUSIC/EP1/MHBOSS24.OGG MUSIC/EP1/ABYSSFB.OGG MUSIC/EP1/DISBE.OGG MUSIC/EP1/MHEND.OGG MUSIC/EP1/SEND.OGG MUSIC/EP1/DECISION.OGG MUSIC/EP1/AMCMIKKO.OGG MUSIC/NULL.OGG MUSIC/EP2/SDARKA.OGG
+	  MUSIC/EP2/M2_INTRO.OGG MUSIC/NULL.OGG MUSIC/EP2/M2_OUTRO.OGG MUSIC/EP1/CLUBDOOM_M.OGG MUSIC/TITLE.OGG MUSIC/TITLE2.OGG MUSIC/EP1/CREDITS.OGG MUSIC/EP1/GHOSTS2.OGG MUSIC/NULL.OGG
+	  MUSIC/EP3/NEARFAR.OGG MUSIC/EP3/INSISTENT.OGG MUSIC/EP3/TRIUMP.OGG MUSIC/EP3/HPIANO.OGG MUSIC/EP3/BRAINDEAD.OGG MUSIC/EP3/STRUTH.OGG MUSIC/EP3/WWMA.OGG
+	  
+music 2 MUSIC/EP2/INTRO2.OGG MUSIC/BASE/AMCB.OGG MUSIC/COPYR/BRIEF2.OGG MUSIC/EP2/POB.OGG MUSIC/BASE/AMCB_4.OGG MUSIC/EP2/C_BRIEF.OGG MUSIC/EP2/ASIA.OGG MUSIC/EP2/THWINDS.OGG MUSIC/EP2/LPROPH.OGG 
+       MUSIC/EP2/FEAR.OGG MUSIC/EP2/ENCOUNTER.OGG MUSIC/EP2/MARSHUB3.OGG MUSIC/EP2/DNOPARI.OGG MUSIC/EP2/DTBF.OGG MUSIC/EP2/SEARCH.OGG MUSIC/EP2/FREAKOUT.OGG MUSIC/EP2/BSHIP.OGG MUSIC/EP2/BSHIP2.OGG 
+	   MUSIC/EP2/TRAIN.OGG MUSIC/EP2/INCAHH.OGG MUSIC/EP2/STALKER2.OGG MUSIC/EP2/BRIEF3.OGG MUSIC/EP2/SPACELIFE.OGG MUSIC/EP2/LIFET.OGG MUSIC/EP2/HONOR.OGG MUSIC/EP2/SSTAND.OGG 
+	   MUSIC/EP2/SHADES.OGG MUSIC/EP2/DACTION.OGG MUSIC/EP2/DEPARTURE.OGG MUSIC/EP2/SPIRITW.OGG MUSIC/EP2/SPEACE.OGG MUSIC/EP2/ZBASE3.OGG MUSIC/EP2/HOM.OGG MUSIC/EP2/AM_FALL.OGG 
+	   MUSIC/EP2/ALERTO.OGG MUSIC/EP2/CREDITS2.OGG MUSIC/EP2/AM_MEET.OGG MUSIC/EP2/DBLUE.OGG MUSIC/EP2/MARS.OGG MUSIC/EP2/METAM.OGG MUSIC/EP2/MARSHUB.OGG MUSIC/EP2/MARSATT.OGG MUSIC/EP2/AM_ROS.OGG
+	   MUSIC/EP2/MARSHUB2.OGG MUSIC/EP2/TRENTON.OGG MUSIC/EP2/BTRANSF.OGG MUSIC/EP2/LWASTE.OGG MUSIC/EP2/CYBOSS.OGG MUSIC/EP2/ESCAPE.OGG MUSIC/EP2/GSBOSS.OGG MUSIC/BASE/AMCB_2B.OGG MUSIC/COPYR/TOTALR.OGG
+	   MUSIC/EP2/WARGOD.OGG MUSIC/EP2/INFINITY.OGG MUSIC/EP2/MARSTV2.OGG MUSIC/EP2/JUNGLE_B.OGG MUSIC/EP2/JBASETRK.OGG MUSIC/EP2/AMCMIKKO3.OGG MUSIC/EP2/M2_ESCAPE.OGG MUSIC/EP2/SHRAVE.OGG MUSIC/EP2/SHELLAC.OGG 
+	   MUSIC/EP2/GRFIGHT.OGG MUSIC/EP2/ZBASE.OGG MUSIC/EP2/ZBASE2.OGG
+
+music 3 MUSIC/EP3/INTRO3.OGG MUSIC/BASE/AMCB.OGG MUSIC/EP3/BRIEF6.OGG MUSIC/EP3/CDEATH.OGG MUSIC/BASE/AMCB_4.OGG MUSIC/EP3/EINTRO.OGG MUSIC/EP3/EGYPT.OGG MUSIC/EP3/CATAC.OGG MUSIC/EP3/KSANCT.OGG MUSIC/EP3/GPEAK.OGG 
+        MUSIC/EP3/AQUAD.OGG MUSIC/EP3/MTOMB.OGG MUSIC/EP3/TTHC.OGG MUSIC/EP3/DSPHINX.OGG MUSIC/BASE/AMCB_2.OGG MUSIC/EP3/NEUTRINO.OGG MUSIC/EP3/PIPEDREAM.OGG MUSIC/EP3/SPOOKYCUT.OGG MUSIC/NULL.OGG
+		MUSIC/EP3/ARUINS.OGG MUSIC/EP3/CSHIP.OGG MUSIC/EP3/LPWTD.OGG MUSIC/NULL.OGG MUSIC/EP3/FAKEVR.OGG MUSIC/EP3/FAKE.OGG MUSIC/EP3/FAKE2.OGG MUSIC/BASE/AMCB_3.OGG MUSIC/EP3/CBTW.OGG MUSIC/EP3/MMAN.OGG 
+		MUSIC/EP3/FRACTAL.OGG MUSIC/EP3/SPOOKYCUT2.OGG MUSIC/NULL.OGG MUSIC/EP3/ALONE.OGG MUSIC/EP3/FHOUR.OGG MUSIC/EP3/BEYONDER.OGG MUSIC/EP3/AMCBIN.OGG MUSIC/EP3/NEARFAR.OGG MUSIC/EP3/LESSON1.OGG MUSIC/NULL.OGG 
+		MUSIC/EP3/SURPRISE.OGG MUSIC/EP3/LCHILL.OGG MUSIC/EP3/CSHUNTER.OGG MUSIC/EP3/SNOMAD2.OGG MUSIC/EP3/SNOMAD3.OGG MUSIC/EP3/MIAMIS.OGG MUSIC/EP3/SCIPAD.OGG MUSIC/EP3/GLOOMY.OGG MUSIC/EP3/RAINF.OGG MUSIC/EP3/CREDITS3.OGG 
+		MUSIC/EP3/SFLOW.OGG MUSIC/EP3/DGLITCH.OGG MUSIC/EP3/OUTTHERE.OGG MUSIC/EP3/SPACE.OGG MUSIC/EP3/BRIEF7.OGG MUSIC/EP3/DPURS.OGG MUSIC/EP3/NAT2.OGG MUSIC/EP3/DEMO_3.OGG MUSIC/EP3/DFH.OGG MUSIC/NULL.OGG
+		MUSIC/EP3/LITC.OGG
+		
+
+music 7 MUSIC/BASE/AMCB_2.OGG DUKEUSERM/RED1.OGG DUKEUSERM/RED2.OGG DUKEUSERM/RED3.OGG DUKEUSERM/RED4.OGG DUKEUSERM/RED5.OGG DUKEUSERM/JUNGLED.OGG MUSIC/EP2/POB.OGG DUKEUSERM/CLCOAST.OGG DUKEUSERM/ABBA.OGG DUKEUSERM/COLOSSUS.OGG 
+DUKEUSERM/VOA.OGG DUKEUSERM/GOTHAM2.OGG DUKEUSERM/BCBP.OGG DUKEUSERM/PSYCHIC.OGG DUKEUSERM/WESTAT.OGG DUKEUSERM/LOSTW.OGG DUKEUSERM/ZPYRAMID.OGG DUKEUSERM/EDFBURO.OGG DUKEUSERM/HYDROST.OGG DUKEUSERM/2BIZARRE.OGG 
+DUKEUSERM/DUBSPACE.OGG DUKEUSERM/RESTRICT.OGG DUKEUSERM/TRANCE.OGG DUKEUSERM/MYST.OGG DUKEUSERM/ALIENZ.OGG DUKEUSERM/XPLASMA.OGG DUKEUSERM/NICKBASS.OGG DUKEUSERM/CSTREETS.OGG DUKEUSERM/GOTHAM.OGG DUKEUSERM/CHEM2BRAIN.OGG DUKEUSERM/WWORLD.OGG 
+       DUKEUSERM/XPLASMA.OGG DUKEUSERM/CDEATH.OGG DUKEUSERM/WAREHAUS2.OGG DUKEUSERM/LEMCHILL.OGG DUKEUSERM/CHAINGUN.OGG DUKEUSERM/RED2.OGG DUKEUSERM/MKING.OGG DUKEUSERM/MHEAVY3.OGG DUKEUSERM/JARRE.OGG DUKEUSERM/IMPERIAL.OGG
+	    DUKEUSERM/TRNROCK.OGG DUKEUSERM/ALIENS2.OGG DUKEUSERM/XPLASMA2.OGG DUKEUSERM/DARKG.OGG DUKEUSERM/SPACEY.OGG DUKEUSERM/CYDUKE.OGG DUKEUSERM/303C.OGG DUKEUSERM/CHEM2BRAIN.OGG DUKEUSERM/EDFBURO.OGG
+		DUKEUSERM/1HK.OGG DUKEUSERM/DUKENECK.OGG DUKEUSERM/ALLUNDED.OGG DUKEUSERM/NELIEX.OGG DUKEUSERM/JUNGLED.OGG DUKEUSERM/WAREHAUS.OGG DUKEUSERM/BAKEDGDS.OGG DUKEUSERM/CASTLEA.OGG DUKEUSERM/PEREJIL.OGG
+		DUKEUSERM/ABYSS.OGG DUKEUSERM/CBP8.OGG DUKEUSERM/JP_CT.OGG DUKEUSERM/DISTORT.OGG
