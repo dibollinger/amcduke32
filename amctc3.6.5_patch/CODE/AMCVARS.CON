@@ -192,6 +192,11 @@ var initplayer NO 1
 gamearray player_ranks 8 // each element is a bitfield storing all weapon mods for a player
 var my_rank 0 2 // this is what is saved to the ini file
 
+var PREV_MELEE_ANG -1 1 // previous player angle for the melee lock-on mechanic
+var PREV_LADDER_ANG -1 1 // previous player angle for the ladder (and zipwire)
+var VEHICLE_ANG -1 1 // vehicle x-angle to be set by the vehicle (-1 --> freelook)
+var VEHICLE_HORIZ -1 1 // vehicle y-angle  to be set by the vehicle (-1 --> freelook)
+
 var player_spritebridge 0 1 // is player on a spritebridge
 
 var kill_count 0 2 // how many kills in this level

@@ -66,6 +66,218 @@ ife RETURN 1
 enda
 
 onevent EVENT_DISPLAYROOMS
+
+/** BEGIN INTERPOLATION FIXES */
+    // The following code exists to accomodate missing interpolation thanks to the mouse input changes
+    // Anything that locks the player's view in place needs to be handled here
+    // This needs to happens before the skybox stuff is applied. Probably better to split these into two separate appendevents later.
+
+    // Menu fix
+    ifg MOUSEUP 0
+    {
+        // fix player angle so he doesn't turn
+        setp[].ang  PANG 
+        setp[].horiz PHORIZ
+        
+        // fix camera angle so it doesn't jitter
+        set cameraang PANG
+        set camerahoriz PHORIZ
+    }
+    
+    // Sprinting fix
+    ifand BITS_PRESS P_SPRINTING // sprint key
+    ife player_in_vehicle 0
+    ife SCOPE 0
+    {
+        ife ARTIFACTS_LOADOUT[CHAR] 6 nullop else // don't slow the player's turning speed if they have lightstep boots
+        {
+            getp[].oang DISP_TEMP
+            getp[].ang DISP_TEMP2
+            getincangle DISP_TEMP2 DISP_TEMP DISP_TEMP2
+            ife GUN_SIZE 3 divvar DISP_TEMP2 3 
+            else divvar DISP_TEMP2 2
+            add DISP_TEMP DISP_TEMP2
+            set cameraang DISP_TEMP
+        }
+    }
+    
+    // Fix sniper scope
+    ifn SCOPE 0
+    {    
+        // following code by Dan Gaskil
+        getp[].ohoriz TEMP
+        getp[].horiz TEMP2
+        sub TEMP2 TEMP
+        ifn cameraoffset 0
+        {
+            ifl TEMP2 0
+            add cameraoffset TEMP2
+            ifl cameraoffset 0 set cameraoffset 0
+        }
+        
+        getp[].ohoriz TEMP
+        getp[].horiz TEMP2
+        sub TEMP2 TEMP
+        ifn cameraoffset 0
+        {
+            ifl TEMP2 0
+            add cameraoffset TEMP2
+            ifl cameraoffset 0 set cameraoffset 0
+        }
+        ifn TEMP2 1 ifn TEMP2 -1
+        {
+            shiftvarr TEMP2 1
+            add TEMP TEMP2
+            set camerahoriz TEMP
+            setp[].horiz TEMP
+        }
+        
+        getp[].oang TEMP
+        getp[].ang TEMP2
+        getincangle TEMP2 TEMP TEMP2
+        ifn TEMP2 1 ifn TEMP2 -1
+        {
+            shiftvarr TEMP2 1
+            add TEMP TEMP2
+            set cameraang TEMP
+            setp[].ang TEMP
+        }
+    
+        ifand BITS_PRESS P_SPRINTING // sprint key
+          ifg SPRINTING 0
+             set HOLD_BREATHE 1
+        else
+          ife HOLD_BREATHE 1
+             set HOLD_BREATHE 2
+    }
+    else ife SCOPE 0 ife HOLD_BREATHE 1 set HOLD_BREATHE 2
+    
+    // Fix choking
+    ifg CHOKE 0 ifl camerahoriz 50 set camerahoriz 50
+    ifg FCHOKE 0 ifl camerahoriz 50 set camerahoriz 50
+   
+   // Horse view fix
+   ifn player_using_horse -1 ifl player[].horiz 0 
+        {
+        set camerahoriz 0
+        setp[].horiz 0
+        }
+   
+    // Phantasm ball attack
+    ifg PHANTASM_STICK -1
+    {
+        setp[].horiz 100
+        set camerahoriz 100
+    }
+   
+    // Cultist shotgun struggle
+    ifg SHOTGUN_STRUGGLE -1
+    {
+        setp[].horiz 100
+        set camerahoriz 100
+    }
+   
+    // Fix ladder turn
+    ifg onladder 0
+    {
+        ife PREV_LADDER_ANG -1 getp[].ang PREV_LADDER_ANG
+        
+        set TEMP PREV_LADDER_ANG
+        getp[].ang TEMP2
+        getincangle TEMP2 TEMP TEMP2
+        divvar TEMP2 2
+        add TEMP TEMP2
+    
+        set PREV_LADDER_ANG TEMP
+        setp[].ang PREV_LADDER_ANG
+        set cameraang PREV_LADDER_ANG
+    }
+
+   // fix zipwire
+   ife on_tripwire 1 
+        {
+        ife PREV_LADDER_ANG -1 getp[].ang PREV_LADDER_ANG
+        set cameraang PREV_LADDER_ANG
+        }
+   
+   // reset for zipwire + ladder
+   ifg PREV_LADDER_ANG 0 
+     ife onladder 0 
+       ife on_tripwire 0
+          set PREV_LADDER_ANG -1
+    
+   
+    // bipod actor
+    ifand GUNFIREMODE 512 set cameraang ANGVAR
+    
+    // melee lockon fix
+    ife CURWEAP 0 
+      ife temp_weapon 0
+        {
+            set GUN_ACCURACY 16
+            ifn MELEE_LOCKED_ON -1
+            {
+                geta[MELEE_LOCKED_ON].extra DISP_TEMP
+                ifl DISP_TEMP 1 set MELEE_LOCKED_ON -1
+                else
+                {
+                    geta[MELEE_LOCKED_ON].x mx
+                    geta[MELEE_LOCKED_ON].y my
+                    getp[].posx x
+                    getp[].posy y
+                    sub mx x
+                    sub my y
+                    getangle ANGVAR mx my
+                    
+                    set DISP_TEMP ANGVAR
+                    sub DISP_TEMP PREV_MELEE_ANG
+                    ifl DISP_TEMP 0 mul DISP_TEMP -1
+                    
+                    // Huge jumps normally occur when the angle goes from 2047 to 0. Check for this here:
+                    ifg DISP_TEMP 512 {
+                        set DISP_TEMP ANGVAR
+                        sub DISP_TEMP 1
+                        set PREV_MELEE_ANG DISP_TEMP
+                        }
+                    else
+                    {
+                        sub ANGVAR PREV_MELEE_ANG
+                        div ANGVAR 4
+                        add PREV_MELEE_ANG ANGVAR
+                    }
+                    
+                    ifn PREV_MELEE_ANG ANGVAR ifg SPIN_KICK 13 ifg ROUNDHOUSE_KICK 26
+                    {
+                        set cameraang PREV_MELEE_ANG
+                        setp[].ang PREV_MELEE_ANG
+                    }
+                    else getp[].ang PREV_MELEE_ANG
+                    
+                    dist DISP_TEMP THISACTOR MELEE_LOCKED_ON
+                    ifg DISP_TEMP 10000 set MELEE_LOCKED_ON -1
+                }
+            }
+            // else getp[].ang PREV_MELEE_ANG
+        }
+    
+    // Vehicles Fix:
+    ifg player_in_vehicle 0
+        ifn VEHICLE_ANG -1 set cameraang VEHICLE_ANG 
+    else ifg PLAYERONTHEBIKE 0
+        ifn VEHICLE_ANG -1 set cameraang VEHICLE_ANG 
+    else ifg VEHICLE_ANG -1 
+        set VEHICLE_ANG -1
+    
+    ifg PLAYERONTHEBIKE 0
+        ifn VEHICLE_HORIZ -1 
+            {
+            set camerahoriz VEHICLE_HORIZ
+            }
+    else ifg VEHICLE_HORIZ -1
+        set VEHICLE_HORIZ -1
+
+    /** END INTERPOLATION FIXES */
+
 ifn SCIENTIST_CAM -1
 {
   geta[SCIENTIST_CAM].x camerax

@@ -10367,16 +10367,10 @@ else
 enda
 
 defstate laddercode
-setp[].weapon_pos 10
-ifp ponground { stopsound SLIDE_DOWN set bpress 0 }
-setp[].falling_counter 0
+    setp[].weapon_pos 10
+    ifp ponground { stopsound SLIDE_DOWN set bpress 0 }
+    setp[].falling_counter 0
 
-	  getp[].oang TEMP
-        getp[].ang TEMP2
-        getincangle TEMP2 TEMP TEMP2
-        divvar TEMP2 2
-        add TEMP TEMP2
-        setp[].ang TEMP
 
 ife fpress 0 ife bpress 0
 {
