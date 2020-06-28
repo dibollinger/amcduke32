@@ -3461,8 +3461,8 @@ iffloordistl 16
 		}
 	
 
-	geta[].ang TEMP
-	setp[].ang TEMP
+	geta[].ang VEHICLE_ANG
+	setp[].ang VEHICLE_ANG
 	
 getinput[].avel TEMP3 // Get their mouse movements
 
@@ -3767,8 +3767,8 @@ ifn TEMP4 -1 // Make sure it's a a valid sector
 	}
 	
 
-	geta[].ang TEMP
-	setp[].ang TEMP
+	geta[].ang VEHICLE_ANG
+	setp[].ang VEHICLE_ANG
 
 getinput[].avel TEMP3 // Get their mouse movements
 ifg TEMP3 0
@@ -4135,8 +4135,8 @@ ifaction HOVERTANK_INACTION
 		setp[].cursectnum TEMP4
 	}
 	
-	geta[].ang TEMP
-	setp[].ang TEMP
+	geta[].ang VEHICLE_ANG
+	setp[].ang VEHICLE_ANG
 
 	getinput[].avel TEMP3 // Get their mouse movements
 
@@ -4469,8 +4469,8 @@ ifaction HOVERTANK_INACTION
 		setp[].cursectnum TEMP4
 		}
 		
-		geta[].ang TEMP
-		setp[].ang TEMP
+		geta[].ang VEHICLE_ANG
+		setp[].ang VEHICLE_ANG
 
 	getinput[].avel TEMP3 // Get their mouse movements
 	ifg TEMP3 0
@@ -4893,8 +4893,8 @@ ifn TEMP4 -1 // Make sure it's a a valid sector
 	}
 
 	
-	geta[].ang TEMP
-	setp[].ang TEMP
+	geta[].ang VEHICLE_ANG
+	setp[].ang VEHICLE_ANG
 	
 getinput[].avel TEMP3 // Get their mouse movements
 ifg TEMP3 0

@@ -11965,30 +11965,6 @@ ifg weaponcount 11 // ugly hack for hardcoded reduction of player speed for slot
 		divvar TEMP 12
 		setp[].posyv TEMP
 	}
-ife temp_weapon 0
-	{
-	set GUN_ACCURACY 16
-	ifn MELEE_LOCKED_ON -1
-		{
-		geta[MELEE_LOCKED_ON].extra TEMP
-		ifl TEMP 1 set MELEE_LOCKED_ON -1
-		else
-			{
-			geta[MELEE_LOCKED_ON].x mx
-			geta[MELEE_LOCKED_ON].y my
-			getp[].posx x
-			getp[].posy y
-			sub mx x
-			sub my y
-			getangle ANGVAR mx my
-			ifg SPIN_KICK 13
-			ifg ROUNDHOUSE_KICK 26
-			setp[].ang ANGVAR
-			dist TEMP THISACTOR MELEE_LOCKED_ON
-			ifg TEMP 5000 set MELEE_LOCKED_ON -1
-			}
-		}
-	}
 }
 
 ifmultiplayer
@@ -12401,7 +12377,6 @@ ifvarvarg MGUNMAG MAXMGUNMAG set MGUNMAG MAXMGUNMAG
 ifn player_using_horse -1 
 {
 action BOAT_USE
-ifl player[].horiz 0 setp[].horiz 0
 setp[].over_shoulder_on 0
 }
 
@@ -12877,38 +12852,34 @@ ifn DOCUMENT -1
 	}
  
  }
- 
-	
-ifp pstanding
- ifhitspace
-	{
-	set TEMP3 LEAN_COUNT
-	mulvar TEMP3 16
-	setp[].rotscrnang TEMP3
-	setp[].movement_lock 12
-	ifand EXTBITS_PRESS 16
-		{
-		ifl LEAN_COUNT 8 add LEAN_COUNT 1
-		getp[].oang temp
-        setp[].ang temp
-		setp[].weapon_pos 10
-		}
-		else
-	ifand EXTBITS_PRESS 32
-		{
-		ifg LEAN_COUNT -8 sub LEAN_COUNT 1
-		getp[].oang temp
-        setp[].ang temp
-		setp[].weapon_pos 10
-		}
-	else
-	ifl LEAN_COUNT 0 add LEAN_COUNT 1
-	else ifg LEAN_COUNT 0 sub LEAN_COUNT 1
-	}
-else
-ifn LEAN_COUNT 0 set LEAN_COUNT 0
-	
-	
+
+
+ifp ponground
+  ifp pstanding
+    ifhitspace
+    {
+        set TEMP3 LEAN_COUNT
+        mulvar TEMP3 16
+        setp[].rotscrnang TEMP3
+
+        ifn LEAN_COUNT 0 lockplayer 5
+
+        ifand EXTBITS_PRESS 16
+            {
+            ifl LEAN_COUNT 8 add LEAN_COUNT 1
+            setp[].weapon_pos 10
+            }
+        else ifand EXTBITS_PRESS 32
+            {
+            ifg LEAN_COUNT -8 sub LEAN_COUNT 1
+            setp[].weapon_pos 10
+            }
+        else ifl LEAN_COUNT 0 add LEAN_COUNT 1
+        else ifg LEAN_COUNT 0 sub LEAN_COUNT 1
+    }
+else ifn LEAN_COUNT 0 set LEAN_COUNT 0
+
+
 // WILDLANDS
 
 ifvarvarl SPRINTING PMAX_STAMINA 
@@ -13460,7 +13431,6 @@ ifg PHANTASM_STICK -1
 	ife MISSIONUP 1 set MISSIONUP 0
 	palfrom 0 0 0 0
 	set player_use -1
-	setp[].horiz 100
 	setuserdef[].overhead_on 0
 	setp[].movement_lock 31
 	setp[].kickback_pic 0
@@ -13531,7 +13501,6 @@ ifg SHOTGUN_STRUGGLE -1
 	{
 	palfrom 0 0 0 0
 	ife MISSIONUP 1 set MISSIONUP 0
-	setp[].horiz 100
 	setuserdef[].overhead_on 0
 	setp[].kickback_pic 0
 	setp[].weapon_pos 10
@@ -13637,7 +13606,6 @@ ifg CHOKE 0
 set player_use -1
 setuserdef[].overhead_on 0
 palfrom 20 20
-ifl player[].horiz 50 setp[].horiz 50
 ife player_hitspace 1 { sub CHOKE 10 wackplayer set player_hitspace 2 }
 soundonce CHOKING
 state STOPSTEPSOUNDS
@@ -16167,7 +16135,6 @@ ifg FCHOKE 0
 set player_use -1
 palfrom 20 20
 lockplayer 10
-ifl player[].horiz 50 setp[].horiz 50
 ifhitspace { wackplayer sub CHOKE 20 }
 soundonce CHOKING
 state STOPSTEPSOUNDS
@@ -16420,59 +16387,7 @@ ife player[].quick_kick 8 // wall kick
 			ifp pboosted set knockback 8 else set knockback 4
 			}
 	}
-	
-ifn SCOPE 0
-	{
-	
-	// following code by Dan Gaskil
-	getp[].ohoriz TEMP
-	getp[].horiz TEMP2
-	sub TEMP2 TEMP
-	ifn cameraoffset 0
-	{
-		ifl TEMP2 0
-		add cameraoffset TEMP2
-		ifl cameraoffset 0 set cameraoffset 0
-	}
-	
-	getp[].ohoriz TEMP
-		getp[].horiz TEMP2
-		sub TEMP2 TEMP
-		ifn cameraoffset 0
-		{
-			ifl TEMP2 0
-			add cameraoffset TEMP2
-			ifl cameraoffset 0 set cameraoffset 0
-		}
-		ifn TEMP2 1 ifn TEMP2 -1
-		{
-			shiftvarr TEMP2 1
-			add TEMP TEMP2
-			setp[].horiz TEMP
-		}
-		
-		getp[].oang TEMP
-		getp[].ang TEMP2
-		getincangle TEMP2 TEMP TEMP2
-		ifn TEMP2 1 ifn TEMP2 -1
-		{
-			shiftvarr TEMP2 1
-			add TEMP TEMP2
-			setp[].ang TEMP
-		}
-	
-	ifand BITS_PRESS P_SPRINTING // sprint key
-	 ifg SPRINTING 0
-		set HOLD_BREATHE 1
-		else
-		ife HOLD_BREATHE 1
-		set HOLD_BREATHE 2
-	}
-	else
-	ife SCOPE 0
-	ife HOLD_BREATHE 1
-	 set HOLD_BREATHE 2
-	 
+
 ife HOLD_BREATHE 1
 	{
 	inittimer 30
@@ -17514,16 +17429,6 @@ ife SCOPE 0
 		ife GUN_SIZE 3 mulvar GUN_ACCURACY 3
 		}
 		
-	ife ARTIFACTS_LOADOUT[CHAR] 6 nullop else // don't slow the player's turning speed if they have lightstep boots
-	{
-	  getp[].oang TEMP
-        getp[].ang TEMP2
-        getincangle TEMP2 TEMP TEMP2
-		ife GUN_SIZE 3 divvar TEMP2 3 else
-        divvar TEMP2 2
-        add TEMP TEMP2
-        setp[].ang TEMP
-	}
 
 	getp[].angvel TEMP3
 	divvar TEMP3 2

@@ -316,10 +316,10 @@ else ife BIKESTATE 1
   ife bike_mode 1
   {
   getincangle e3 sprite[].ang player[].ang
-  ifg e3 475 { geta[].ang e1 add e1 475 setp[].ang e1 }
-  ifl e3 -475 { geta[].ang e1 sub e1 475 setp[].ang e1 }
+  ifg e3 475 { geta[].ang e1 add e1 475 setp[].ang e1 set VEHICLE_ANG e1 }
+  ifl e3 -475 { geta[].ang e1 sub e1 475 setp[].ang e1 set VEHICLE_ANG e1 }
   }
-  else setp[].ang e1
+  else { setp[].ang e1 set VEHICLE_ANG e1 }
   getp[].oang e1
   sub e1 e3
   andvar e1 2047
@@ -698,6 +698,7 @@ else ife BIKESTATE 1
 	divvar e1 -16
 	add e1 100
 	setp[].horiz e1
+    set VEHICLE_HORIZ e1
   
   set e1 BIKEANGVEL
   mulvarvar e1 BIKEVEL
@@ -849,7 +850,7 @@ gamevar bikepal 0 2
 
 defstate theebikehudstate
   geta[BIKEID].ang e1
-  getp[].ang e2
+  set e2 cameraang
   getp[].look_ang e3
   add e2 e3
   sub e1 e2
@@ -860,7 +861,7 @@ defstate theebikehudstate
   add e3 160
   // set e1 0
   set BIKEHUD_X e3
-  getp[].horiz BIKEHUD_Y
+  set BIKEHUD_Y  camerahoriz
   add BIKEHUD_Y 24
   set BIKEZ 16777216
   set e1 CURRENTBIKEACCELERATION
