@@ -136,6 +136,8 @@ tilefromtexture 23786 { file TILES/SATURN.PNG }
 
 include voxels2.def
 
+// magenta to light blue (visibility)
+2dcol 5 0 128 256
 
 spritecol 3712 1 1
 spritecol 3626 1 1
