@@ -42,7 +42,7 @@ apps/
 
 *.log
 *.cache
-*.cfg
+/*.cfg
 textures
 texturecache
 *.index
@@ -58,10 +58,6 @@ texturecache
 *.VC.db
 *.VC.opendb
 *.sym
-/*.grp
-/*.rts
-/*.art
-/*.con
 /platform/Windows/*.con
 *.memmap
 *.sdf
