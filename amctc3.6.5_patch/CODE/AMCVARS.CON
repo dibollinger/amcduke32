@@ -801,6 +801,7 @@ var INVASION 0 0
 var screen_pal 0 0
 
 var camera_bars -18 0
+var cameraoffset 0 1
 
 var HIDE_SPRITES 1 0
 

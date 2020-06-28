@@ -644,9 +644,6 @@ else setaspect viewingrange yxaspect
 
 endevent
 
-gamevar cameraoffset 0 1
-
-
 move CAMBACK -90
 move CAMSLOWBACK -10
 move CAMFORWARD 90
