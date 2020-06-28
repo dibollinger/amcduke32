@@ -1,0 +1,3387 @@
+
+damageeventtilerange 263 275
+damageeventtile 293
+damageeventtile 297
+damageeventtile W_TECHWALL15
+damageeventtile 301
+damageeventtilerange 305 306
+damageeventtilerange 4120 4127
+damageeventtilerange 4130 4134
+damageeventtile 875
+damageeventtile 4136
+damageeventtile 4138
+damageeventtile 4140
+damageeventtile 4142
+damageeventtile 8616
+damageeventtile 8618
+damageeventtile 5645
+damageeventtilerange 4800 4803
+damageeventtile 10507
+damageeventtile 3896 // register cash draw
+damageeventtile 3470 // vending machine
+damageeventtile 4199 // milk	
+damageeventtile 407 // fan
+damageeventtile 595 // grate
+damageeventtilerange 7194 7196
+damageeventtile 10579
+damageeventtilerange 7208 7210 // dis base monitors
+damageeventtile 12325
+damageeventtile 12329
+damageeventtile 13941
+damageeventtile 19694
+damageeventtile 18622
+damageeventtile 20359
+damageeventtile 14276 // vending machine
+damageeventtile 14278 // vending machine
+damageeventtile 9490 // gun cabinet
+damageeventtilerange 5644 5649 // SW cars
+damageeventtile 5692 // SW car back
+damageeventtilerange 12411 12415 // russian cars
+damageeventtilerange 17009 17012 // computer monitors
+damageeventtilerange 17014 17016 // computer
+damageeventtile 22418 // vending machine
+damageeventtile 22420 // vending machine
+damageeventtilerange 16609 16610
+damageeventtile SCREENBREAK20
+damageeventtilerange 5785 5786
+damageeventtilerange 5884 5886
+
+gamevar DAMAGE_TILE 0 0
+
+defstate TILE_DAMAGE_STUFF
+	switch TEMP
+		case 875 sound VENT_BUST sound GLASS_HEAVYBREAK lotsofglass 5 debris SCRAP1 8 set DAMAGE_TILE 20360 break
+		case W_TECHWALL2 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 362 break
+		case W_TECHWALL3 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 360 break
+		case W_TECHWALL4 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 361 break
+		case W_TECHWALL5 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4135 break
+		case W_TECHWALL6 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4137 break
+		case W_TECHWALL7 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4139 break
+		case W_TECHWALL8 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4141 break
+		case W_TECHWALL9 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4143 break
+		case W_TECHWALL10 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4145 break
+		case W_TECHWALL1 
+		case W_TECHWALL11 
+		case W_TECHWALL12 
+		case W_TECHWALL13 
+		case W_TECHWALL14 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 363 break
+		case W_TECHWALL15 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4147 break
+		case W_TECHWALL16 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 4144 break
+		case 7194
+		case 7195
+		case 7196
+			sound GLASS_BREAKING lotsofglass 15 set DAMAGE_TILE 7337 break
+		case 10579 sound GLASS_BREAKING lotsofglass 15 set DAMAGE_TILE 10580 break
+		case 8616 
+		case 17012 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 17017 break
+		case 8618
+		case 17014 
+		case 17015 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 17018 break
+		case 19694 sound GLASS_BREAKING lotsofglass 15 set DAMAGE_TILE 19968 break
+		case 5645 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 5638 break
+		case 407 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 411 break
+		case 3894 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 3895 break
+		case 595 sound VENT_BUST set DAMAGE_TILE 596 break
+		case 13941 sound GLASS_BREAKING lotsofglass 20 set DAMAGE_TILE 13942 break
+		case 12413 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 13943 break
+		case 12414 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 13944 break
+		case 17016 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 17019 break	
+	   case 18622 
+	   case 20359
+		sound GLASS_BREAKING 
+		lotsofglass 25 	   
+	    set DAMAGE_TILE 20358
+	    break
+		case SCREENBREAK1
+		case SCREENBREAK2
+		case SCREENBREAK3
+		case SCREENBREAK4
+		case SCREENBREAK5
+		case SCREENBREAK6 
+		case SCREENBREAK7
+		case SCREENBREAK8
+		case SCREENBREAK9 
+		case SCREENBREAK10 
+		case SCREENBREAK11 
+		case SCREENBREAK12 
+		case SCREENBREAK13 
+		case SCREENBREAK14 
+		case SCREENBREAK15 
+		case SCREENBREAK16 
+		case SCREENBREAK17 
+		case SCREENBREAK18 
+		case SCREENBREAK19 
+		case SCREENBREAK20 
+	   case 16609 
+	   case 16610 
+	   case 5786 
+	   case 5884 
+	   case 5885 
+	   case 5886 
+	   case 4800
+	   case 4801
+	   case 4802
+	   case 4803
+		sound GLASS_BREAKING 
+		lotsofglass 15 
+		ifrnd 96 set DAMAGE_TILE 357 
+		else ifrnd 96 set DAMAGE_TILE 358
+		else set DAMAGE_TILE 359
+		break
+	   case 7208
+	   case 7209
+	   case 7210 
+		sound GLASS_BREAKING 
+		lotsofglass 15 
+		set DAMAGE_TILE 20357 
+		break	   
+	   case 10507 sound GLASS_BREAKING lotsofglass 15 set DAMAGE_TILE 20356 break
+	   case 9490 sound GLASS_BREAKING lotsofglass 15 set DAMAGE_TILE 4738 break
+	   case 5644 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5643 break
+	   case 5646 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5639 break
+	   case 5647 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5640 break
+	   case 5648 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5642 break
+	   case 5649 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5641 break
+	   case 5692 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 5691 break
+	   case 12415 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 13940 break
+	   case 12411 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 13946 break
+	   case 12412 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 13945 break
+	   case 14276 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 14277 break
+	   case 14278 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 14279 break
+	   case 17009
+	   case 17010 
+	   case 17011 
+	   case 3470 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 3471 break
+	   case 4199 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 4807 break
+	   case 22418 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 22419 break
+	   case 22420 sound GLASS_BREAKING sound VENT_BUST debris SCRAP1 8 lotsofglass 10 set DAMAGE_TILE 22421 break
+	   case 3896 money 5 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 3897 break   
+	   case 12329 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 12332 break
+	   case 12325 sound VENT_BUST debris SCRAP1 8 set DAMAGE_TILE 12328 break	
+	endswitch
+ends
+
+onevent EVENT_DAMAGEFLOOR
+	gets[RETURN].floorpicnum TEMP
+	state TILE_DAMAGE_STUFF
+	sets[RETURN].floorpicnum DAMAGE_TILE
+endevent
+
+onevent EVENT_DAMAGECEILING
+	gets[RETURN].ceilingpicnum TEMP
+	state TILE_DAMAGE_STUFF
+	sets[RETURN].ceilingpicnum DAMAGE_TILE
+endevent
+
+onevent EVENT_DAMAGEWALL
+	getwall[RETURN].picnum TEMP
+	state TILE_DAMAGE_STUFF
+	setwall[RETURN].picnum DAMAGE_TILE
+endevent
+
+action ANULLACTION 0
+
+move MOUSEVELS 32
+
+define SPACESHUTTLE 487
+move SHUTTLEVELS 16
+actor SPACESHUTTLE TOUGH
+//  ifmove 0          //  Init once
+//    move SHUTTLEVELS getv geth
+enda
+
+
+actor SATELLITE TOUGH
+  //  ifmove 0 move SHUTTLEVELS getv geth
+  //  ifcount 120 move SHUTTLEVELS getv geth randomangle
+enda
+
+action BLIMPWAITTORESPAWN
+
+defstate blimphitstate
+  cstat 0
+  spawn FIRSTGUNSPRITE
+  spawn EXPLOSION2
+
+  debris SCRAP1 40      // Weapons and ammo!
+  debris SCRAP2 32
+  debris SCRAP3 32
+  debris SCRAP4 32
+  debris SCRAP5 32
+
+  sound PIPEBOMB_EXPLODE
+  ifrespawn
+  {
+    action BLIMPWAITTORESPAWN
+    count 0
+    cstat 32768
+  }
+  else
+    killit
+ends
+
+actor BLIMP 1
+
+  ifaction BLIMPWAITTORESPAWN
+  {
+    ifcount BLIMPRESPAWNTIME
+    {
+      action 0
+      cstat 0
+    }
+    break
+  }
+
+  ifhitweapon
+  {
+    ifwasweapon RADIUSEXPLOSION
+      state blimphitstate
+    ifwasweapon RPG
+      state blimphitstate
+    strength 1
+  }
+enda
+
+defstate burningbarrelcode
+  fall
+  
+  ifcount 32
+  {
+  ifactorsound THISACTOR SOFTFIRE_AMBIENCE nullop else sound SOFTFIRE_AMBIENCE
+    resetcount
+    ifp palive
+      ifpdistl 1480
+        ifp phigher
+    {
+      add FIRE_DAMAGE 2
+      palfrom 16 16
+      ifrnd 96
+         { ife CHAR 0 sound J_HOTHOT ife CHAR 1 sound Z_LONGTERM_PAIN }
+    }
+  }
+  ifhitweapon
+  {
+    sound VENT_BUST
+    debris SCRAP1 10
+    ifrnd 128
+      spawn BURNING
+    else
+      spawn BURNING2
+    killit
+  }
+ends
+
+actor FIREBARREL
+  state burningbarrelcode
+enda
+actor FIREVASE
+  state burningbarrelcode
+enda
+
+defstate rats
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+  ifrnd 128
+    spawn RAT
+ends
+
+
+action RUBCANDENT 1 1 1 1 1
+
+actor RUBBERCAN WEAK
+  ifaction RUBCANDENT
+  {
+    ifactioncount 16
+    {
+      strength 0
+      action ANULLACTION
+      break
+    }
+  }
+  else
+    ifhitweapon
+  {
+    ifwasweapon RADIUSEXPLOSION
+    {
+      state rats
+      ifrnd 48
+        spawn BURNING
+      debris SCRAP3 12
+      killit
+    }
+    else
+      action RUBCANDENT
+  }
+enda
+
+
+defstate MARTINIDRINK
+ifpdistl 812
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+	    ifhitspace
+		{
+		quote 134
+		sound DRINKSOME
+	  	palfrom 16 0 32
+		ife CHAR 3 addphealth 5 else addphealth 2
+	      ife CHAR 0 add INEBRIATION 100
+		ife CHAR 1 add INEBRIATION 150
+	      ife CHAR 2 add INEBRIATION 50
+	      ife CHAR 3 add INEBRIATION 25
+	      ife CHAR 4 add INEBRIATION 75
+		ife CHAR 5 add INEBRIATION 150
+	    ife CHAR 6 add INEBRIATION 100
+		ife CHAR 7 add INEBRIATION 100
+		ife CHAR 9 add INEBRIATION 75
+		ife CHAR 10 add INEBRIATION 50
+		ife CHAR 11 add INEBRIATION 50
+		ife CHAR 12 add INEBRIATION 125
+		ife CHAR 13 add INEBRIATION 200
+		ife CHAR 14 add INEBRIATION 25
+		killit
+		}
+  }
+
+ifhitweapon
+{
+lotsofglass 6
+sound GLASS_HEAVYBREAK
+killit
+}
+
+ends
+
+defstate eat_sushi_object
+cstat 257 
+ifpdistl 812
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+	    ifhitspace
+		{
+		ife CHAR 0 { set PLAYER_VOICEOVER 16 break }
+		else
+			{
+			quote 139
+			sound EATSOME
+			palfrom 16 0 32
+			addphealth 2
+			ifactor 16928 cactor 16934
+			else ifactor 16929 cactor 16934
+			else ifactor 16930 cactor 16934
+			else ifactor 16945 cactor 16946
+			else killit
+			}
+		}
+   }
+ends
+
+
+defstate eatfoodobject
+ifpdistl 812
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+	    ifhitspace
+		{
+		quote 139
+		sound EATSOME
+		ifspritepal 3
+			{
+			palfrom 16 16
+			ifrnd 128 { sound VOMIT wackplayer spawn PUKE }
+			addphealth -2
+			}
+		else
+			{
+			palfrom 16 0 32
+			addphealth 2
+			}
+		ifactor 4547 cactor 4546 
+		else ifactor 16928 cactor 16934
+		else ifactor 16929 cactor 16934
+		else ifactor 16930 cactor 16934
+		else killit
+		}
+   }
+ends
+
+defstate drinkobject
+ifpdistl 812
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+    ifhitspace
+		{
+		quote 140
+		sound DRINKSOME2
+	  	palfrom 16 0 32
+		ife CHAR 0 addphealth 4 else ife CHAR 5 addphealth 4 else addphealth 2
+		killit
+		}
+	}
+ends
+
+defstate toughgalspeech
+  ifrnd 64
+  {
+    ifnosounds
+      soundonce TOUGHGALSND1
+  }
+  else
+    ifrnd 64
+  {
+    ifnosounds
+      soundonce TOUGHGALSND2
+  }
+  else
+    ifrnd 64
+  {
+    ifnosounds
+      soundonce TOUGHGALSND3
+  }
+  else
+    ifnosounds
+      soundonce TOUGHGALSND4
+ends
+
+defstate jibfood
+  state squish_sounds
+  guts JIBS6 3
+  killit
+ends
+
+defstate break_glass
+      lotsofglass 5
+      sound GLASS_BREAKING
+ends
+
+defstate break_metal
+	debris SCRAP1 2
+	debris SCRAP2 2
+	sound VENT_BUST
+ends
+
+defstate break_wood
+sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP
+ends
+
+defstate breakobject
+  ifaction 0
+  {
+    action ANULLACTION
+    cstator 257
+    ifactor ROBOTMOUSE
+      clipdist 64
+	  
+  }
+  else
+    ifactor ROBOTMOUSE
+  {
+      ifdead
+      {
+        ifcount 32
+        {
+          killit
+        }
+        break
+      }
+      ifcount 64 ifrnd 6
+      {
+        ifrnd 128
+          move MOUSEVELS randomangle geth
+        else
+        {
+          ifrnd 64
+            soundonce HAPPYMOUSESND1
+          else
+            ifrnd 64
+              soundonce HAPPYMOUSESND2
+          else
+            ifrnd 64
+              soundonce HAPPYMOUSESND3
+          else
+            soundonce HAPPYMOUSESND4
+        }
+        resetcount
+      }
+  }
+
+  ifhitweapon
+  {
+    ifdead
+    {
+      ifactor 4535
+        state jibfood
+      else
+        ifactor 4540
+          state jibfood
+      else
+        ifactor 4541
+          state jibfood
+      else
+        ifactor 4542
+          state jibfood
+      else
+        ifactor 4543
+          state jibfood
+      else
+        ifactor 4544
+          state jibfood
+      else
+        ifactor 4545
+          state jibfood
+      else
+        ifactor 4546
+          state jibfood
+      else
+        ifactor 23540
+          state jibfood
+      else
+        ifactor 4554
+          state jibfood
+	  else
+	    ifactor 19539
+		{
+		spritepal 7
+		debris SCRAP3 10
+		sound THUD
+		}
+      else
+        ifactor SHOPPINGCART
+      {
+        debris SCRAP1 5
+        debris SCRAP2 5
+        debris SCRAP3 5
+        sound VENT_BUST
+        killit
+      }
+      else
+        ifactor ROBOTDOG2
+      {
+        soundonce DEAD_DOG
+        guts JIBS2 1
+        guts JIBS3 2
+        guts JIBS6 3
+        killit
+      }
+      else
+        ifactor 4555
+          state jibfood
+      else
+        ifactor DOLPHIN1
+      {
+        guts JIBS2 1
+        guts JIBS3 2
+        guts JIBS4 3
+        guts JIBS5 2
+        state jibfood
+      }
+      else
+        ifactor DOLPHIN2
+      {
+        guts JIBS2 1
+        guts JIBS3 2
+        guts JIBS4 3
+        guts JIBS5 2
+        state jibfood
+      }
+      else
+        ifactor SNAKEP
+      {
+        guts JIBS2 1
+        guts JIBS3 2
+        guts JIBS4 3
+        guts JIBS5 2
+        state jibfood
+      }
+      else
+        ifactor DONUTS
+      {
+        spritepal 7
+        guts JIBS6 2
+        killit
+      }
+      else
+        ifactor DONUTS2
+      {
+        debris SCRAP1 1
+        spritepal 7
+        guts JIBS6 2
+        killit
+      }
+      else
+        ifactor MAILBAG
+        {
+          mail 30
+          debris SCRAP3 5
+          debris SCRAP4 3
+          killit
+        }
+      else
+        ifactor TEDDYBEAR
+      {
+        debris SCRAP3 5
+        spritepal 1
+        debris SCRAP3 6
+      }
+	else
+	  ifactor HATRACK
+	{
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  sound WOODBREAK
+	}
+	else
+	 ifactor COFFEEMUG spawn BROWNSTAIN
+	else
+	 ifactor COFFEEMACHINE spawn BROWNSTAIN else
+	 ifactor COFFEEMACHINE2 spawn BROWNSTAIN else
+	 ifactor COFFEEMACHINE3 spawn BROWNSTAIN else
+	  ifactor GAVALS sound WOODBREAK else
+	  ifactor GAVALS2 sound WOODBREAK else	
+	  ifactor BROOM { shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP sound WOODBREAK } else
+	  ifactor 10513 { shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP sound WOODBREAK } else		  
+	  ifactor MOP { spawn BROWNSTAIN shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP sound WOODBREAK } else
+	  ifactor 8045 { shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP sound WOODBREAK }
+      else
+      {
+        ifrnd 128
+          sound GLASS_BREAKING
+        else
+          sound GLASS_HEAVYBREAK
+      }
+
+      ifactor CLOCK
+      {
+        cactor BROKENCLOCK
+        break
+      }
+      else
+        ifactor JOLLYMEAL
+      {
+        spawn AMULET
+        debris SCRAP3 1
+        debris SCRAP4 2
+      }
+      else
+        ifactor GUMBALLMACHINE
+      {
+        sound GLASS_BREAKING
+        cactor GUMBALLMACHINEBROKE
+        strength 1
+        debris SCRAP4 2
+        lotsofglass 10
+        break
+      }
+      else
+        ifactor GUMBALLMACHINEBROKE
+      {
+        sound GLASS_BREAKING
+        debris SCRAP3 3
+        debris SCRAP4 2
+        lotsofglass 10
+      }
+      else
+        ifactor DUKEBURGER
+      {
+        debris SCRAP3 14
+        debris SCRAP1 13
+        debris SCRAP4 12
+        debris SCRAP2 12
+        debris SCRAP5 11
+      }
+      else
+        ifactor POLICELIGHTPOLE
+      {
+        debris SCRAP3 4
+        debris SCRAP1 3
+        debris SCRAP4 2
+        debris SCRAP2 2
+        debris SCRAP5 1
+      }
+      else
+        ifactor TOPSECRET
+          paper 10
+      else
+        ifactor GUNPOWDERBARREL
+      {
+        spawn EXPLOSION2
+        sound PIPEBOMB_EXPLODE
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  shoot WOODSCRAP
+	  sound WOODBREAK
+        hitradius 2048 WEAKEST WEAK MEDIUMSTRENGTH TOUGH
+        ifpdistl 2048
+          wackplayer
+        debris SCRAP1 10      // Weapons and ammo!
+        debris SCRAP2 13
+        debris SCRAP3 4
+        debris SCRAP4 17
+        debris SCRAP5 6
+      }
+      else
+        ifactor FLOORBASKET
+      {
+        spawn PUKE
+        debris SCRAP1 2
+        debris SCRAP3 3
+        debris SCRAP4 2
+      }
+      else
+        ifactor ROBOTMOUSE
+      {
+        debris SCRAP2 10
+        spritepal 1
+        debris SCRAP3 4
+        resetcount
+        cstat 32768
+        break
+      }
+      else
+        ifactor ROBOTPIRATE
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE1A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor MAN
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor MAN2
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE2A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE3A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE4A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE4A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE5A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+        ifactor PIRATE6A
+      {
+        debris SCRAP2 10
+        debris SCRAP1 5
+        debris SCRAP3 3
+        lotsofglass 10
+      }
+      else
+      {
+        lotsofglass 10
+        debris SCRAP4 3
+      }
+      killit
+    }
+    else
+      ifactor DOLPHIN1
+    {
+      guts JIBS6 1
+      soundonce DOLPHINSND
+      ifstrength TOUGH
+      {
+        cactor DOLPHIN2
+        state squish_sounds
+      }
+    }
+    else
+      ifactor DOLPHIN2
+    {
+      guts JIBS6 1
+      soundonce DOLPHINSND
+    }
+    else
+      ifactor ROBOTDOG2
+    {
+      guts JIBS6 1
+      soundonce WHINING_DOG
+    }
+  }
+  else
+  {
+    ifactor CLOCK
+      nullop
+    else
+      ifactor TOPSECRET
+        nullop
+    else
+      ifactor 4554
+        nullop
+    else
+      ifactor 4555
+        nullop
+    else
+      ifactor 4531
+        nullop
+    else
+      ifactor 4535
+        nullop
+    else
+      ifactor DOLPHIN1
+        nullop
+    else
+      ifactor DOLPHIN2
+        nullop
+    else
+      fall
+  }
+
+
+ends
+
+defstate COFFEEMACHINEW
+ifpdistl 812
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+    ifhitspace
+	ifcount 30
+	{
+	quote 140
+	sound DRINKSOME2
+  	palfrom 16 0 32
+	ife CHAR 0 addphealth 4 
+		else ife CHAR 5 
+				{ 
+				getp[].firstaid_amount TEMP
+				ifactor COFFEEMACHINE2 add TEMP 15 else
+				ifactor COFFEEMACHINE3 add TEMP 10 else
+				add TEMP 20
+				setp[].firstaid_amount TEMP		 
+				cactor COFFEEMACHINE4 
+				} 
+				else 
+			addphealth 2
+	ifactor COFFEEMACHINE cactor COFFEEMACHINE2 else
+	ifactor COFFEEMACHINE2 cactor COFFEEMACHINE3 else
+	ifactor COFFEEMACHINE3 cactor COFFEEMACHINE4
+	resetcount
+	}
+  }
+ends
+
+action ABURGERROTS 0 1 5
+useractor notenemy DUKEBURGER PIRATEGALSTRENGTH ABURGERROTS state breakobject enda
+
+useractor notenemy MOP WEAK state breakobject
+       ifp palive
+        ifpdistl RETRIEVEDISTANCE
+          ifcount 6
+            ifcanseetarget
+			ife temp_weapon 0
+			{
+			set player_use 0
+			    ifhitspace
+			      {
+					setarray PICKED_UP_GUN[0] 30
+					set WEAP_SHOW 130
+					state PICKUP_DISPLAY
+					set PICKED_UP_TILE MOPSPRITE
+					set ITEM_AMOUNT -1
+					set temp_weapon 20
+					sound WOOD_IMPACT
+					setp[].curr_weapon 0
+					setp[].ammo_amount 0 1
+			        cactor 12083
+			      }
+			}
+ 
+ enda
+
+useractor notenemy 8046 cstator 257 ifhitweapon { sound GLASS_HEAVYBREAK lotsofglass 5 killit } enda
+useractor notenemy 8047 cstator 257 ifhitweapon { sound GLASS_HEAVYBREAK lotsofglass 5 killit } enda
+useractor notenemy 8048 cstator 257 ifhitweapon { sound GLASS_HEAVYBREAK lotsofglass 5 killit } enda
+useractor notenemy 8049 cstator 257 ifhitweapon { sound GLASS_HEAVYBREAK lotsofglass 5 killit } enda
+
+useractor notenemy 10507 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 seta[].picnum 20356 } enda
+
+useractor notenemy 18622 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 20 state break_glass seta[].picnum 20358 } enda
+useractor notenemy 20359 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 20 state break_glass seta[].picnum 20358 } enda
+
+useractor notenemy 9506 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 20 state break_glass spritepal 7 state jibfood } enda
+
+useractor notenemy 8126 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass killit } enda
+useractor notenemy 8127 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass espawn 2284 seta[RETURN].pal 17 killit } enda
+useractor notenemy 8128 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass killit } enda
+useractor notenemy 8129 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass espawn 2284 seta[RETURN].pal 17 killit } enda
+useractor notenemy 8130 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass killit } enda
+useractor notenemy 8131 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass espawn 2284 seta[RETURN].pal 17 killit } enda
+useractor notenemy 8132 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 10 state break_glass espawn 2284 seta[RETURN].pal 17 killit } enda
+useractor notenemy 8133 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 10 state break_glass espawn 2284 seta[RETURN].pal 6 killit } enda
+useractor notenemy 8134 cstator 257 ifhitweapon { sound GLASS_BREAKING lotsofglass 5 state break_glass espawn 2284 seta[RETURN].pal 6 killit } enda
+
+useractor notenemy GLASS ifspritepal 3 { ifhitweapon { sound GLASS_BREAKING lotsofglass 15 killit } } enda
+
+useractor notenemy 3525 WEAK state breakobject enda
+
+useractor notenemy 8045 WEAK state breakobject enda
+
+useractor notenemy 10513 WEAK state breakobject enda
+useractor notenemy BROOM WEAK state breakobject enda
+
+useractor notenemy WETFLOOR WEAK state breakobject enda
+
+useractor notenemy DESKLAMP WEAK state breakobject enda
+
+// useractor notenemy DUKECUTOUT WEAK state breakobject enda
+
+useractor notenemy HATRACK WEAK state breakobject enda
+
+useractor notenemy GUNPOWDERBARREL TOUGH state breakobject enda
+
+useractor notenemy COFFEEMACHINE WEAK state breakobject state COFFEEMACHINEW enda
+
+useractor notenemy COFFEEMACHINE2 WEAK state breakobject state COFFEEMACHINEW enda
+
+useractor notenemy COFFEEMACHINE3 WEAK state breakobject state COFFEEMACHINEW enda
+
+useractor notenemy COFFEEMACHINE4 WEAK state breakobject enda
+
+useractor notenemy TEDDYBEAR WEAK state breakobject enda
+
+useractor notenemy TOPSECRET WEAK state breakobject enda
+
+useractor notenemy ROBOTMOUSE ROBOTMOUSESTRENGTH state breakobject enda
+
+useractor notenemy MAN PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy MAN2 PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy WOMAN PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE1A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE2A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE3A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE4A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE5A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATE6A PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy ROBOTPIRATE PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy PIRATEHALF TOUGH state breakobject enda
+
+useractor notenemy CHESTOFGOLD WEAK state breakobject enda
+
+useractor notenemy ROBOTDOG PIRATEGALSTRENGTH state breakobject enda
+
+useractor notenemy ROBOTDOG2 TOUGH state breakobject enda
+
+useractor notenemy PLEASEWAIT state breakobject enda
+
+useractor notenemy 4530 WEAK state breakobject enda
+
+useractor notenemy 4531 WEAK state breakobject enda
+
+useractor notenemy 4532 WEAK state breakobject enda
+
+useractor notenemy 4533 WEAK state breakobject enda
+
+useractor notenemy 4534 WEAK state breakobject enda
+
+useractor notenemy 4535 WEAK state breakobject enda
+
+useractor notenemy 4536 WEAK state breakobject enda
+
+useractor notenemy 4537 WEAK state breakobject enda
+
+useractor notenemy 4538 WEAK state breakobject enda
+
+useractor notenemy 4539 WEAK state breakobject enda
+
+useractor notenemy 23540 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 19539 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4540 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4541 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4542 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4543 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4544 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4545 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4546 WEAK state breakobject enda
+
+useractor notenemy 4547 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy 4548 WEAK state breakobject state drinkobject enda
+
+useractor notenemy 4549 WEAK state breakobject enda
+
+useractor notenemy JOLLYMEAL WEAK state breakobject enda
+
+useractor notenemy GUMBALLMACHINE WEAK state breakobject enda
+
+useractor notenemy GUMBALLMACHINEBROKE WEAK state breakobject enda
+
+useractor notenemy POLICELIGHTPOLE TOUGH state breakobject enda
+
+useractor notenemy CLOCK WEAK state breakobject enda
+
+useractor notenemy MAILBAG WEAK state breakobject enda
+
+useractor notenemy 4555 WEAK state breakobject enda
+
+useractor notenemy 4554 WEAK state breakobject enda
+
+useractor notenemy HEADLAMP WEAK state breakobject enda
+
+useractor notenemy DOLPHIN1 DOLPHINSTRENGTH state breakobject enda
+
+useractor notenemy DOLPHIN2 DOLPHINSTRENGTH state breakobject enda
+
+useractor notenemy SNAKEP MEDIUMSTRENGTH state breakobject enda
+
+useractor notenemy DONUTS WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy GAVALS WEAK state breakobject enda
+
+useractor notenemy GAVALS2 WEAK state breakobject enda
+
+useractor notenemy CUPS WEAK state breakobject enda
+
+useractor notenemy DONUTS2 WEAK state breakobject state eatfoodobject enda
+
+useractor notenemy FLOORBASKET WEAK state breakobject enda
+
+useractor notenemy METER WEAK state breakobject enda
+
+useractor notenemy MACE WEAK state breakobject enda
+
+useractor notenemy SHOPPINGCART WEAK state breakobject enda
+
+useractor notenemy COFFEEMUG WEAK state breakobject state drinkobject enda
+
+useractor notenemy 4517
+
+ifaction 0
+{
+ifpdistg 2048
+	{
+	soundonce SERVOSND
+	action MINUSONE
+	}
+}
+
+ifaction MINUSONE
+{
+ifpdistl 2048
+	{
+	soundonce SERVOSND
+	action 0
+	}
+}
+
+enda
+
+useractor notenemy 5881 state MARTINIDRINK enda
+useractor notenemy 5882 state MARTINIDRINK enda
+useractor notenemy 3925 state MARTINIDRINK enda
+
+useractor notenemy 9596 state drinkobject enda
+
+useractor notenemy 5883 state eatfoodobject enda
+
+useractor notenemy 16928 state eat_sushi_object ifhitweapon { state break_glass spritepal 8 state jibfood } enda
+useractor notenemy 16929 state eat_sushi_object ifhitweapon { state break_glass spritepal 7 state jibfood }  enda
+useractor notenemy 16930 state eat_sushi_object ifhitweapon { state break_glass state jibfood } enda
+useractor notenemy 16931 state eat_sushi_object ifhitweapon { spritepal 8 state jibfood } enda
+useractor notenemy 16932 state eat_sushi_object ifhitweapon { spritepal 7 state jibfood } enda
+useractor notenemy 16933 state eat_sushi_object ifhitweapon state jibfood enda
+useractor notenemy 16945 state eat_sushi_object ifhitweapon { state break_glass state jibfood } enda
+useractor notenemy 16946 ifhitweapon { state break_glass killit } enda
+useractor notenemy 16934 ifhitweapon { state break_glass killit } enda
+
+useractor notenemy 16944 ifhitweapon { state break_metal killit } enda
+
+useractor notenemy 19688 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_metal killit } enda
+
+useractor notenemy 16345 
+ifspritepal 3
+{
+soundonce WIND_CHIMES
+ifhitweapon { stopactorsound THISACTOR WIND_CHIMES spritepal 7 state break_metal  killit }
+}
+enda
+
+// engineering oil can
+useractor notenemy 19540 ifaction 0 { cstator 256 action ZERO } ifhitweapon { state break_metal spawn 2284 killit } enda
+
+useractor notenemy 16973 ifhitweapon { state break_metal state break_wood action ONE } enda
+
+useractor notenemy 16899 50 
+ifhitweapon { sound HITMETAL shoot SPARK ifdead { state break_metal spritepal 2 state break_metal spritepal 7 state break_metal killit } } 
+enda
+
+spriteshadow 23764
+spriteshadow 23765
+spriteshadow 23768
+
+useractor notenemy 23764 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_wood state break_wood killit } enda
+useractor notenemy 23765 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_wood state break_wood killit } enda
+useractor notenemy 23768 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_wood state break_wood killit } enda
+
+useractor notenemy 16309 ifhitweapon { spritepal 2 state break_metal state break_metal killit } enda
+
+spriteshadow 23024
+useractor notenemy 23024 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_wood state break_wood killit } enda
+
+spriteshadow 23025
+useractor notenemy 23025 ifaction 0 { cstator 257 action ZERO } ifhitweapon { state break_wood spritepal 8 debris SCRAP2 4 killit } enda
+
+action HITCLOCK 1
+
+useractor notenemy 16938
+
+ifhitweapon
+	{
+	ifaction 0
+		{
+		state break_glass
+		action ONE
+		strength 1
+		}
+	else ifaction ONE
+		{
+		action HITCLOCK
+		}
+	}
+	
+ifaction HITCLOCK
+	{
+	fall
+ iffloordistl 4
+		{
+		state break_glass
+		state break_metal
+		killit
+		}
+	}
+
+enda
+
+useractor notenemy 16380
+
+ifaction 0
+	{
+	cstat 288
+	sizeat 32 32
+	action ZERO
+	}
+	
+ifhitweapon
+	{
+	ifaction ZERO
+		{
+		state break_metal
+		state jibfood
+		}
+	else
+	ifaction ONE
+		{
+		state break_metal
+		killit
+		}
+	}
+	
+
+ifpdistl 812
+ifaction ZERO
+ifp palive
+   ifp pfacing
+   {
+   set player_use 0
+	    ifhitspace
+		{
+		quote 139
+		sound EATSOME
+	  	palfrom 16 0 32
+		addphealth 5
+		action ONE
+		}
+   }
+
+enda
+
+// GLASS
+
+useractor notenemy 9520
+cstat 257
+
+ifhitweapon
+	{
+	sound GLASS_BREAK3
+	spritepal 2
+	lotsofglass 6
+	guts JIBS6 6
+	killit
+	}
+
+
+enda
+
+useractor notenemy 9521
+cstat 257
+
+ifhitweapon
+	{
+	sound GLASS_BREAK3
+	lotsofglass 10
+	spawn BROWNSTAIN
+	killit
+	}
+
+
+enda
+
+// DUKE CORPSES GIB STUFF
+useractor notenemy 1513 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1514 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1515 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1521 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1522 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1523 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1524 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1525 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1526 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 1527 cstator 256 ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+
+// CORPSES
+useractor notenemy 3550 cstator 256 sizeat 24 24 ifaction 0 action ACAR ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+useractor notenemy 3569 cstator 256 sizeat 24 24 ifaction 0 action ACAR ifhitweapon { sound SQUISHED state standard_jibs killit } enda
+
+useractor notenemy 5783 sizeat 32 32 enda
+useractor notenemy 5784 sizeat 32 32 enda
+useractor notenemy 5787 sizeat 32 32 enda
+useractor notenemy 5870 sizeat 32 32 enda
+
+defstate hangcorpse
+  ifaction 0
+  {
+    action ZERO
+    cstat 257
+  }
+  ifhitweapon
+  {
+    ifdead
+    {
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED
+      sound SQUISHED
+      guts JIBS5 8
+      guts JIBS6 9
+      killit
+    }
+    else
+      guts JIBS6 1
+  }
+  ifrnd 1
+    spawn WATERDRIP
+ends
+
+eventloadactor 3555 state GETHITAG enda
+eventloadactor 23761 state GETHITAG enda
+
+useractor notenemy 3327 10 state hangcorpse enda
+useractor notenemy 3555 10 state hangcorpse enda
+
+useractor notenemy 20084 10 state hangcorpse enda
+useractor notenemy 20085 10 state hangcorpse enda
+useractor notenemy 20087 10 state hangcorpse enda
+useractor notenemy 20088 10 state hangcorpse enda
+
+useractor notenemy 23761 10
+
+  ifaction 0
+  {
+    action ZERO
+    cstat 257
+  }
+  ifhitweapon
+  {
+    ifdead
+    {
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED
+      sound SQUISHED
+	  debris SCRAP3 10
+      guts JIBS5 8
+      guts JIBS6 9
+      killit
+    }
+    else
+      guts JIBS6 1
+  }
+
+ enda
+
+// VENT
+
+useractor notenemy NEWVENT1
+
+ifhitweapon
+ifaction 0
+	{
+	sound VENT_BUST
+	debris SCRAP2 4
+	action ONE
+	geta[].cstat TEMP
+	ifand TEMP 1 sub TEMP 1
+	ifand TEMP 256 sub TEMP 256
+	seta[].cstat TEMP
+	}
+
+enda
+
+useractor notenemy NEWVENT2
+
+ifhitweapon
+ifaction 0
+	{
+	sound VENT_BUST
+	debris SCRAP2 4
+	action ONE
+	geta[].cstat TEMP
+	ifand TEMP 1 sub TEMP 1
+	ifand TEMP 256 sub TEMP 256
+	seta[].cstat TEMP
+	}
+
+enda
+
+
+spriteshadow 10514
+
+useractor notenemy 10514 cstator 257 ifhitweapon { debris SCRAP1 4 sound VENT_BUST killit } enda
+
+// BARREL
+
+eventloadactor 4087 state GETHITAGLOTAG enda
+
+action BARREL_FLAME_EX 0
+
+useractor notenemy 4087 
+fall
+cstator 257
+ifspawnedby APLAYER sizeat 32 32
+
+ifaction 0 { ifspritepal 10 strength 50 action ZERO }
+
+ifaction ZERO cstat 257
+
+ifhitweapon
+{
+ifspritepal 13 { strength 1 break }
+debris SCRAP1 16
+ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+ifspritepal 21 { spawn GROUNDEXPLOSION flash quake 13 sound BARREL_EXPLODE hitradius 2048 100 125 175 250 }
+ifspritepal 10 { quake 13 spawn GROUNDEXPLOSION flash sound BARREL_EXPLODE hitradius 2048 10 25 50 100 }
+else sound VENT_BUST 
+ifaction OK setp[].runspeed RUNNINGSPEED
+ifspritepal 10 action BARREL_FLAME_EX else killit
+}
+
+ifaction BARREL_FLAME_EX
+{
+geta[].ang TEMP sub TEMP 128 seta[].ang TEMP 
+cstat 32768
+spawn 3296
+ifactioncount 15 killit
+}
+
+ifpdistl 1024
+ ifp pfacing
+  ifp palive
+  ifaction ZERO
+  {
+  set player_use 0
+   ifhitspace
+    ifcount 13
+	{
+	set PLAYER_VOICEOVER 2
+	sound METALB_PICKUP
+	action OK
+	resetcount
+	}
+  }
+
+ifaction OK
+	{
+	cstat 258
+	setp[].runspeed 45200
+
+	set TEMP3 player[].posx
+	add TEMP3 512
+
+	rotatepoint player[].posx player[].posy TEMP3 player[].posy player[].ang TEMP5 TEMP6
+
+	updatesector TEMP5 TEMP6 TEMP7
+	ife TEMP7 -1 action ZERO else
+	{
+	seta[].x TEMP5 
+	seta[].y TEMP6
+	}
+	getp[].posz TEMP
+	add TEMP 5600
+	seta[].z TEMP
+	setp[].weapon_pos 10
+
+	ifhitspace
+	 ifcount 13
+		{
+		sound METALB_PICKUP
+		setp[].runspeed RUNNINGSPEED
+		action ZERO
+		resetcount
+		}
+
+	ifpdistg 1024 { sound METALB_PICKUP setp[].runspeed RUNNINGSPEED action ZERO }
+	ifp pjumping { sound METALB_PICKUP setp[].runspeed RUNNINGSPEED action ZERO }
+
+	}
+
+enda
+
+spritenopal 10054
+
+useractor notenemy 10054
+ifspritepal 4
+nullop
+else
+	{
+	ifaction 0
+		{
+		cstator 257
+		action ZERO
+		}
+	ifhitweapon 
+		{ 
+		globalsound POTBREAK 
+		spritepal 28
+		lotsofglass 40
+		ifn THISSHADOW -1 seta[THISSHADOW].cstat 32768
+		killit 
+		}
+	}
+enda	
+
+// FISH
+
+defstate FISHSTUFF
+ifspritepal 4
+nullop
+else
+{
+cstator 256
+ifhitweapon { sound SQUISHED state standard_jibs ifn THISSHADOW -1 seta[THISSHADOW].cstat 32768 killit } 
+}
+ends
+
+useractor notenemy 3910 state FISHSTUFF enda
+useractor notenemy 3911 state FISHSTUFF enda
+useractor notenemy 3912 state FISHSTUFF enda
+useractor notenemy 3913 state FISHSTUFF enda
+useractor notenemy 3914 state FISHSTUFF enda
+
+// SPECIAL GLASS
+
+useractor notenemy EMGLASS 
+ifspritepal 4 nullop 
+else ifhitweapon { sound GLASS_BREAKING lotsofglass 20 seta[THISSHADOW].cstat 32768 killit } enda
+
+useractor notenemy MGLASS 
+ifspritepal 4 nullop 
+else ifhitweapon { sound GLASS_BREAKING lotsofglass 20 seta[THISSHADOW].cstat 32768 killit } enda
+
+
+// CLOTHES DUMMY
+useractor notenemy 5887 cstator 256 ifhitweapon 
+{ sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP killit } 
+enda
+
+useractor notenemy 3899 cstator 256 ifhitweapon
+{ ifwasweapon KNEE strength 1 else { sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP strength 1 cactor 3900 } }
+enda
+
+useractor notenemy 3900 cstator 256 ifhitweapon
+{ 
+ifwasweapon KNEE strength 1 else
+{ sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP killit } } 
+enda
+
+useractor notenemy 3901 cstator 256 ifhitweapon
+{ sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP killit } 
+enda
+
+useractor notenemy 3526 cstator 256 ifhitweapon
+{ state break_wood killit } 
+enda
+
+
+useractor notenemy 7423 enda
+
+spriteshadow 21543
+useractor notenemy 21543 fall ifaction 0 action ACAR cstator 256 
+ifhitweapon { sound WOODBREAK shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP shoot WOODSCRAP killit } enda
+
+useractor notenemy 8689 
+fall 
+ifaction 0 { sizeat 32 32 cstator 257 clipdist 8 action ACAR } 
+ifaction ACAR
+	{
+	ifpdistl 1024
+	ifp pfacing
+	ifhitspace
+	 ifl TEMP 240
+		{
+		sound JMOVE6
+		move STOP
+		set TEMP 256
+		}
+	}
+	
+ifmove STOP
+	{
+	geta[].ang TEMP2
+	set TEMP3 TEMP
+	divvar TEMP3 2 
+	add TEMP2 TEMP3
+	seta[].ang TEMP2
+	sub TEMP 1
+	ifl TEMP 1
+		move 0
+	}
+	
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+debris SCRAP2 3
+debris SCRAP1 3
+killit
+}
+	
+enda
+
+useractor notenemy 17648
+fall 
+ifaction 0 { sizeat 26 26 cstator 257 clipdist 8 action ACAR } 
+ifaction ACAR
+	{
+	ifpdistl 1024
+	ifp pfacing
+	ifhitspace
+	 ifl TEMP 240
+		{
+		sound JMOVE6
+		move STOP
+		set TEMP 256
+		}
+	}
+	
+ifmove STOP
+	{
+	geta[].ang TEMP2
+	set TEMP3 TEMP
+	divvar TEMP3 2 
+	add TEMP2 TEMP3
+	seta[].ang TEMP2
+	sub TEMP 1
+	ifl TEMP 1
+		move 0
+	}
+	
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+debris SCRAP2 3
+debris SCRAP1 3
+killit
+}
+ enda
+
+action MINUS_ONE -1
+
+useractor notenemy 8640
+
+ifhitweapon
+ifaction 0
+{
+debris SCRAP3 8
+debris SCRAP6 8
+sound THUD
+action MINUS_ONE
+}
+enda
+
+useractor notenemy 10062
+
+  ifpdistl 8192
+  {
+    soundonce WATER_GURGLE
+
+    ifp palive
+      ifpdistl RETRIEVEDISTANCE
+        ifp pfacing
+          ifcount 32
+            ifphealthl 30
+              ifhitspace
+                ifcansee
+    {
+      addphealth 1
+	ifg INEBRIATION 0 { sub INEBRIATION 10 }
+      globalsound DUKE_DRINKING
+      resetcount
+    }
+  }
+
+enda
+
+spriteshadow 10501
+spriteshadow 10502
+spriteshadow 10503
+spriteshadow 10504
+spriteshadow 10505
+spriteshadow 10506
+
+useractor notenemy 10501 cstat 257 fall ifhitweapon { spritepal 28 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 10502 cstat 257 fall ifhitweapon { spritepal 28 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 10503 cstat 257 fall ifhitweapon { spritepal 1 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 10504 cstat 257 fall ifhitweapon { spritepal 1 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 10505 cstat 257 fall ifhitweapon { spritepal 1 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 10506 cstat 257 fall ifhitweapon { spritepal 1 debris SCRAP3 6 sound THUD killit } enda
+useractor notenemy 9206 cstat 257 fall ifhitweapon { spritepal 1 debris SCRAP3 6 sound THUD killit } enda
+
+useractor notenemy 12516
+
+ifaction 0
+{
+cstator 256
+action ZERO
+}
+
+ifhitweapon
+{
+debris SCRAP3 8
+debris SCRAP5 4
+paper 5
+ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+sound THUD
+killit
+}
+enda
+
+defstate cactus
+ifaction 0
+{
+cstator 256
+strength 100
+action ZERO
+}
+
+ifhitweapon
+{
+sound THUD
+spritepal 8
+debris SCRAP3 2
+getlastpal
+
+ifdead
+	{
+	spritepal 8
+	debris SCRAP3 16
+	sound SMALL_CRUSH
+	killit
+	}
+}
+ends
+
+useractor notenemy 8672 state cactus enda
+useractor notenemy 8673 state cactus enda
+useractor notenemy 8674 state cactus enda
+useractor notenemy 8675 state cactus enda
+
+// GARBAGE CAN
+
+defstate garbage_destroy
+{
+debris SCRAP1 16
+ paper 10
+ mail 5
+ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+sound VENT_BUST 
+ifmove PICKEDUP setp[].runspeed RUNNINGSPEED
+killit
+}
+ends
+
+useractor notenemy 5667
+
+ifaction 0 { cstator 256 action ZERO }
+
+ifpdistl 1536
+ ifn player_in_vehicle 0
+state garbage_destroy
+
+ifhitweapon
+state garbage_destroy
+
+enda
+
+useractor notenemy 19535
+
+ifaction 0 { cstator 256 action ZERO }
+
+ifpdistl 1536
+ ifn player_in_vehicle 0
+state garbage_destroy
+
+ifhitweapon
+state garbage_destroy
+
+enda
+
+move CANTHROW 600 0
+
+// GARBAGE CAN
+
+useractor notenemy 12416
+sizeat 24 24
+
+ifpdistl 1536
+ ife player_in_vehicle 1
+state garbage_destroy
+
+ifhitweapon
+state garbage_destroy
+
+enda
+
+useractor notenemy 967 
+cstator 256 
+ifhitweapon { sound VENT_BUST debris SCRAP1 8 seta[].picnum 3779 } 
+
+ifpdistl 812
+ ifp palive
+  ifp pfacing
+   ifcansee
+    ifhitspace
+	{
+	soundonce GENERIC_AMBIENCE5
+	}
+
+enda
+
+useractor notenemy 4575
+cstator 256 
+ifhitweapon { sound VENT_BUST debris SCRAP1 8 shoot SPARK shoot SPARK shoot SPARK seta[].picnum 4839 } 
+
+ifpdistl 812
+ ifp palive
+  ifp pfacing
+   ifcansee
+    ifhitspace
+	{
+	soundonce TICKET_PUNCH
+	}
+
+enda
+
+defstate hand_dryer
+ifaction 0
+	{
+	ifpdistl 812
+	 ifp palive
+	  ifp pfacing
+	   ifcansee
+		ifhitspace
+			{
+			sound HAND_DRIER
+			action ZERO
+			resetcount
+			}
+	}
+ifaction ZERO
+	{
+	ifcount 90
+		{
+		action 0
+		resetcount
+		}
+	}
+ends
+
+useractor notenemy 1051 state hand_dryer enda
+useractor notenemy 16941 state hand_dryer enda
+
+
+// --------------------------------------------------------SCREEN BREAK STUFF-------------------------------------------------
+
+
+
+defstate SCREENBROKEN
+ifhitweapon
+ifaction 0
+{
+sound GLASS_HEAVYBREAK lotsofglass 25 
+ifrnd 85 { action BREAK cactor W_SCREENBREAK }
+ifrnd 170 { action BREAK cactor W_SCREENBREAK2 }
+else { action BREAK cactor W_SCREENBREAK3 }
+}
+ends
+
+useractor notenemy 1289 state SCREENBROKEN enda // Fempic2
+useractor notenemy 1298 state SCREENBROKEN enda // Fempic 3
+useractor notenemy 1306 state SCREENBROKEN enda // Fempic 4
+
+useractor notenemy 17297 
+ifhitweapon
+ifaction 0
+{
+sound GLASS_HEAVYBREAK 
+shoot SPARK shoot SPARK shoot SPARK
+lotsofglass 25 
+action TWO
+}
+enda
+
+useractor notenemy 20094 
+ifhitweapon
+ifaction 0
+{
+sound GLASS_HEAVYBREAK 
+shoot SPARK shoot SPARK shoot SPARK
+lotsofglass 25 
+cactor 17299
+}
+enda
+
+useractor notenemy 17298 
+ifhitweapon
+ifaction 0
+{
+sound GLASS_HEAVYBREAK 
+shoot SPARK shoot SPARK shoot SPARK
+lotsofglass 25 
+action ONE
+}
+enda
+
+defstate BREAKSCREEN
+cstator 256
+
+ifaction 0 { set TEMP3 TEMP action ZERO }
+
+ifcount 1 { add TEMP6 1 resetcount }
+
+ifhitweapon
+ifaction ZERO
+{
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+sound GLASS_HEAVYBREAK lotsofglass 25 
+ifrnd 85
+{
+action BREAK
+cactor W_SCREENBREAK
+}
+else
+ifrnd 170
+{
+action BREAK
+cactor W_SCREENBREAK2
+}
+else
+{
+action BREAK
+cactor W_SCREENBREAK3
+}
+}
+
+ifrnd 16
+ifaction ZERO
+seta[].picnum SCREENBREAK6
+
+ifg TEMP6 1
+ifaction ZERO
+{
+seta[].picnum TEMP3
+set TEMP6 0
+}
+
+ends
+
+eventloadactor SCREENBREAK1 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK2 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK3 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK4 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK5 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK6 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK7 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK8 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK9 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK10 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK11 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK12 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK13 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK14 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK15 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK16 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK18 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK19 geta[].picnum TEMP enda
+eventloadactor SCREENBREAK20 geta[].picnum TEMP enda
+
+eventloadactor 19695 geta[].picnum TEMP enda
+eventloadactor 19696 geta[].picnum TEMP enda
+eventloadactor 19697 geta[].picnum TEMP enda
+eventloadactor 19698 geta[].picnum TEMP enda
+eventloadactor 19699 geta[].picnum TEMP enda
+eventloadactor 19699 geta[].picnum TEMP enda
+
+eventloadactor OJ geta[].picnum TEMP enda
+eventloadactor 5884 geta[].picnum TEMP enda
+eventloadactor 5885 geta[].picnum TEMP enda
+eventloadactor 5886 geta[].picnum TEMP enda
+eventloadactor 5785 geta[].picnum TEMP enda
+eventloadactor 5786 geta[].picnum TEMP enda
+eventloadactor 8070 geta[].picnum TEMP enda 
+eventloadactor 14301 geta[].picnum TEMP enda 
+eventloadactor 16609 geta[].picnum TEMP enda 
+eventloadactor 16610 geta[].picnum TEMP enda 
+
+useractor notenemy SCREENBREAK1 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK2 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK3 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK4 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK5 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK6 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK7 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK8 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK9 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK10 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK11 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK12 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK13 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK14 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK15 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK16 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK18 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK19 state BREAKSCREEN enda
+useractor notenemy SCREENBREAK20 state BREAKSCREEN enda
+useractor notenemy OJ state BREAKSCREEN enda
+useractor notenemy 5884 state BREAKSCREEN enda
+useractor notenemy 5885 state BREAKSCREEN enda
+useractor notenemy 5886 state BREAKSCREEN enda
+useractor notenemy 5785 state BREAKSCREEN enda
+useractor notenemy 5786 state BREAKSCREEN enda
+useractor notenemy 8070 state BREAKSCREEN enda
+useractor notenemy 14301 state BREAKSCREEN enda
+useractor notenemy 16609 state BREAKSCREEN enda
+useractor notenemy 16610 state BREAKSCREEN enda
+
+useractor notenemy 19695 state BREAKSCREEN enda
+useractor notenemy 19696 state BREAKSCREEN enda
+useractor notenemy 19697 state BREAKSCREEN enda
+useractor notenemy 19698 state BREAKSCREEN enda
+useractor notenemy 19699 state BREAKSCREEN enda
+useractor notenemy 19699 state BREAKSCREEN enda
+
+state BREAKFAN
+ifhitweapon
+ifaction 0
+{
+sound GLASS_HEAVYBREAK debris SCRAP1 12 
+seta[].picnum 411
+}
+ends
+
+useractor notenemy 408 cstator 256 state BREAKFAN enda
+useractor notenemy 409 cstator 256 state BREAKFAN enda
+useractor notenemy 410 cstator 256 state BREAKFAN enda
+
+useractor notenemy W_TECHWALL1 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 363 } enda
+useractor notenemy W_TECHWALL2 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 362 } enda
+useractor notenemy W_TECHWALL3 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 360 } enda
+useractor notenemy W_TECHWALL4 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 361 } enda
+useractor notenemy W_TECHWALL5 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4135 } enda
+useractor notenemy W_TECHWALL6 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4137 } enda
+useractor notenemy W_TECHWALL7 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4139 } enda
+useractor notenemy W_TECHWALL8 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4141 } enda
+useractor notenemy W_TECHWALL9 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4143 } enda
+useractor notenemy W_TECHWALL10 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4145 } enda
+useractor notenemy W_TECHWALL11 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 363 } enda
+useractor notenemy W_TECHWALL12 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 363 } enda
+useractor notenemy W_TECHWALL13 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 363 } enda
+useractor notenemy W_TECHWALL14 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 363 } enda
+useractor notenemy W_TECHWALL15 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4147 } enda
+useractor notenemy W_TECHWALL16 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 4144 } enda
+
+useractor notenemy W_TECHWALL20 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 12328 } enda
+useractor notenemy W_TECHWALL21 cstator 256 ifhitweapon { sound VENT_BUST debris SCRAP1 8 cactor 12332 } enda
+
+useractor notenemy W_SCREENBREAK
+enda
+
+useractor notenemy W_SCREENBREAK2
+enda
+
+useractor notenemy W_SCREENBREAK3
+enda
+
+useractor notenemy 14276
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon { sound VENT_BUST lotsofglass 12 cactor 14277 }
+enda
+
+useractor notenemy 14278
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon { sound VENT_BUST lotsofglass 12 cactor 14278 }
+enda
+
+useractor notenemy VENDMACHINE 
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon { sound VENT_BUST lotsofglass 12 cactor VENDMACHINEBROKE }
+enda
+
+useractor notenemy 5814 // Laptop
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon { sound VENT_BUST sound GLASS_BREAKING debris SCRAP1 8 lotsofglass 6 shoot SPARK shoot SPARK shoot SPARK shoot SPARK killit }
+enda
+
+useractor notenemy 19691 // misc. Gadget
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon { sound VENT_BUST debris SCRAP1 4 shoot SPARK shoot SPARK killit }
+enda
+
+
+useractor notenemy COLAMACHINE 
+cstator 256
+ifhitweapon { sound VENT_BUST lotsofglass 12 cactor COLAMACHINEBROKE }
+enda
+
+defstate BREAKSCREEN_2
+cstator 256
+
+ifaction 0 { set TEMP sprite[].picnum set TEMP3 TEMP action ZERO }
+
+ifcount 1 { add TEMP6 1 resetcount }
+
+ifhitweapon
+ifaction ZERO
+{
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+sound GLASS_HEAVYBREAK lotsofglass 25 
+action BREAK
+cactor 21753
+}
+
+ifrnd 16
+ifaction ZERO
+seta[].picnum 21754
+
+ifg TEMP6 1
+ifaction ZERO
+{
+seta[].picnum TEMP3
+set TEMP6 0
+}
+
+ends
+
+useractor notenemy 21754 state BREAKSCREEN_2 enda
+useractor notenemy 21755 state BREAKSCREEN_2 enda
+useractor notenemy 21756 state BREAKSCREEN_2 enda
+useractor notenemy 21757 state BREAKSCREEN_2 enda
+useractor notenemy 21758 state BREAKSCREEN_2 enda
+useractor notenemy 21759 state BREAKSCREEN_2 enda
+
+defstate BREAKSCREEN_3
+cstator 256
+
+ifaction 0 { set TEMP sprite[].picnum set TEMP3 TEMP action ZERO }
+
+ifcount 1 { add TEMP6 1 resetcount }
+
+ifhitweapon
+ifaction ZERO
+{
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+sound GLASS_HEAVYBREAK lotsofglass 25 
+action BREAK
+cactor 21746
+}
+
+ifrnd 16
+ifaction ZERO
+seta[].picnum 21747
+
+ifg TEMP6 1
+ifaction ZERO
+{
+seta[].picnum TEMP3
+set TEMP6 0
+}
+
+ends
+
+useractor notenemy 21747 state BREAKSCREEN_3 enda
+useractor notenemy 21748 state BREAKSCREEN_3 enda
+useractor notenemy 21749 state BREAKSCREEN_3 enda
+useractor notenemy 21750 state BREAKSCREEN_3 enda
+useractor notenemy 21751 state BREAKSCREEN_3 enda
+useractor notenemy 21752 state BREAKSCREEN_3 enda
+
+defstate BREAKSCREEN_4
+cstator 256
+
+ifaction 0 { set TEMP sprite[].picnum set TEMP3 TEMP action ZERO }
+
+ifcount 1 { add TEMP6 1 resetcount }
+
+ifhitweapon
+ifaction ZERO
+{
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+shoot SPARK
+sound GLASS_HEAVYBREAK lotsofglass 25 
+action BREAK
+cactor 21738
+}
+
+ifrnd 16
+ifaction ZERO
+seta[].picnum 21739
+
+ifg TEMP6 1
+ifaction ZERO
+{
+seta[].picnum TEMP3
+set TEMP6 0
+}
+
+ends
+
+useractor notenemy 21739 state BREAKSCREEN_4 enda
+useractor notenemy 21740 state BREAKSCREEN_4 enda
+useractor notenemy 21741 state BREAKSCREEN_4 enda
+useractor notenemy 21742 state BREAKSCREEN_4 enda
+useractor notenemy 21743 state BREAKSCREEN_4 enda
+useractor notenemy 21744 state BREAKSCREEN_4 enda
+useractor notenemy 21745 state BREAKSCREEN_4 enda
+
+eventloadactor 11249 state GETALLTAGS enda
+eventloadactor 11250 state GETALLTAGS enda
+eventloadactor 5664 state GETALLTAGS enda
+eventloadactor 5665 state GETALLTAGS enda
+
+useractor notenemy 11249 
+state ITEM_BOX_STUFF cstat 257 
+	ifhitweapon 
+	{ 
+	globalsound POTBREAK 
+	spritepal 28
+	lotsofglass 12 
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+	ife CHECKBOX THISACTOR { set MOUSEUP 0 set CHECKBOX -1 }
+	killit 
+	} 
+enda
+
+useractor notenemy 11250 
+state ITEM_BOX_STUFF cstat 257 
+ifhitweapon 
+	{ 
+	globalsound POTBREAK 
+	spritepal 28
+	lotsofglass 10 
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+	ife CHECKBOX THISACTOR { set MOUSEUP 0 set CHECKBOX -1 }
+	killit 
+	}
+enda
+
+useractor notenemy 5664
+state ITEM_BOX_STUFF cstat 257 
+ifspritepal 3
+	{
+	ifpdistl 2048
+		{
+		globalsound POTBREAK 
+		spritepal 28
+		lotsofglass 10 
+		spawn LIL_SCORP_LEAP
+		killit
+		}
+	}
+ifhitweapon 
+	{ 
+	globalsound POTBREAK 
+	spritepal 28
+	lotsofglass 10 
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+	ife CHECKBOX THISACTOR { set MOUSEUP 0 set CHECKBOX -1 }
+	killit 
+	}
+enda
+
+useractor notenemy 5665
+state ITEM_BOX_STUFF cstat 257 
+ifhitweapon 
+	{ 
+	globalsound POTBREAK 
+	spritepal 1
+	lotsofglass 10 
+	ifn HITAGSAVED 0 espawnvar HITAGSAVED 
+	ife CHECKBOX THISACTOR { set MOUSEUP 0 set CHECKBOX -1 }
+	killit 
+	}
+enda
+
+useractor notenemy ATM cstator 256 ifhitweapon { sound GLASS_HEAVYBREAK money 10 cactor ATMBROKE } enda
+useractor notenemy 918 cstator 256 ifhitweapon { sound VENT_BUST sound SHORT_CIRCUIT seta[].picnum 4430 } enda
+
+
+// HELL SCREENS==================================================================================
+
+defstate BREAKDSCREEN
+cstator 256
+
+ifaction 0 { set TEMP3 TEMP action ZERO }
+
+ifcount 1 { add TEMP6 1 resetcount }
+
+ifhitweapon
+ifaction ZERO
+{
+sound GLASS_HEAVYBREAK lotsofglass 25 
+action BREAK
+cactor 7337
+}
+
+ifrnd 1
+ifaction ZERO
+ifspritepal 3
+{
+ifp pfacing nullop else
+seta[].picnum 7336
+}
+
+ifg TEMP6 1
+ifaction ZERO
+{
+seta[].picnum TEMP3
+set TEMP6 0
+}
+
+ends
+
+eventloadactor 7194 geta[].picnum TEMP enda
+eventloadactor 7195 geta[].picnum TEMP enda
+eventloadactor 7196 geta[].picnum TEMP enda
+
+useractor notenemy 7194 state BREAKDSCREEN enda
+useractor notenemy 7195 state BREAKDSCREEN enda
+useractor notenemy 7196 state BREAKDSCREEN enda
+useractor notenemy 7336 state BREAKDSCREEN enda
+useractor notenemy 7337 enda
+
+useractor notenemy 12375 
+
+ifpdistl 2048
+ife player_in_vehicle 1
+	{
+	cstat 0
+	quake 13
+	state break_glass
+	state break_metal
+	cactor 12799
+	}
+
+enda
+
+useractor notenemy 10701 
+
+ifpdistl 2048
+ife player_in_vehicle 1
+	{
+	cstat 0
+	quake 13
+	state break_glass
+	state break_metal
+	cactor 12799
+	}
+
+enda
+
+
+state setfloorpal
+ife sprite[].pal 0 seta[].pal sector[].floorpal
+ends
+
+state CHECK_MAG_SQUISH
+ifmove 0 { ifsquished { sound CHAINSNAP setactorsoundpitch THISACTOR CHAINSNAP -32 cstat 32 move STOP } }
+ends
+
+// MAGAZINES ON FLOOR SPRITES
+useractor notenemy PISTOLMAGAZINEI fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy PISTOLMAGAZINE2I fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy SMGMAGAZINEI fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy SMG_MAG2I fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy RIFLEMAGAZINEI fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy SHOTGUNBOXMAGI fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy DRUMMAGAZINEI  fall sizeat 26 26 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+useractor notenemy BETA_MAGI  fall sizeat 18 18 state lowperf state setfloorpal state CHECK_MAG_SQUISH enda
+
+state gib_ground_squish
+ifsquished { sound BLOOD_SPURT spawn 2284 killit }
+ends
+
+// JIB GROUND SPRITES
+useractor notenemy 1519 fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 1534 fall state lowperf state setfloorpal state gib_ground_squish enda
+
+useractor notenemy 2249 fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 2254 fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 2259 fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 2264 fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 2269 fall state lowperf state setfloorpal state gib_ground_squish enda
+
+useractor notenemy 2214 
+
+sizeat 32 32
+cstat 256
+fall 
+state gib_ground_squish
+
+ifhitweapon { state standard_jibs state squish_sounds killit } else
+ifpdistl 812 
+{ 
+getp[].ang TEMP
+seta[].ang TEMP
+sound ENDSEQVOL3SND1
+ifp prunning { setprojectile[LIZMANHEAD3].VEL 600 ezshoot 4096 LIZMANHEAD3 } else 
+{ setprojectile[LIZMANHEAD3].VEL 400 ezshoot 2048 LIZMANHEAD3 } 
+geta[].pal TEMP
+seta[RETURN].pal TEMP
+killit 
+}
+
+enda
+
+spriteshadow 8497
+
+useractor notenemy 8497
+
+ifaction 0
+{
+cstator 256
+action ZERO
+}
+
+ifhitweapon
+{
+spritepal 7
+lotsofglass 12
+sound GLASS_HEAVYBREAK
+killit
+}
+
+enda
+
+spriteshadow 8498
+
+useractor notenemy 8498
+
+ifaction 0
+{
+cstator 256
+action ZERO
+}
+
+ifhitweapon
+{
+spritepal 7
+lotsofglass 12
+sound GLASS_HEAVYBREAK
+killit
+}
+
+enda
+
+spriteshadow 18112
+
+useractor notenemy 18112
+
+ifaction 0
+{
+cstator 256
+action ZERO
+}
+
+ifhitweapon
+{
+spritepal 7
+lotsofglass 4
+spawn 2284
+sound GLASS_HEAVYBREAK
+killit
+}
+
+enda
+
+useractor notenemy SATYR_HEAD_FLOOR
+sizeat 26 26
+cstat 256
+fall 
+state gib_ground_squish
+ifand sector[].floorstat 1 killit
+
+ifhitweapon { state standard_jibs state squish_sounds killit } else
+ifpdistl 812 
+{ 
+getp[].ang TEMP
+seta[].ang TEMP
+sound ENDSEQVOL3SND1
+ifp prunning { setprojectile[SATYR_HEAD].VEL 600 ezshoot 4096 SATYR_HEAD } else 
+{ setprojectile[SATYR_HEAD].VEL 400 ezshoot 2048 SATYR_HEAD } 
+geta[].pal TEMP
+seta[RETURN].pal TEMP
+killit 
+}
+
+enda
+
+useractor notenemy MJ12_HEAD_FLOOR
+ifai 0 {
+    ifrnd 64 qspawn BLOODPOOL
+    ai 1
+}
+sizeat 30 30
+cstat 256
+fall 
+state gib_ground_squish
+ifand sector[].floorstat 1 killit
+
+ifhitweapon { state standard_jibs state squish_sounds killit } else
+ifpdistl 812 
+{ 
+    getp[].ang TEMP
+    seta[].ang TEMP
+    sound ENDSEQVOL3SND1
+    ifp prunning 
+    { 
+        setprojectile[MJ12_HEAD].VEL 600 
+        ezshoot 4096 MJ12_HEAD
+    } 
+    else 
+    { 
+        setprojectile[MJ12_HEAD].VEL 400 
+        ezshoot 2048 MJ12_HEAD 
+    } 
+    geta[].pal TEMP
+    seta[RETURN].pal TEMP
+    killit 
+}
+
+enda
+
+useractor notenemy 3714 
+fall 
+state lowperf 
+ifaction 0 
+	{ 
+	updatesectorz sprite[].x sprite[].y sprite[].z TEMP4
+	ife TEMP4 -1 killit
+	else changespritesect THISACTOR TEMP4
+	seta[].z sector[].floorz
+	findnearactor 3714 128 TEMP ifn TEMP -1 killit // prevents odd occasion where hundreds of shards spawn
+	sizeat 24 24 
+	cstat 34 
+	randvar TEMP 2048
+	seta[].ang TEMP 
+	action ZERO
+	} 
+
+ifaction ZERO 
+	{ 
+	ifpdistl 764 ifn FOOTSTEPCOUNT -1 { sound ICE_BOUNCE espawn 509 seta[RETURN].pal sprite[].pal killit }
+	}
+enda
+
+useractor notenemy 509
+fall
+state lowperf 
+ifaction 0 
+	{ seta[].z sector[].floorz sizeat 24 24 
+	cstat 34 randvar TEMP 2048 seta[].ang TEMP 
+	ifand sector[].floorstat 1 killit
+	findnearactor 509 128 TEMP ifn TEMP -1 killit
+	action ZERO } 
+
+ifaction ZERO { ifpdistl 764 ifn FOOTSTEPCOUNT -1 { sound GLASS_CRUNCH action FORM } }
+ifaction FORM { ifpdistg 764 action ZERO }
+
+enda
+
+useractor notenemy 2215 fall ifand sector[].floorstat 1 killit state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 2216 fall ifand sector[].floorstat 1 killit state lowperf state setfloorpal state gib_ground_squish enda
+
+defstate jib_setup
+fall 
+sizeat 26 26 
+ifand sector[].floorstat 1 killit
+ifaction 0 { spawn 2284 state rf action ZERO } 
+state lowperf 
+state setfloorpal 
+state gib_ground_squish
+ends
+
+useractor notenemy NJIBI state jib_setup enda
+useractor notenemy NJIB2I state jib_setup enda
+useractor notenemy NJIB3I state jib_setup enda
+useractor notenemy NJIB4I state jib_setup enda
+useractor notenemy OCTA_TENTI state jib_setup enda
+useractor notenemy 11430 state jib_setup enda
+useractor notenemy 11435 state jib_setup enda
+
+action SUBZERO -1
+
+useractor notenemy 1769 ifaction 0 action SUBZERO fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 1773 ifaction 0 action SUBZERO fall state lowperf state setfloorpal state gib_ground_squish enda
+useractor notenemy 1777 fall state lowperf  state setfloorpal state gib_ground_squish enda
+
+// DEBRIS
+useractor notenemy ROCKDEB1F  fall sizeat 32 32 ifaction 0 { state rf action ZERO } state lowperf state setfloorpal enda
+useractor notenemy ROCKDEB3F  fall sizeat 16 16 ifaction 0 { state rf ifrnd 128 action ONE else action ZERO } state lowperf state setfloorpal enda
+useractor notenemy ROCKDEB4F  fall sizeat 16 16 ifaction 0 { state rf ifrnd 128 action ONE else action ZERO } state lowperf state setfloorpal enda
+
+useractor notenemy 19171 fall sizeat 50 50 ifaction 0 { state rf action ZERO } state lowperf state setfloorpal enda // powersuit arm
+useractor notenemy 19176 fall sizeat 50 50 ifaction 0 { state rf action ZERO } state lowperf state setfloorpal enda // powersuit leg
+useractor notenemy 12711 fall sizeat 20 20 ifaction 0 { state rf action ZERO } state lowperf state setfloorpal enda // mace
+useractor notenemy 12703 fall sizeat 20 20 ifaction 0 { move STOP randomangle cstat 32 action ZERO } state lowperf  state setfloorpal enda // shield
+
+useractor notenemy ICE_DEBRIS_F 
+fall 
+ifaction 0 { sizeat 16 16 state rf ifrnd 128 action ONE else action ZERO } 
+else
+	{
+	ifpdistl 864
+		{
+		sound ICE_BOUNCE
+		spawn 2284
+		killit
+		}
+		
+	ifcount 236
+		{
+		sizeto 1 1
+		}
+	ifcount 260
+		{
+		spawn 2284
+		killit
+		}
+	}
+state lowperf  
+
+
+
+enda
+
+action OTHERSHELL -1
+
+
+
+state CHECK_SHELL_SQUISH
+ifmove 0 { ifsquished { sound CHAINSNAP setactorsoundpitch THISACTOR CHAINSNAP 512 cstat 32 move STOP } }
+ends
+
+state BULLET_STUFF
+ifaction 0 { state rf state NOEVENTNOCLIPPING insertspriteq action ZERO } state lowperf state setfloorpal state CHECK_SHELL_SQUISH
+ends
+
+// SHELLS ON FLOOR SPRITES
+useractor notenemy 6560 fall sizeat 12 12 state BULLET_STUFF enda
+useractor notenemy SHELL_LINK_FLOOR fall sizeat 4 4 state BULLET_STUFF enda
+
+useractor notenemy 9MMSHELLF  fall sizeat 10 10 
+ifaction 0 { state rf state NOEVENTNOCLIPPING insertspriteq ifrnd 128 action OTHERSHELL else action ZERO } 
+state lowperf state setfloorpal state CHECK_SHELL_SQUISH enda
+
+useractor notenemy RIFLESHELLF fall sizeat 7 7 state BULLET_STUFF enda
+useractor notenemy SRIFLESHELLF fall sizeat 10 10 state BULLET_STUFF enda
+useractor notenemy 12GSHELLF fall sizeat 7 7 state BULLET_STUFF enda
+useractor notenemy MAGN_SHELLF fall sizeat 7 7 state BULLET_STUFF enda
+
+useractor notenemy 40MM_SH_FLOOR fall sizeat 22 22 
+ifaction 0 { state rf state NOEVENTNOCLIPPING insertspriteq action ZERO } state lowperf state CHECK_SHELL_SQUISH
+enda
+
+useractor notenemy EXSHELLF fall sizeat 7 7 state BULLET_STUFF enda
+useractor notenemy FL_SHELLF fall sizeat 7 7 state BULLET_STUFF enda
+
+useractor notenemy 21670 
+
+ifaction 0
+{
+cstator 256
+ifpdistg 16384
+	{
+	geta[].mdflags spawntmp
+    orvar spawntmp 1  // SPREXT_NOTMD
+    seta[].mdflags spawntmp
+	action ZERO
+	}
+}
+else
+ifaction ZERO
+{
+ifpdistl 16384
+	{
+	geta[].mdflags spawntmp
+    xorvar spawntmp 1  // SPREXT_NOTMD
+    seta[].mdflags spawntmp
+	action 0
+	}
+}
+
+ifhitweapon
+{
+sound GLASS_HEAVYBREAK lotsofglass 25
+cactor 21671
+}
+
+enda
+
+useractor notenemy 21671 
+
+ifaction 0
+{
+ifpdistg 16384
+	{
+	geta[].mdflags spawntmp
+    orvar spawntmp 1  // SPREXT_NOTMD
+    seta[].mdflags spawntmp
+	action ZERO
+	}
+}
+else
+ifaction ZERO
+{
+ifpdistl 16384
+	{
+	geta[].mdflags spawntmp
+    xorvar spawntmp 1  // SPREXT_NOTMD
+    seta[].mdflags spawntmp
+	action 0
+	}
+}
+
+enda
+
+
+// CON Files for the 'Duke Carribean Add-on' by SunStorm Interactive
+//
+// Actor - BEACHBALL - Sprite #941
+//
+// --- Resources ---
+//
+// Sounds:
+// Beach Ball Bounce      - BLBOUNCE.WAV
+// Beach Ball Explode     - BALLBOOM.WAV
+//
+// Art:
+// 1 * 1 frame(s)         - Beach Ball
+
+define BEACHBALL 20162
+define BALLSTRENGTH 20
+action BBB 0 8 1 1 10
+action BBI 1 1
+
+move   BALL0  0     40
+move   BALL1 -500   -90
+move   BALL2 -400    30
+move   BALL3 -300    -70
+move   BALL4 -200    20
+move   BALL5 -150    -50
+move   BALL6 -80    10
+move   BALL7 -100   0
+
+ai     AIBALLRANDOM BBB BALL0 randomangle
+ai     AIBALLI BBI BALL0 faceplayer
+ai     AIBALLR BBB BALL7 geth getv
+ai     AIBALL1 BBB BALL1 geth getv
+ai     AIBALL2 BBB BALL2 geth getv
+ai     AIBALL3 BBB BALL3 geth getv
+ai     AIBALL4 BBB BALL4 geth getv
+ai     AIBALL5 BBB BALL5 geth getv
+ai     AIBALL6 BBB BALL6 geth getv
+
+spriteshadow BEACHBALL
+
+useractor notenemy BEACHBALL WEAK BBI
+
+fall
+ifai 0 { ai AIBALLI cstator 256 sizeat 30 30 }
+
+ifhitweapon
+  {
+  debris SCRAP3 5
+  sound THUD
+  killit
+  }
+
+ifcansee { }
+
+ifai AIBALLI
+  {
+  ifpdistl 1024
+    {
+    ai AIBALL1
+    sound BOUNCESOUND
+    }
+  }
+
+ifai AIBALL1
+  {
+  ifcount 8
+    {
+    ai AIBALL2
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL1
+    }
+  }
+
+ifai AIBALL2
+  {
+  iffloordistl 1
+    {
+    ai AIBALL3
+    sound BOUNCESOUND
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL2
+    }
+  }
+
+ifai AIBALL3
+  {
+  ifcount 8
+    {
+    ai AIBALL4
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL3
+    }
+  }
+
+ifai AIBALL4
+  {
+  iffloordistl 1
+    {
+    ai AIBALL5
+    sound BOUNCESOUND
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL4
+    }
+
+  }
+
+ifai AIBALL5
+  {
+  ifcount 8
+    {
+    ai AIBALL6
+    break
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL5
+    }
+  }
+
+ifai AIBALL6
+  {
+  iffloordistl 1
+    {
+    ai AIBALLR
+    sound BOUNCESOUND
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALL6
+    }
+  }
+
+ifai AIBALLR
+  {
+  ifpdistl 1024
+    {
+    ai AIBALL1
+    sound BOUNCESOUND
+    }
+  ifcount 15
+    {
+    ai AIBALLI
+    }
+  ifnotmoving
+    {
+    ai AIBALLRANDOM
+    ai AIBALLR
+    }
+  }
+
+
+break
+enda
+
+// following code by Alias Conrad Coldwood for his EDF Bureau level
+
+define ACC_SHADES                       20367
+define ACC_SHADESBREAK1                 20368
+define ACC_SHADESBREAK2                 20369
+
+useractor notenemy ACC_SHADES
+	cstator 2321	// ACC, use the OR method for the actor state:: 2321 = Solid (1) + Vertically Flat (16) + HitScan (256) + Custom Shadow (2048)
+	ifhitweapon
+		{
+		ifrnd 160	// if a random value between 0-255 is less than 160...
+			cactor ACC_SHADESBREAK1
+		else
+			cactor ACC_SHADESBREAK2
+		debris SCRAP1 5
+		debris SCRAP2 5
+		sound VENT_BUST
+		cstat 2064	// ACC, reset the actor state to:: 2064 = Vertically Flat (16) + Custom Shadow (2048)
+		break
+		} 
+enda
+
+// HOLOGRAMS ===============================================================================
+
+gamevar X_RATIO 0 2
+gamevar Y_RATIO 0 2
+
+gamevar XREPEAT 0 2
+gamevar YREPEAT 0 2
+
+spritenoshade 5627
+
+useractor notenemy 5627
+seta[].blend 255
+cstator 514
+ifrnd 128 cstator 4
+ifrnd 128 cstator 8
+add TEMP 1
+ifg TEMP 1 seta[].shade -127
+ifg TEMP 3 killit
+enda
+
+defstate HOLO_FLICKER
+	espawn 5627
+	seta[RETURN].blend 255
+	seta[RETURN].shade 30
+	seta[RETURN].pal TEMP2
+	seta[RETURN].cstat sprite[].cstat
+	seta[RETURN].ang sprite[].ang
+	geta[].xrepeat TEMP7
+	mulvarvar TEMP7 X_RATIO
+	divvar TEMP7 100
+	seta[RETURN].xrepeat TEMP7
+
+	geta[].yrepeat TEMP8
+	mulvarvar TEMP8 Y_RATIO
+	divvar TEMP8 100
+	seta[RETURN].yrepeat TEMP8
+	resetcount
+ends
+
+defstate HOLOGRAM_FLICKER
+ifrnd 4 state HOLO_FLICKER
+ifpdistl 1024 ifrnd 32 state HOLO_FLICKER
+ends
+
+useractor notenemy 19582 ifaction 0 { set TEMP2 2 set X_RATIO 50 set Y_RATIO 50 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19619 ifaction 0 { set TEMP2 7 set X_RATIO 54 set Y_RATIO 39 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19620 ifaction 0 { set TEMP2 0 set X_RATIO 54 set Y_RATIO 54 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19621 ifaction 0 { set TEMP2 2 set X_RATIO 54 set Y_RATIO 54 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19628 ifaction 0 { geta[].pal TEMP2 set X_RATIO 50 set Y_RATIO 26 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19629 ifaction 0 { set TEMP2 8 set X_RATIO 52 set Y_RATIO 28 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19630 ifaction 0 { set TEMP2 2 set X_RATIO 52 set Y_RATIO 28 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19631 ifaction 0 { set TEMP2 2 set X_RATIO 38 set Y_RATIO 40 action ZERO } state HOLOGRAM_FLICKER enda
+useractor notenemy 19631 ifaction 0 { set TEMP2 2 set X_RATIO 52 set Y_RATIO 28 action ZERO } state HOLOGRAM_FLICKER enda
+
+// *************************************************
+// CHANDILIER
+// *************************************************
+
+define CHAND 5873
+
+define CHANDBASE 3038
+define CHANDFALL 3040
+
+useractor notenemy CHAND
+
+ifspritepal 3
+{
+cstat 257
+ifhitweapon
+	{
+	sound CHAINSNAP
+	espawn CHANDBASE
+	seta[RETURN].xrepeat sprite[].xrepeat
+	seta[RETURN].yrepeat sprite[].yrepeat
+	espawn CHANDFALL
+	seta[RETURN].xrepeat sprite[].xrepeat
+	seta[RETURN].yrepeat sprite[].yrepeat
+	debris SCRAP2 1
+	killit
+	}
+}
+
+enda
+
+useractor notenemy CHANDBASE cstat 0 enda
+
+useractor notenemy CHANDFALL
+fall
+
+hitradius 1024 50 100 150 200
+
+iffloordistl 2
+{
+sound VENT_BUST
+debris SCRAP2 5
+debris SCRAP1 5
+killit
+}
+
+enda
+
+useractor notenemy 5707 // fancy street light
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+ifspritepal 4 break
+sound VENT_BUST
+sound GLASS_BREAKING
+debris SCRAP2 5
+lotsofglass 10
+shoot SPARK shoot SPARK shoot SPARK
+debris SCRAP1 5
+cactor 5714
+}
+enda
+
+useractor notenemy 5756 // lamp
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+sound GLASS_BREAKING
+debris SCRAP2 2
+lotsofglass 5
+shoot SPARK shoot SPARK shoot SPARK
+debris SCRAP1 2
+killit
+}
+enda
+
+useractor notenemy 5769 // clothes hanger
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+sound VENT_BUST
+debris SCRAP2 4
+debris SCRAP1 4
+killit
+}
+enda
+
+useractor notenemy 5771 // small lamp
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+sound GLASS_BREAKING
+debris SCRAP2 2
+lotsofglass 4
+shoot SPARK shoot SPARK shoot SPARK
+debris SCRAP1 2
+killit
+}
+enda
+
+useractor notenemy 8174 // lamp
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+sound GLASS_BREAKING
+debris SCRAP2 2
+lotsofglass 4
+shoot SPARK shoot SPARK shoot SPARK
+debris SCRAP1 2
+killit
+}
+enda
+
+useractor notenemy 8683  // microscope
+ifaction 0 { cstator 256 action ZERO }
+ifhitweapon
+{
+ifspritepal 3 break
+sound VENT_BUST
+sound GLASS_BREAKING
+debris SCRAP2 3
+lotsofglass 4
+shoot SPARK shoot SPARK shoot SPARK
+debris SCRAP1 3
+killit
+}
+enda
+
+useractor notenemy 23773 // ceiling grate
+ifspritepal 3 break
+else
+	{
+	ifaction 0
+		{
+		geta[].z TEMP2
+		gets[].ceilingz TEMP
+		sub TEMP TEMP2
+		ifl TEMP 0 mulvar TEMP -1
+		action ZERO
+		}
+	ifaction ZERO
+		{
+		gets[].ceilingz TEMP2
+		add TEMP2 TEMP
+		seta[].z TEMP2
+		}
+	}
+enda
+
+useractor notenemy 20434 // whiteboard
+
+ifaction 0
+{
+ifpdistl 1536
+ ifp pfacing
+  ifcansee
+   ifp palive
+	{
+	set player_use 0
+	 ifhitspace
+		{
+		set hit_key 30
+		sound WRITING
+		setp[].weapon_pos 10
+		ife CHAR 0 seta[].picnum 20435
+		ife CHAR 1 seta[].picnum 20436
+		ife CHAR 2 seta[].picnum 20437
+		ife CHAR 3 seta[].picnum 20438
+		ife CHAR 4 { set PLAYER_VOICEOVER 13 seta[].picnum 20439 }
+		ife CHAR 5 seta[].picnum 20440
+		ife CHAR 6 seta[].picnum 20441
+		ife CHAR 7 seta[].picnum 20442
+		ife CHAR 13 seta[].picnum 20443
+		ife CHAR 14 seta[].picnum 20444
+		ife CHAR 15 seta[].picnum 20443
+		}
+	}
+}
+
+enda
+
+// case specific stuff for CNC
+
+defstate PROPER_SHADE
+seta[].shade sector[].floorshade
+ends
+
+spritenoshade 9645
+spritenoshade 19645
+spritenoshade 19646
+spritenoshade 19647
+spritenoshade 19648
+spritenoshade 19649
+spritenoshade 19650
+spritenoshade 19651
+
+useractor notenemy 9645 state PROPER_SHADE enda
+useractor notenemy 19645 state PROPER_SHADE enda
+useractor notenemy 19646 state PROPER_SHADE enda
+useractor notenemy 19647 state PROPER_SHADE enda
+useractor notenemy 19648 state PROPER_SHADE enda
+useractor notenemy 19649 state PROPER_SHADE enda
+useractor notenemy 19650 state PROPER_SHADE enda
+useractor notenemy 19651 state PROPER_SHADE enda
+
+useractor notenemy HOTMEAT TOUGH
+  ifaction 0
+  {
+    action ANULLACTION
+    cstat 257
+  }
+  ifhitweapon
+  {
+    ifdead
+    {
+      state squish_sounds
+      guts JIBS5 8
+      guts JIBS6 9
+      killit
+    }
+    else
+      guts JIBS6 1
+  }
+  ifrnd 1
+    spawn WATERDRIP
+
+enda
+
+action ASPEAKERBROKE 1
+useractor notenemy SPEAKER
+  ifaction 0
+  {
+    ifhitweapon
+    {
+	  ifspritepal 3
+	  {
+	  stopsound PA_SYSTEM_1
+	  stopsound PA_SYSTEM_2
+	  stopsound PA_SYSTEM_3
+	  stopsound PA_SYSTEM_4
+	  stopsound PA_SYSTEM_5
+	  sound SHORT_CIRCUIT 
+	  sound VENT_BUST
+	  shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	  }
+	  else
+	  ifspritepal 5
+	  {
+      stopsound CLCOAST_MUSIC3
+      soundonce STORE_MUSIC_BROKE
+	  shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	  }
+	  else
+	  {
+      stopsound STORE_MUSIC
+      soundonce STORE_MUSIC_BROKE
+	  shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	  }
+      action ASPEAKERBROKE
+    }
+    else
+    {
+      ifpdistl 10240
+		{
+		ifspritepal 3 // Angry PA system
+			{
+				ifcount 204
+				{
+				randvar TEMP4 50
+				ifl TEMP4 10 soundonce PA_SYSTEM_1 else
+				ifl TEMP4 20 soundonce PA_SYSTEM_2 else
+				ifl TEMP4 30 soundonce PA_SYSTEM_3 else
+				ifl TEMP4 40 soundonce PA_SYSTEM_4 else
+				ifl TEMP4 50 soundonce PA_SYSTEM_5
+				cstator 256
+				resetcount
+				}
+			}
+			else
+			ifspritepal 5
+			{
+            soundonce CLCOAST_MUSIC3
+			cstat 289
+			}
+			else
+			ifspritepal 9 nullop
+			else
+			{
+            soundonce STORE_MUSIC
+			cstat 289
+			}
+		}
+      
+    }
+  }
+  
+ ifaction ASPEAKERBROKE
+ {
+ ifspritepal 3 break
+ add INTERNALCOUNT 1
+  ifg INTERNALCOUNT 30
+	{
+	set PLAYER_VOICEOVER 17
+	action ONE
+	}
+ }
+  
+enda
+
+action ALAVABUBBLE
+action ALAVABUBBLEANIM 0 5 1 1 16
+
+useractor notenemy LAVABUBBLE
+  ifaction 0
+  {
+  seta[].blend 255
+    cstat 32768
+    action ALAVABUBBLE
+  }
+  else
+    ifaction ALAVABUBBLE
+  {
+    ifcount 72
+      ifrnd 2
+    {
+      cstat 2
+      action ALAVABUBBLEANIM
+    }
+  }
+  else
+  {
+    ifactioncount 5
+    {
+      cstat 32768
+      action ALAVABUBBLE
+    }
+  }
+enda
+

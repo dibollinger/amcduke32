@@ -1,0 +1,393 @@
+// GORILLA ENEMY ===============================================
+
+action AGORILLA_FROZE 0 1 5 1 10
+action AGORILLA_GROW 30 1 1 1 10
+action AGORILLA_IDLE 0 1 5 1 20
+action AGORILLARUN  0  4 5 1 12
+action AGORILLARUSH  0  4 5 1 8
+action AGORILLARELOAD 20 1 5 1 4
+action AGORILLAFIRE 20 2 5 1 4
+action AGORILLAFLINCH 30 1 1 1 10
+action AGORILLADYING 30 6 1 1 16
+action AGORILLADEAD 35 1 1 1 10
+
+action AGORILLA_HEADSHOT 36 6 1 1 16
+action AGORILLA_HEADDEAD 41 1 1 1 10
+
+
+move GORILLAWALKVELS 140 
+move GORILLARUNVELS 200 
+
+ai AIGORILLASEEKENEMY AGORILLARUN GORILLAWALKVELS seekplayer
+ai AIGORILLARUSHENEMY AGORILLARUSH GORILLAWALKVELS seekplayer
+ai AIGORILLASHOOTENEMY AGORILLAFIRE STOP shoottarget
+ai AIGORILLARELOAD AGORILLARELOAD STOP faceplayer
+ai AIGORILLADEAD AGORILLADEAD STOP faceplayer
+ai AIGORILLA_HEADDEAD AGORILLA_HEADDEAD STOP faceplayer
+ai AIGORILLASHRUNK AGORILLARUN GORILLARUNVELS furthestdir
+ai AIGORILLA_GROW AGORILLA_GROW STOP faceplayer
+
+useractor enemystayput GORILLA_STAYPUT 275 AGORILLA_IDLE
+state monst_glow
+cactor GORILLA
+enda
+
+useractor enemy GORILLA 275 AGORILLA_IDLE
+fall
+
+ifai 0
+{
+	state monst_glow
+	spriteflags NORMAL_ENEMY
+	spawn SHOOTME
+	geta[].pal ENEMY_TYPE
+	ifspritepal 10 { strength 600 sizeat 40 40 } else
+	ifspritepal 13 { set ENEMY_SHIELD 500 spritepal 97 strength 2000 sizeat 45 45 } else
+	ifspritepal 24 { strength 400 sizeat 35 35  } else
+	{ strength 275 sizeat 30 30 }
+	action AGORILLARUN
+	ai AIGORILLASEEKENEMY
+	ifrnd 128 sound GORILLA_ALERT2 else
+	sound GORILLA_ALERT1
+	cstat 257
+}
+
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+state enemy_spirit_damage
+
+//ifspritepal 24 state BODYA_DAMAGE_MODIFIER
+//ifspritepal 13 state BODYA_DAMAGE_MODIFIER
+
+ifaction AGORILLA_FROZE state frozen_code 
+else
+ifaction AGORILLAFLINCH
+{
+	sub PAIN_AMOUNT 1
+	move STOP
+	ife PAIN_AMOUNT 0 
+		{
+		ifdead action AGORILLADYING else
+		ai AIGORILLASEEKENEMY
+		}
+}
+else
+ifai AIGORILLADEAD
+{
+move STOP
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			state standard_jibs
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifai AIGORILLA_HEADDEAD
+{
+move STOP
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			state standard_jibs
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifaction AGORILLADYING
+{
+strength 0
+	ifactioncount 6 { state BODY_FALL_NOISES spawn BLOODPOOL ai AIGORILLADEAD }
+}
+else
+ifaction AGORILLA_HEADSHOT
+{
+strength 0
+	ifactioncount 6 { state BODY_FALL_NOISES spawn BLOODPOOL ai AIGORILLA_HEADDEAD }
+}
+else
+ifai AIGORILLA_GROW state genericgrowcode
+else
+ifai AIGORILLASHRUNK
+{
+    ifcount SHRUNKDONECOUNT
+      ai AIGORILLASEEKENEMY
+    else ifcount SHRUNKCOUNT
+	  {
+	  sound ACTOR_UNSHRINK
+      sizeto 55 55
+	  }
+    else
+      state genericshrunkcode
+    break
+}
+else
+ifai AIGORILLASEEKENEMY
+{	
+state SKILL_SHOOT_LEVELADJUST
+    
+ifg shoot_countdown 0 sub shoot_countdown 1
+	ifl shoot_countdown 1 
+				ifl RANDOM_CHANCE SKILLCHANCE 
+				  {
+				  state correctcansee
+				   ife sightvar YES
+					ai AIGORILLASHOOTENEMY
+				  }
+	ifrnd 16 soundonce GORILLA_ROAM
+}
+else
+ifai AIGORILLARELOAD
+{
+add INTERNALCOUNT 1
+ife ENEMY_TYPE 11
+	{
+	ife INTERNALCOUNT 10 sound RIOTGUN_BOLT
+	ife INTERNALCOUNT 25 sound RIOTGUN_COCK
+	ife INTERNALCOUNT 30 
+		{
+		set ALLY_MAG 0 
+		ai AIGORILLASEEKENEMY
+		}
+	}
+ife ENEMY_TYPE 10
+	{
+	ife INTERNALCOUNT 10 sound RANGER_ROTATE
+	ife INTERNALCOUNT 30 
+		{
+		ai AIGORILLASEEKENEMY
+		}
+	}
+}
+else
+ifai AIGORILLASHOOTENEMY
+{
+	ifactioncount 2
+	{ 
+		ife ENEMY_TYPE 10
+			{
+				set PROJECTILE_TO_SHOOT MICRO_MISSILE
+				set PROJECTILE_FIRING_SOUND Z_MISSILE_FIRE
+				state sang_enemyShootProjectile
+				set INTERNALCOUNT 0
+				ai AIGORILLARELOAD
+			}
+		else
+		ife ENEMY_TYPE 16
+			{
+				set HITSCAN_TO_SHOOT ZRIFLESHOTU
+				set HITSCAN_FIRING_SOUND M60_FIRE
+				state sang_enemyShootHitscan
+			}
+		else
+		ife ENEMY_TYPE 11
+			{
+				add ALLY_MAG 1
+				
+				set HITSCAN_TO_SHOOT SHOTGUN
+				set HITSCAN_FIRING_SOUND RIOTGUN_FIRE
+				state sang_enemyShootHitscan
+				
+				// chain another shot (could add more for higher damage output)
+				ife HITSCAN_SHOT_FIRED 1
+					zshoot TEMP3 SHOTGUN
+				
+				ifg ALLY_MAG 3 { set INTERNALCOUNT 0 ai AIGORILLARELOAD }
+			}
+		else
+		ife ENEMY_TYPE 13
+			{
+				// TODO enemyshoothitscan state wasn't working for this one. Not sure why
+				state enemyLocateAnyTarget
+
+				ifn target -1
+				{
+					sound BOS1_ATTACK1
+					shoot SHOTSPARK1
+					shoot SHOTSPARK1
+					shoot SHOTSPARK1
+					shoot SHOTSPARK1
+				}
+			}
+		else
+		ife ENEMY_TYPE 49
+			{
+				set HITSCAN_TO_SHOOT ZRIFLESHOT
+				set HITSCAN_FIRING_SOUND FNFAL_FIRE
+				state sang_enemyShootHitscan
+			}
+		else
+			{
+				state SKILL_ENEMY_ACCURACY
+				set HITSCAN_TO_SHOOT SHOTSPARK1
+				set HITSCAN_FIRING_SOUND AK104FIRE
+				state sang_enemyShootHitscan
+			}
+		ife PERFMODE 1
+		 ifcansee
+			{
+			set gunsmoke_z 7644 
+			set gunsmoke_angle 256
+			state spawn_gunsmoke_z
+			ife ENEMY_TYPE 11 shoot 3761 else
+			ife ENEMY_TYPE 10 nullop else
+			shoot RIFLESHELL
+			set gunsmoke_z 7044
+			ife ENEMY_TYPE 10 espawn 16115 else ife ENEMY_TYPE 11 espawn 16115 else
+			state spawn_enemy_ARFLASH
+			state spawn_muzzleflash
+			}
+		globalsound DISTANT_RIFLE
+		ife ENEMY_TYPE 13 nullop else
+		ifrnd 32  ai AIGORILLASEEKENEMY
+		ife target -1 ai AIGORILLASEEKENEMY
+		resetactioncount
+	}
+}
+
+	ifspritepal 32
+		{
+		ifcount 10 
+			{
+			ifg ENEMY_SHIELD 0 spritepal 97 else spritepal 13
+			}
+		}
+
+state ENEMY_SHIELD_STUFF
+
+ifhitweapon
+{
+	state NEWGUNEFFECTS
+	//spawn BLOOD
+	guts JIBS6 1	
+	state random_wall_jibs
+	ifdead
+		{
+		ifwasweapon GROWSPARK { cstat 0 sound ACTOR_GROWING ai AIGORILLA_GROW break }
+		else ifg ICE_DAMAGE 0 { spritepal 1 strength 1 sound SOMETHINGFROZE action AGORILLA_FROZE } 
+		else
+			{
+			ife ENEMY_TYPE 13
+			ife CHAR 6
+				{
+				ife gp_subt 0
+						{
+						qputs 7500 ^8Geoffrey: ^0Fuck you giant gorilla guy.
+						set gp_subt 87
+						}
+				globalsound G_RAINF3
+				}
+			state rf
+			addkills 1
+			state thegames_score
+			ifg FIRE_DAMAGE 0 
+			{
+			shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				ifrnd 128 sound ZSOLD_DIE1
+				else sound ZSOLD_DIE2
+			spawn ONFIREGUY
+			killit
+			}
+			else
+			ife HEADSHOT 2 
+			{
+			ifg FIRE_DAMAGE 0 set FIRE_DAMAGE 0
+				ifrnd 32 state trigger_showoff
+				state jib_sounds
+				sound DECAPITATE 
+				shoot NJIB 
+				shoot NJIB 
+				guts JIBS6 4 
+				guts JIBS2 2 
+				action AGORILLA_HEADSHOT
+			}
+			else ifg SPIRIT_DAMAGE 0
+			{
+			shoot SPARK2 shoot SPARK2 shoot SPARK2 
+			spritepal 1
+			guts JIBS3 6
+			spawn SPIRIT_DEATH_GUY
+			killit
+			}
+			else
+			ifg ENERGY_DAMAGE 0
+				{
+				shoot SPARK2 shoot SPARK2 shoot SPARK2 
+				spritepal 4
+				guts JIBS3 6
+				spawn DISINTIGRATE_GUY
+				killit
+				}
+			else
+				{
+				sound GORILLA_DIE
+				action AGORILLADYING
+				}
+			}
+		ifrnd 16 
+			{ 
+			ife ENEMY_TYPE 16
+				{
+				espawn M60_SPRITE randvar TEMP 50 
+				add TEMP 20
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			else
+			ife ENEMY_TYPE 10
+				{
+				espawn ZMISSILELSPRITE randvar TEMP 2
+				add TEMP 5
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			else
+			ife ENEMY_TYPE 11
+				{
+				espawn RIOTGUNSPRITE randvar TEMP 8
+				add TEMP 4
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			else
+			ife ENEMY_TYPE 13
+				{
+				espawn RIOTGUN_MINIGUN_SPRITE randvar TEMP 100 
+				add TEMP 100
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			else
+			ife ENEMY_TYPE 49
+				{
+				espawn FNFALSPRITE randvar TEMP 15 
+				add TEMP 5
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			else
+				{
+				espawn AK114SPRITE randvar TEMP 15 
+				add TEMP 15
+				setactorvar[RETURN].YVELSAVED TEMP 
+				}
+			}
+		ifphealthl 50
+			{
+			state SKILL_LEVELADJUST
+			ifl RANDOM_CHANCE SKILLCHANCE spawn 20159
+			}
+		}
+else
+	ifg PAIN_AMOUNT 0 action AGORILLAFLINCH 
+	else ifrnd 16 { sound GORILLA_PAIN state PAIN_SKILL_LEVELADJUST action AGORILLAFLINCH }
+	else ifwasweapon SHRINKSPARK { sound ACTOR_SHRINKING ai AIGORILLASHRUNK }
+}
+
+state checksquished
+
+enda

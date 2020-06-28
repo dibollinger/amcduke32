@@ -1,0 +1,225 @@
+// ******************************************************************************
+// EGYPT GIANT COBRA
+// ******************************************************************************
+
+action A_SNAKE_FROZEN 30 1 1 1 8
+action A_SNAKE_IDLE 0 1 5 1 8 
+action A_SNAKE_MOVE 0 4 5 1 8 
+action A_SNAKE_SPIT 20 2 5 1 16
+action A_SNAKE_PAIN 30
+action A_SNAKE_DIE 31 6 1 1 12
+action A_SNAKE_DEAD 36
+
+move SNAKE_ROAM 175
+
+ai AI_SNAKE_SEEK A_SNAKE_MOVE SNAKE_ROAM seekplayer
+ai AI_SNAKE_SPIT A_SNAKE_SPIT STOP faceplayer
+ai AI_SNAKE_SPIT2 A_SNAKE_SPIT STOP faceplayersmart
+ai AI_SNAKE_GROW A_SNAKE_PAIN STOP
+ai AI_SNAKE_DEAD A_SNAKE_DEAD STOP
+ai AI_SNAKE_SHRUNK A_SNAKE_MOVE SNAKE_ROAM fleeenemy
+
+useractor enemystayput COBRA_STAYPUT 175 A_SNAKE_IDLE
+cactor COBRA
+enda
+
+useractor enemy COBRA 175 A_SNAKE_IDLE
+fall
+ifai 0
+	{
+	spawn SHOOTME
+	state monst_glow
+	spriteflags NORMAL_ENEMY
+	sound SERPGOD_TAUNT
+	strength 175
+	sizeat 45 45
+	ai AI_SNAKE_SEEK
+	cstator 257
+	}
+	
+geta[].htextra HIT_DAMAGE
+
+ifg HIT_DAMAGE 0                            // if the actor is set to take some damage from a weapon...
+{
+  ife sprite[].htowner THISACTOR              // if the owner of the weapon IS this actor
+    seta[].htextra -1       // set the damage to zero 
+}
+
+ifaction A_SNAKE_FROZEN
+{
+state frozen_code
+}
+else
+ifai AI_SNAKE_GROW state genericgrowcode
+else
+ifai AI_SNAKE_DEAD
+{
+strength 0
+move STOP
+    ifhitweapon
+    {
+      ifwasweapon RADIUSEXPLOSION
+      {
+	  spritepal 8
+      state squish_sounds
+	  state monst_body_jibs
+	  state standard_jibs
+      killit
+      }
+      break
+    }
+}
+else
+ifaction A_SNAKE_DIE
+{
+move STOP
+	strength 0
+	ifactioncount 6 { state BODY_FALL_NOISES state rf ai AI_SNAKE_DEAD }
+}
+else
+ifaction A_SNAKE_PAIN
+{
+move STOP 0
+sub PAIN_AMOUNT 1
+	seta[].xvel 0
+	ife PAIN_AMOUNT 0
+		ai AI_SNAKE_SEEK
+}
+else
+ifai AI_SNAKE_SHRUNK
+{
+    ifcount SHRUNKDONECOUNT
+      ai AI_SNAKE_SEEK
+    else ifcount SHRUNKCOUNT
+      {
+	sound ACTOR_UNSHRINK
+	sizeto 45 45
+	}
+    else
+      state genericshrunkcode
+    break
+}
+else
+ifai AI_SNAKE_SEEK
+{
+ifrnd 2 sound SERPGOD_TAUNT
+ifcansee { }
+state correctcansee
+  ife sightvar YES
+   ifrnd 64
+  {
+  state SKILL_SHOOT_LEVELADJUST
+  ifl RANDOM_CHANCE SKILLCHANCE  
+    {
+	ifstrength 100 ai AI_SNAKE_SPIT2 else
+   ai AI_SNAKE_SPIT
+    }
+  }
+}
+else
+ifai AI_SNAKE_SPIT
+{
+ifactioncount 2
+	{
+	ifpdistg 4096
+		{
+			set PROJECTILE_TO_SHOOT 22828
+			set PROJECTILE_FIRING_SOUND SNAKE_FIRE
+			state sang_enemyShootProjectile
+			ai AI_SNAKE_SEEK
+		}
+	else
+	ifpdistl 1024
+		{
+			set PROJECTILE_TO_SHOOT 23533
+			set PROJECTILE_FIRING_SOUND RIPPER_SCRATCH
+			state sang_enemyShootProjectile
+			ai AI_SNAKE_SEEK
+		}
+		else
+		{
+			state enemyLocateAnyTarget // target == the sprite to shoot at
+			
+			ifn target -1
+			{
+				sound LIZARD_SPIT
+				shoot SPIT shoot SPIT shoot SPIT shoot SPIT
+			}
+			ai AI_SNAKE_SEEK
+		}
+	}
+}
+else
+ifai AI_SNAKE_SPIT2
+{
+ifactioncount 2
+	{
+	ifpdistg 4096
+		{
+			set PROJECTILE_TO_SHOOT 22828
+			set PROJECTILE_FIRING_SOUND SNAKE_FIRE
+			state sang_enemyShootProjectile
+			ai AI_SNAKE_SEEK
+		}
+	else
+	ifpdistl 1024
+		{
+			set PROJECTILE_TO_SHOOT 23533
+			set PROJECTILE_FIRING_SOUND RIPPER_SCRATCH
+			state sang_enemyShootProjectile
+			ai AI_SNAKE_SEEK
+		}
+		else
+		{
+			state enemyLocateAnyTarget // target == the sprite to shoot at
+			
+			ifn target -1
+			{
+				sound LIZARD_SPIT
+				shoot SPIT shoot SPIT shoot SPIT shoot SPIT
+			}
+			ai AI_SNAKE_SEEK
+		}
+	}
+}
+
+ifhitweapon
+{
+	ifaction A_SNAKE_DIE break
+	ifwasweapon RADIUSEXPLOSION seta[].xvel 0
+	ifg HIT_DAMAGE -1 
+		{
+		spritepal 8
+		guts JIBS6 1
+		//spawn BLOOD
+		getlastpal
+		soundonce SERPGOD_PAIN
+		setactorsoundpitch THISACTOR SERPGOD_PAIN 512
+		state random_wall_jibs
+		}
+		state NEWGUNEFFECTS
+	ifdead
+		{
+		state rf
+		state thegames_score
+		ifwasweapon GROWSPARK { cstat 0 sound ACTOR_GROWING ai AI_SNAKE_GROW break }
+		else ifg ICE_DAMAGE 0 { spritepal 1 strength 0 sound SOMETHINGFROZE action A_SNAKE_FROZEN } 
+		else
+			{
+			sound SERPGOD_SCREAM
+			setactorsoundpitch THISACTOR SERPGOD_SCREAM 256
+			addkills 1
+			action A_SNAKE_DIE
+			espawn BLOODPOOL
+			seta[RETURN].pal 8
+			}
+		}
+	else ifg PAIN_AMOUNT 0 action A_SNAKE_PAIN
+	else ifpdistl 1524 { set PAIN_AMOUNT 26 action A_SNAKE_PAIN }
+	else ifrnd 32 ife FIRE_DAMAGE 0 { state PAIN_SKILL_LEVELADJUST_REV action A_SNAKE_PAIN }
+	ifwasweapon SHRINKSPARK { sound ACTOR_SHRINKING ai AI_SNAKE_SHRUNK }
+}
+
+state checksquished
+	
+enda

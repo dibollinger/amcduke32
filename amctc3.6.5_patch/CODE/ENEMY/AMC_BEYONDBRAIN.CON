@@ -1,0 +1,236 @@
+// ======================================================================================
+// BEYONDER
+// ======================================================================================
+
+action ABEYONDWALK    0   3   5   1   15
+action ABEYONDSTAND     0   1   5   1   15
+action ABEYONDSHOOT    20   1   5   1   10
+action ABEYONDDYING    25   7   1   1   17
+action ABEYONDDEAD     31   1   1   1  1
+action ABEYONDFROZEN    0   1   5
+
+move BEYONDWALKVELS 96 -30
+move BEYONDUPVELS 96 -70
+move BEYONDSTOPPED 0 -30
+move BEYONDINWATER 96 24
+
+ai AIBEYONDGETENEMY ABEYONDWALK BEYONDWALKVELS seektarget2
+ai AIBEYONDSHOOTENEMY ABEYONDSHOOT BEYONDSTOPPED shoottarget2
+ai AIBEYONDHIT ABEYONDSTAND BEYONDSTOPPED seektarget2
+ai AIBEYONDDYING ABEYONDDYING BEYONDSTOPPED faceplayer
+
+defstate BEYONDgetenemystate
+
+  ifn target -1
+  {
+    ifactioncount 32
+    {
+      ifrnd 48
+      {
+        sound BEYOND_CHA
+        ai AIBEYONDSHOOTENEMY
+        break
+      }
+    }
+  }
+
+ends
+
+
+defstate BEYONDshootenemystate
+  ifcount 25
+  {
+    ifcount 27
+      ai AIBEYONDGETENEMY
+  }
+  else
+    ifcount 24
+	{
+	ife IN_DREAM 1 
+	 ife player_spooked 0
+		{
+		 stopallsounds
+		 globalsound BEYOND_HIT
+			wackplayer
+			set player_spooked 98
+			palfrom 64 64 64 64
+		 state setknockback 
+		}
+		else
+			{
+			ifn target -1
+				{
+				getactorvar[target].myowner TEMP4
+				ife TEMP4 PLAYER_IDENTITY
+					{
+					ifcansee
+						{
+						ifg P_SPIRIT_ARMOUR 20
+							{ 
+							stopallsounds
+							globalsound BEYOND_HITENEMY
+							wackplayer
+							sub P_SPIRIT_ARMOUR 40
+							soundonce SPARM_PROTECT
+							palfrom 20 0 0 40
+							ifl P_SPIRIT_ARMOUR 0 set P_SPIRIT_ARMOUR 0
+							state setknockback
+							}
+						else
+						ife CHAR 14
+						 ifn player[].holoduke_on -1
+							{ 
+							stopallsounds
+							globalsound BEYOND_HITENEMY
+							wackplayer
+							soundonce SPARM_PROTECT
+							palfrom 20 0 0 40
+							state setknockback
+							}
+							else
+							{
+							 stopallsounds
+							 globalsound BEYOND_HIT
+							 wackplayer
+							 ife player_spooked 0 set player_spooked 98
+							 addphealth -75
+							 palfrom 64 64 64 64
+							 state setknockback 
+							}
+						}
+					}
+				else
+					{
+					globalsound BEYOND_HITENEMY
+					seta[TEMP4].htextra 150
+					}
+				}
+			 }
+	  }
+  else
+    ifactioncount 6
+      resetactioncount
+ends
+
+defstate checkBEYONDhitstate
+	state NEWGUNEFFECTS
+		ifwasweapon RPG seta[].xvel 0
+	ifwasweapon RADIUSEXPLOSION seta[].xvel 0
+
+    ifdead
+    {
+      addkills 1
+	  state thegames_score
+      ifwasweapon RPG
+      {
+        state squish_sounds
+        state standard_jibs
+        killit
+      }
+      else
+        ifwasweapon RADIUSEXPLOSION
+      {
+        state squish_sounds
+        state standard_jibs
+        killit
+      }
+      else
+      {
+        state rf
+        ai AIBEYONDDYING
+      }
+      // sound BEYOND_DYING
+    }
+    else
+    {
+
+      //spawn BLOOD
+      ifrnd 4
+        ai AIBEYONDHIT
+    }
+  state random_wall_jibs
+ends
+
+defstate BEYONDdyingstate
+  ifactioncount 7
+  {
+    ifrnd 64
+      spawn BLOODPOOL
+    move BEYONDSTOPPED
+    action ABEYONDDEAD
+    break
+  }
+  else
+    ifactioncount 5 nullop
+  else
+    ifactioncount 4
+      iffloordistl 8
+        state BODY_FALL_NOISES
+ends
+
+useractor enemy BEYONDBRAIN 6000
+  fall
+  state checksquished
+ state ENEMYKNOCKBACKS
+ 
+ //state BEYOND_DAMAGE_MODIFIER // Modifier for targets from beyond
+
+  ifai 0
+    { 	
+	state monst_glow
+	set both_present 1 
+	globalsound BEYOND_SPA 
+	sizeat 32 32
+	cstat 257
+	spawn SHOOTME3 
+	spriteflags NORMAL_ENEMY
+	ai AIBEYONDGETENEMY 
+	}
+  else
+    ifaction ABEYONDDEAD
+  {
+    strength 0
+    ifhitweapon
+      ifwasweapon RADIUSEXPLOSION
+    {
+      state standard_jibs
+      killit
+    }
+    break
+  }
+  else
+  {
+ifrnd 8 soundonce BEYOND_AMB
+  
+    ifai AIBEYONDGETENEMY
+      state BEYONDgetenemystate
+    else
+      ifai AIBEYONDHIT
+      {
+        ifcount 4
+          ai AIBEYONDSHOOTENEMY
+      }
+    else
+      ifai AIBEYONDDYING
+      {
+        state BEYONDdyingstate
+        break
+      }
+    else
+      ifai AIBEYONDSHOOTENEMY
+        state BEYONDshootenemystate
+
+    ifmove BEYONDUPVELS nullop
+    else
+      ifp phigher
+        move BEYONDUPVELS seektarget2
+    else
+      ifmove BEYONDINWATER nullop
+      else
+        ifinwater
+          move BEYONDINWATER seektarget2
+
+    ifhitweapon
+      state checkBEYONDhitstate
+  }
+enda

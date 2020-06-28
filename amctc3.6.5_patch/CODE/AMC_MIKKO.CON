@@ -1,0 +1,546 @@
+var MIKKOSWITCH 0 0
+define PROGRAMSWITCH 13032
+
+// Zaxtor file
+
+definequote 12027 Positives: 
+definequote 12057 Has extensive knowledge of various extrasolar
+definequote 12028 ecosystems. These fragile ecosystems should
+definequote 12029 be acquired for further study and commercial
+definequote 12030 exploitation.
+
+definequote 12031 Negatives: 
+definequote 12058 An idealist, cannot be lured with money. 
+definequote 12032 Moreover, his furry friends are creepy and
+definequote 12033 pose a threat to civilization. Should be
+definequote 12034 eliminated once no longer useful.
+
+definequote 12035 Notes: 
+definequote 12059 May have ties to the various eco-terrorist
+definequote 12036 groups that have attacked Sandt Industries 
+definequote 12037 facilities.
+
+// Sang file
+
+definequote 12038 Positives: 
+definequote 12060 None.
+definequote 12039 Negatives: 
+definequote 12061 Dumb as a rock and lazy as hell. 
+definequote 12040 Notes: 
+definequote 12066 Genetically unfit for clone-program modifications.
+definequote 12067 The original should be preserved for lifting heavy
+definequote 12068 objects in the underground sugar caves of Origae-6. 
+
+// James file
+
+definequote 12041 Positives: 
+definequote 12063 Has good connections that can be exploited
+definequote 12042 and some technology that might be of some
+definequote 12043 practical use in more capable hands.
+
+definequote 12044 Negatives: 
+definequote 12045 I wouldn't trust our "glorious leader" to
+definequote 12046 lead a Girl Scouts' cookie-selling mission.
+definequote 12047 To be tolerated only so long as necessary.
+
+definequote 12048 Notes: 
+definequote 12064 First on my kill list when the time is
+definequote 12049 right. 
+
+// Micky file
+
+definequote 12050 Positives: 
+definequote 12069 With his limited math skills he could help out
+definequote 12070 some of my dumbest scientists. As a scientist 
+definequote 12071 Micky has no moral compass; can easily be turned 
+definequote 12072 against the others in exchange for some samples
+definequote 12073 and equipment. His armor may be worth acquiring.
+
+definequote 12074 Negatives: 
+definequote 12051 Unreliable for the aforementioned reasons. The
+definequote 12052 clone program should preserve his physical weakness.
+
+definequote 12026 Zaxtor
+definequote 12054 James
+definequote 12055 Micky
+definequote 12056 Sang
+
+definequote 12053 Unauthorized user
+definequote 12075 Dummy Program Database
+
+appendevent EVENT_ENTERLEVEL
+
+setvar SLO_MO_SHOWOFF 1
+
+endevent
+
+//Switch
+
+useractor notenemy PROGRAMSWITCH 
+
+cstator 257
+
+ifaction 0
+	{
+	geta[].pal TEMP
+	spritepal 0
+	action ZERO
+	}
+
+ifn MIKKOSWITCH 0 lockplayer 30
+
+ifp palive ifpdistl 1024 ifp pfacing ifcansee 
+{
+set player_use 0
+ife MIKKOSWITCH 0
+	{
+	ifhitspace
+	 ifcount 13
+	   {
+	   set hit_key 30
+		ife CHAR 7 {  set MIKKOSWITCH TEMP globalsound INTERFACE_3 } else { set MIKKOSWITCH 5 globalsound COMP_INVALID } 
+		resetcount
+	   }
+	}
+else
+	{
+	ifhitspace
+	 ifcount 13
+	   {
+	   set hit_key 30
+	   globalsound INTERFACE_1
+	   set MIKKOSWITCH 0
+	   lockplayer 0
+	   resetcount
+	   }
+	  ifp pjumping
+	   {
+	   globalsound INTERFACE_1
+	   set MIKKOSWITCH 0
+	   lockplayer 0
+	   resetcount
+	   }
+	}
+ }
+    /*else { set MIKKOSWITCH 0 }*/
+
+enda 
+
+//Events
+
+appendevent EVENT_DISPLAYREST
+
+switch MIKKOSWITCH
+ case 1 // Sang
+  myospal 200 100 3827 0 1 0
+  rotatespritea 130 26 HALFSIZE 0 3826 0 0 0 -255 0 0 xdim ydim 
+  minitext 105 23 12056 0 4 minitext 106 23 12056 0 2
+  rotatespritea 80 60 49152 0 23813 0 0 0 0 windowx1 windowy1 windowx2 windowy2
+
+  gametextz 2822 360 28 12075 0 2 0 0 0 xdim ydim 42767
+
+  gametextz 2822 210 44 12038 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 50 12060 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 58 12039 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 64 12061 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 72 12040 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 78 12066 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 84 12067 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 90 12068 0 2 0 0 0 xdim ydim 32767
+  break
+ case 2 // Zaxtor
+  myospal 200 100 3827 0 1 0 
+  rotatespritea 130 26 HALFSIZE 0 3826 0 0 0 -255 0 0 xdim ydim 
+  minitext 105 23 12026 0 4 minitext 106 23 12026 0 2
+  rotatespritea 80 70 49152 0 5531 0 0 0 0 windowx1 windowy1 windowx2 windowy2
+  
+  gametextz 2822 360 28 12075 0 2 0 0 0 xdim ydim 42767 
+
+  gametextz 2822 210 44 12027 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 50 12057 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 56 12028 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 62 12029 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 68 12030 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 76 12031 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 82 12058 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 88 12032 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 94 12033 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 100 12034 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 108 12035 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 114 12059 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 120 12036 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 126 12037 0 2 0 0 0 xdim ydim 32767
+  break
+ case 3 // James
+  myospal 200 100 3827 0 1 0 
+  rotatespritea 130 26 HALFSIZE 0 3826 0 0 0 -255 0 0 xdim ydim 
+  minitext 105 23 12054 0 4 minitext 106 23 12054 0 2
+  rotatespritea 80 70 49152 0 5265 0 0 0 0 windowx1 windowy1 windowx2 windowy2
+
+  gametextz 2822 360 28 12075 0 2 0 0 0 xdim ydim 42767  
+
+  gametextz 2822 210 44 12041 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 50 12063 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 56 12042 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 62 12043 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 70 12044 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 76 12045 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 82 12046 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 88 12047 0 2 0 0 0 xdim ydim 32767
+
+  gametextz 2822 210 96 12048 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 102 12064 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 108 12049 0 2 0 0 0 xdim ydim 32767
+  break
+ case 4 // Micky
+  myospal 200 100 3827 0 1 0 
+  rotatespritea 130 26 HALFSIZE 0 3826 0 0 0 -255 0 0 xdim ydim 
+  minitext 105 23 12055 0 4 minitext 106 23 12055 0 2
+  rotatespritea 80 70 HALFSIZE 0 16581 0 0 0 0 windowx1 windowy1 windowx2 windowy2
+
+  gametextz 2822 360 28 12075 0 2 0 0 0 xdim ydim 42767
+
+  gametextz 2822 210 44 12050 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 50 12069 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 56 12070 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 62 12071 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 68 12072 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 74 12073 0 2 0 0 0 xdim ydim 32767
+  
+  gametextz 2822 210 82 12074 0 1 0 0 0 xdim ydim 32767
+  gametextz 2822 210 88 12051 0 2 0 0 0 xdim ydim 32767
+  gametextz 2822 210 94 12052 0 2 0 0 0 xdim ydim 32767
+  break
+ case 5
+  rotatespritea 150 102 65536 0 3826 0 2 0 -255 0 0 xdim ydim 
+  gametextz 2822 210 103 12053 0 2 0 0 0 xdim ydim 49152
+  break
+endswitch
+
+endevent
+
+
+appendevent EVENT_USE
+
+// ifn MIKKOSWITCH 0 { ifhitspace { set MIKKOSWITCH 0 } }
+
+endevent
+
+
+appendevent EVENT_GAME
+
+ifactor BLOOD
+ { 
+  ifspawnedby CYBERCULTIST spritepal 4
+ }
+
+ifactor BLOODPOOL
+ { 
+  ifspawnedby CYBERCULTIST spritepal 4
+   
+ }
+
+endevent
+
+// ******************************************************************************
+// CYBERCULTIST
+// ******************************************************************************
+
+action ACYBERCULTIST_FROZE   89 1 5 1 0
+action ACYBERCULTIST_GROW   89 1 5 1 0
+action ACYBERCULTISTSTAND    0 1 5 1 0
+action ACYBERCULTISTWALK     5 4 5 1 20
+action ACYBERCULTISTRUN      5 4 5 1 11
+action ACYBERCULTISTSHOOT 25 2 5 1 11
+action ACYBERCULTISTSHOOT_DUCK 35 2 5 1 11
+action ACYBERCULTISTFLINCH 45 1 5 1 20
+action ACYBERCULTISTDYING 45 6 1 1 15
+action ACYBERCULTISTDEAD 50 1 1 1 1
+
+move CYBERCULTISTWALKVELS 72
+move CYBERCULTISTRUNVELS 108 
+move CYBERCULTISTJUMPVELS 158
+
+ai AICYBERCULTISTIDLE ACYBERCULTISTSTAND STOP
+ai AICYBERCULTISTSEEKENEMY ACYBERCULTISTWALK CYBERCULTISTWALKVELS seekplayer
+ai AICYBERCULTISTRUSHENEMY ACYBERCULTISTRUN CYBERCULTISTRUNVELS faceplayer
+ai AICYBERCULTISTSHOOT ACYBERCULTISTSHOOT STOP faceplayer
+ai AICYBERCULTISTSHOOT_DUCK ACYBERCULTISTSHOOT_DUCK STOP faceplayersmart
+ai AICYBERCULTISTDEAD ACYBERCULTISTDEAD STOP faceplayer
+
+defstate CYBERCULTISTLOADUP
+seta[].xrepeat 30
+seta[].yrepeat 30
+    geta[].extra EXTRASAVED
+    geta[].xvel XVELSAVED
+    geta[].yvel YVELSAVED
+    geta[].zvel ZVELSAVED
+	geta[].owner OWNERSAVED
+    seta[].extra 0
+    seta[].xvel 0
+    seta[].yvel 0
+    seta[].zvel 0
+	seta[].owner 0
+ends
+
+
+eventloadactor CYBERCULTIST state CYBERCULTISTLOADUP enda
+eventloadactor CYBERCULTISTSTAYPUT state CYBERCULTISTLOADUP enda
+
+spriteflags CYBERCULTIST NORMAL_ENEMY
+spriteflags CYBERCULTISTSTAYPUT NORMAL_ENEMY
+
+useractor enemystayput CYBERCULTISTSTAYPUT
+strength 250 
+ife EXTRASAVED -1 set EXTRASAVED 5 
+cactor CYBERCULTIST
+enda
+
+useractor enemy CYBERCULTIST 250 ACYBERCULTISTSTAND
+fall
+
+ifai 0
+{
+geta[].mdflags TEMP
+orvar TEMP 16
+seta[].mdflags TEMP
+spawn SHOOTME
+strength 250 
+sizeat 30 30
+ai AICYBERCULTISTIDLE
+cstator 257
+}
+
+state ENEMYKNOCKBACKS
+state enemyfloordamage
+state enemy_fire_damage
+state enemy_ice_damage
+
+ifaction ACYBERCULTIST_FROZE { state frozen_code break }
+
+ifp pdead
+{
+ifstrength 0 break else ai AICYBERCULTISTIDLE
+}
+else
+ifai AICYBERCULTISTDEAD
+{
+strength 0
+move 0
+
+    ifhitweapon
+    {
+      ifwasweapon RADIUSEXPLOSION
+      {
+		ife INVASION 1 nullop else
+		{
+	  debris SCRAP4 3
+       debris SCRAP2 2
+		}
+	  ifrnd 128 debris SCRAP4 3
+	  ifrnd 128 debris SCRAP2 2
+        killit
+      }
+      break
+    }
+
+}
+else
+ifaction ACYBERCULTISTDYING
+{
+strength 0
+ifactioncount 5 { state BODY_FALL_NOISES espawn 7991 state rf ai AICYBERCULTISTDEAD }
+}
+else
+ifaction ACYBERCULTISTFLINCH
+{
+ifdead action ACYBERCULTISTDYING
+move 0
+sub PAIN_AMOUNT 1
+ife PAIN_AMOUNT 0 ai AICYBERCULTISTSEEKENEMY
+}
+else
+ifai AICYBERCULTISTIDLE
+{
+	state correctcansee
+	ife sightvar YES ai AICYBERCULTISTSEEKENEMY
+}
+else
+ifai AICYBERCULTISTSEEKENEMY
+{
+
+state correctcansee
+    ife sightvar YES
+	{
+	state SKILL_SHOOT_LEVELADJUST
+		ifl RANDOM_CHANCE SKILLCHANCE  
+		{
+		ifrnd 128 ai AICYBERCULTISTSHOOT_DUCK else
+		ai AICYBERCULTISTSHOOT
+		}
+	}
+
+ifpdistl 5120
+ife sightvar YES
+ ifrnd 64
+  {
+   ai AICYBERCULTISTRUSHENEMY
+  }
+else ifrnd 2 ai AICYBERCULTISTIDLE
+else ifrnd 16 ai AICYBERCULTISTSEEKENEMY
+
+state SKILL_SHOOT_LEVELADJUST
+
+}
+else
+ifai AICYBERCULTISTRUSHENEMY
+{
+	ifcansee
+	 ifrnd 32
+		{
+		ife allies_present 1 state enemyfindtarget
+		ife both_present 1 state enemyfindtarget2
+		ifn target -1 ai AICYBERCULTISTSHOOT
+		else ai AICYBERCULTISTSHOOT
+		}
+}
+else
+ifai AICYBERCULTISTSHOOT
+{
+  state correctcansee
+	ife sightvar YES
+	 {
+	  ifactioncount 1 
+		{ 
+		setprojectile[6857].offset -512
+		setprojectile[6857].extra 3
+		eshoot 6857
+		setprojectile[6857].extra 30
+		setprojectile[6857].offset 224
+		
+		sound CYBERCULTIST_RIFLE
+		globalsound DISTANT_RIFLE
+		ife PERFMODE 1
+			{
+			set gunsmoke_z 4644 
+			set gunsmoke_angle -64
+			state spawn_gunsmoke_z
+			set gunsmoke_z 6044
+			espawn 16113
+			seta[RETURN].pal 21
+			state spawn_muzzleflash
+			}
+		ifrnd 32 ai AICYBERCULTISTSEEKENEMY
+		resetactioncount 
+		}
+	}
+	else ai AICYBERCULTISTSEEKENEMY
+}
+else
+ifai AICYBERCULTISTSHOOT_DUCK
+{
+  state correctcansee
+	ife sightvar YES
+	 {
+	  ifactioncount 1 
+		{ 
+		setprojectile[6857].offset -512
+		setprojectile[6857].extra 3
+		eshoot 6857
+		geta[RETURN].z TEMP
+		add TEMP 2048
+		seta[RETURN].z TEMP
+		setprojectile[6857].extra 30
+		setprojectile[6857].offset 224
+		
+		sound CYBERCULTIST_RIFLE
+		globalsound DISTANT_RIFLE
+		ife PERFMODE 1
+			{
+			set gunsmoke_z 4644 
+			set gunsmoke_angle -64
+			state spawn_gunsmoke_z
+			set gunsmoke_z 6044
+			espawn 16113
+			seta[RETURN].pal 21
+			state spawn_muzzleflash
+			}
+		ifrnd 32 ai AICYBERCULTISTSEEKENEMY
+		resetactioncount 
+		}
+	}
+	else ai AICYBERCULTISTSEEKENEMY
+}
+	
+ifhitweapon
+{ 
+    ifrnd 64 debris SCRAP2 1 
+    ifrnd 72 debris SCRAP5 1
+    ifrnd 48 guts JIBS6 2
+	ifwasweapon SHOTSPARK1
+	{
+     sound DRON_PAIN
+	}
+
+ifdead 
+	{ 
+	ifaction ACYBERCULTISTDYING break
+	ifaction ACYBERCULTISTDEAD break
+
+      ifwasweapon RADIUSEXPLOSION
+      {
+		 palfrom 40 40 0 40 spawn EXPLOSION2 sound RPG_EXPLODE
+		sound VENT_BUST
+        debris SCRAP3 6
+        debris SCRAP2 4
+		state termspawnlegparts
+		shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	  killit
+      }
+	else
+      ifwasweapon RPG
+      {
+		palfrom 40 40 0 40 spawn EXPLOSION2 sound RPG_EXPLODE
+		sound VENT_BUST
+		debris SCRAP3 6
+        debris SCRAP2 4
+		state termspawnlegparts
+		shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+	  killit
+      }	
+	else
+		{
+		ifstrength -50
+			{
+			palfrom 40 40 0 40 spawn EXPLOSION2 sound RPG_EXPLODE
+			sound VENT_BUST
+			debris SCRAP3 6
+			debris SCRAP2 4
+			state termspawnlegparts
+			shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK shoot SPARK
+		  killit
+			}
+		else
+			{
+			ifrnd 16 ife CHAR 7 globalsound MS_CULTISTK
+			randvar TEMP 30
+			ifl TEMP 10 sound CYBERCULTIST_DIE1 else
+			ifl TEMP 20 sound CYBERCULTIST_DIE2 else
+			sound CYBERCULTIST_DIE3
+			action ACYBERCULTISTDYING
+			}
+		}
+	} 
+else 
+ifg PAIN_AMOUNT 0 action ACYBERCULTISTFLINCH
+else ifrnd 32 { sound ZSCI_PAIN state PAIN_SKILL_LEVELADJUST action ACYBERCULTISTFLINCH }
+}
+
+state check_metal_squished
+
+enda

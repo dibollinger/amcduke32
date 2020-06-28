@@ -1,0 +1,146 @@
+/* EVENT DEFINITIONS -- Define which actors trigger damage events */
+
+// Special Cases
+damageeventtile APLAYER
+damageeventtile MJ12_TROOP
+damageeventtile DARKAVATAR
+damageeventtile MADRAX
+
+/* (possible) Body Armor */
+damageeventtile ZSOLDIER
+damageeventtile ZSOLDIER2
+damageeventtile ZCHAING
+damageeventtile Z_GRENADEL
+damageeventtile TRIAD
+damageeventtile PIGCOP
+damageeventtile PIG_SF
+damageeventtile PIG_SF_DIVE
+damageeventtile PIG_SF_STAYPUT
+damageeventtile CULTIST
+damageeventtile MERC2
+damageeventtile FASCIST
+damageeventtile PE_TROOP
+damageeventtile PE_ELDER
+damageeventtile GORILLA
+damageeventtile NAZI
+damageeventtile E3_BOSS
+damageeventtile AMCSOLDIER_ACTIVE // Ally
+damageeventtile EDFSOLDIER_ACTIVE // Ally
+damageeventtile MSSOLDIER_ACTIVE // Ally
+
+/* (possible) Mech Actor */
+damageeventtile CYBERALIEN
+damageeventtile CYBERTOUR
+damageeventtile EAST_ROBOT
+damageeventtile GWBOSS
+damageeventtile HPOWERSUIT
+damageeventtile LPOWERSUIT
+damageeventtile OGRE // uhh.. Mech?
+damageeventtile TANK
+damageeventtile VILMOS_ROBOT
+damageeventtile 21602 // BIG TURRET (Note: wouldn't it make more sense for the turrets to be defined as robots?)
+damageeventtile 10595 // Turret (Ally)
+damageeventtile 12972 // Flamer Turret (Ally)
+damageeventtile 22677 // Micky's Turret (Ally)
+
+/* (possible) Heavy Mech Actor */
+damageeventtile WTANK
+damageeventtile 21594 // Hovertank (Ally)
+damageeventtile MS_CORP_MECH // (Ally)
+
+/* (possible) Supernatural Actor */
+damageeventtile SORCERER
+damageeventtile LOST
+damageeventtile ANUBIS_MUMMY
+damageeventtile 9771 // Ally Sorcerer
+
+/* (possible) Robot Actor */
+damageeventtile PE_SENTRY
+damageeventtile TERMINATOR
+damageeventtile TERMINATORCRAWLING
+damageeventtile TERMINATORSTAYPUT
+damageeventtile TERMINATORDUCKING
+
+/* Melee attack vulnerable */
+damageeventtile TRENTON_SOLARI
+
+/* Modifier for targets from beyond */
+damageeventtile BEYONDBRAIN
+
+/* other (non armored) */
+damageeventtile E1_BOSS 
+damageeventtile PIGCOP_RIOTSHIELD       
+damageeventtile MJ12_ASSASSIN        
+damageeventtile ZPIGCOP
+damageeventtile ANUBIS
+damageeventtile COMMANDER
+damageeventtile FLESHWIZARD
+damageeventtile GUARDIAN
+damageeventtile LESANG
+damageeventtile LIZMAN
+damageeventtile LIZTROOP
+damageeventtile LIZTROOPONTOILET
+damageeventtile LIZTROOPJUSTSIT
+damageeventtile MERC
+damageeventtile NINJA
+damageeventtile SATYR
+damageeventtile ZOMBIE
+damageeventtile ZSCIEN
+damageeventtile ABYSS_DESPOT
+damageeventtile ARCHER
+damageeventtile ALUDRAN
+damageeventtile BERSERKER
+damageeventtile BOSS1
+damageeventtile BOSS2
+damageeventtile BOSS3
+damageeventtile BOSS4
+damageeventtile BOSS5
+damageeventtile BRUISER
+damageeventtile CHRYSSALID
+damageeventtile COBRA
+damageeventtile DOCTORJ
+damageeventtile EGG
+damageeventtile ELITE_LIZMAN
+damageeventtile HADESPHERE
+damageeventtile INFERNAL
+damageeventtile LAVA_BEAST
+damageeventtile LILITH
+damageeventtile MAMANO
+damageeventtile MISTERH
+damageeventtile NETHERBRUTE
+damageeventtile NEWBEAST
+damageeventtile OCTABRAIN
+damageeventtile ORC
+damageeventtile PIGBOSS
+damageeventtile PITFIEND
+damageeventtile RIPPER
+damageeventtile RUSSIAN
+damageeventtile SCORPIONESS
+damageeventtile SERPENT_GOD
+damageeventtile SHAMBLER
+damageeventtile SHARK
+damageeventtile SIREN
+damageeventtile SPIDER2
+damageeventtile VLADMIR  
+damageeventtile 1319 // pole stripper??? doesn't appear to correspond to any actor
+damageeventtile 15360 // female civilian
+damageeventtile LIZBOSS        
+damageeventtile CYBERDEMON
+damageeventtile MAEPHISTO
+damageeventtile SPACE_LIZTROOP
+damageeventtile SPIDERDEMON
+damageeventtile BLACK_HAWK
+damageeventtile CYBERCULTIST
+damageeventtile DRONE
+damageeventtile FIRESUIT
+damageeventtile HOVERCRAFT
+damageeventtile JANE
+damageeventtile KA_50_BLACK_SHARK
+damageeventtile MI_24_HIND
+damageeventtile ROTATEGUN
+damageeventtile RECON
+damageeventtile WASP_DRONE
+damageeventtile 22877 // Turret from Strife (enemy)
+damageeventtile 17638 // Some other Turret    
+damageeventtile PATCOS
+			 

@@ -1,0 +1,190 @@
+// *************************************************
+// SPACE LIZTROOP
+// *************************************************
+
+action ALIZ_SPACE_FLY 5 1 5 1 20
+action ALIZ_SPACE_BOOST 0 1 5 1 20
+action ALIZ_SPACE_FIRE 5 2 5 1 20
+action ALIZ_SPACE_PAIN 15
+action ALIZ_SPACE_DIE 15 6 1 1 12
+action ALIZ_SPACE_DEAD 20
+action ALIZ_SPACE_DEAD2 20
+
+move DRIFT 1 1
+move SPACE_MOVE 70 
+move SPACE_BOOST 210 25
+
+ai AI_SPACELIZ_FLY ALIZ_SPACE_FLY SPACE_MOVE seekplayer
+ai AI_SPACELIZ_BOOST ALIZ_SPACE_BOOST SPACE_BOOST faceplayer
+ai AI_SPACELIZ_FIRE ALIZ_SPACE_FIRE SPACE_MOVE faceplayerslow
+ai AI_SPACELIZ_DIE ALIZ_SPACE_DIE STOP
+
+useractor enemy SPACE_LIZTROOP
+
+ifaction 0
+{
+cstat 257
+state monst_glow
+sizeat 40 40
+sound PRED_RECOG
+strength 100
+spriteflags NORMAL_ENEMY
+ai AI_SPACELIZ_FLY
+}
+
+state ENEMYKNOCKBACKS
+
+ifaction ALIZ_SPACE_DEAD
+{
+cstat 256
+ifpdistl 1024
+ ifp pfacing
+  ife SPACE_SUIT 1
+  {
+  set player_use 0
+   ifhitspace
+	{
+	set hit_key 30
+	randvar TEMP 450 // anywhere between 0 - 15 seconds
+	add TEMP 450 // add 15 on so they always get something
+	add LIFE_SUPPORT TEMP
+	screensound SPACESUIT_OFF
+	action ALIZ_SPACE_DEAD2
+	}
+  }
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			state standard_jibs
+			state human_jibs
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifaction ALIZ_SPACE_DEAD2
+{
+    ifhitweapon
+	    {
+	      ifwasweapon RADIUSEXPLOSION
+	      {
+	        state squish_sounds
+			state standard_jibs
+			state human_jibs
+	        killit
+	      }
+	      break
+	    }
+}
+else
+ifai AI_SPACELIZ_DIE
+{
+move DRIFT spin
+strength 0
+	ifactioncount 6 { state rf action ALIZ_SPACE_DEAD }
+}
+else
+ifaction ALIZ_SPACE_PAIN
+{
+	sub PAIN_AMOUNT 1
+	ife PAIN_AMOUNT 0 ai AI_SPACELIZ_FLY
+}
+else
+ifai AI_SPACELIZ_BOOST
+{
+state correctcansee
+
+  ifp palive
+   ife sightvar YES
+    ifpdistl 8192
+		{
+		ai AI_SPACELIZ_FIRE
+		}
+		else
+		ifrnd 2 ai AI_SPACELIZ_FLY
+}
+else
+ifai AI_SPACELIZ_FLY
+{
+
+      ifp phigher ifrnd 128
+			{
+			geta[].z TEMP
+			sub TEMP 1024
+			seta[].z TEMP
+			}
+      else
+	  ifp ponground nullop
+	  else
+	  ifrnd 128
+			{
+			geta[].z TEMP
+			add TEMP 1024
+			seta[].z TEMP
+			}
+
+  ifrnd 1
+  {
+	ifrnd 128 soundonce PRED_ROAM 
+	else soundonce PRED_ROAM2 
+  }
+
+state correctcansee
+
+  ifp palive
+   ife sightvar YES
+    ifrnd 32
+		{
+		ai AI_SPACELIZ_FIRE
+		}
+		else
+		ifpdistg 8192 ifrnd 8 
+			{
+			sound SPACESUIT_THRUSTER
+			ai AI_SPACELIZ_BOOST
+			}
+		else
+		ifcansee ifrnd 8 ai AI_SPACELIZ_FLY
+  
+}
+else
+ifai AI_SPACELIZ_FIRE
+{
+	ifactioncount 2
+	{
+		// Just use standard hardcoded firing code for this
+		sound PRED_ATTACK
+		shoot FIRELASER
+		ai AI_SPACELIZ_FLY
+	}
+}
+
+ifhitweapon
+{
+	state NEWGUNEFFECTS
+//	spawn BLOOD
+//	guts JIBS6 5	
+	state random_wall_jibs
+	ifdead
+		{
+		sound PRED_DYING
+		state rf
+		addkills 1
+		state thegames_score
+		ai AI_SPACELIZ_DIE
+		}
+	else
+	ifg PAIN_AMOUNT 0 action ALIZ_SPACE_PAIN
+	else ifrnd 16 
+		{ 
+		ifrnd 128 set playsound PRED_PAIN2
+		else set playsound PRED_PAIN
+		state PAIN_SKILL_LEVELADJUST 
+		action ALIZ_SPACE_PAIN
+		}
+}
+
+enda

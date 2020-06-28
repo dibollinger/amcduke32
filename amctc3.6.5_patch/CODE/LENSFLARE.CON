@@ -1,0 +1,295 @@
+
+// Based on the lensflare from SkyTown TC by Lezing Entertainment
+
+var hide_lens 0 0
+
+defstate lensflarestate
+	set orientation 2
+	
+	set DISP_TEMP4 SLEFFECTY
+	divvar DISP_TEMP4 4
+	set DISP_TEMP5 30
+	sub DISP_TEMP5 DISP_TEMP4
+  set e1 SLEFFECTX  set e2 SLEFFECTY
+  set e5 e3         set e6 e4
+  mulvarvar e5 e7         mulvarvar e6 e7
+  divvar e5 64            divvar e6 64
+  add e1 e5         add e2 e6
+  set x e1          set y e2
+  rotatespritea x y z 0 tilenum DISP_TEMP5 pal orientation -255 0 0 xdim ydim
+ends
+
+onevent EVENT_DISPLAYREST
+ife hide_lens 0
+ifg SLEFFECT 0
+{
+  set e1 SLEFFECTX set e2 SLEFFECTY
+  sub e1 160 sub e2 100
+  mulvarvar e1 e1 mulvarvar e2 e2
+  add e1 e2
+  ifl e1 65536
+  {
+  
+  set tilenum 3605
+  set shade 0
+  set orientation 2
+  // set orientation 1
+  set pal 0
+  
+  set e1 SLEFFECTX  set e2 SLEFFECTY
+  set e3 160           set e4 100
+  sub e3 e1         sub e4 e2
+  
+  set e7 -18 set z 2000
+  set tilenum 17921
+  state lensflarestate
+  
+  // set e7 -5 set z 12000
+  // state lensflarestate
+  
+  set e7 4 set z 3000
+  set tilenum 17923
+  state lensflarestate
+  
+  // set e7 6 set z 14000
+  // state lensflarestate
+  
+  set e7 15 set z 6000
+  set tilenum 17921
+  state lensflarestate
+  
+  // set e7 22 set z 13000
+  // state lensflarestate
+  
+  // set e7 31 set z 9000
+  // state lensflarestate
+  
+  set e7 36 set z 6000
+  set tilenum 17923
+  state lensflarestate
+  
+  set e7 49 set z 9000
+  set tilenum 17922
+  state lensflarestate
+  
+  set e7 53 set z 2000
+  set tilenum 17922
+  state lensflarestate
+	
+	// set e7 62 set z 6000
+  // state lensflarestate
+	
+	set e7 70 set z 5000
+	set tilenum 17922
+  state lensflarestate
+	
+	// set e7 79 set z 14000
+  // state lensflarestate
+	
+	set e7 83 set z 4000
+	set tilenum 17921
+  state lensflarestate
+	
+	// set e7 87 set z 7000
+  // state lensflarestate
+  
+  }
+  
+  ifg SLEFFECTX -1 ifg SLEFFECTY -1 ifl SLEFFECTX 320 ifl SLEFFECTY 200
+  {
+  ifg LENS_TEMP4 0 sub LENS_TEMP4 2
+    set x SLEFFECTX  set y SLEFFECTY
+    set z 24576
+    set pal 2
+    set orientation 2
+    set tilenum 18658
+    rotatespritea x y 14576 0 tilenum LENS_TEMP4 pal orientation -255 0 0 xdim ydim
+    set pal 0
+    set tilenum 17924
+    rotatespritea x y NORMALSIZE 0 tilenum LENS_TEMP4 pal orientation -255 0 0 xdim ydim
+    set orientation 1
+    set tilenum 17924
+    rotatespritea x y z 0 tilenum LENS_TEMP4 pal orientation -255 0 0 xdim ydim
+  }
+  else
+  { ifl LENS_TEMP4 60 add LENS_TEMP4 2 }
+}
+endevent
+
+
+useractor notenemy 17920 0
+ifspritepal 4
+	{
+	cstat 32768
+	ifpdistl 65536 set hide_lens 30
+	}
+else
+	{
+	ifaction 0
+	{
+	  action ZERO
+	  // cstat 144
+	  ifspritepal 3 nullop else
+	 cstat 32768
+	}
+	ifg hide_lens 0 sub hide_lens 1
+	state updatesprisect
+
+	getp[].posz e2
+	divvar e2 16
+	gets[].ceilingz e1
+	divvar e1 16
+	sub e2 e1
+	sub e2 64
+
+			set TEMP3 player[].posx
+			add TEMP3 e2
+			geta[].ang TEMP4
+			add TEMP4 1024
+			rotatepoint player[].posx player[].posy TEMP3 player[].posy TEMP4 TEMP5 TEMP6
+
+	// set e2 4096
+
+	seta[].x TEMP5
+	seta[].y TEMP6
+
+	/*
+	getp[].posx e1
+	add e1 e2 // 4096
+	seta[].x e1
+	getp[].posy e1
+	add e1 e2 // 4096
+	seta[].y e1
+
+	/*
+	getp[].oposx e1
+	add e1 e2 // 4096
+	seta[].htbposx e1
+	getp[].oposy e1
+	add e1 e2 // 4096
+	seta[].htbposy e1
+	*/
+	getp[].posz e1
+	// mulvar e2 375
+	// divvar e2 -16
+	mulvar e2 -16
+	add e1 e2 // -96000 (*23.4375)
+	seta[].z e1
+	// move 0 faceplayer
+	set SLEFFECT 0
+
+			getp[].ang TEMP7
+			// add TEMP7 1024
+			getincangle TEMP4 sprite[].ang TEMP7
+			ifand TEMP4 2147483648
+			{
+			xorvar TEMP4 4294967295 
+			add TEMP4 1
+			}
+
+	ifl TEMP4 550 nullop else
+	ifoutside
+	{
+	  // getp[].i e3
+	  // canseespr THISACTOR e3 e2
+	  // set e6 6144
+	  // zshoot e6 COOLEXPLOSION1
+	  
+	  geta[].x e1
+	  geta[].y e2
+	  geta[].z e3
+	  // geta[].sectnum ee
+	  geta[].ang e4
+	  // set e4 1280
+	  sin e5 e4
+	  cos e4 e4
+	  // set e4 -16384
+	  // set e5 -16384
+	  // set e6 280000
+	  
+	  set e6 262000
+	  // set e7 4294901808
+	  set e7 2147418160
+	  
+	  hitscan e1 e2 e3 sprite[].sectnum e4 e5 e6 e8 e9 ea eb ec ec e7
+	  
+	  // espawn 3023 // Spawn the laser sight
+		// seta[RETURN].x eb
+		// seta[RETURN].y ec
+		// seta[RETURN].z ed
+	  
+	  
+	  getp[].i e2
+	  ife ea e2 set e2 1 else set e2 0
+	  // ife ea -1 set e2 0 else set e2 1
+	  
+	  // ife e1 32 add e2 2
+	  // ifg e2 0 sub e2 1
+	  set SLEFFECT 0
+	  ife e2 1
+	  {
+		// set e2 8
+		set SLEFFECT 1
+		getp[].ang e1
+		sub e1 sprite[].ang
+		andvar e1 2047
+		sin e3 e1
+		cos e4 e1
+		mulvar e3 -160
+		ifn e4 0 divvarvar e3 e4
+		add e3 160
+		set SLEFFECTX e3
+		getp[].ohoriz SLEFFECTY
+		sub SLEFFECTY 96
+		// sub SLEFFECTY 228
+		// set SLEFFECTY 28
+		// set e5 16777216
+		// divvarvar e5 e4
+		// mulvarvar SLEFFECTY e5
+		// divvar SLEFFECTY 1024
+		// add SLEFFECTY 100
+		
+		set e4 SLEFFECTX
+		set e5 SLEFFECTY
+		sub e4 160
+		sub e5 100
+		mulvar e5 12
+		divvar e5 10
+		
+		getp[].rotscrnang e1
+		sin e2 e1
+		cos e3 e1
+		set e1 e4
+		mulvarvar e1 e3
+		divvar e1 16384
+		set SLEFFECTX e1
+		set e1 e5
+		mulvarvar e1 e2
+		divvar e1 -16384
+		add SLEFFECTX e1
+		
+		set e1 e4
+		mulvarvar e1 e2
+		divvar e1 16384
+		set SLEFFECTY e1
+		set e1 e5
+		mulvarvar e1 e3
+		divvar e1 16384
+		add SLEFFECTY e1
+		
+		mulvar SLEFFECTY 10
+		divvar SLEFFECTY 12
+		add SLEFFECTX 160
+		add SLEFFECTY 40
+		/*
+		ifangdiffl 768 nullop else
+		{
+		  ifg SLEFFECTY 0
+			ifl SLEFFECTY 200
+			  palfrom 16 63 0 0
+		}
+		*/
+	  }
+	}
+	}
+enda

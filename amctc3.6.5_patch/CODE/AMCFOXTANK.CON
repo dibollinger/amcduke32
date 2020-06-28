@@ -1,0 +1,1855 @@
+// TANK CODE BY ILOVEFOXES
+
+
+define EXPLOSIONMAKER 1891
+define WTANKPROJ 2606
+define WTANK 13608
+define WTANKDEAD 13609
+define WTANKGUN 13610
+define WTANKUP 13611
+define WTANKUP2 13612
+define WTANKDW 13613
+define WTANKDW2 13614
+define WTANKFR 13616
+define WTANKLF 13618
+define WTANKLF2 13620
+define WTANKFR2 13622
+define WTANKFR3 13623
+define WTANKBK 13624
+define WTANKGUNFR 13625
+define WTANKGUNUP 13626
+define WTANKGUNUP2 13627
+define WTANKGUNFR2 13628
+define WTANKGUNAN 13629
+define WTANKGUNLF 13630
+define WTANKGUNBK 13631
+
+define WTANKSTRENGTH 7500
+
+defineprojectile WTANKPROJ PROJ_WORKSLIKE 102402
+defineprojectile WTANKPROJ PROJ_SPAWNS BIG_EXPLOSION
+defineprojectile WTANKPROJ PROJ_VEL 999
+defineprojectile WTANKPROJ PROJ_VEL_MULT 4
+defineprojectile WTANKPROJ PROJ_EXTRA 800
+defineprojectile WTANKPROJ PROJ_ISOUND PIPEBOMB_EXPLODE
+defineprojectile WTANKPROJ PROJ_HITRADIUS 2500
+defineprojectile WTANKPROJ PROJ_OFFSET 224
+defineprojectile WTANKPROJ PROJ_CLIPDIST 24
+defineprojectile WTANKPROJ PROJ_TRAIL -1
+defineprojectile WTANKPROJ PROJ_XREPEAT 32
+defineprojectile WTANKPROJ PROJ_YREPEAT 32
+defineprojectile WTANKPROJ PROJ_CSTAT 128
+defineprojectile WTANKPROJ PROJ_USERDATA 64
+
+action WTANKPROJFRAMES -1 1 7
+
+useractor notenemy WTANKPROJ 0 WTANKPROJFRAMES setthisprojectile[].workslike 102402 enda
+
+defstate flatcodewithoutblockingbit
+  ifaction 0
+  {
+    spriteflags 4
+    action ZERO
+  }
+  geta[SET].x x
+  geta[SET].y y
+  geta[SET].z ANGLESET
+  updatesectorz x y ANGLESET ANGLESET
+  ifn ANGLESET -1
+  {
+  ifoutside
+    gets[ANGLESET].ceilingshade x
+  else
+    gets[ANGLESET].floorshade x
+ }
+  geta[].cstat y
+  ifand y 32
+  {
+    ifand y 8
+      add x 10
+  }
+  else
+  {
+    geta[].ang y
+    ifg y 1791
+      add x 9
+    else
+      ifg y 1535
+        add x 8
+    else
+      ifg y 1279
+        add x 7
+    else
+      ifg y 1023
+        add x 6
+    else
+      ifg y 767
+        add x 5
+    else
+      ifg y 511
+        add x 4
+    else
+      ifg y 255
+        add x 3
+    else
+      add x 2
+  }
+  seta[].shade x
+ends
+
+defstate flatcodewithblockingbit
+  ifaction 0
+  {
+	cstator 1
+    spriteflags 4
+    action ZERO
+  }
+  geta[SET].x x
+  geta[SET].y y
+  geta[SET].z ANGLESET
+  updatesectorz x y ANGLESET ANGLESET
+  ifn ANGLESET -1
+  {
+  ifoutside
+    gets[ANGLESET].ceilingshade x
+  else
+    gets[ANGLESET].floorshade x
+ }
+  geta[].cstat y
+  ifand y 32
+  {
+    ifand y 8
+      add x 10
+  }
+  else
+  {
+    geta[].ang y
+    ifg y 1791
+      add x 9
+    else
+      ifg y 1535
+        add x 8
+    else
+      ifg y 1279
+        add x 7
+    else
+      ifg y 1023
+        add x 6
+    else
+      ifg y 767
+        add x 5
+    else
+      ifg y 511
+        add x 4
+    else
+      ifg y 255
+        add x 3
+    else
+      add x 2
+  }
+  seta[].shade x
+ends
+
+// This spawns the sprites that make up the tank and gives them correct cstat properties
+defstate wtankload
+  cstat 33025
+  ifspawnedby RESPAWN
+	  {
+	  geta[].owner myowner
+	  seta[].pal sprite[myowner].pal
+	  }
+  geta[].pal SET
+  
+  // This sprite is the roof of the tank body, behind the turret
+  espawn WTANKUP
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 96
+  }
+  
+  // This is the roof of the tank body in front of the turret
+  // This one is problematic
+  espawn WTANKUP2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 96
+  }
+
+  espawn WTANKDW
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 104
+  }
+  espawn WTANKDW2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 32
+    seta[RETURN].cstat 104
+  }
+  espawn WTANKDW2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 32
+    seta[RETURN].cstat 108
+  }
+  espawn WTANKFR
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKFR
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 84
+  }
+  espawn WTANKLF
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKLF
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 84
+  }
+  
+  // These are the insides of the tank tracks
+  // These are also problematic
+  //======
+  espawn WTANKLF2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKLF2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 84
+  }
+  // =======
+  espawn WTANKFR2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 40
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKFR3
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKBK
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 23
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKFR
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 2
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 84
+  }
+  espawn WTANKFR
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    setactorvar[RETURN].ANGLE 3
+    seta[RETURN].xrepeat 32
+    seta[RETURN].yrepeat 39
+    seta[RETURN].cstat 80
+  }
+  
+  // These sprites, starting with WTANK, make up the tank's entire turret.
+  espawn WTANKGUN
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET THISACTOR
+    ifspawnedby WTANK
+      nullop
+    else
+      ifg LOTAGSAVED 0
+      {
+        geta[].ang ANGLE
+        add ANGLE LOTAGSAVED
+        seta[RETURN].ang ANGLE
+      }
+    set ANGLE RETURN
+  }
+  espawn WTANKGUNFR
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 16
+  }
+  espawn WTANKGUNUP
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 80
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 16
+  }
+  espawn WTANKGUNUP2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 96
+  }
+  espawn WTANKGUNUP2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 104
+  }
+  espawn WTANKGUNFR2
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKGUNAN
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 73
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKGUNAN
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 73
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 84
+  }
+  espawn WTANKGUNLF
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 80
+  }
+  espawn WTANKGUNLF
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    setactorvar[RETURN].ANGLE 1
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 84
+  }
+  espawn WTANKGUNBK
+  ifg RETURN 0
+  {
+    seta[RETURN].pal SET
+    setactorvar[RETURN].SET ANGLE
+    seta[RETURN].xrepeat 64
+    seta[RETURN].yrepeat 64
+    seta[RETURN].cstat 80
+  }
+  set ANGLE -1
+ends
+
+action AWTANKWALK 0 1 1 1 0
+action AWTANKSHOOT 0 1 1 1 128
+action AWTANKHIT 0 1 1 1 32
+
+action AWTANKWALKFRAMES 0 2 1 1 8
+
+move WTANKSTOPPED
+move WTANKWALK 160
+move WTANKRUN 240
+move WTANKBACK -80
+move WTANKRUNBACK -120
+
+ai AIWTANKWALK AWTANKWALK WTANKWALK faceplayerslow
+ai AIWTANKSHOOT AWTANKSHOOT WTANKSTOPPED geth
+
+state wtankwalkstate
+  ifmove WTANKWALK
+  {
+    geta[].ang x
+    geta[SET].ang y
+    sub x y
+    ifn x 0
+    {
+      ifg x 16
+        set x 16
+      ifl x -16
+        set x -16
+      geta[].ang y
+      sub y x
+      ifg y 2047
+        sub y 2048
+      ifl y 0
+        add y 2048
+      seta[].ang y
+    }
+  }
+  soundonce TANK_ENGINE
+  ifpdistl 4096
+  {
+    ifmove WTANKRUN
+      nullop
+    else
+      move WTANKRUN geth
+  }
+  ifp palive
+  {
+    ifcansee
+    {
+      ifcount 64
+        ifrnd 32
+        {
+          ifcanshoottarget
+            ai AIWTANKSHOOT
+          else
+            move WTANKRUNBACK geth
+        }
+    }
+    else
+      move WTANKRUN geth
+  }
+  ifp palive
+    ifcanshoottarget
+    {
+      ifp phigher
+        nullop
+      else
+        ifpdistl 2560
+        {
+          addphealth -1000
+          palfrom 63 63
+        }
+    }
+ends
+
+state wtankshootstate
+  ifactioncount 1
+  {
+	ifspritepal 40 globalsound RETRO_DOORC else
+    sound TANK_FIRE
+	globalsound DISTANT_EXPLOSION
+	spawn BIG_SMOKE
+    eshoot WTANKPROJ
+	ifspritepal 40 setthisprojectile[RETURN].isound RETRO_BOOM
+	setthisprojectile[RETURN].extra 200
+    ifg RETURN 0
+    {
+      geta[ANGLESET].x x
+      seta[RETURN].x x
+      geta[ANGLESET].y y
+      seta[RETURN].y y
+      geta[ANGLESET].z x
+      seta[RETURN].z x
+      geta[ANGLESET].ang x
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSION2
+    ifg RETURN 0
+    {
+      geta[ANGLESET].x x
+      seta[RETURN].x x
+      geta[ANGLESET].y y
+      seta[RETURN].y y
+      geta[ANGLESET].z x
+      seta[RETURN].z x
+    }
+    ifrnd 128
+      ai AIWTANKWALK
+    else
+      resetactioncount
+  }
+ends
+
+defstate wtankhitstate
+  debris SCRAP1 1
+  ifdead
+  {
+	ifspritepal 40 globalsound RETRO_DEAD else
+    sound BLOWUP
+	flash
+	ife skybox 0 wackplayer else set CUS_WACK 10 // wackplayer messes up skyboxes
+	quake 52
+    hitradius 12288 TOUGH TOUGH TOUGH TOUGH
+    spawn EXPLOSIONMAKER
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 256
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 512
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 768
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 1024
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 1280
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 1536
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    espawn EXPLOSIONMAKER
+    ifg RETURN 0
+    {
+      geta[].ang x
+      add x 1792
+      ifg x 2047
+        sub x 2048
+      seta[RETURN].ang x
+    }
+    addkills 1
+    move 0
+    set ANGLE -2
+    cactor WTANKDEAD
+  }
+  else
+    ifrnd 20
+    {
+      ifai AIWTANKSHOOT
+        nullop
+      else
+        action AWTANKHIT
+    }
+ends
+
+appendevent EVENT_LOADACTOR
+ifactor WTANK state wtankload
+ifactor WTANKDEAD
+ {
+	  ifspawnedby WTANK
+		nullop
+	  else
+	  {
+		geta[].lotag LOTAGSAVED
+		seta[].lotag 0
+		state wtankload
+	  }
+  }
+endevent
+
+useractor enemy WTANK 3000
+  fall
+  ifaction AWTANKWALK
+    set ANGLE 1
+  else
+    set ANGLE 0
+  ifaction AWTANKHIT
+  {
+    ifactioncount 1
+    {
+      ifp palive
+        ai AIWTANKSHOOT
+      else
+        ai AIWTANKWALK
+    }
+  }
+  ifai 0
+  {
+    sizeat 128 56
+    clipdist 240
+    set ANGLE 0
+    ai AIWTANKWALK
+  }
+  else
+    ifai AIWTANKWALK
+      state wtankwalkstate
+  else
+    ifai AIWTANKSHOOT
+      state wtankshootstate
+  geta[].htpicnum x
+//state HEAVY_MECH_DAMAGE_MODIFIER
+  ifhitweapon
+    state wtankhitstate
+enda
+
+// This is the code for the driveable tank
+useractor notenemy WTANKDEAD WTANKSTRENGTH
+  fall
+  ifspawnedby WTANK
+  {
+  ifrnd 16 spawn BIG_SMOKE2
+    strength 1
+    ifhitweapon
+      debris SCRAP1 1
+  }
+  else
+  {
+    ifaction 0
+    {
+      sizeat 128 56
+      clipdist 240
+      action ZERO
+    }
+    ife LOTAGSAVED -1
+    {
+	ife player_in_vehicle 0
+      ifcansee
+        ifcanshoottarget
+          ifpdistl 1736
+		  {
+		  set player_use 0
+            ifhitspace
+            {
+              ife ANGLE -1
+              {
+			    set player_in_vehicle 1
+				set control_display 150
+			    soundonce TANK_START
+			    palfrom 63 0 0 0
+                getp[].i SET
+                setactorvar[SET].ANGLE 2
+                setactorvar[SET].SET THISACTOR
+                geta[ANGLESET].ang x
+				
+                setp[].ang x
+                set ANGLE 0
+              }
+            }
+		  }
+            else
+              ife ANGLE -3
+                set ANGLE -1
+      ifg ANGLE -1
+      {
+	  ifsound TANK_START nullop else soundonce TANK_ENGINE
+        ife ANGLE 1
+        {
+		  // This is the tank rotation code. Cannon and body rotate independently.
+          geta[].ang x
+          geta[SET].ang y
+          ifand EXTBITS_PRESS 4
+          {
+            add y -512
+            ifl y 0
+              add y 2048
+          }
+          else
+            ifand EXTBITS_PRESS 8
+            {
+              add y 512
+              ifg y 2047
+                sub y 2048
+            }
+          sub x y
+          ifn x 0
+          {
+            ifand BITS_PRESS 64
+            {
+              ifg x 0
+                mulvar x -1
+            }
+            else
+              ifand BITS_PRESS 128
+              {
+                ifl x 0
+                  mulvar x -1
+              }
+            ifg x 1024
+              mulvar x -1
+            else
+              ifl x -1024
+                mulvar x -1
+            ifg x 16
+              set x 16
+            ifl x -16
+              set x -16
+            geta[].ang y
+            sub y x
+            ifg y 2047
+              sub y 2048
+            ifl y 0
+              add y 2048
+            seta[].ang y
+          }
+        }
+        ifaction AWTANKSHOOT
+          ifactioncount 1
+            action ZERO
+        ifand BITS_PRESS 4 // Fire!
+        {
+          ifaction AWTANKSHOOT
+            nullop
+          else
+          {
+			quake 26
+            eshoot WTANKPROJ
+			ifand GUNFIREMODE 262144 { globalsound DISTANT_EXPLOSION sound TANK_FIRE2 setthisprojectile[RETURN].spawns EXPLOSION2 }
+			else { globalsound DISTANT_EXPLOSION sound TANK_FIRE }
+            ifg RETURN 0
+            {
+              geta[ANGLESET].x x
+              seta[RETURN].x x
+              geta[ANGLESET].y y
+              seta[RETURN].y y
+              geta[ANGLESET].z x
+              seta[RETURN].z x
+              geta[ANGLESET].ang x
+              seta[RETURN].ang x
+            }
+            espawn EXPLOSION2
+            ifg RETURN 0
+            {
+              geta[ANGLESET].x x
+              seta[RETURN].x x
+              geta[ANGLESET].y y
+              seta[RETURN].y y
+              geta[ANGLESET].z x
+              seta[RETURN].z x
+            }
+            espawn BIG_SMOKE2
+            ifg RETURN 0
+            {
+              geta[ANGLESET].x x
+              seta[RETURN].x x
+              geta[ANGLESET].y y
+              seta[RETURN].y y
+              geta[ANGLESET].z x
+              seta[RETURN].z x
+            }
+            action AWTANKSHOOT
+          }
+        }
+        set ANGLE 0
+        ifand BITS_PRESS 32 // Running
+        {
+		
+		 findnearsprite3d SHOOTME 1596 TEMP9 
+			ifn TEMP9 -1 
+				{
+				getactorvar[TEMP9].myowner TEMP8
+				seta[TEMP8].htextra 50 
+				}
+			 else
+			 ife TEMP9 -1
+				{
+				 findnearsprite3d SHOOTME3 1596 TEMP9 
+			ifn TEMP9 -1 
+					{
+					getactorvar[TEMP9].myowner TEMP8
+					seta[TEMP8].htextra 50 
+					}
+				}
+		
+		  // Tank movement code
+          ifand EXTBITS_PRESS 4
+          {
+            soundonce TANK_TREAD
+            ifand EXTBITS_PRESS 2
+              move WTANKRUNBACK geth
+            else
+              move WTANKRUN geth
+            set ANGLE 1
+          }
+          else
+            ifand EXTBITS_PRESS 8
+            {
+              soundonce TANK_TREAD
+              ifand EXTBITS_PRESS 2
+                move WTANKRUNBACK geth
+              else
+                move WTANKRUN geth
+              set ANGLE 1
+            }
+          else
+            ifand EXTBITS_PRESS 1
+            {
+              soundonce TANK_TREAD
+              move WTANKRUN geth
+              set ANGLE 1
+            }
+          else
+            ifand EXTBITS_PRESS 2
+            {
+              soundonce TANK_TREAD
+              move WTANKRUNBACK geth
+              set ANGLE 1
+            }
+        }
+        else
+        {
+          ifand EXTBITS_PRESS 4
+          {
+            soundonce TANK_TREAD
+            ifand EXTBITS_PRESS 2
+              move WTANKBACK geth
+            else
+              move WTANKWALK geth
+            set ANGLE 1
+          }
+          else
+            ifand EXTBITS_PRESS 8
+            {
+              soundonce TANK_TREAD
+              ifand EXTBITS_PRESS 2
+                move WTANKBACK geth
+              else
+                move WTANKWALK geth
+              set ANGLE 1
+            }
+          else
+            ifand EXTBITS_PRESS 1
+            {
+              soundonce TANK_TREAD
+              move WTANKWALK geth
+              set ANGLE 1
+            }
+          else
+            ifand EXTBITS_PRESS 2
+            {
+              soundonce TANK_TREAD
+              move WTANKBACK geth
+              set ANGLE 1
+            }
+        }
+        ife ANGLE 0
+          move 0
+      }
+      else
+        move 0
+    }
+    geta[].htpicnum x
+    ife x KNEE
+    {
+      seta[].htextra -1
+      break
+    }
+    ife x SHOTSPARK1
+    {
+      seta[].htextra -1
+      break
+    }
+    ifhitweapon
+    {
+      ife ANGLE -2
+        strength 1
+      else
+        ifdead
+        {
+          sound LASERTRIP_EXPLODE
+          hitradius 12288 TOUGH TOUGH TOUGH TOUGH
+          spawn EXPLOSIONMAKER
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 256
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 512
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 768
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 1024
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 1280
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 1536
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          espawn EXPLOSIONMAKER
+          ifg RETURN 0
+          {
+            geta[].ang x
+            add x 1792
+            ifg x 2047
+              sub x 2048
+            seta[RETURN].ang x
+          }
+          move 0
+		  addphealth -1000
+          ifg ANGLE -1
+            setactorvar[SET].ANGLE 0
+          set ANGLE -2
+        }
+      debris SCRAP1 1
+    }
+  }
+enda
+
+action EXPLODE 0
+move EXPLOSIONVELS 512
+move EXPLOSIONUPVELS 512 -128
+
+// These various actors set the positioning of the tank's elements, relative to the tank itself (the tank == geta[SET])
+useractor notenemy WTANKGUN
+  getactorvar[SET].ANGLE ANGLESET
+  ife ANGLESET -1
+    move 0
+  else
+    ife ANGLESET -2
+    {
+      ifaction 0
+      {
+        sizeat 112 20
+        clipdist 112
+        cstat 33025
+        ifrnd 64
+        {
+          move EXPLOSIONUPVELS randomangle getv
+          action EXPLODE
+        }
+        else
+        {
+          move 0
+          action ZERO
+        }
+      }
+      else
+        ifaction EXPLODE
+        {
+          fall
+          ifmove 0
+            nullop
+          else
+          {
+            ifcount 4
+            {
+              spawn EXPLOSION2
+              resetcount
+            }
+            ifnotmoving
+              move 0
+            ifmove EXPLOSIONVELS
+            {
+              iffloordistl 8
+                move 0
+              ifrnd 8
+                move 0
+            }
+            else
+            {
+              ifceilingdistl 8
+                move EXPLOSIONVELS geth
+              ifrnd 8
+                move EXPLOSIONVELS geth
+            }
+          }
+          break
+        }
+      strength 1
+      ifhitweapon
+        debris SCRAP1 1
+    }
+  else
+  {
+    geta[SET].picnum y
+    ife y WTANK
+    {
+      move WTANKSTOPPED faceplayer
+      setactorvar[SET].SET THISACTOR
+    }
+    else
+    {
+      getactorvar[SET].SET x
+      geta[x].ang x
+	  geta[].ang TEMP4
+	  ifvarvarn TEMP4 x soundonce TANK_ROTATE else stopactorsound THISACTOR TANK_ROTATE
+      seta[].ang x
+    }
+  }
+  geta[SET].x x
+  seta[].x x
+  geta[SET].y y
+  seta[].y y
+  geta[SET].z x
+  add x -9216
+  seta[].z x
+enda
+
+useractor notenemy WTANKUP
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  add x -9216
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  geta[SET].x x
+  seta[].x x
+  geta[SET].y y
+  seta[].y y
+enda
+
+useractor notenemy WTANKUP2
+  state flatcodewithoutblockingbit
+  /*
+  // remove block bit
+  geta[].cstat TEMP 
+  xorvar TEMP 1 
+  seta[].cstat TEMP
+  */
+  
+  geta[SET].z x
+  add x -7168
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 1152
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 1152
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKDW
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  add x -2048
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  geta[SET].x x
+  seta[].x x
+  geta[SET].y y
+  seta[].y y
+enda
+
+useractor notenemy WTANKDW2
+  state flatcodewithblockingbit
+  
+  getactorvar[SET].ANGLE x
+  ife x 1
+  {
+    ifaction AWTANKWALKFRAMES
+      nullop
+    else
+      action AWTANKWALKFRAMES
+  }
+  else
+    action ZERO
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  ifn ANGLE 1
+  {
+    add ANGLESET 1024
+    ifg ANGLESET 0
+      sub ANGLESET 2048
+  }
+  sin y ANGLESET
+  mulvar y 768
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 768
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKFR
+  state flatcodewithblockingbit
+  
+  getactorvar[SET].ANGLE x
+  ife x 1
+  {
+    ifaction AWTANKWALKFRAMES
+      nullop
+    else
+      action AWTANKWALKFRAMES
+  }
+  else
+    action ZERO
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ifg ANGLE 1
+  {
+    add ANGLESET 1024
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  ifg ANGLE 1
+    add ANGLESET 1536
+  else
+    add ANGLESET 512
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 1792
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 1792
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+  ife ANGLE 1
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  else
+    ife ANGLE 2
+    {
+      add ANGLESET 512
+      ifg ANGLESET 2047
+        sub ANGLESET 2048
+    }
+  else
+    ife ANGLE 3
+    {
+      sub ANGLESET 512
+      ifl ANGLESET 0
+        add ANGLESET 2048
+    }
+  else
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  sin y ANGLESET
+  mulvar y 768
+  divvar y 16384
+  geta[].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 768
+  divvar x 16384
+  geta[].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKLF
+  state flatcodewithblockingbit
+  
+  getactorvar[SET].ANGLE x
+  ife x 1
+  {
+    ifaction AWTANKWALKFRAMES
+      nullop
+    else
+      action AWTANKWALKFRAMES
+  }
+  else
+    action ZERO
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ife ANGLE 1
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  else
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  ifn ANGLE 1
+  {
+    add ANGLESET 1024
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  sin y ANGLESET
+  mulvar y 1024
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 1024
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKLF2
+  state flatcodewithoutblockingbit
+  /*
+  // remove block bit
+  geta[].cstat TEMP 
+  xorvar TEMP 1 
+  seta[].cstat TEMP
+  */
+  getactorvar[SET].ANGLE x
+  ife x 1
+  {
+    ifaction AWTANKWALKFRAMES
+      nullop
+    else
+      action AWTANKWALKFRAMES
+  }
+  else
+    action ZERO
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ife ANGLE 1
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  else
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  ifn ANGLE 1
+    add ANGLESET 1024
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y -512
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x -512
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKFR2
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  add x -2048
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 1664
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 1664
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKFR3
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  add x -7168
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 640
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 640
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKBK
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  add x -2048
+  seta[].z x
+  geta[SET].ang ANGLESET
+  add ANGLESET 1024
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 1536
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y -1664
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x -1664
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNFR
+  state flatcodewithblockingbit
+  
+  getactorvar[SET].SET x
+  setactorvar[x].ANGLESET THISACTOR
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 2816
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 2816
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNUP
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+    add x -1024
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ife ANGLE 3
+  {
+    sub ANGLESET 1536
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  else
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 1856
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 1856
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+  ifg ANGLE 1
+  {
+    ife ANGLE 2
+    {
+      sub ANGLESET 512
+      ifl ANGLESET 0
+        add ANGLESET 2048
+    }
+    else
+    {
+      add ANGLESET 512
+      ifg ANGLESET 2047
+          sub ANGLESET 2048
+    }
+    sin y ANGLESET
+    mulvar y 128
+    divvar y 16384
+    geta[].x x
+    add x y
+    seta[].x x
+    cos x ANGLESET
+    mulvar x 128
+    divvar x 16384
+    geta[].y y
+    add y x
+    seta[].y y
+  }
+enda
+
+
+useractor notenemy WTANKGUNUP2
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  ifn ANGLE 1
+    add x -5120
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  geta[SET].x x
+  seta[].x x
+  geta[SET].y y
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNFR2
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 896
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 896
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNAN
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ife ANGLE 1
+  {
+    add ANGLESET 256
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  else
+  {
+    sub ANGLESET 256
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 512
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 640
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 640
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+  ife ANGLE 1
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  else
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  sin y ANGLESET
+  mulvar y 640
+  divvar y 16384
+  geta[].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 640
+  divvar x 16384
+  geta[].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNLF
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  ifn ANGLE 1
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  else
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  seta[].ang ANGLESET
+  geta[SET].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 1536
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y 256
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 256
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+  ife ANGLE 1
+  {
+    sub ANGLESET 512
+    ifl ANGLESET 0
+      add ANGLESET 2048
+  }
+  else
+  {
+    add ANGLESET 512
+    ifg ANGLESET 2047
+      sub ANGLESET 2048
+  }
+  sin y ANGLESET
+  mulvar y 896
+  divvar y 16384
+  geta[].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x 896
+  divvar x 16384
+  geta[].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy WTANKGUNBK
+  state flatcodewithblockingbit
+  
+  geta[SET].z x
+  seta[].z x
+  geta[SET].ang ANGLESET
+  add ANGLESET 1024
+  ifg ANGLESET 2047
+    sub ANGLESET 2048
+  seta[].ang ANGLESET
+  mulvar ANGLESET -1
+  add ANGLESET 2048
+  add ANGLESET 1536
+  ifg ANGLESET 0
+    sub ANGLESET 2048
+  sin y ANGLESET
+  mulvar y -896
+  divvar y 16384
+  geta[SET].x x
+  add x y
+  seta[].x x
+  cos x ANGLESET
+  mulvar x -896
+  divvar x 16384
+  geta[SET].y y
+  add y x
+  seta[].y y
+enda
+
+useractor notenemy EXPLOSIONMAKER 0 0 EXPLOSIONVELS geth
+  ifcount 17
+    killit
+  else
+    ifcount 16
+    {
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+      seta[].z SET
+      spawn EXPLOSION2
+      seta[].z ANGLE
+    }
+  else
+    ifcount 13
+      nullop
+  else
+    ifcount 12
+    {
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+      seta[].z SET
+      spawn EXPLOSION2
+      seta[].z ANGLE
+    }
+  else
+    ifcount 9
+      nullop
+  else
+    ifcount 8
+    {
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+      seta[].z SET
+      spawn EXPLOSION2
+      seta[].z ANGLE
+    }
+  else
+    ifcount 3
+      nullop
+  else
+    ifcount 4
+    {
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	shoot SPARK
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+	spawn BIG_SMOKE2
+      seta[].z SET
+      spawn EXPLOSION2
+      seta[].z ANGLE
+    }
+enda

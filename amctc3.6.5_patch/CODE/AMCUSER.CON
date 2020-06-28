@@ -1,0 +1,1272 @@
+/*
+--------------------------------------------------------------------------------
+Duke Nukem 3D Version 1.4
+By Todd Replogle
+(c) 1996 3D Realms Entertainment
+--------------------------------------------------------------------------------
+
+IMPORTANT NOTICE IF YOU USE MODIFIED .CON FILES
+
+If you are playing a MULTIPLAY game (Dukematch or Co-op) and you are
+using *modified* .CON files (USER.CON, GAME.CON, DEFS.CON), then each
+multiplayer must be using the EXACT SAME .CON files, or the game will
+get out of sync and/or develop interesting problems.
+
+3D Realms encourages you to experiment freely with the parameters
+contained in this file, and to share your discoveries with the rest
+of the world.  However, BE ADVISED that 3D Realms does NOT offer 
+any technical support on how to use this file or other user-modifiable 
+features of this game.  Do NOT call 3D Realms or Apogee Software 
+for advice or help with this subject.  
+
+You make modifications to this and other files at your own risk. 
+It is recommended that you first make a backup copy of this, or
+any .CON files before making any changes.
+--------------------------------------------------------------------------------
+*/
+
+// ******************
+// MISC GAME SETTINGS
+// ******************
+
+define SWEARFREQUENCY          100      // The lower, the less.
+
+define CAMERASDESTRUCTABLE      NO               // YES
+define FREEZERHURTOWNER         YES
+
+define MAXPLAYERHEALTH          255
+
+define YELLHURTSOUNDSTRENGTH     40
+define YELLHURTSOUNDSTRENGTHMP   50
+
+define MAXXSTRETCH 70
+define MAXYSTRETCH 70
+
+define MINXSTRETCH 9
+define MINYSTRETCH 8
+
+define DOUBLEMAXPLAYERHEALTH    200
+define STARTARMORHEALTH         0
+define RETRIEVEDISTANCE         844
+define SQUISHABLEDISTANCE      1024 // For actors only!
+define DEFAULTVISIBILITY        512
+define FROZENQUICKKICKDIST      980
+
+define GENERICIMPACTDAMAGE      10
+
+define MAXPISTOLAMMO           200
+define MAXSHOTGUNAMMO           50
+define MAXCHAINGUNAMMO         200
+define MAXRPGAMMO               50
+define MAXHANDBOMBAMMO          50
+define MAXSHRINKERAMMO          50
+define MAXGROWAMMO              50
+define MAXDEVISTATORAMMO        99
+define MAXFREEZEAMMO            99
+define MAXTRIPBOMBAMMO          10
+define TRIPBOMBLASERMODE        0     // 0 = always visable
+                                      // 1 = transluscense
+                                      // 2 = invisible w/o IR goggles
+                                      // 3 = totally invisable
+
+
+
+define RESPAWNACTORTIME         768
+define RESPAWNITEMTIME          768
+
+define QSIZE                   512      // total number of active
+                                        // bullet holes, blood,
+                                        // footprints, money, ect...
+                                        // (max 1024)
+
+// The BLIMP has a high respawn time (any value smaller runs the risk
+// of spawning too many sprites, resulting in "Bog City")
+
+define BLIMPRESPAWNTIME 2048
+
+define NUMFREEZEBOUNCES          3    // 0 - 255
+
+define RUNNINGSPEED 49200
+define GRAVITATIONALCONSTANT 176
+
+define PLAYDEADTIME 120
+
+define SHRUNKCOUNT 270
+define SHRUNKDONECOUNT 304
+
+define FROZENDRIPTIME 90
+define THAWTIME 138
+
+
+// Various blast radius distances
+
+define RPGBLASTRADIUS           1780
+define PIPEBOMBRADIUS           2500
+define SHRINKERBLASTRADIUS      680
+define TRIPBOMBBLASTRADIUS      3880
+define MORTERBLASTRADIUS        2500
+define BOUNCEMINEBLASTRADIUS    2500
+define SEENINEBLASTRADIUS       2048
+
+gamestartup     DEFAULTVISIBILITY GENERICIMPACTDAMAGE MAXPLAYERHEALTH
+                STARTARMORHEALTH  RESPAWNACTORTIME RESPAWNITEMTIME
+                RUNNINGSPEED GRAVITATIONALCONSTANT RPGBLASTRADIUS
+                PIPEBOMBRADIUS SHRINKERBLASTRADIUS TRIPBOMBBLASTRADIUS
+                MORTERBLASTRADIUS BOUNCEMINEBLASTRADIUS SEENINEBLASTRADIUS
+                MAXPISTOLAMMO MAXSHOTGUNAMMO MAXCHAINGUNAMMO
+                MAXRPGAMMO MAXHANDBOMBAMMO MAXSHRINKERAMMO
+                MAXDEVISTATORAMMO MAXTRIPBOMBAMMO MAXFREEZEAMMO
+                MAXGROWAMMO CAMERASDESTRUCTABLE NUMFREEZEBOUNCES
+                FREEZERHURTOWNER QSIZE TRIPBOMBLASERMODE
+				
+define SPRINTSPEED 55200
+define MERLIJN_SPRINTSPEED 58200
+
+// Knockback effect
+define ENEMYKNOCKBACK -10
+
+// Proximity mines distance
+define PROX_DISTANCE 1526
+
+// Weapon Strengths
+define KNEE_WEAPON_STRENGTH             13
+define PISTOL_WEAPON_STRENGTH            6
+define HANDBOMB_WEAPON_STRENGTH        140
+
+
+// For direct hits with the rocket launcher,
+// this amount is actually doubled.  Otherwise,
+// damage values depend on distance. The
+// further, the weaker.
+
+define RPG_WEAPON_STRENGTH              140
+
+
+define SHRINKER_WEAPON_STRENGTH          0
+define GROWSPARK_WEAPON_STRENGTH        15
+define SHOTGUN_WEAPON_STRENGTH          10
+define CHAINGUN_WEAPON_STRENGTH          9
+define FREEZETHROWER_WEAPON_STRENGTH    20
+define COOL_EXPLOSION_STRENGTH          38
+define TRIPBOMB_STRENGTH               300
+define FIRELASER_WEAPON_STRENGTH         7
+define MORTER_WEAPON_STRENGTH           50
+define BOUNCEMINE_WEAPON_STRENGTH      150
+define SPIT_WEAPON_STRENGTH              8
+define BULLET_WEAPON_STRENGTH           30
+
+// Enemy strengths (hit points).
+
+define TROOPSTRENGTH            30
+define PIGCOPSTRENGTH          100
+define PIG_SHIELD_AMOUNT1       75
+define PIG_SHIELD_AMOUNT2       50
+define LIZSTRENGTH             100
+define LIZGETTINGDAZEDAT        15
+define LIZEATINGPLAYER          -2
+define OCTASTRENGTH            175
+define OCTASCRATCHINGPLAYER    -22
+define RECONSTRENGTH            50
+define TURRETSTRENGTH           30
+define ROTTURRETSTRENGTH        40
+define DRONESTRENGTH           50
+define CAPTAINSTRENGTH          50
+define CAPTSPINNINGPLAYER      -22
+define COMMANDERSTRENGTH        350
+define SHARKSTRENGTH            35
+define SHARKBITESTRENGTH        -25
+define NEWBEASTSTRENGTH         300
+define NEWBEASTSCRATCHAMOUNT   -34
+define DOLPHINSTRENGTH          50
+
+define PISTOLAMMOAMOUNT         12
+define SHOTGUNAMMOAMOUNT        10
+define CHAINGUNAMMOAMOUNT       50
+define RPGAMMOBOX               5
+define CRYSTALAMMOAMOUNT        5
+define GROWCRYSTALAMMOAMOUNT    20
+define DEVISTATORAMMOAMOUNT     15
+define FREEZEAMMOAMOUNT         25
+define HANDBOMBBOX              5
+
+
+define BOSS1STRENGTH            4500
+define BOSS1PALSTRENGTH         1000
+define BOSS2STRENGTH            4500
+define BOSS3STRENGTH            4500
+define BOSS3PALSTRENGTH         1500
+define BOSS4STRENGTH            6000
+
+// Miscellaneous strengths.
+
+define WEAKEST           1
+define WEAK              5
+define MEDIUMSTRENGTH    10
+define TOUGH             20
+define REALLYTOUGH       30
+define ROBOTMOUSESTRENGTH 45
+define GOTTASMART        90
+define PIRATEGALSTRENGTH 200
+
+define MANWOMANSTRENGTH  100
+
+
+// Players' inventory amounts.
+
+define STEROID_AMOUNT           400
+define SHIELD_AMOUNT            100
+define SCUBA_AMOUNT            6400
+define HOLODUKE_AMOUNT         2400
+define JETPACK_AMOUNT          1600
+define HEAT_AMOUNT             4800
+define BOOT_AMOUNT              200
+
+define SPAWNAMMOODDS             96
+
+
+// Maximum quote size is 64 characters.
+
+
+definequote  0        Auto Aiming!
+definequote  1        Show Map: OFF
+definequote  2        Activated
+definequote  3        
+definequote  4        Locked
+definequote  5        Given everything!
+definequote  6        Boots!
+definequote  7        Wasted!
+definequote  8        Unlocked
+definequote  9        A secret area! 
+// LEAVE BLANK
+definequote 10        Squish!
+definequote 11        All doors unlocked, can you dig it?
+definequote 12        
+definequote 13        Press use key to restart level
+definequote 14        Ammo for Devastator
+definequote 15        Deactivated
+definequote 16        Switch operated only!
+definequote 17        God mode on
+definequote 18        God mode off
+definequote 19        Amulet!
+definequote 20        Crosshair on
+definequote 21        Crosshair off
+definequote 22        TRYING TO CHEAT? FOR SHAME
+definequote 23        Messages on
+definequote 24        Messages off
+definequote 25        TYPE THE CHEAT CODE:
+definequote 26        Detail low
+definequote 27        Detail high
+definequote 28        WILL ALWAYS HAVE NO FUTURE
+definequote 29        BRIGHTNESS LEVEL: ONE
+definequote 30        BRIGHTNESS LEVEL: TWO
+definequote 31        BRIGHTNESS LEVEL: THREE
+definequote 32        BRIGHTNESS LEVEL: FOUR
+definequote 33        BRIGHTNESS LEVEL: FIVE 
+definequote 34        Sound on
+definequote 35        Sound off
+definequote 36        
+definequote 37        
+definequote 38        Armour
+definequote 39        
+definequote 40        Press F1 for Help
+definequote 41        
+definequote 42        Body suit
+definequote 43        Access card
+definequote 44        Mouse aiming off
+definequote 45        Mouse aiming on
+definequote 46        CHEAT CODE:  UNRECOGNIZED
+definequote 47        
+definequote 48        
+definequote 49        
+definequote 50        
+definequote 51        
+definequote 52        
+definequote 53        
+definequote 54        Chaingun cannon!
+definequote 55        Pipebomb!
+definequote 56        RPG!
+definequote 57        Shotgun
+definequote 58        Laser tripbomb!
+definequote 59        Freezethrower!
+definequote 60        Got Shrinker/Expander!
+definequote 61        Small medikit: +10
+definequote 62        Large medikit: +30
+definequote 63        Ammo for Chaingun cannon!
+definequote 64        Ammo for RPG!
+definequote 65        Ammo for Pistol!
+definequote 66        Ammo for Freezethrower!
+definequote 67        BOOTS OFF
+definequote 68        BOOTS ON
+definequote 69        Ammo for Shotgun
+definequote 70        
+definequote 71        
+definequote 72        
+definequote 73        
+definequote 74        Weapon raised
+definequote 75        
+definequote 76        
+definequote 77        
+definequote 78        Ammo for Shrinker
+definequote 79        MORE ASIAN GIRLS PLZ
+definequote 80        
+definequote 81        Weapon mode on
+definequote 82        Weapon mode off
+definequote 83        Follow mode off
+definequote 84        Follow mode on
+definequote 85        Run mode off
+definequote 86        Run mode on
+definequote 87        Devastator weapon
+definequote 88        
+definequote 89        
+definequote 90        
+definequote 91        
+definequote 92        Music on
+definequote 93        Music off
+definequote 94        Scroll mode on
+definequote 95        Scroll mode off
+definequote 96        BRIGHTNESS LEVEL: SIXz
+definequote 97        BRIGHTNESS LEVEL: SEVEN
+definequote 98        BRIGHTNESS LEVEL: GOD THIS SHIT IS HIDEOUS WHY THE FUCK WOULD YOU WANT IT AT THIS LEVEL
+definequote 99        Max ammo!
+definequote 100       All locks toggled
+definequote 101       
+definequote 102       We're gonna fry your ass, Nukem!
+definequote 103       
+definequote 104       Got dirty, filthy, used armor
+definequote 105       Pirates rule the seven seas! Yaargh!
+definequote 106       
+definequote 107       
+definequote 108       YOU'RE BURNING SHITHEAD! STOP DROP 'N ROLL  
+definequote 109       3rd person off
+definequote 110       3rd person on
+definequote 111       Show all map on
+definequote 112       No clip mode off
+definequote 113       No clip mode on
+definequote 114       !!! INCORRECT VERSION !!!
+definequote 115       <Please Leave Blank>
+definequote 116       <Please Leave Blank>
+definequote 117       <Please Leave Blank>
+definequote 118       You can't quick save when dead
+definequote 119       Got all weapons and ammo
+definequote 120       Got all inventory items
+definequote 121       Got all keys
+definequote 122       <Please Leave Blank>
+definequote 123       Ammo for Expander
+definequote 124       MAP HAS A DIFFERENT NUMBER OF PLAYERS
+definequote 125       James
+definequote 126       Zaxtor
+definequote 127       Merlijn
+definequote 128       Highwire
+definequote 129       Sang
+definequote 130       Rusty
+definequote 131       Geoffrey
+definequote 132       Mikko
+definequote 133       Shield plate!
+definequote 134       Booze!
+definequote 135       Ordered the brochure! Check R&D back at base.
+// spare
+definequote 138       Heavy Armour!
+definequote 139       Food!
+definequote 140       Drink!
+// spare
+definequote 147       It's too heavy to pickup
+definequote 148       It's too heavy to pickup, but...
+definequote 149       10 Shells transferred to Autoshotgun
+definequote 150       Megasphere!
+definequote 151       Hypospray: +20
+definequote 152       Healing Potion: +10%
+definequote 153       Healing Flask: +25%
+definequote 154       Healing Powder: +15
+definequote 155       Flame key!
+definequote 156       Flame key required
+definequote 157       Spider key!
+definequote 158       Spider key required
+definequote 159       Dagger key!
+definequote 160       Dagger key required
+definequote 161       Moon key!
+definequote 162       Moon key required
+definequote 163       Skull key!
+definequote 164       Skull key required
+definequote 165       Rune key!
+definequote 166       Micky
+definequote 172       Ammo converter kit
+definequote 173       Oxygen Canister!
+definequote 174       Mini-shrinker!
+definequote 175       Barrett sniper rifle!
+definequote 176       Duel Mac-10s!
+definequote 177       Blood Staff!
+definequote 178       Lizard Captain chaingun!
+definequote 179       Riot shotgun!
+definequote 180       Brimstone: +25
+definequote 181       Skull duster!
+definequote 182       Flesh Squirter!
+definequote 183       Stygian Warcannon!
+definequote 184       C4 Explosive!
+definequote 185       You need some C4 Explosive for this
+definequote 186       5...
+definequote 187       4...
+definequote 188       3...
+definequote 189       2...
+definequote 190       1...
+definequote 191       Boom!
+definequote 192       Incoming communication!
+definequote 193       Air filter!
+definequote 194       Countdown aborted!
+definequote 195       Spirit armour!
+definequote 196       This will look nice back at base...
+definequote 197       Weapon Upgrade pack!
+definequote 198       Explosive shells!
+definequote 199       Sawn-off Shotgun!
+definequote 200       Dark blue access card required
+definequote 201       Caught in a web!
+definequote 202       Tommy Gun!
+definequote 203       A key!
+definequote 204       Silver Bullets for Tommy Gun!
+definequote 205       Switching to Silver bullets...
+definequote 206       Switching to Regular bullets...
+definequote 207       Switching to Explosive shells...
+definequote 208       Switching to Regular shells...
+definequote 209       Enviro suit!
+definequote 210       Gas mask!
+definequote 211       Riotgun!
+definequote 212       Tesla Charge for Riotgun!
+definequote 213       Scarab Key!
+definequote 214       Scarab key needed!
+definequote 215       A cog!
+definequote 216       This needs a cog to function!
+definequote 217       Crossbow!
+definequote 218       "Missing in Action" Gun!
+definequote 219       Locked, but it looks pretty weak...
+definequote 220       Evidence taken!
+definequote 221       Locked, it needs a key!
+definequote 222       A strange artifact!
+definequote 223       A broken torch!
+definequote 224       Switching to Quad shot mode...
+definequote 225       Switching to single shot mode...
+definequote 226       Switching to Tesla ammo...
+definequote 227       Laser gun!
+definequote 228       Weapons and Equipment taken!
+definequote 229       Missile Launcher!
+definequote 230       Chainsaw! The great communicator!
+definequote 231       Chainsaw! Find some meat!
+definequote 232       Access denied!
+definequote 233       Locked, it must open somewhere else...
+definequote 234       fire!
+definequote 235       Cultist
+definequote 236       Bombshell
+definequote 237       Added ammo to minigun!
+definequote 238       Built barricade!
+definequote 239       An enemy is near the reactor!
+definequote 240       Eye key!
+definequote 241       Eye key required
+definequote 242       Flamethrower!
+definequote 243       Autosaving...
+definequote 244       Fire Armour!
+definequote 245       Super Armour!
+definequote 246       I could lift this door if I crouch...
+definequote 247       I can't move on without my EDF buddy!
+definequote 248       Sword!
+definequote 249       Sword Rampage!
+definequote 250       Mop!
+definequote 251       Toolbox!
+definequote 252       I'll need a toolbox to fix this...
+definequote 253       You managed to salvage the Toolbox
+definequote 254       You've used up the toolbox
+definequote 255       This needs a battery!
+definequote 256       Used a battery!
+definequote 257       FN FAL!
+definequote 258       Maarten
+definequote 259       Jane
+definequote 260       Changed the lease to AMC Squad!
+definequote 261       MP40!
+definequote 262       This needs a support radio!
+definequote 263       Used support radio!
+definequote 264       GDF Plasma Gun!
+definequote 265       Lizard Captain Firelaser gun!
+definequote 266       I can't move on without my comrade Vladmir!
+definequote 267       Flechette shells!
+definequote 268       Switching to Flechette shells...
+definequote 269       M16!
+definequote 270       Abyssal key!
+definequote 271       AK-103!
+definequote 272       Switching to grenade launcher
+definequote 273       Switching to standard attack
+definequote 274       Riotgun-Minigun!
+definequote 275       Combat knife!
+definequote 276       Silver knife!
+definequote 277       Alt-fire
+definequote 278       Switching to Silver bolts...
+definequote 279       Switching to Normal bolts...
+definequote 280       Silver crossbow bolts!
+definequote 281       Put on Enviro-suit first!
+definequote 282       Remove the Enviro-suit first!
+definequote 283       Placed artifact...
+definequote 284       Ordered the catalogue! Check the arms dealer at base!
+definequote 285       Switching to standard ammo...
+definequote 286       Switching to Magnum shells...
+definequote 287       Need a password....
+definequote 288       I could use a CD-ROM or a Floppy Disk here...
+definequote 289       Mission information obtained!
+definequote 290       You need a Bronze key
+definequote 291       You need a Silver key
+definequote 292       You need a Gold key
+definequote 293       You need a Red key
+definequote 294       Switching to first tube...
+definequote 295       Switching to second tube...
+definequote 296       Snowfall
+definequote 297       Switching to Dragon's breath shells...
+
+// MISSION OBJECTIVES
+definequote 298       Agent
+definequote 299       Mission objectives updated!
+definequote 300       - Eliminate hostile activity!
+definequote 301       - Try and find Survivors
+definequote 302       - Try and find out what went wrong
+definequote 303       - Escape
+definequote 304       - Rendezvous with your team
+definequote 305       - Make your way through the area
+definequote 306       - Destroy the Leader
+definequote 307       - Destroy the Reactor
+definequote 308       - Destroy the Base
+definequote 309       - Objective completed!
+
+// AMC TC SPECIFIC MISSIONS - LEAVE BLANK!!!
+definequote 330       -
+definequote 331       -
+definequote 332       -
+definequote 333       -
+definequote 334       -
+definequote 335       -
+
+definequote 340
+
+// CUTSCENE LINEs - LEAVE BLANK!!!
+definequote 350	    
+definequote 351	    
+definequote 352	    
+definequote 353	    
+definequote 354	    
+definequote 355	    
+
+// Player name 
+definequote 356                 
+definequote 357       is playing as James!
+definequote 358       is playing as Zaxtor!
+definequote 359       is playing as Merlijn!
+definequote 360       is playing as Highwire!
+definequote 361       is playing as Sang!
+definequote 362       is playing as Rusty!
+definequote 363       is playing as Geoffrey!
+definequote 364       is playing as Mikko!
+definequote 365       is playing as a Cultist!
+definequote 366       is playing as Bombshell!
+definequote 367       is playing as Maarten!
+definequote 368       is playing as Jane!
+definequote 369       is playing as Micky!
+definequote 370       is playing as Snowfall!
+
+definequote 380       I can't use this.
+
+definequote 390       is on a killing spree!
+
+definequote 400       Some bars were lowered...
+definequote 401       A door somewhere just opened...
+definequote 402       Some bars were raised...
+definequote 403               
+definequote 405               
+definequote 406             
+definequote 407       *Not Found yet*
+definequote 408
+definequote 409
+
+definequote 410       Stock folded!
+definequote 411       Stock unfolded!
+
+definequote 450       Send outbound communication!
+
+definequote 500       ON
+definequote 501       OFF
+definequote 502       AUTO
+definequote 503       RANGE: SHORT
+definequote 504       RANGE: MEDIUM
+definequote 505       RANGE: LONG
+definequote 506       RANGE: VERY LONG
+definequote 507       RANGE: ERROR
+definequote 508       SELECT SKILL
+definequote 509       USE
+
+definequote 511       Max Health: %ld
+definequote 512
+definequote 513       Can't find exit point for door transport!
+definequote 514       Calculating trajectory...
+definequote 515       Empty...
+definequote 516       Dropped temporary weapon
+definequote 517       Score
+definequote 518       Combo: %ld
+definequote 519       Total combo points: %ld
+definequote 520       Time: %ld:%ld:%ld
+definequote 521       Sprite spawner doesn't have hitag set!
+
+definequote 530       ^8 1. Proceed
+definequote 531       ^1 2. Continue Conversation
+
+definequote 550       ^8 has just repaired something!
+definequote 551       ^8 has just built barricades!
+definequote 552       ^8 has just loaded a minigun!
+definequote 553       has been ^2INFECTED!
+definequote 560       ^8 has just been promoted to Squaddie!
+definequote 561       ^8 has just been promoted to Sergent!
+definequote 562       ^8 has just been promoted to Captain!
+definequote 563       ^8 has just been promoted to Colonel!
+definequote 564       ^8 has just been promoted to Commander!
+
+// leave blank
+definequote 570 
+definequote 571       %ld
+definequote 572
+definequote 573       Agent
+definequote 574
+definequote 575
+
+definequote 580       Hold fire and alt-fire to abort current mission
+
+definequote 589       6. Command Ally 4
+definequote 590       1. Radio Commands
+definequote 591       2. Taunt
+definequote 592       3. Command Ally 1
+definequote 593       4. Command Ally 2
+definequote 594       5. Command Ally 3
+
+definequote 595       1. Tell Ally to follow
+definequote 596       2. Tell Ally to wait
+definequote 597       3. Dismiss Ally
+definequote 598       4. Cease/Resume firing
+
+definequote 599       Ally command menu
+definequote 600       Voice command menu
+definequote 601       1. Roger that!
+definequote 602       2. Wait here!
+definequote 603       3. Cover me!
+definequote 604       4. Incoming!
+definequote 605       5. I need backup!
+definequote 606       6. Reloading!
+definequote 607       7. On my way!
+definequote 608       8. Nice work!
+definequote 609       9. More...
+definequote 610       0. Cancel
+
+definequote 611       1. Thanks!
+definequote 612       2. Follow me!
+definequote 613       3. Watch out!
+definequote 614       4. Supplies here!
+definequote 615       5. Low on health!
+definequote 616       6. Low on ammo!
+definequote 617       7. Hit the switch!
+definequote 618       8. We can blow this up!
+definequote 619       9. More...
+
+definequote 621       1. Affirmative!
+definequote 622       2. Negative!
+definequote 623       3. Resupplying!
+definequote 624       4. Got your back!
+definequote 625       5. Move out!
+definequote 626       6. Give me a hand!
+definequote 627       7. Dead end!
+definequote 628       8. Got the key!
+definequote 629       9. First...
+
+definequote 640       : ^1Roger!
+definequote 641       : ^8Wait here!
+definequote 642       : ^2Cover me!
+definequote 643       : ^2Incoming!
+definequote 644       : ^2I need backup!
+definequote 645       : ^8Reloading!
+definequote 646       : ^1On my way!
+definequote 647       : ^8Nice work!
+
+definequote 648       : ^8Thanks!
+definequote 649       : ^1Follow me!
+definequote 650       : ^2Watch out!
+definequote 651       : ^1Supplies here!
+definequote 652       : ^2Low on health!
+definequote 653       : ^2Low on ammo!
+definequote 654       : ^1Hit the switch!
+definequote 655       : ^1We can blow this up!
+
+definequote 656       : ^8Affirmative!
+definequote 657       : ^2Negative!
+definequote 658       : ^1Resupplying!
+definequote 659       : ^8Got your back!
+definequote 660       : ^1Move out!
+definequote 661       : ^8Give me a hand!
+definequote 662       : ^2Dead end!
+definequote 663       : ^1Got the key!
+
+definequote 690      No fire mode available
+
+definequote 700      Fire mode menu
+definequote 701      1. Explosive shells
+definequote 702      2. Flechette shells
+definequote 703      3. Regular shells
+definequote 704      4. Magnum buck shells
+definequote 705      5. Dragon's breath shells
+
+
+
+definequote 710      1. Silver bullets
+definequote 711      2. Regular bullets
+
+definequote 720      1. Grenade Launcher
+definequote 721      1. Regular firing mode
+
+definequote 722      2. Attach Suppressor
+definequote 723      2. Remove Suppressor
+
+definequote 730      1. Silver Bolts
+definequote 731      2. Normal Bolts
+
+definequote 740      1. 1 Second explosion
+definequote 741      2. Instant explosion
+
+definequote 745      1. Standard Missiles
+definequote 746      2. DUP-head Missiles
+
+definequote 750       Downloading files...
+definequote 751       Uploading Virus...
+definequote 752       Download Complete!
+definequote 753       Upload Complete!
+
+definequote 760      1. Standard Grenades
+definequote 761      2. HE Grenades
+definequote 762      3. MIA grenades
+definequote 763      4. Plasma Shells
+definequote 769      9. Regular firing mode
+
+definequote 771      2. AP-Slug Ammunition
+definequote 772      3. Electro Ammunition
+definequote 773      4. Cryo Ammunition
+
+definequote 800       Helpful Hints
+definequote 801
+definequote 802
+definequote 803
+definequote 804
+definequote 805
+
+definequote 810
+definequote 811
+definequote 812
+definequote 813
+definequote 814
+definequote 815
+
+// Skill text space
+definequote 830
+definequote 831
+definequote 832
+definequote 833
+definequote 834
+definequote 835
+//definequote 836
+//definequote 837
+definequote 838 - Will unlock gold weapons on episode completion!
+definequote 839 - Will unlock an extended ending for the episode!
+
+definequote 900 Blue Key
+definequote 901 Red Key
+definequote 902 Yellow Key
+definequote 903 Green Key
+
+definequote 1001 Next 
+definequote 1002 BG
+
+definequote 1003 Agent Stanfield
+definequote 1004 Agent Znort
+definequote 1005 Agent Oostrum
+definequote 1006 Agent Highwire
+definequote 1007 Agent Sang
+definequote 1008 Agent Rusty
+definequote 1009 Agent Geoffrey
+definequote 1010 Agent Sandt
+definequote 1011
+definequote 1212 Cultist
+definequote 1213 Bombshell
+definequote 1214 Maarten Oostrum
+definequote 1215 Jane Ashford
+definequote 1216 Agent Crisp
+definequote 1217 Agent Snowfall
+definequote 1218 Highwire
+definequote 1219 Snowfall
+definequote 1221 Student M. Crisp
+
+ 	
+
+definequote 1012 Member Bios
+definequote 1013 World Info
+definequote 1014 Ally Info
+definequote 1015 Statistics
+
+definequote 1016 People saved: %ld
+definequote 1017 Amulets collected: %ld
+definequote 1018 Bottles of Beer drunk: %ld
+definequote 1019 Total Kill count: %ld
+
+definequote 1020 Co-op Rank:
+
+definequote 1021 Found Treasure!
+definequote 1022 Found Cash!
+
+definequote 1023 
+definequote 1024 Total AMC budget: %ld
+
+definequote 1025 Found a research project!
+
+definequote 1026 
+definequote 1027 Money earned: %ld
+
+definequote 1028 You already have this project
+
+
+
+definequote 1090 Equipment cost: %ld.%ld%ld
+
+definequote 1029 Help
+definequote 1030 Weapons
+definequote 1031 Equipment
+definequote 1032 Personnel
+definequote 1033 Base
+definequote 1034 Mystical
+
+definequote 1035 Specialty
+definequote 900 Dojo
+
+definequote 1036 
+definequote 1037 Tech Level: %ld
+
+definequote 1039
+definequote 1040 Weapon project no %ld
+
+definequote 1041
+definequote 1042 Budget: %ldk
+
+definequote 1043
+definequote 1044 Personnel project no %ld
+
+definequote 1045
+definequote 1046 Base project no %ld
+
+definequote 1047
+definequote 1048 Mystical project no %ld
+
+definequote 1050 Fuel Remaining: %ld%
+definequote 1051 Empty!
+definequote 1052 Refueled flame turret!
+definequote 1053
+
+definequote 1055
+definequote 1056 Equipment project no %ld
+
+definequote 1057
+definequote 1058 Dojo project no %ld
+
+definequote 1060 
+definequote 1061 Tech Level
+definequote 1062 Progress: %ld
+
+definequote 1065 New research projects added
+
+definequote 1066
+definequote 1067 Loadout Cost: %ld.%ld%ldk
+
+definequote 1070 Artifacts
+definequote 1071 Melee
+definequote 1072 Special ammo
+
+
+definequote 1075 Click to research!
+
+definequote 1080 Section 1
+definequote 1081 Section 2
+definequote 1082 Section 3
+definequote 1083 Section 4
+
+definequote 1200 MOUSE CURSOR X: %ld
+definequote 1201 MOUSE CURSOR Y: %ld
+
+definequote 1220 This will look good at home...
+
+// LEAVE QUOTES 1300+ SPARE FOR FMV STUFF
+
+// Research project description space
+definequote 1380
+definequote 1381
+definequote 1382
+definequote 1383
+definequote 1384
+definequote 1385
+definequote 1386
+
+// Research project requirement space
+definequote 1390
+definequote 1391
+definequote 1392
+definequote 1393
+definequote 1394
+
+definequote 1400 
+definequote 1401 %ld
+
+definequote 1600 Semi-auto
+definequote 1601 Full-auto
+definequote 1602 Standard mode
+definequote 1603 Armour Piercing mode
+definequote 1604 Hollow Point mode
+definequote 1605 Pump-action
+definequote 1606 Invincibility
+
+// Boss name
+definequote 1666 <BOSS NAME>
+
+definequote 3000 Moves to previous page
+definequote 3001 Moves to next page
+definequote 3002 Unlocks new weapons to use
+definequote 3003 Unlocks new equipment to use
+definequote 3004 Upgrades Agents and soldier NPCs
+definequote 3005 Upgrades Base facilities
+definequote 3006 Research paranormal items
+definequote 3007 Research melee attacks and skills
+definequote 3010 Shows information on Research
+
+definequote 3011 Shows information on key AMC Agents
+definequote 3012 Shows information on vital Planets
+definequote 3013 Shows information on AMC allies
+definequote 3014 
+definequote 3015 Change background
+
+definequote 3020 C4 - Can be placed on C4 hotspots
+definequote 3021 Silver Ammo for Tommy Gun
+definequote 3022 Explosive Shotgun Shells
+definequote 3023 Air Filter - grants unlimited oxygen underwater
+definequote 3024 Fire Suit - Protects against Lava and Heavy fires
+definequote 3025 Gas Mask - Protects against Gas leaks and attacks
+
+definequote 3026 Tesla Ammo for Riotgun
+definequote 3027 Cog - Can be used to activate machinery
+definequote 3028 Toolbox - Can fix broken switches or machinery
+definequote 3029 Armour-piercing Flechette Shells
+definequote 3030 Silver bolts for Crossbow
+definequote 3031 Micro-Torpedoes for Dartgun
+definequote 3032 Hi-power 4/0 Magnum Shells
+definequote 3033 Heat Sinks - Can discharge a Gun's heat
+definequote 3034 Dragon's breath rounds
+
+definequote 3035 Click on an item's name to assign it to this character
+definequote 3036 Artifacts can only be assigned to one character.
+
+definequote 3037 You found an artifact!
+definequote 3038 You found some equipment!
+
+
+definequote 3040 AMC Lab has advanced a tech level!
+
+definequote 3050 Added healing item to First aid kit
+
+definequote 3060 Start mission with briefing
+definequote 3061 Show information
+definequote 3062 Show help
+definequote 3063 Show Solar System
+definequote 3064 Show Star System
+definequote 3065 Show Episode debriefing
+definequote 3066 Show filter select
+definequote 3067 Show All of Earth
+definequote 3068 Show Milky way
+
+definequote 3070 Show Episode 1 missions
+definequote 3071 Show Episode 2 missions
+definequote 3072 Show Facilities
+definequote 3073 Show Resources
+definequote 3074 Show Episode 3 missions
+definequote 3075 Show Episode 4 missions
+definequote 3076 Show Episode 5 missions
+definequote 3077 Show EDF missions
+
+definequote 3080 BOUGHT
+
+definequote 3090 Activate supply drop. Costs 30 supplies on delivery.
+definequote 3091 Supply drop on it's way!
+definequote 3092 Click to toggle precog brain information
+definequote 3093 Deactivate supply drop.
+
+definequote 3095 Click to change lasersight colour
+definequote 3096 Click to change chassis colour
+
+definequote 3100 Flippers - move faster underwater
+definequote 3101 Jumping Sandals - Jump Higher
+definequote 3102 Rope - deployed at certain areas
+definequote 3103 Breathing Mask - Infinite oxygen
+definequote 3104 Bracers - Infinite Sprint
+definequote 3105 Feather - Jump to float
+definequote 3106 Airstrike Marker
+definequote 3107 Firewall - deactivates a firewall
+
+definequote 3200 Found a weapon for James!
+definequote 3201 Found a weapon for Zaxtor!
+definequote 3202 Found a weapon for Merlijn!
+definequote 3203 Found a weapon for Highwire!
+definequote 3204 Found a weapon for Sang!
+definequote 3205 Found a weapon for Rusty Nails!
+definequote 3206 Found a weapon for Geoffrey!
+definequote 3207 Found a weapon for Mikko!
+definequote 3208 Found a weapon for Micky!
+definequote 3209 Found a weapon for Snowfall!
+
+
+definequote 3503       ENEMIES KILLED:
+definequote 3504       ENEMIES LEFT:
+definequote 3505       SECRETS FOUND:
+definequote 3506       SECRETS LEFT:
+
+definequote 3509       PRESS USE TO CONTINUE
+definequote 3511
+
+
+definequote 4000 DATA/WEAPONS.AMCTC
+definequote 4001 DATA/EQUIPMENT.AMCTC
+definequote 4002 DATA/PERSONEL.AMCTC
+definequote 4003 DATA/BASE.AMCTC
+definequote 4004 DATA/MYSTIC.AMCTC
+definequote 4005 DATA/MONSTER.AMCTC
+definequote 4006 DATA/IW_COMPLETE.AMCTC
+
+definequote 4007 DATA/WEAPON_FOUND.AMCTC
+definequote 4008 DATA/TEMP_W_LOADOUT.AMCTC
+definequote 4009 DATA/MELEE_FOUND.AMCTC
+definequote 4010 DATA/TEMP_M_LOADOUT.AMCTC
+definequote 4011 DATA/EQUIPMENT_FOUND.AMCTC
+definequote 4012 DATA/EQUIP_LOADOUT.AMCTC
+definequote 4013 DATA/ARTIFACTS_FOUND.AMCTC
+definequote 4014 DATA/ARTIFACTS_LOADOUT.AMCTC
+definequote 4015 DATA/AMMO_LOADOUT.AMCTC
+definequote 4016 DATA/SPECIAL_LOADOUT.AMCTC
+
+definequote 4018 DATA/SHOP_NEW.AMCTC
+
+definequote 4020 DATA/DOJO.AMCTC
+
+definequote 4025 DATA/TECH_LEVEL.AMCTC
+definequote 4026 DATA/FACILITIES.AMCTC
+definequote 4027 DATA/RESOURCES.AMCTC
+
+definequote 4030 DATA/SKILL_MEDALS.AMCTC
+definequote 4031 DATA/BEAT_LEVELS_CHAR.AMCTC
+
+
+definequote 4041 DATA/MELEE_LOADOUT_COST.AMCTC
+definequote 4042 DATA/WEAPON_LOADOUT_COST.AMCTC
+definequote 4043 DATA/AMMO_LOADOUT_COST.AMCTC
+definequote 4044 DATA/SPECIALIST_LOADOUT_COST.AMCTC
+
+definequote 4040 DATA/EQUIPMENT_LOADOUT_COST.AMCTC
+
+// 2 = medikit
+
+definequote 4054 DATA/CHEST_LOADOUT.AMCTC
+
+// 1 = armour
+// 4 = spirit vest
+
+definequote 4055 DATA/BELT_LOADOUT.AMCTC
+
+// 5 = shotgun belt
+
+definequote 4056 DATA/HELMET_LOADOUT.AMCTC
+
+// 1 = ballistic mask
+// 3 = night/heat vision
+
+definequote 4070 DATA/BOOTS_LOADOUT.AMCTC
+
+// 1 = protective
+// 2 = flippers
+
+definequote 4045 DATA/SPECIALIST_CUSTOM.AMCTC
+
+definequote 4046 DATA/SEEN_MAP.AMCTC
+
+definequote 4047 DATA/DECORATIONS.AMCTC
+
+definequote 4050 DATA/DATA_ARRAYS.AMCTC
+definequote 4051 DATA/PLAYED_AS.AMCTC
+
+definequote 4052 DATA/CONFIG_DATA.AMCTC
+definequote 4053 DATA/BEAT_EPISODES.AMCTC
+
+definequote 4057 DATA/CHEST_LOADOUT_COST.AMCTC
+definequote 4058 DATA/BELT_LOADOUT_COST.AMCTC
+definequote 4059 DATA/HELMET_LOADOUT_COST.AMCTC
+definequote 4071 DATA/BOOT_LOADOUT_COST.AMCTC
+
+definequote 4060 DATA/AGENT_FATIGUE.AMCTC
+
+definequote 4061 DATA/HELP_HINT.AMCTC
+
+definequote 4090 EARTH
+definequote 4091 SOL SYSTEM
+definequote 4092 MARS
+definequote 4093 MOON
+definequote 4094 GANYMEDE
+definequote 4095 IO
+definequote 4096 LOCAL CLUSTER
+definequote 4097 ISHTEG SYSTEM
+definequote 4098 ABYSSAL DIMENSION
+definequote 4099 33 BOO SYSTEM
+definequote 4100 XUGLOP
+definequote 4101 RACTONIA
+definequote 4102 UMBRIEL
+definequote 4103 USA
+definequote 4104 EUROPE
+definequote 4105 UMBRIEL
+definequote 4106 THE MILKY WAY
+definequote 4107 ELYSION
+
+definequote 5000 Heat Seeking card for Zilla Missile Launcher
+definequote 5001 Atomic Bomb for Zilla Missile Launcher
+definequote 5002 Depleted Uranium head missiles for Zilla Missile Launcher
+definequote 5003 Grenades for M203 Launchers
+definequote 5004 Caseless grenades for GP30/GP25 launchers
+definequote 5005 HE shells for M203 Launchers
+definequote 5006 MIA shells for M203 Launchers
+definequote 5007 Plasma shells for M203 Launchers
+definequote 5008 AP-Slug ammo for GP30/GP25 Launchers
+definequote 5009 Electrobomb for GP30/GP25 Launchers
+definequote 5010 Freezebomb for GP30/GP25 Launchers
+
+definequote 6500 You will find Happiness with a new love
+definequote 6501 Stick with your Wife
+definequote 6502 Fortune Cookies are actually a Japanese invention
+definequote 6503 Love is Free
+definequote 6503 Believing is doing
+definequote 6504 Someday everything will all make perfect sense
+definequote 6505 You are thinking about doing something. Do it
+definequote 6506 Plan for many pleasures ahead
+definequote 6507 Demonstrate refinement in everything you do
+definequote 6508 Face facts with dignity
+definequote 6509 See the light at the end of the tunnel
+definequote 6510 Movies have pause buttons, friends do not
+definequote 6511 Life is too short to waste time hating anyone
+definequote 6512 It is better to be the hammer then the nail
+definequote 6513 All the water in the world can't sink a ship unless it gets inside
+definequote 6514 Your dream will come true when you least expect it
+definequote 6515 Your failures will lead you to your success
+definequote 6516 An unexpected relationship will become permanent
+definequote 6517 Walk without rhythm, and you won't attract the worm
+definequote 6518 Next full moon brings an enchanting evening
+definequote 6519 The greatest risk is not taking one
+definequote 6520 The cure for grief is motion
+definequote 6521 Everything will now come your way
+definequote 6522 Impossible is a word found only in the lexicon of fools
+definequote 6523 Your problem just became your stepping stone
+definequote 6524 You create your own stage ... the audience is waiting
+definequote 6525 Perhaps you've been focusing too much on spending
+definequote 6526 Remember the fate of the early Worm
+definequote 6527 Something you lost will soon turn up
+definequote 6528 If life gives you lemons, make lemonade
+definequote 6529 Every happens for a reason
+definequote 6530 Live every day like it's your last
+
+definequote 6540 WAKE UP
+
+definequote 6600 
+definequote 6601 
+definequote 6602 
+definequote 6603 ^7(and so is the clap)
+definequote 6603 ^7(so jump! you can make it!)
+definequote 6604 ^7(life is meaningless, existence is futility)
+definequote 6605 ^7(unzip it and dip it)
+definequote 6606 ^7(booze, pornography, and a loaded .45)
+definequote 6607 ^7(especially when using the toilet)
+definequote 6608 ^7(Unless they're inconvenient, then throw a tantrum)
+definequote 6609 ^7(That's a train)
+definequote 6610 ^7(so just un-friend them)
+definequote 6611 ^7(that's why I want to live forever)
+definequote 6612 ^7(They made more than one song you know)
+definequote 6613 ^7(We call them 'submarines')
+definequote 6614 ^7(Pray you're not out in public when it does)
+definequote 6615 ^7(you're King shit of fuck mountain)
+definequote 6616 ^7(That wart ain't going away)
+definequote 6617 
+definequote 6618 ^7(The Werewolf gala fund-raiser; buy tickets now)
+definequote 6619 ^7(Sometimes a cliff is a cliff though)
+definequote 6620 ^7(Common baby, do the locomotion!)
+definequote 6621 ^7(HIT THE DECK)
+definequote 6622 ^7(and also the Oxford Dictionary)
+definequote 6623 ^7(SHIT IT'S A LANDMIN-)
+definequote 6624 ^7(Might wanna get comfortable folks, I suck at DIY)
+definequote 6625 ^7(Better spend more, just to be sure)
+definequote 6626 ^7(be lazy and late, you'll live longer AND get free Cheese)
+definequote 6627 ^7(hope it was friendly!)
+definequote 6628 ^7(Unless it gives you Turnips)
+definequote 6629 ^7(because Fuck You, that's why)
+definequote 6630 ^7(let's face it, it probably is)
+
+definequote 6640 ^7RIGHT NOW
+
+definequote 6900 FATIGUED
+definequote 6901 EXHAUSTED
+
+definequote 6905 I'll need one of the artifacts for this...
+
+definequote 7000 MS-CORP BATTLESUIT V1.35
+definequote 7001 Initializing...
+definequote 7002 Checking Armour systems....
+definequote 7003 Regeneration Module installed...
+definequote 7004 Regeneration Module NOT installed!
+definequote 7005 Anti-armour Missiles check...
+definequote 7006 Exploding-Shrapnel Gun Check...
+definequote 7007 Light Anti-infantry laser check...
+definequote 7008 Booster module installed...
+definequote 7009 Booster module NOT installed!
+definequote 7010 User detected as Lord Sandt; Welcome Master!
+definequote 7011 User unknown; license required for extended use!
+definequote 7012 Please exit Mech after 24 hours if you do not have one
+definequote 7013 Reticulating splines...
+definequote 7014 MS-CORP BATTLESUIT READY FOR ACTION
+
+definequote 7020 Fire - Anti-personel blast
+definequote 7021 Alt-Fire - Anti-armour missiles
+definequote 7022 - Anti-infantry Laser
+definequote 7023 - Exit vehicle
+definequote 7024 - Show vehicle controls
+
+definequote 7030 Fire - Laser beam
+definequote 7031 Alt-fire - Fire Homing missiles
+definequote 7032 Next Wep/Prev Wep - change speed
+definequote 7033 - Change missile type
+
+definequote 7040 Fire - Main cannon
+definequote 7041 Alt-fire - Machine-gun
+definequote 7042 - Change shell type
+
+definequote 7045 Anti-Tank HEAT rounds
+definequote 7046 High Explosive rounds
+
+definequote 7050 Fire - Plasma cannon
+
+definequote 7060 Regular Bayonet
+definequote 7061 Silver Bayonet
+
+// gameplay subtitles
+definequote 7500
+definequote 7501
+definequote 7502
+
+definequote 8000 0. Thank you, Goodbye.
+
+definequote 8500 You cheated!
+
+definequote 8599 Locked from the other side...
+definequote 8600 Unlocked it from this side...
+
+definequote 9000 AMC TC v3.6
+
+

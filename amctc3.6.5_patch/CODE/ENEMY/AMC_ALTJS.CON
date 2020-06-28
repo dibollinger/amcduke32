@@ -1,0 +1,383 @@
+// **************************************************************************************************
+// ALT JAMES
+// **************************************************************************************************
+
+action ALT_JS_STAND -6647 1 5 1 8
+action ALT_JS_FIRE -6642 1 5 1 8
+action ALT_JS_RUN -6637 5 5 1 12
+action ALT_JS_RUN_BACK -6617 5 5 -1 12
+action ALT_JS_DASH -6637 5 5 1 4
+action ALT_JS_DYING -6612 6 1 1 18
+action ALT_JS_DEAD -6607 1 1 1 0
+action ALT_JS_CROUCH -6606 1 5 1 8
+
+move FK_JS_RUN 180
+move FK_JS_RUN_BACK -180
+move FK_JS_DASH 280
+
+ai AI_ALT_JS_STAND ALT_JS_STAND STOP seekplayer
+
+ai AI_ALT_JS_FIRE ALT_JS_FIRE STOP shoottarget
+ai AI_ALT_JS_FIRE_AHEAD ALT_JS_FIRE STOP faceplayersmart
+
+ai AI_ALT_JS_RUN ALT_JS_RUN FK_JS_RUN seekplayer
+ai AI_ALT_JS_RUN_BACK ALT_JS_RUN_BACK FK_JS_RUN_BACK seekplayer
+
+ai AI_ALT_JS_DASH_TO ALT_JS_DASH FK_JS_DASH dodgebullet
+ai AI_ALT_JS_DASH ALT_JS_DASH FK_JS_DASH faceplayer randomangle
+
+ai AI_ALT_JS_TIMEJ ALT_JS_CROUCH STOP faceplayer
+
+ai AI_ALT_JS_DEAD ALT_JS_DEAD STOP
+
+useractor enemy 23031
+fall
+
+ifaction 0
+	{
+	state monst_glow
+	spawn SHOOTME
+	spriteflags NORMAL_ENEMY_TRU
+	strength 4000
+	spritepal 12
+	sizeat 22 22
+	cstat 257
+	set ALLY_MAG SKILL_LEVEL
+	ife SKILL_LEVEL 1 set HEAL_COUNT 200
+	ife SKILL_LEVEL 2 set HEAL_COUNT 400
+	ife SKILL_LEVEL 3 set HEAL_COUNT 600
+	ife SKILL_LEVEL 4 set HEAL_COUNT 800
+	ife SKILL_LEVEL 5 set HEAL_COUNT 1000
+	soundonce PFIELD
+	espawn 22923
+	seta[RETURN].pal 18
+	setactorvar[RETURN].TEMP8 TEMP4
+	set shoot_countdown 150
+	ai AI_ALT_JS_RUN
+	}
+	
+	
+ifdead nullop else
+{
+ifg playsound 0
+	{
+	sub playsound 1
+	ifl playsound 5
+		{
+		soundonce PFIELD
+		espawn 22923
+		seta[RETURN].pal 18
+		setactorvar[RETURN].TEMP8 TEMP4		
+		set playsound 0
+		}
+	}
+	
+ifrnd 16
+ifrnd 16
+	{
+	ifand ALLY_VOICE 1 nullop else ife ENEMY_TALKING 0 
+		{ 
+		globalsound SEMAJ_TAUNT1 
+		ife gp_subt 0
+			{
+			qputs 7500 ^2???: ^0You little punk! You think you stand a chance against me?!
+			set gp_subt 112
+			}
+		xorvar ALLY_VOICE 1 
+		set ENEMY_TALKING 900 
+		}
+	ifand ALLY_VOICE 2 nullop else ife ENEMY_TALKING 0 
+		{ 
+		globalsound SEMAJ_TAUNT2
+		ife gp_subt 0
+			{
+			qputs 7500 ^2???: ^0I've fought and killed things you couldn't even begin to imagine!
+			set gp_subt 117
+			}
+		xorvar ALLY_VOICE 2 
+		set ENEMY_TALKING 900
+		}
+	ifand ALLY_VOICE 4 nullop else ife ENEMY_TALKING 0 
+		{ 
+		globalsound SEMAJ_TAUNT3 
+		ife gp_subt 0
+			{
+			qputs 7500 ^2???: ^0Give up! you can't win against me boy!
+			set gp_subt 82
+			}
+		xorvar ALLY_VOICE 4 
+		set ENEMY_TALKING 900
+		}
+	ifand ALLY_VOICE 8 nullop else ife ENEMY_TALKING 0
+		{ 
+		globalsound SEMAJ_TAUNT4 
+		ife gp_subt 0
+			{
+			qputs 7500 ^2???: ^0You're gonna die here cold and forgotten!
+			set gp_subt 82
+			}
+		xorvar ALLY_VOICE 8 
+		set ENEMY_TALKING 900 
+		}
+	}
+	
+ifg ENEMY_TALKING 0 sub ENEMY_TALKING 1
+	
+
+ifstrength 1000
+ ifg HEAL_COUNT 0
+	{
+	sub HEAL_COUNT 1
+	addstrength 1
+	soundonce JAMES_FIRSTAID
+	
+		set TEMP3 sprite[].x
+		randvarvar TEMP4 256
+		add TEMP3 TEMP4
+		randvar TEMP4 2048
+
+		rotatepoint sprite[].x sprite[].y TEMP3 sprite[].y TEMP4 TEMP5 TEMP6
+
+		espawn 18574
+
+		seta[RETURN].x TEMP5 
+		seta[RETURN].y TEMP6
+		geta[RETURN].z TEMP7
+		sub TEMP7 4096
+		seta[RETURN].z TEMP7
+		
+		seta[RETURN].pal 11
+	
+	}
+//state BODYA_DAMAGE_MODIFIER 
+}
+	
+ifai AI_ALT_JS_DEAD
+	{
+	strength 0
+	cstat 0
+	move STOP
+	ifl INTERNALCOUNT 100 add INTERNALCOUNT 1
+		ifg INTERNALCOUNT 90
+			{
+			operateactivators 999 THISACTOR
+			operaterespawns 999
+			operatemasterswitches 999
+			}
+	break
+	}
+else
+ifaction ALT_JS_DYING
+	{
+	move STOP
+	add INTERNALCOUNT_2 1
+	ifg INTERNALCOUNT_2 25
+		{
+		set INTERNALCOUNT 0
+		quake 26
+		spawn 10644
+		state BODY_FALL_NOISES
+		ai AI_ALT_JS_DEAD
+		}
+	}
+else
+ifai AI_ALT_JS_RUN
+	{
+	ifg shoot_countdown 0 sub shoot_countdown 1
+	ifg playsound 0 ifbulletnear ai AI_ALT_JS_DASH_TO 
+
+	ifrnd 4 ifpdistl 8192 ai AI_ALT_JS_FIRE 
+	else ifrnd 4 ifpdistg 8192 ai AI_ALT_JS_FIRE_AHEAD
+	else ifrnd 4
+		  ife shoot_countdown 0
+			{
+			getp[].posx TEMP
+			getp[].posy TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				set INTERNALCOUNT 0
+				state SKILL_SHOOT_LEVELADJUST
+				ifl RANDOM_CHANCE SKILLCHANCE ifg ALLY_MAG 0 { shoot FL_GRENADE sub ALLY_MAG 1 }
+				ai AI_ALT_JS_TIMEJ
+				resetcount
+				}
+			}
+	else ife WEAPON_TYPE 2 ifpdistl 8192 ai AI_ALT_JS_RUN_BACK
+	else ife WEAPON_TYPE 8 ifpdistl 8192 ai AI_ALT_JS_RUN_BACK
+	else ife WEAPON_TYPE 11 ifpdistl 8192 ai AI_ALT_JS_RUN_BACK
+	else ife WEAPON_TYPE 4 ifpdistg 4096 ai AI_ALT_JS_DASH
+	}
+else
+ifai AI_ALT_JS_RUN_BACK
+	{
+	ifg playsound 0 ifbulletnear ai AI_ALT_JS_DASH_TO 
+	ifpdistg 4096
+	{
+		ifrnd 16
+		{
+			getp[].posx TEMP
+			getp[].posy TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				set INTERNALCOUNT 0
+				state SKILL_SHOOT_LEVELADJUST
+				ifl RANDOM_CHANCE SKILLCHANCE shoot FL_GRENADE
+				ai AI_ALT_JS_TIMEJ
+				resetcount
+				}
+		}
+		else ife WEAPON_TYPE 2 ai AI_ALT_JS_FIRE_AHEAD
+		else ife WEAPON_TYPE 8 ai AI_ALT_JS_FIRE_AHEAD
+		else ife WEAPON_TYPE 11 ai AI_ALT_JS_FIRE_AHEAD
+		else ife WEAPON_TYPE 4 ai AI_ALT_JS_DASH
+	}
+	}
+else
+ifai AI_ALT_JS_DASH
+	{
+	spawn FRAMEEFFECT1
+	ifg playsound 0 ifbulletnear ai AI_ALT_JS_DASH_TO else
+	ifpdistl 4096 ai AI_ALT_JS_FIRE else
+	ife WEAPON_TYPE 2 ifrnd 128 ai AI_ALT_JS_RUN_BACK else
+	ife WEAPON_TYPE 11 ifrnd 128 ai AI_ALT_JS_RUN_BACK else
+	ife WEAPON_TYPE 8 ifrnd 128 ai AI_ALT_JS_RUN_BACK else
+	ifpdistg 8098
+	 ifrnd 16
+		{
+		getp[].posx TEMP
+		getp[].posy TEMP2
+		set TEMP3 TEMP
+		add TEMP3 1024
+		randvar TEMP4 2048
+		rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+		updatesector TEMP5 TEMP6 TEMP7
+		ifn TEMP7 -1
+			{
+			set INTERNALCOUNT 0
+			state SKILL_SHOOT_LEVELADJUST
+			ifl RANDOM_CHANCE SKILLCHANCE shoot FL_GRENADE
+			ai AI_ALT_JS_TIMEJ
+			resetcount
+			}
+		}
+	}
+else
+ifai AI_ALT_JS_DASH_TO
+	{
+	spawn FRAMEEFFECT1
+	ifactioncount 10
+		{
+		ife WEAPON_TYPE 2 ai AI_ALT_JS_RUN_BACK else
+		ife WEAPON_TYPE 8 ai AI_ALT_JS_RUN_BACK else
+		ife WEAPON_TYPE 11 ai AI_ALT_JS_RUN_BACK else
+		ife WEAPON_TYPE 4 ai AI_ALT_JS_DASH else
+		ai AI_ALT_JS_RUN		
+		}
+	}
+else
+ifai AI_ALT_JS_TIMEJ
+{
+add INTERNALCOUNT 1
+	spawn FRAMEEFFECT1
+	ife INTERNALCOUNT 4 { cstat 2 soundonce USE_TIMEPORTAL sizeto 2 22 }
+	ife INTERNALCOUNT 13
+		{
+			cstat 32768
+			getp[].posx TEMP
+			getp[].posy TEMP2
+			set TEMP3 TEMP
+			add TEMP3 1024
+			randvar TEMP4 2048
+			rotatepoint TEMP TEMP2 TEMP3 TEMP2 TEMP4 TEMP5 TEMP6
+			updatesector TEMP5 TEMP6 TEMP7
+			ifn TEMP7 -1
+				{
+				spawn 8433
+				seta[].x TEMP5 
+				seta[].y TEMP6
+				getp[].posz TEMP8
+				sub TEMP8 1754
+				seta[].z TEMP8
+				}
+			else { cstat 257 sizeat 22 22 ai AI_ALT_JS_DASH }
+		} 
+	ife INTERNALCOUNT 14 { soundonce USE_TIMEPORTAL cstat 2 sizeto 22 22 spawn 8433 }
+	ife INTERNALCOUNT 24 { spawn SHOOTME cstat 257 sizeat 22 22 ai AI_ALT_JS_DASH }
+}
+else
+ifai AI_ALT_JS_FIRE
+{
+	ifactioncount 3 
+	{ 
+		ifpdistl 4096
+		{
+			set HITSCAN_TO_SHOOT CHAINGUN
+			set HITSCAN_FIRING_SOUND MERC3_SHOTG
+			state sang_enemyShootHitscan
+
+			ife HITSCAN_SHOT_FIRED 1
+			{
+				zshoot TEMP3 CHAINGUN 
+				zshoot TEMP3 CHAINGUN 
+				zshoot TEMP3 CHAINGUN 
+				zshoot TEMP3 CHAINGUN 
+				flash
+			}
+		}
+		else
+		ifpdistg 16384
+		{
+			set HITSCAN_TO_SHOOT RAILGUN
+			set HITSCAN_FIRING_SOUND RAILGUN_FIRE
+			state sang_enemyShootHitscan
+			ife HITSCAN_SHOT_FIRED 1
+			{
+				flash
+				globalsound RAILGUN_FIRE
+			}
+		}
+		else
+		{
+			set HITSCAN_TO_SHOOT ZRIFLESHOT
+			set HITSCAN_FIRING_SOUND UP_GLOCKFIRE
+			state sang_enemyShootHitscan
+			ife HITSCAN_SHOT_FIRED 1
+				flash
+		}
+		ai AI_ALT_JS_RUN
+	}
+}
+else
+ifai AI_ALT_JS_FIRE_AHEAD
+{
+	ifactioncount 3 
+	{ 
+		shoot 5375
+		ai AI_ALT_JS_RUN 
+	}
+}
+	
+ifhitweapon
+{
+	//spawn BLOOD
+	state random_wall_jibs
+	ifdead 
+	{
+		cstat 0
+		move STOP
+		globalsound SEMAJ_DIE
+		action ALT_JS_DYING
+	}
+}
+
+enda
