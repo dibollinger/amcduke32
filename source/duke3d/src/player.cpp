@@ -3262,38 +3262,29 @@ void P_GetInput(int const playerNum)
     localInput.extbits |= BUTTON(gamefunc_Turn_Right)<<5;
     localInput.extbits |= BUTTON(gamefunc_Alt_Fire)<<6;
 
-    int const movementLocked = P_CheckLockedMovement(playerNum);
 
-    if ((ud.scrollmode && ud.overhead_on) || (movementLocked & IL_NOTHING) == IL_NOTHING)
+    if (ud.scrollmode && ud.overhead_on)
     {
-        if (ud.scrollmode && ud.overhead_on)
-        {
-            ud.folfvel = input.fvel;
-            ud.folavel = fix16_to_int(input.q16avel);
-        }
+        ud.folfvel = input.fvel;
+        ud.folavel = fix16_to_int(input.q16avel);
 
         localInput.fvel = localInput.svel = 0;
         localInput.q16avel = localInput.q16horz = 0;
     }
     else
     {
-        if (!(movementLocked & IL_NOMOVE))
-        {
-            localInput.fvel = clamp(localInput.fvel + input.fvel, -MAXVEL, MAXVEL);
-            localInput.svel = clamp(localInput.svel + input.svel, -MAXSVEL, MAXSVEL);
-        }
+        int const movementLocked = P_CheckLockedMovement(playerNum);
 
         if (!(movementLocked & IL_NOANGLE))
-        {
-            localInput.q16avel = fix16_sadd(localInput.q16avel, input.q16avel);
             pPlayer->q16ang    = fix16_sadd(pPlayer->q16ang, input.q16avel) & 0x7FFFFFF;
-        }
 
         if (!(movementLocked & IL_NOHORIZ))
-        {
-            localInput.q16horz = fix16_clamp(fix16_sadd(localInput.q16horz, input.q16horz), F16(-MAXHORIZVEL), F16(MAXHORIZVEL));
             pPlayer->q16horiz  = fix16_clamp(fix16_sadd(pPlayer->q16horiz, input.q16horz), F16(HORIZ_MIN), F16(HORIZ_MAX));
-        }
+
+        localInput.fvel = clamp(localInput.fvel + input.fvel, -MAXVEL, MAXVEL);
+        localInput.svel = clamp(localInput.svel + input.svel, -MAXSVEL, MAXSVEL);
+        localInput.q16horz = fix16_clamp(fix16_sadd(localInput.q16horz, input.q16horz), F16(-MAXHORIZVEL), F16(MAXHORIZVEL));
+        localInput.q16avel = fix16_sadd(localInput.q16avel, input.q16avel);
     }
 
     // A horiz diff of 128 equal 45 degrees, so we convert horiz to 1024 angle units
