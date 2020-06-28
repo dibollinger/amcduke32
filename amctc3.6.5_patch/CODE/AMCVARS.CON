@@ -2216,6 +2216,24 @@ var TRIGGER_BASE_SCENE 0 1
 // 1 = base assault
 
 // ==========================================================================================
+// Gamevars used for Postdamagesprite (damage modifiers, effects, etc.)
+// ==========================================================================================
+
+//TODO: Could reduce variable usage here for the temp variables and NEW_DAMAGE
+
+gamevar EV_TARG_SPRITE 0 0
+gamevar EV_NEW_DAMAGE 0 0
+gamevar EV_PREVIOUS_TOTAL_DAMAGE 0 2 
+
+gamevar EV_PROJ_TYPE 0 0
+gamevar EV_PID 0 0
+gamevar EV_CAN_HEADSHOT 0 0
+gamevar EV_TEMP 0 0
+gamevar EV_TEMP2 0 0
+gamevar EV_TEMP3 0 0
+
+
+// ==========================================================================================
 // PLAYER LOCKABLES
 // ==========================================================================================
 

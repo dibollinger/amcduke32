@@ -3,16 +3,6 @@
 /* SPRITE DAMAGE EVENTS -- damage modifiers and such go here */
 /*************************************************************/
 
-// Stores the actor that has been shot -- global
-gamevar EV_TARG_SPRITE 0 0
-gamevar EV_NEW_DAMAGE 0 0
-gamevar EV_PROJ_TYPE 0 0
-gamevar EV_PID 0 0
-gamevar EV_CAN_HEADSHOT 0 0
-gamevar EV_TEMP 0 0
-gamevar EV_TEMP2 0 0
-gamevar EV_TEMP3 0 0
-
 /* MODIFIER STATES */
 
 defstate ev_getProjData
@@ -33,21 +23,42 @@ defstate DING
 ends
 
 defstate character_protected_sounds
-    ife sprite[EV_TARG_SPRITE].htowner player[EV_PID].i 
-        ifl EV_NEW_DAMAGE 1 // if shot by player and doing no damage at all 
+    ife sprite[EV_TARG_SPRITE].htowner player[EV_PID].i
+        ifl EV_NEW_DAMAGE 1 // if shot by player and doing no damage at all
             ifrnd 32 setplayervar[EV_PID].PLAYER_VOICEOVER 6 // randomly say line
 ends
+
+
+// Compute the damage the current projectile dealt. Assumption: value is > 0  if and only if the actor didn't apply the damage yet
+// Returns EV_NEW_DAMAGE. Prevents exponential increase/decrease of htextra when using multipliers
+// Note: Explosions can lower damage between two calls to EVENT_DAMAGESPRITE
+defstate get_current_damage_increment
+    geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
+    getactorvar[EV_TARG_SPRITE].EV_PREVIOUS_TOTAL_DAMAGE EV_TEMP3
+    ifg EV_TEMP3 EV_NEW_DAMAGE setactorvar[EV_TARG_SPRITE].EV_PREVIOUS_TOTAL_DAMAGE 0
+    else sub EV_NEW_DAMAGE EV_TEMP3
+ends
+
+
+// Add newly computed damage, stored as input in EV_NEW_DAMAGE. Also requires EV_TARG_SPRITE.
+defstate apply_damage_increment
+    getactorvar[EV_TARG_SPRITE].EV_PREVIOUS_TOTAL_DAMAGE EV_TEMP3
+    add EV_TEMP3 EV_NEW_DAMAGE
+    seta[EV_TARG_SPRITE].htextra EV_TEMP3
+    setactorvar[EV_TARG_SPRITE].EV_PREVIOUS_TOTAL_DAMAGE EV_TEMP3
+ends
+
 
 defstate doheadshot
     // sound 388 //debug
 	//sound HITFLESH
-    
+
     // <doesn't do anything? (always the same)>
     // geta[].owner EV_TEMP
     // seta[EV_TARG_SPRITE].htowner EV_TEMP
-    
+
     ifspawnedby APLAYER set EV_TEMP 1 // <wtf?>
-    
+
     ife EV_PROJ_TYPE SHOTGUN
     {
         ifrnd 128 setactorvar[EV_TARG_SPRITE].HEADSHOT 2
@@ -70,34 +81,35 @@ defstate doheadshot
 	{
         ifrnd 128 setactorvar[EV_TARG_SPRITE].HEADSHOT 2
 		else setactorvar[EV_TARG_SPRITE].HEADSHOT 1
-        ife sprite[EV_TARG_SPRITE].picnum CULTIST set EV_TEMP 40 
+        ife sprite[EV_TARG_SPRITE].picnum CULTIST set EV_TEMP 40
         else set EV_TEMP 20
 	}
 	else
 	{
 		setactorvar[EV_TARG_SPRITE].HEADSHOT 2
         switch sprite[EV_TARG_SPRITE].picnum
-            case ZOMBIE 
+            case ZOMBIE
                 add EV_TEMP 30
                 break
-            case FASCIST 
+            case FASCIST
             case CULTIST
             case MERC
-            case MERC2 
+            case MERC2
                 randvar EV_TEMP 20
                 break
-            case LPOWERSUIT 
+            case LPOWERSUIT
                 randvar EV_TEMP 15
                 break
-            case TERMINATOR 
+            case TERMINATOR
                 randvar EV_TEMP 25
                 break
-            default 
+            default
                 randvar EV_TEMP 10
                 break
         endswitch
     }
-    
+
+    // flat additions are ok, no per-projectile handling necessary
     geta[EV_TARG_SPRITE].htextra EV_TEMP2
     add EV_TEMP2 EV_TEMP
     seta[EV_TARG_SPRITE].htextra EV_TEMP2
@@ -106,16 +118,16 @@ ends
 
 // Detect the valid area for a headshot
 defstate headshot_scan
-    
+
     set EV_TEMP2 600 // default lower bound for headshot
     //set EV_TEMP3 2000 // default upper bound for headshot
     set EV_CAN_HEADSHOT 0
 
     // safety
     geta[EV_TARG_SPRITE].htpicnum EV_PROJ_TYPE
-    
+
     ifl actorvar[EV_TARG_SPRITE].ENEMY_SHIELD 1
-    {   
+    {
         switch sprite[EV_TARG_SPRITE].picnum
             // Headshots only allowed for armor negating, armor piercing and double armor piercing shots (default boundary)
             case E3_BOSS
@@ -127,9 +139,9 @@ defstate headshot_scan
                 else ife EV_PROJ_TYPE SHOTSPARK1 set EV_TEMP 128
                 else ife EV_PROJ_TYPE CHAINGUN set EV_TEMP 128
                 else getprojectile[EV_PROJ_TYPE].userdata EV_TEMP
-                
+
                 ifand EV_TEMP 608 set EV_CAN_HEADSHOT 1
-                
+
                 ife sprite[EV_TARG_SPRITE].picnum MJ12_TROOP set EV_TEMP2 650
                 else ife sprite[EV_TARG_SPRITE].picnum PE_ELDER
                 {
@@ -137,23 +149,23 @@ defstate headshot_scan
                     else set EV_TEMP2 625
                 }
                 break
-                
+
             // altered boundaries
             case GORILLA
                 set EV_CAN_HEADSHOT 1
-                ife sprite[EV_TARG_SPRITE].pal 10 set EV_TEMP2 1050 
-                else ife sprite[EV_TARG_SPRITE].pal 13 set EV_TEMP2 1250 
-                else ife sprite[EV_TARG_SPRITE].pal 24 set EV_TEMP2 900 
+                ife sprite[EV_TARG_SPRITE].pal 10 set EV_TEMP2 1050
+                else ife sprite[EV_TARG_SPRITE].pal 13 set EV_TEMP2 1250
+                else ife sprite[EV_TARG_SPRITE].pal 24 set EV_TEMP2 900
                 else set EV_TEMP2 775
                 break
-            
+
             case LPOWERSUIT
             case FLESHWIZARD
             case LESANG
                 set EV_CAN_HEADSHOT 1
                 set EV_TEMP2 700
                 break
-                
+
             case SATYR
                 set EV_CAN_HEADSHOT 1
                 ife sprite[EV_TARG_SPRITE].pal 47 set EV_TEMP2 850
@@ -165,32 +177,32 @@ defstate headshot_scan
                 ife sprite[EV_TARG_SPRITE].pal 41 set EV_TEMP2 1000
                 else set EV_TEMP2 700
                 break
-            
+
             case ZSOLDIER2
                 set EV_CAN_HEADSHOT 1
                 ife sprite[EV_TARG_SPRITE].pal 25 set EV_TEMP2 700
                 else set EV_TEMP2 650
                 break
-            
+
             case ZCHAING
             case Z_GRENADEL
                 set EV_CAN_HEADSHOT 1
                 ife sprite[EV_TARG_SPRITE].pal 43 set EV_TEMP2 700
                 else set EV_TEMP2 650
                 break
-                
+
             case COMMANDER
                 set EV_CAN_HEADSHOT 1
                 ife sprite[EV_TARG_SPRITE].pal 24 set EV_TEMP2 850
                 else set EV_TEMP2 650
                 break
-                
+
             case ZSCIEN
                 set EV_CAN_HEADSHOT 1
                 ife sprite[EV_TARG_SPRITE].pal 24 set EV_TEMP2 750
                 else set EV_TEMP2 650
                 break
-            
+
             case LIZMAN
                 set EV_CAN_HEADSHOT 1
                 set EV_TEMP2 550
@@ -219,16 +231,16 @@ defstate headshot_scan
                 ife sprite[EV_TARG_SPRITE].pal 24 set EV_TEMP2 725
                 else set EV_TEMP2 600
                 break
-            
+
             // default boundaries
             case CULTIST
             case FASCIST
-            case MJ12_ASSASSIN    
+            case MJ12_ASSASSIN
             case LIZTROOP
             case LIZTROOPONTOILET
             case LIZTROOPJUSTSIT
             case MERC
-            case NAZI 
+            case NAZI
             case NINJA
             case TRIAD
             case ZPIGCOP
@@ -268,7 +280,7 @@ defstate spawnBloodZ
     seta[RETURN].z EV_TEMP
 ends
 
-        
+
 // EV_TEMP3 is the return value for this state (0/1 == unarmored/armored)
 defstate isSpriteArmorPal
     switch sprite[EV_TARG_SPRITE].picnum
@@ -313,29 +325,29 @@ defstate simulate_hardcoded_splat
             case COBRA set EV_TEMP3 8 break
             default set EV_TEMP3 0 break //red blood by default
         endswitch
-        
+
         eqspawn JIBS6
         seta[RETURN].pal EV_TEMP3
         /*
-        geta[RETURN].z EV_TEMP 
+        geta[RETURN].z EV_TEMP
         addvar EV_TEMP 1024
         seta[RETURN].z EV_TEMP
         */
         geta[].z EV_TEMP
         seta[RETURN].z EV_TEMP
-        
+
         seta[RETURN].xvel 16
         seta[RETURN].xrepeat 24
         seta[RETURN].yrepeat 24
-        
+
         set EV_TEMP 32
         randvar EV_TEMP2 64
         sub EV_TEMP EV_TEMP2
         geta[RETURN].ang EV_TEMP2
         add EV_TEMP EV_TEMP2
         seta[RETURN].ang EV_TEMP
-        
-        ifactor SHOTGUN 
+
+        ifactor SHOTGUN
         {
             eshoot BLOODSPLAT3 seta[RETURN].pal EV_TEMP3
             eshoot BLOODSPLAT1 seta[RETURN].pal EV_TEMP3
@@ -343,39 +355,39 @@ defstate simulate_hardcoded_splat
             eshoot BLOODSPLAT4 seta[RETURN].pal EV_TEMP3
         }
     }
-    
+
 ends
 
 defstate spritehit_effects
     // safety
     geta[EV_TARG_SPRITE].htpicnum EV_PROJ_TYPE
-    ifg actorvar[EV_TARG_SPRITE].ENEMY_SHIELD 0 
+    ifg actorvar[EV_TARG_SPRITE].ENEMY_SHIELD 0
     {
         stopsound SOMETHINGHITFORCE
         sound SOMETHINGHITFORCE
     }
     else
-    {   
-        switch sprite[EV_TARG_SPRITE].picnum      
+    {
+        switch sprite[EV_TARG_SPRITE].picnum
             case APLAYER
-                ifactor SHOTSPARK1 
+                ifactor SHOTSPARK1
                     ifg EV_NEW_DAMAGE 0
                     {
                         ifg P_ENERGYSHIELD 0 ifg P_HAS_SHIELD 0 sound SOMETHINGHITFORCE
-                        else ifg PARMOUR 0 sound HITARMOUR2 
+                        else ifg PARMOUR 0 sound HITARMOUR2
                         else sound HITFLESH
                     }
                 break
-            
+
             case E1_BOSS
-                ifg EV_NEW_DAMAGE 0  
+                ifg EV_NEW_DAMAGE 0
                 {
                     guts JIBS6 1
                     ifactor SHOTSPARK1 { sound HITFLESH }
                     state simulate_hardcoded_splat
                 }
                 break
-            
+
             // special case
             case MJ12_TROOP
             case MERC2
@@ -384,44 +396,44 @@ defstate spritehit_effects
             case E3_BOSS
                 ife actorvar[EV_TARG_SPRITE].HEADSHOT 0
                 {
-                    ifactor SHOTSPARK1 
+                    ifactor SHOTSPARK1
                     {
                         sound HITARMOUR2
                         shoot SPARK2
                     }
                     ifg EV_NEW_DAMAGE 0 state simulate_hardcoded_splat
                 }
-                else ifg EV_NEW_DAMAGE 0 
+                else ifg EV_NEW_DAMAGE 0
                 {
                     ifactor SHOTSPARK1 { sound HITFLESH }
                     state spawnBloodZ
                     state simulate_hardcoded_splat
                 }
                 break
-                
+
             // special case: Madrax unrobes
             case MADRAX
                 getactorvar[EV_TARG_SPRITE].ALLY_MAG EV_TEMP
                 ife EV_TEMP 1
                 {
-                    ifactor SHOTSPARK1 
+                    ifactor SHOTSPARK1
                     {
                         sound HITARMOUR2
                         shoot SPARK2
                     }
                     ifg EV_NEW_DAMAGE 10 state spawnBloodZ
                 }
-                else ifg EV_NEW_DAMAGE 0 
+                else ifg EV_NEW_DAMAGE 0
                 {
                     ifactor SHOTSPARK1 sound HITFLESH
                     state simulate_hardcoded_splat
                     state spawnBloodZ
                 }
                 break
-            
+
             // special case: Powersuit has glass visor
             case LPOWERSUIT
-                ifactor SHOTSPARK1 
+                ifactor SHOTSPARK1
                 {
                     ifrnd 64 espawn 9284 else ifrnd 64 espawn 9285 else ifrnd 64 espawn 9286 else espawn 9287
                     seta[RETURN].pal 1
@@ -434,31 +446,31 @@ defstate spritehit_effects
                     else sound HITGLASS
                 }
                 break
-            
-            
-            // always armored        
+
+
+            // always armored
             case PIGCOP
             case PIGCOP_RIOTSHIELD
                 ifn actorvar[EV_TARG_SPRITE].HEADSHOT 0
                     ifg EV_NEW_DAMAGE 0
-                    { 
+                    {
                         ifactor SHOTSPARK1 sound HITFLESH
                         guts JIBS6 1
                         state spawnBloodZ
                         state simulate_hardcoded_splat
                     }
-                else 
+                else
                 {
                     ifactor SHOTSPARK1 sound HITARMOUR2
                     ifg EV_NEW_DAMAGE 0 state simulate_hardcoded_splat
                 }
                 break
-            
+
             // armored pal
             case GORILLA
             case CULTIST
             case TRIAD
-            case NAZI 
+            case NAZI
             case FASCIST
             case Z_GRENADEL
             case ZCHAING
@@ -475,46 +487,46 @@ defstate spritehit_effects
                             ifactor SHOTSPARK1 sound HITFLESH
                             state spawnBloodZ
                         }
-                    else 
+                    else
                     {
                         ifactor SHOTSPARK1 sound HITARMOUR2
                         ifg EV_NEW_DAMAGE 5 state simulate_hardcoded_splat
                     }
                 } //unarmored
-                else ifg EV_NEW_DAMAGE 0 
+                else ifg EV_NEW_DAMAGE 0
                 {
                     ifactor SHOTSPARK1 sound HITFLESH
                     state simulate_hardcoded_splat
-                    ifn actorvar[EV_TARG_SPRITE].HEADSHOT 0 state spawnBloodZ 
+                    ifn actorvar[EV_TARG_SPRITE].HEADSHOT 0 state spawnBloodZ
                 }
                 break
-            
-            
+
+
             case PIGBOSS
-                ifg EV_NEW_DAMAGE 0 
-                {            
+                ifg EV_NEW_DAMAGE 0
+                {
                     ifrnd 64 { guts JIBS6 1 debris SCRAP2 1 debris SCRAP4 1 }
                     state simulate_hardcoded_splat
-                    state spawnBloodZ 
+                    state spawnBloodZ
                     ifactor SHOTSPARK1 sound HITFLESH
                 }
-                break   
-            
+                break
+
             case SPACE_LIZTROOP
-                state spawnBloodZ 
+                state spawnBloodZ
                 ifactor SHOTSPARK1
                 {
                     ifrnd 64 spawn 9284 else ifrnd 64 spawn 9285 else ifrnd 64 spawn 9286 else spawn 9287
-                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4 
-                    shoot SPARK shoot SPARK 
+                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4
+                    shoot SPARK shoot SPARK
                 }
                 break
-            
+
             // standard
             case ANUBIS
             case BEYONDBRAIN
             case COMMANDER
-            case MJ12_ASSASSIN        
+            case MJ12_ASSASSIN
             case PE_TROOP
             case FLESHWIZARD
             case GUARDIAN
@@ -566,10 +578,10 @@ defstate spritehit_effects
             case TRENTON_SOLARI
             case ELITE_LIZMAN
             case 1319 // pole stripper??? doesn't appear to correspond to any actor
-                ifg EV_NEW_DAMAGE 0 
+                ifg EV_NEW_DAMAGE 0
                 {
                     state simulate_hardcoded_splat
-                    state spawnBloodZ 
+                    state spawnBloodZ
                     ifactor SHOTSPARK1 sound HITFLESH
                 }
                 break
@@ -578,25 +590,25 @@ defstate spritehit_effects
             case MSSOLDIER_ACTIVE
             case EDFSOLDIER_ACTIVE
             case RUSSIAN
-            case VLADMIR  
+            case VLADMIR
             case 9771 // Ally Sorcerer
             case 15360 // female civilian
-                ifn sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER    
+                ifn sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER
                 {
                     state simulate_hardcoded_splat
                     guts JIBS6 1
-                    state spawnBloodZ 
+                    state spawnBloodZ
                     ifactor SHOTSPARK1 sound HITFLESH
                 }
                 break
-                
+
             // no headshot, biomech
-            case LIZBOSS  
-                ifg EV_NEW_DAMAGE 0 
+            case LIZBOSS
+                ifg EV_NEW_DAMAGE 0
                 {
                     ifrnd 96 { guts JIBS6 1 debris SCRAP6 1 debris SCRAP1 2 debris SCRAP5 1 }
                     state simulate_hardcoded_splat
-                    ifactor SHOTSPARK1 
+                    ifactor SHOTSPARK1
                     {
                         sound HITFLESH
                         sound HITMETAL
@@ -604,16 +616,16 @@ defstate spritehit_effects
                     }
                 }
                 break
-            
+
             case CYBERDEMON
             case CYBERTOUR
             case MAEPHISTO
             case SPIDERDEMON
-                ifg EV_NEW_DAMAGE 0 
+                ifg EV_NEW_DAMAGE 0
                 {
                     state simulate_hardcoded_splat
-                    state spawnBloodZ 
-                    ifactor SHOTSPARK1 
+                    state spawnBloodZ
+                    ifactor SHOTSPARK1
                     {
                         sound HITFLESH
                         sound HITMETAL
@@ -621,7 +633,7 @@ defstate spritehit_effects
                     }
                 }
                 break
-            
+
             // full mech
             case BLACK_HAWK
             case CYBERCULTIST
@@ -640,11 +652,11 @@ defstate spritehit_effects
                 ifactor SHOTSPARK1
                 {
                     ifrnd 64 spawn 9284 else ifrnd 64 spawn 9285 else ifrnd 64 spawn 9286 else spawn 9287
-                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4 
-                    shoot SPARK shoot SPARK 
+                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4
+                    shoot SPARK shoot SPARK
                 }
                 break
-            
+
             case CYBERALIEN
             case GWBOSS
             case HPOWERSUIT
@@ -661,36 +673,42 @@ defstate spritehit_effects
                 ifactor SHOTSPARK1
                 {
                     ifrnd 64 espawn 9284 else ifrnd 64 espawn 9285 else ifrnd 64 espawn 9286 else espawn 9287
-                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4 
+                    ifrnd 96 sound HITMETAL2 else ifrnd 96 sound HITMETAL3 else sound HITMETAL4
                     seta[RETURN].pal 1
                     shoot SPARK2 shoot SPARK2
                 }
                 break
         endswitch
-	}		
-    
+	}
+
 ends
 
 
 defstate PLAYER_VEHICLE_DAMAGE_MODIFIER // Modifier for armoured player vehicles
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
 
+    // Since this sets the damage back to -1 every time, no per-projectile increments necessary
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
-    ifg EV_NEW_DAMAGE 0 {
-        
+
+    ifg EV_NEW_DAMAGE 0
+    {
+
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
-        
-        ifand PROJ_UDATA 66144 {
-            ifand PROJ_UDATA 66112 { // Armor Negating (64) + Triple AP (512) + Nuclear/Atomic (65536) -- (normal damage)
+
+        ifand PROJ_UDATA 66144
+        {
+            ifand PROJ_UDATA 66112
+            { // Armor Negating (64) + Triple AP (512) + Nuclear/Atomic (65536) -- (normal damage)
                 sound HITARMOUR
                 shoot SPARK shoot SPARK shoot SPARK shoot SPARK
             }
-            else { // (32) Armour piercing attack
+            else
+            { // (32) Armour piercing attack
                 divvar EV_NEW_DAMAGE 2
                 shoot SPARK
             }
-            
+
             set EV_TEMP3 playervar[EV_PID].player_using_hovertank
             geta[EV_TEMP3].extra EV_TEMP2
             sub EV_TEMP2 EV_NEW_DAMAGE
@@ -703,40 +721,48 @@ ends
 
 defstate HEAVY_MECH_DAMAGE_MODIFIER // Modifier for Mech-suits, Tanks, heavy armour, and heavy Power armour damage
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
-    ifg EV_NEW_DAMAGE 0 {
-        
+    ifg EV_NEW_DAMAGE 0
+    {
+        state get_current_damage_increment
+
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
-        
+
         // player is more likely to use effective weaponry -- take this to first spot
-        ifand PROJ_UDATA 66112 { // Armor Negate (64) + Triple AP (512) + Nuclear/Atomic (65536) -- normal damage 
+        ifand PROJ_UDATA 66112
+        { // Armor Negate (64) + Triple AP (512) + Nuclear/Atomic (65536) -- normal damage
             sound HITARMOUR
             shoot SPARK shoot SPARK shoot SPARK shoot SPARK
         }
-        else { // reduced damage
-            ifand PROJ_UDATA 32 { // Armour piercing attack (div 2)
+        else
+        { // reduced damage
+            ifand PROJ_UDATA 32
+            { // Armour piercing attack (div 2)
                 divvar EV_NEW_DAMAGE 2
                 shoot SPARK
             }
-            else { // Default -- no damage
-                set EV_NEW_DAMAGE -1
+            else
+            { // Default -- no damage
+                set EV_NEW_DAMAGE 0
                 shoot SPARK2
             }
             state DING
             state character_protected_sounds
-            seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
         }
+
+        state apply_damage_increment
     }
 ends
 
 
 defstate MELEE_DAMAGE_MODIFIER
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
     ifg EV_NEW_DAMAGE 0 {
+        state get_current_damage_increment
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
 
@@ -744,21 +770,23 @@ defstate MELEE_DAMAGE_MODIFIER
             shoot SPARK shoot SPARK shoot SPARK shoot SPARK
         }
         else { // reduced damage
-            ifg playervar[EV_PID].SKILL_LEVEL 2 divvar EV_NEW_DAMAGE 6 
+            ifg playervar[EV_PID].SKILL_LEVEL 2 divvar EV_NEW_DAMAGE 6
             else divvar EV_NEW_DAMAGE 2
-            seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
             state character_protected_sounds
             state DING
         }
+
+        state apply_damage_increment
     }
 ends
 
 defstate MECH_DAMAGE_MODIFIER // Modifier for Mech-suits, heavy armour and Power armour damage
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
     ifg EV_NEW_DAMAGE 0 {
-        
+
+        state get_current_damage_increment
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
 
@@ -780,33 +808,35 @@ defstate MECH_DAMAGE_MODIFIER // Modifier for Mech-suits, heavy armour and Power
         else { // reduced damage
             ifand PROJ_UDATA 2176 set EV_TEMP2 2  // Soft (128) + Bodyarmor Piercing (2048) -- (dmg/2)
             else set EV_TEMP2 4 // Default -- (dmg/4)
-            
-            ife sprite[EV_TARG_SPRITE].picnum APLAYER 
-                divvarvar EV_NEW_DAMAGE EV_TEMP2 
+
+            ife sprite[EV_TARG_SPRITE].picnum APLAYER
+                divvarvar EV_NEW_DAMAGE EV_TEMP2
             else {
-                ifg playervar[EV_PID].SKILL_LEVEL 2 set EV_NEW_DAMAGE -1 // remove all damage if on expert or above
+                ifg playervar[EV_PID].SKILL_LEVEL 2 set EV_NEW_DAMAGE 0 // remove all damage if on expert or above
                 else divvarvar EV_NEW_DAMAGE EV_TEMP2 // else divide
             }
             shoot SPARK2
             state character_protected_sounds
             state DING
         }
-        seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
+        state apply_damage_increment
     }
 ends
 
 defstate ROBOT_DAMAGE_MODIFIER // Modifier for robots with armour (ie things without pilots)
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
-    ifg EV_NEW_DAMAGE 0 {
-        
+    ifg EV_NEW_DAMAGE 0
+    {
+
+        state get_current_damage_increment
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
 
         ifand PROJ_UDATA 74337 { // increased damage (sum of all the contained)
             sound HITARMOUR
-            stopsound HITMETAL stopsound HITMETAL2 stopsound HITMETAL3 stopsound HITMETAL4        
+            stopsound HITMETAL stopsound HITMETAL2 stopsound HITMETAL3 stopsound HITMETAL4
             ifand PROJ_UDATA 65601 { // Energy (1) + Armor Negating (64) + Nuclear (65536) - full damage
                 shoot SPARK shoot SPARK
             }
@@ -826,51 +856,48 @@ defstate ROBOT_DAMAGE_MODIFIER // Modifier for robots with armour (ie things wit
         }
         else ifand PROJ_UDATA 49286 { // decreased damage
             ifand PROJ_UDATA 134 { // Fire (2) + Ice (4) + Soft (128) -- does reduced damage to robotics
-                // ife sprite[EV_TARG_SPRITE].picnum APLAYER // <This can never be satisfied -- cut robot player character?>
-                //    divvar EV_NEW_DAMAGE 4 
-                // else {
+
                 ifg playervar[EV_PID].SKILL_LEVEL 2 set EV_NEW_DAMAGE -1 // remove all damage if on expert or above
                 else divvar EV_NEW_DAMAGE 4 // else quarter the damage
                 // }
                 ifand PROJ_UDATA 128 { shoot SPARK2 shoot SPARK2 shoot SPARK2 }
             } else { // (49152) = Spirit (16384) + Draining (32768) does no damage to robotics whatsoever
-                set EV_NEW_DAMAGE -1      
+                set EV_NEW_DAMAGE 0
             }
             state character_protected_sounds
-            state DING    
+            state DING
         }
         else { // default case
             ifg playervar[EV_PID].SKILL_LEVEL 2 div EV_NEW_DAMAGE 4 // quarter damage if on expert
             else div EV_NEW_DAMAGE 2 // else half the damage
             shoot SPARK2
             state character_protected_sounds
-            state DING                
+            state DING
         }
-        seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE 
+        state apply_damage_increment
     }
 ends
 
 
 defstate SUPERNATURAL_DAMAGE_MODIFIER // Modifier for supernatural targets
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
-    ifg EV_NEW_DAMAGE 0 {
-   
+    ifg EV_NEW_DAMAGE 0
+    {
+        state get_current_damage_increment
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
-        
-        ifand PROJ_UDATA 81937  // Energy (1) + Magical (16) + Spirit (16384) + Nuclear/Atomic (65536) attacks 
+
+        ifand PROJ_UDATA 81937  // Energy (1) + Magical (16) + Spirit (16384) + Nuclear/Atomic (65536) attacks
             sound LAVA_HIT // burning noise + full damage
         else ifand PROJ_UDATA 256 { // silver-type attacks
             mulvar EV_NEW_DAMAGE 2
-            seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
             sound LAVA_HIT
         }
         else { // any other type
             ifg playervar[EV_PID].SKILL_LEVEL 2 { spawn 13952 set EV_NEW_DAMAGE -1 } // remove all damage if on expert or above
             else { divvar EV_NEW_DAMAGE 2 ifrnd 64 spawn 13952 } // else half the damage
-            seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
             state character_protected_sounds
             state DING
             ifn sprite[EV_TARG_SPRITE].picnum DARKAVATAR
@@ -878,29 +905,30 @@ defstate SUPERNATURAL_DAMAGE_MODIFIER // Modifier for supernatural targets
             stopsound SPARM_PROTECT
             sound SPARM_PROTECT
         }
+
+        state apply_damage_increment
     }
 ends
 
 defstate BEYOND_DAMAGE_MODIFIER // modifier for beyonders
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
     ifg EV_NEW_DAMAGE 0 {
-        
+        state get_current_damage_increment
+
         // set PROJ_UDATA & EV_PROJ_TYPE
         state ev_getProjData
 
         ifand PROJ_UDATA 74065 { // sum of the contained bitfields
             // NOTE: the intention might have been that only gold, silver, electric and nuke attacks can hurt Beyonders.  The code makes armor-negating and laser/magic attacks hurt them too however.
-            ifand PROJ_UDATA 8272 { // 80 (golden attack (16 + 64))  + 8192 (electric attack) 
+            ifand PROJ_UDATA 8272 { // 80 (golden attack (16 + 64))  + 8192 (electric attack)
                 divvar EV_NEW_DAMAGE 6 // 1/6 dmg
-                seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
                 state character_protected_sounds
                 state DING
             }
             else ifand PROJ_UDATA 256 { // silver-type attacks
                 divvar EV_NEW_DAMAGE 8 // 1/8 dmg
-                seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
                 sound LAVA_HIT // burning noise
                 state character_protected_sounds
                 state DING
@@ -912,21 +940,25 @@ defstate BEYOND_DAMAGE_MODIFIER // modifier for beyonders
             }
         }
         else { // else no damage
-            set EV_NEW_DAMAGE -1
-            seta[EV_TARG_SPRITE].htextra -1
+            set EV_NEW_DAMAGE 0
             state character_protected_sounds
             state DING
         }
+
+        state apply_damage_increment
     }
 ends
 
 defstate BODYA_DAMAGE_MODIFIER // Modifier for Body Armour
     ifl sprite[EV_TARG_SPRITE].extra 1 break // if dead, skip
-    
+
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
     ifg EV_NEW_DAMAGE 0 {
-        ife actorvar[EV_TARG_SPRITE].HEADSHOT 0 { // Only apply body armor to non-headshots
-            
+
+        state get_current_damage_increment
+        ife actorvar[EV_TARG_SPRITE].HEADSHOT 0
+        { // Only apply body armor to non-headshots
+
             // set PROJ_UDATA & EV_PROJ_TYPE
             state ev_getProjData
 
@@ -938,68 +970,80 @@ defstate BODYA_DAMAGE_MODIFIER // Modifier for Body Armour
                 shoot SPARK2
             }
             // Case distinction for hardcoded projectile types
-            else switch EV_PROJ_TYPE
-                case CHAINGUN // hardcoded chaingun pellets
-                case SHOTSPARK1 // shotspark
-                case EXPLOSION2
-                    ifg playervar[EV_PID].SKILL_LEVEL 2 divvar EV_NEW_DAMAGE 3 // 1/3 damage if playing on expert or above
-                    else divvar EV_NEW_DAMAGE 2 // else 1/2 damage
-                    state DING
-                    shoot SPARK2
-                    sound HITARMOUR2
-                    break
-                case SHOTGUN // hardcoded shotgun pellets
-                    ifg playervar[EV_PID].SKILL_LEVEL 2 set EV_NEW_DAMAGE -1 // remove all damage if on expert or professional
-                    else divvar EV_NEW_DAMAGE 4 // quarter the damage
-                    state DING
-                    shoot SPARK2 shoot SPARK2
-                    sound HITARMOUR2
-                    break
-            endswitch
-            
-            // set new damage
-            seta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
+            else
+                {
+                switch EV_PROJ_TYPE
+                    case CHAINGUN // hardcoded chaingun pellets
+                    case SHOTSPARK1 // shotspark
+                    case EXPLOSION2
+                        ifg playervar[EV_PID].SKILL_LEVEL 2 divvar EV_NEW_DAMAGE 3 // 1/3 damage if playing on expert or above
+                        else divvar EV_NEW_DAMAGE 2 // else 1/2 damage
+                        state DING
+                        shoot SPARK2
+                        sound HITARMOUR2
+                        break
+                    case SHOTGUN // hardcoded shotgun pellets
+                        ifg playervar[EV_PID].SKILL_LEVEL 2 set EV_NEW_DAMAGE 0 // remove all damage if on expert or professional
+                        else divvar EV_NEW_DAMAGE 4 // quarter the damage
+                        state DING
+                        shoot SPARK2 shoot SPARK2
+                        sound HITARMOUR2
+                        break
+                endswitch
+                }
         }
-    // set HEADSHOT 0 // reset
+        state apply_damage_increment
     }
 ends
 
-
-/* ONEVENT DEFINITION -- CASE DISTINCTION AND HITSCAN HANDLING */
-onevent EVENT_POSTDAMAGESPRITE
-    
+// This event executes before the damage has been added to htextra
+onevent EVENT_DAMAGESPRITE
     // Set Target Actor Variable
     setvarvar EV_TARG_SPRITE RETURN
-    
+
+    // if htextra = -1, then reset the previous damage counter to 0, as damage was just applied to the enemy
+    geta[EV_TARG_SPRITE].htextra EV_TEMP
+    ife EV_TEMP -1 setactorvar[EV_TARG_SPRITE].EV_PREVIOUS_TOTAL_DAMAGE 0
+
+endevent
+
+
+/* ONEVENT DEFINITION -- CASE DISTINCTION AND HITSCAN HANDLING */
+// This event executes after the damage has been added to htextra
+onevent EVENT_POSTDAMAGESPRITE
+
+    // Set Target Actor Variable
+    setvarvar EV_TARG_SPRITE RETURN
+
     // Find ID of player that damaged the actor (if more than one player active)
     setvarvar EV_PID 0
     ifg numplayers 1
-        ife sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER    
-            for EV_TEMP range numplayers 
+        ife sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER
+            for EV_TEMP range numplayers
             {
-                ife player[EV_TEMP].i sprite[EV_TARG_SPRITE].htowner 
-                    setvarvar EV_PID EV_TEMP    
+                ife player[EV_TEMP].i sprite[EV_TARG_SPRITE].htowner
+                    setvarvar EV_PID EV_TEMP
             }
-    
+
     // Restore the actual projectile type before determining damage modifier (for hitscan projectiles)
     // & perform the headshot scan
-    ifactor SHOTSPARK1 
+    ifactor SHOTSPARK1
     {
         geta[THISACTOR].yvel EV_PROJ_TYPE
         ifg EV_PROJ_TYPE 0 seta[EV_TARG_SPRITE].htpicnum EV_PROJ_TYPE
-        
+
         state headshot_scan
     }
     else setactorvar[EV_TARG_SPRITE].HEADSHOT 0
-        
+
 
     // case distinction on target
     switch sprite[EV_TARG_SPRITE].picnum
     // Multiple Armors:
         case APLAYER
-            ifn playervar[EV_PID].player_using_hovertank -1 // Vehicle damage reduction while in Hovertank 
-                state PLAYER_VEHICLE_DAMAGE_MODIFIER 
-            ife playervar[EV_PID].FIRE_SUIT 1 // Enviro suit protects against damage 
+            ifn playervar[EV_PID].player_using_hovertank -1 // Vehicle damage reduction while in Hovertank
+                state PLAYER_VEHICLE_DAMAGE_MODIFIER
+            ife playervar[EV_PID].FIRE_SUIT 1 // Enviro suit protects against damage
                 state MECH_DAMAGE_MODIFIER
             break
         case MJ12_TROOP
@@ -1010,7 +1054,7 @@ onevent EVENT_POSTDAMAGESPRITE
     // Modifier for Actors with Body Armour
         case AMCSOLDIER_ACTIVE // (Ally)
             ifn sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER
-                ifand actorvar[EV_TARG_SPRITE].AMCSOLDIER_UPGRADES 2 // bodyarmor upgrade 
+                ifand actorvar[EV_TARG_SPRITE].AMCSOLDIER_UPGRADES 2 // bodyarmor upgrade
                     state BODYA_DAMAGE_MODIFIER
             break
         case FASCIST
@@ -1026,7 +1070,7 @@ onevent EVENT_POSTDAMAGESPRITE
             ife EV_TEMP 43 state BODYA_DAMAGE_MODIFIER
             else ife EV_TEMP 24 state BODYA_DAMAGE_MODIFIER
             break
-        case CULTIST 
+        case CULTIST
         case TRIAD
             geta[EV_TARG_SPRITE].pal EV_TEMP
             ife EV_TEMP 49 state BODYA_DAMAGE_MODIFIER
@@ -1036,9 +1080,9 @@ onevent EVENT_POSTDAMAGESPRITE
             ife EV_TEMP 13 state BODYA_DAMAGE_MODIFIER
             else ife EV_TEMP 24 state BODYA_DAMAGE_MODIFIER
             break
-        case MADRAX 
+        case MADRAX
             ife actorvar[EV_TARG_SPRITE].ALLY_MAG 1 // Body armor for phase 1
-                 state BODYA_DAMAGE_MODIFIER 
+                 state BODYA_DAMAGE_MODIFIER
             break
         case MERC2
         case PE_ELDER
@@ -1048,10 +1092,10 @@ onevent EVENT_POSTDAMAGESPRITE
             state BODYA_DAMAGE_MODIFIER
             break
         case EDFSOLDIER_ACTIVE // (Ally)
-        case MSSOLDIER_ACTIVE // (Ally)     
+        case MSSOLDIER_ACTIVE // (Ally)
             ifn sprite[sprite[EV_TARG_SPRITE].htowner].picnum APLAYER state BODYA_DAMAGE_MODIFIER
             break
-            
+
     // Modifier for Mechs (part biological)
         case CYBERALIEN
         case CYBERTOUR
@@ -1117,35 +1161,35 @@ onevent EVENT_POSTDAMAGESPRITE
             state BEYOND_DAMAGE_MODIFIER
             break
     endswitch
-    
+
     // get current damage (after bonuses applied)
     geta[EV_TARG_SPRITE].htextra EV_NEW_DAMAGE
-    
+
     // any additional blood effects or sparks are spawned here
     // TODO: Add actor var that determines the sprite effects to avoid huge switch statements (e.g. ROBOT, Flesh, etc.)
     state spritehit_effects
-    
+
     /* // DEBUG
     redefinequote 1002 "Projectile: %d, Actual Projectile: %d, TARGET SPRITE: %d"
     redefinequote 1004 "TARGET TILE: %d, USERDATA: %d, ORIGINAL DAMAGE: %d, FINAL DAMAGE: %d"
-    qsprintf 1003 1002 THISACTOR EV_PROJ_TYPE EV_TARG_SPRITE 
+    qsprintf 1003 1002 THISACTOR EV_PROJ_TYPE EV_TARG_SPRITE
     qsprintf 1005 1004 sprite[EV_TARG_SPRITE].picnum PROJ_UDATA OG_DMG EV_NEW_DAMAGE
     echo 1003 echo 1005 */
-        
+
 endevent
 
 // Prevent spawning of JIBS6 from projectile impacts (do it manually in ifhitweapon per actor)
 /*
 appendevent EVENT_SPAWN
-    ifactor JIBS6 
+    ifactor JIBS6
     {
         geta[THISACTOR].owner EV_TEMP
         ifl EV_TEMP 1 break
         else ifand sprite[EV_TEMP].statnum 4 killit // is it a projectile?
-        else ifand tiledata[sprite[EV_TEMP].picnum].gameflags 8 killit // is it a custom hitscan? 
+        else ifand tiledata[sprite[EV_TEMP].picnum].gameflags 8 killit // is it a custom hitscan?
         else ife sprite[EV_TEMP].picnum SHOTSPARK1 killit
         else ife sprite[EV_TEMP].picnum SHOTGUN killit
-        else ife sprite[EV_TEMP].picnum CHAINGUN killit      
+        else ife sprite[EV_TEMP].picnum CHAINGUN killit
     }
 endevent
 */
