@@ -1,0 +1,270 @@
+// ================
+// AMC TC  -- Custom Hotkeys for 2D mode
+// Originally created by Max "oasiz" Ylitalo. Many thanks!
+// ================
+
+define CONST_CANCEL -2147483648
+
+/*
+*-----------------------------------------------------------------
+* Additional 2D Mode Hotkeys + Description:
+* ----------------------------------------------------------------
+*  - [ALT + KP_PLUS]: Increment lotag of selected sprites by 1
+*  - [ALT + KP_MINUS]: Decrement lotag of selected sprites by 1
+*  - [SHIFT + KP_PLUS]: Increment extra of selected sprites by 1
+*  - [SHIFT + KP_MINUS]: Decrement extra of selected sprites by 1
+*  - [CTRL + KP_PLUS]: Increment hitag of selected sprites by 1
+*  - [CTRL + KP_MINUS]: Decrement hitag of selected sprites by 1
+*
+*  - [ALT + X]: Edit X velocity of highlighted sprite.
+*  - [ALT + Y]: Edit Y velocity of highlighted sprite.
+*  - [ALT + D]: Edit Z velocity of highlighted sprite.
+*  - [ALT + W]: Edit owner of highlighted sprite
+*
+* ----------------------------------------------------------------
+*/
+
+/* Triggered before the keypress is handled */
+onevent EVENT_PREKEYS2D
+
+    ifeitheralt
+    {
+        // Increment lotag of selected sprite
+        ifhitkey KEY_gPLUS
+        {
+            ife highlightcnt -1
+            {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].lotag
+                    add TEMP 1
+                    set sprite[h].lotag TEMP
+                    
+                    redefinequote hud_quote Lotag of sprite %d increased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            }
+            else 
+            {
+                for i selsprites add sprite[i].lotag 1
+                redefinequote hud_quote Incremented lotag for all selected sprites
+                quote hud_quote
+            }
+        }
+        
+        // Decrement lotag of selected sprite
+        ifhitkey KEY_gMINUS
+        {
+            ife highlightcnt -1
+            {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].lotag
+                    sub TEMP 1
+                    set sprite[h].lotag TEMP
+                    
+                    redefinequote hud_quote Lotag of sprite %d decreased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            }
+            else 
+            {
+                for i selsprites sub sprite[i].lotag 1
+                redefinequote hud_quote Decremented lotag for all selected sprites
+                quote hud_quote
+            }
+        }
+        
+        // Change X velocity of highlighted sprite
+        ifhitkey KEY_X
+        {
+            ifge pointhighlight 16384
+            {
+                set h pointhighlight
+                sub h 16384
+                set TEMP sprite[h].xvel
+                
+                redefinequote 420 ^15Sprite (%ld)  X-vel: ^11
+                qsprintf 420 420 h
+                
+                getnumberfromuser TEMP 420 -32767 15
+                ifn TEMP CONST_CANCEL set sprite[h].xvel TEMP
+            }
+        }
+        
+        // Change Y velocity of highlighted sprite
+        ifhitkey KEY_Y
+        {
+            ifge pointhighlight 16384
+            {
+                set h pointhighlight
+                sub h 16384
+                set TEMP sprite[h].yvel
+                
+                redefinequote 420 ^15Sprite (%ld)  Y-vel: ^11
+                qsprintf 420 420 h
+                
+                getnumberfromuser TEMP 420 -32767 15
+                ifn TEMP CONST_CANCEL set sprite[h].yvel TEMP
+            }
+        }
+        
+        // Change Z velocity of highlighted sprite
+        ifhitkey KEY_D
+        {
+            ifge pointhighlight 16384
+            {
+                set h pointhighlight
+                sub h 16384
+                set TEMP sprite[h].zvel
+                
+                redefinequote 420 ^15Sprite (%ld)  Z-vel: ^11
+                qsprintf 420 420 h
+                
+                getnumberfromuser TEMP 420 -32767 15
+                ifn TEMP CONST_CANCEL set sprite[h].zvel TEMP
+            }
+        }
+        
+        // Change owner of highlighted sprite
+        ifhitkey KEY_W
+        {
+            ifge pointhighlight 16384
+            {
+                set h pointhighlight
+                sub h 16384
+                set TEMP sprite[h].owner
+                
+                redefinequote 420 ^15Sprite (%ld)  Owner: ^11
+                qsprintf 420 420 h
+                
+                getnumberfromuser TEMP 420 -32767 15
+                ifn TEMP CONST_CANCEL set sprite[h].owner TEMP
+            }
+        }
+
+    }
+    
+    ifeithershift
+    {
+        // Increment extra of selected sprites
+        ifhitkey KEY_gPLUS
+        {
+            ife highlightcnt -1
+                {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].extra
+                    add TEMP 1
+                    set sprite[h].extra TEMP
+
+                    redefinequote hud_quote Extra of sprite %d increased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            } 
+            else 
+            {
+                for i selsprites add sprite[i].extra 1
+                redefinequote hud_quote Incremented extra for all selected sprites
+                quote hud_quote
+            }
+        }
+        
+        // Decrement extra of selected sprites
+        ifhitkey KEY_gMINUS
+        {
+            ife highlightcnt -1
+            {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].extra
+                    sub TEMP 1
+                    set sprite[h].extra TEMP
+
+                    redefinequote hud_quote Extra of sprite %d decreased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            }
+            else 
+            {
+                for i selsprites sub sprite[i].extra 1
+                redefinequote hud_quote Decremented extra for all selected sprites
+                quote hud_quote
+            }
+        }
+    }
+    
+    ifeitherctrl
+    {
+        // Increment hitag of selected sprites
+        ifhitkey KEY_gPLUS
+        {
+            ife highlightcnt -1
+            {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].hitag
+                    add TEMP 1
+                    set sprite[h].hitag TEMP
+                    
+                    redefinequote hud_quote Hitag of sprite %d increased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            } 
+            else 
+            {
+                for i selsprites add sprite[i].hitag 1
+                redefinequote hud_quote Incremented hitag for all selected sprites
+                quote hud_quote
+            }
+        }
+        
+        // Decrement hitag of selected sprites
+        ifhitkey KEY_gMINUS
+        {
+            ife highlightcnt -1
+            {
+                ifge pointhighlight 16384
+                {
+                    set h pointhighlight
+                    sub h 16384
+                    set TEMP sprite[h].hitag
+                    sub TEMP 1
+                    set sprite[h].hitag TEMP
+                    
+                    redefinequote hud_quote Hitag of sprite %d decreased to %d
+                    qsprintf hud_quote hud_quote h TEMP
+                    quote hud_quote
+                }
+            }
+            else
+            {
+                for i selsprites sub sprite[i].hitag 1
+                redefinequote hud_quote Decremented hitag for all selected sprites
+                quote hud_quote
+            }
+        }
+    }
+
+endevent
+
+
+/* Triggered after the keypress is handled */
+onevent EVENT_KEYS2D
+
+endevent

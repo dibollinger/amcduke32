@@ -1,0 +1,121 @@
+
+gamearray ar 128
+
+defstate cmp_by_lotag
+    set RETURN sprite[SV2].lotag
+    sub RETURN sprite[SV1].lotag
+ends
+
+onevent EVENT_DRAW2DSCREEN
+    ifl cursectnum 0 return
+
+    // connect LOCATORS in a sector by lines
+    getarraysize ar TEMP4
+    set j 0
+    for i spritesofsector cursectnum
+    {
+        ifge j TEMP4 nullop else
+        ifactor LOCATORS
+        {
+            set ar[j] i
+            add j 1
+        }
+    }
+
+    set TEMP4 j
+    sort ar TEMP4 cmp_by_lotag
+
+    sub TEMP4 1
+    for i range TEMP4
+    {
+        set j ar[i]
+        set k i, add k 1, set k ar[k]
+        drawline16b sprite[j].x sprite[j].y sprite[k].x sprite[k].y drawcol
+    }
+
+
+    set drawlinepat -1
+    for i allsprites
+        {
+
+     ifactor 3807
+        {
+            for i allsprites
+            {
+                ifactor 3664
+                    {
+                        ife sprite[i].hitag sprite[searchwall].hitag
+                            {
+                            drawline16b sprite[i].x sprite[i].y sprite[searchwall].x sprite[searchwall].y 2
+                            return
+                            }
+                    }
+                ifactor 3807
+                    {
+                        ife sprite[i].hitag sprite[searchwall].lotag
+                            {
+                            drawline16b sprite[i].x sprite[i].y sprite[searchwall].x sprite[searchwall].y 3
+                            return
+                            }
+                    }
+            }
+        }
+
+        ifactor 17920 // sunlight
+         ife sprite[i].pal 4
+            drawcircle16b sprite[i].x sprite[i].y 65535 180
+
+        ifactor CUTSCENECAM_CHANGE // Camera changer
+            drawcircle16b sprite[i].x sprite[i].y 512 180
+        ifactor 22261 // Camera changer
+            {
+            ife sprite[i].pal 3 drawcircle16b sprite[i].x sprite[i].y 32767 250
+            else drawcircle16b sprite[i].x sprite[i].y 65536 250
+            }
+        ifactor 8444 // Abyss black patheway
+            drawcircle16b sprite[i].x sprite[i].y 1524 220
+        ifactor 7924 // GAS
+            drawcircle16b sprite[i].x sprite[i].y 5000 250
+        ifactor 15614 // Civilian spawner
+            {
+            drawcircle16b sprite[i].x sprite[i].y sprite[i].hitag 50
+            }
+        ifactor 3347 // trigger
+            {
+            drawcircle16b sprite[i].x sprite[i].y sprite[i].hitag 70
+            }
+        ifactor 15615 // Civilian waypoint
+            {
+            drawcircle16b sprite[i].x sprite[i].y 1024 50
+
+
+            setvarvar TEMP3 sprite[i].x
+            addvarvar TEMP3 sprite[i].xvel
+
+            rotatepoint sprite[i].x sprite[i].y TEMP3 sprite[i].y sprite[i].ang TEMP5 TEMP6
+
+            drawline16b sprite[i].x sprite[i].y TEMP5 TEMP6 6
+
+
+            }
+
+        ifactor 1480 // Car waypoint
+            drawcircle16b sprite[i].x sprite[i].y 768 50
+        ifactor 13251 // Chopper waypoint
+            drawcircle16b sprite[i].x sprite[i].y 1024 250
+        ifactor 13227 // Phantasm ball waypoint
+            drawcircle16b sprite[i].x sprite[i].y 512 120
+
+        ifactor PARTICLEE
+            {
+            drawcircle16b sprite[i].x sprite[i].y sprite[i].hitag 1
+            }
+
+        ifactor SPRITE_DETECT
+            {
+            drawcircle16b sprite[i].x sprite[i].y sprite[i].lotag 70
+            }
+
+        }
+
+endevent

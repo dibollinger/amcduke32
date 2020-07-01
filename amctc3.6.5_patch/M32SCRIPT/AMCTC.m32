@@ -1,0 +1,58 @@
+include names.h
+include M32SCRIPT/quotes.m32
+
+/* ---------- GAMEVARS ----------- */
+
+// Note: gamevar flag 1 --> per-block (top-level, event, or state) variable
+
+/* per-block temp variables */
+gamevar h 0 1
+gamevar i 0 1
+gamevar j 0 1
+gamevar k 0 1
+gamevar l 0 1
+gamevar m 0 1
+
+/* global temp variables */
+gamevar TEMP 0 0
+gamevar TEMP2 0 0
+gamevar TEMP3 0 0
+gamevar TEMP4 0 0
+gamevar TEMP5 0 0
+gamevar TEMP6 0 0
+
+/* enemy animation vars */ 
+gamevar ENEMY_ANIM1 0 2
+gamevar ENEMY_ANIM2 0 2
+
+/* variables that are used but never set */
+/* change these manuall in the console by typing: `do set <var> <value>` */
+gamevar cinbars 0 0
+gamevar setshade 0 0
+gamevar explosives 0 0
+gamevar sphi 0 0
+gamevar drawcol 9 0
+
+// Whether RESPAWN sprites show the respawned sprite picnum unconditionally instead of
+// only when aimed at (and locked onto) the RESPAWN sprite in 3D mode.
+gamevar showrespawn_always 1 0
+
+// When set to 1, previewed sprites are 66% translucent instead of 33%:
+gamevar showrespawn_fulltrans 1 0
+
+define hud_quote 420
+
+/* ---------- EVENTS ----------- */
+
+include M32SCRIPT/event_keys2d.m32
+include M32SCRIPT/event_keys3d.m32
+include M32SCRIPT/event_insertsprite2d.m32
+include M32SCRIPT/event_linktags.m32
+include M32SCRIPT/event_analyzesprites.m32
+include M32SCRIPT/event_draw3dscreen.m32
+include M32SCRIPT/event_draw2dscreen.m32
+
+
+/* --------- COMMANDS ---------- */
+
+include M32SCRIPT/command_states.m32

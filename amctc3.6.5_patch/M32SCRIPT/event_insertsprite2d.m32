@@ -1,0 +1,36 @@
+
+// LOCATORS auto-incrementer
+onevent EVENT_INSERTSPRITE2D
+globalsound 2401
+    set k I
+    set j -1
+    for i spritesofsector .sectnum
+    {
+        ifn i k, ifactor LOCATORS, ifg .lotag j
+            set j .lotag
+    }
+    ifg j -1
+    {
+        add j 1
+        set .lotag j
+    }
+
+ifn explosives 0
+{
+    ifactor SEENINE
+    {
+        randvarvar TEMP explosives
+        set sprite[I].lotag TEMP
+        set sprite[I].xrepeat 4
+        ifn sphi 0 set sprite[I].hitag sphi
+        
+        set sprite[I].z posz
+        set TEMP2 sprite[I].z
+        randvar TEMP 8192
+        
+        ifand TEMP 1 sub TEMP2 TEMP
+        else add TEMP2 TEMP
+        set sprite[I].z TEMP2
+    }
+}
+endevent

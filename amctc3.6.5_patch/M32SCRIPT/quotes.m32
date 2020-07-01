@@ -1,0 +1,497 @@
+
+definequote 7 door sector not an island sector!
+definequote 8 door sector has no SE sprite!
+
+definequote 10 door transport has no lotag!
+
+definequote 12 door transport exit has no hitag!
+
+definequote 13 Translation
+
+definequote 15 Lotag 76 = Deactivate skybox when triggered
+
+definequote 16 Lotag 77 = activate skybox when triggered
+
+definequote 19 Spritepal 2 = moves in a circle; hitag is distance
+definequote 20 Lotag 80 = Skybox
+definequote 21 Place texture 178 on all surfaces you wish to
+definequote 22 render skybox. Place SE80 in centre of skybox.
+definequote 23 Spritepal 0 = Static
+definequote 24 Spritepal 1 = moves with player; hitag is scale (default 64)
+
+definequote 25 Lotag 79 = Deactivate/Activate Skybox
+definequote 26 When tripped by an activator, will turn on/off
+definequote 27 the skybox. Use to help FPS when indoors.
+
+definequote 28 Lotag 56 = Change Sector's lotag when activated
+definequote 29 Extra = Lotag to change sector to
+
+definequote 30 SECTOR EFFECTOR
+definequote 31 Lotag 71 = Floor lowers when player is standing on it
+definequote 32 Hitag = Texture to change to when at lowest position
+definequote 33 Angle 512 = turn into water sector when at bottom
+definequote 34 Extra 1 = Don't rise again
+
+definequote 35 Lotag 51 = Change floor texture when Hitag is activated
+definequote 36 Floor will take on this sprite's palette and shade
+definequote 37 Extra = Texture to change into when activated
+definequote 38 Angle 512 = Turn into solid sector when activated
+definequote 39 Angle 1024 = Turn into water sector when activated
+
+definequote 40 Lotag 52 = Change floor texture when floor is level with sprite
+definequote 41 Hitag = Activator to trigger this sprite
+definequote 42 XVEL 1 = Turn On/Off Floor expansion
+definequote 43 ZVEL = Set Visibility
+
+definequote 44 Lotag 53 = Turn into Water/Normal sector
+definequote 45 Turns the sector into a water sector if not already;
+definequote 46 to turn Water sector into normal, set angle to 512
+
+definequote 47 Lotag 54 = Change wall texture when activated
+definequote 48 Point SE towards Wall to be changed
+
+definequote 49 Lotag 55 = Change ceiling texture when activated
+
+definequote 50 RESPAWN SPRITE
+
+definequote 60 MONSTER SPAWNER
+definequote 61 Number of times to spawn (Lotag): %d
+definequote 62 ZVEL = 1, activated by alarm
+definequote 63 Activated by Hitag: %d
+definequote 64 Spawn time (YVEL, 26 = 1 second): %d
+definequote 65 Spawn only when player is visible
+definequote 66 Spawn Transporterbeam (XVEL = 1)
+
+definequote 67 BROKEN SWITCH SPRITE
+definequote 68 Can be fixed with a Toolbox. Give it Lotag and
+definequote 69 Hitag you wish fixed switch to have.
+
+definequote 70 TOOLBOX FIX SPRITE
+definequote 71 Lotag = Tag to activate when fixed
+definequote 72 Hitag = Ambience sound to play when fixed
+definequote 73 XVEL = Sound to play once when fixed
+definequote 74 Spritepal of 3 = Spawns some smoke whilst broken
+
+definequote 75 BATTERY POINT
+definequote 76 Hitag = Tags to activate when CHarged
+definequote 77 Lotag = Minutes of power (leave at 0 for infinite)
+definequote 78 Spritepal of 3 = Invisible
+
+definequote 80 MUSIC CHANGER
+definequote 81 Hitag = Activator number to start
+definequote 82 Spritepal = Track number
+definequote 83 Use Music Preloader (10525) to preload tracks you use
+
+definequote 84 MUSIC PRELOADER
+definequote 85 Assign a hitag, lotag, extra, XVEL, YVEL and ZVEL to
+definequote 86 preload tracks at map start (to avoid loading pauses)
+
+definequote 87 MISSION OBJECTIVES
+definequote 88 LOTAG = Mission Line (leave at 0 to use generic ones)
+definequote 89 HITAG = Mission Objective
+definequote 90 EXTRA = Slot (values 0 to 5 accepted)
+definequote 91 HITAG 300 =  Eliminate hostile activity!
+definequote 92 HITAG 301 =  Try and find Survivors
+definequote 93 HITAG 302 =  Try and find out what went wrong
+definequote 94 HITAG 303 =  Escape
+definequote 95 HITAG 304 =  Rendevouz with your team
+definequote 96 HITAG 305 =  Make your way through the area
+definequote 97 HITAG 306 =  Destroy the Leader
+definequote 98 HITAG 307 =  Destroy the Reactor
+definequote 99 HITAG 308 =  Destroy the Base
+definequote 100 Spritepal 1 = Complete Mission (Extra chooses slot)
+
+definequote 101 ZVEL 0 = No movement
+definequote 102 ZVEL 1 = Move Forward *
+definequote 103 ZVEL 2 = Move Up *
+definequote 104 ZVEL 4 = Move Down *
+definequote 105 ZVEL 8 = Pitch Up
+definequote 106 ZVEL 16 = Turn Camera ( Shade + Right, Shade - Left )
+definequote 107 ZVEL 32 = Move Backward *
+definequote 108 ZVEL 64 = Move Backward slowly *
+definequote 109 ZVEL 128 = Move Forward slowly *
+definequote 110 ZVEL 256 = Pitch Down
+definequote 111 ZVEL 512 = Move Left (Clipdist = Speed)
+definequote 112 ZVEL 1024 = Move Right (Clipdist = Speed)
+definequote 113 ZVEL 2048 = Stop
+definequote 114 ZVEL 4096 = Move depending on shade (minimum is 16)
+definequote 115 Movement speed = %d build units
+definequote 116
+
+definequote 119 CHARACTER SPAWN POINT
+definequote 120 FORCE PLAYER
+definequote 121 SPRITEPAL 0 = James
+definequote 122 SPRITEPAL 1 = Zaxtor
+definequote 123 SPRITEPAL 2 = Merlijn
+definequote 124 SPRITEPAL 3 = Highwire
+definequote 125 SPRITEPAL 4 = Sang
+definequote 126 SPRITEPAL 5 = Rusty Nails
+definequote 127 SPRITEPAL 6 = Geoffrey
+definequote 128 SPRITEPAL 7 = Mikko
+definequote 129 SPRITEPAL 8 = Use for Cutscene maps
+definequote 130 SPRITEPAL 9 = Cultist
+definequote 131 SPRITEPAL 10 = Bombshell
+definequote 132 SPRITEPAL 11 = Maarten
+definequote 133 SPRITEPAL 12 = Jane
+
+
+definequote 134 EXTRA 0 = James
+definequote 135 EXTRA 1 = Zaxtor
+definequote 136 EXTRA 2 = Merlijn
+definequote 137 EXTRA 3 = Highwire
+definequote 138 EXTRA 4 = Sang
+definequote 139 EXTRA 5 = Rusty Nails
+definequote 140 TRIGGER ONLY IF THIS CHAR
+definequote 141 EXTRA 6 = Geoffrey
+definequote 142 EXTRA 7 = Mikko
+
+definequote 143 Spritepal 1 = Highwire Revolution period
+definequote 144
+definequote 145
+definequote 146
+definequote 147 TIMEZONE STUFF
+definequote 148 Spritepal 0 = Nullop
+
+definequote 150 MAKE SWITCH
+definequote 151 When activated, will change into a switch
+definequote 152 Give this sprite all the tags you wish the switch
+definequote 153 sprite to have.
+definequote 154 ZVEL = Picnum to change to
+
+definequote 160 DOOR TRANSPORT
+definequote 161 Give this sprite a lotag; place a exit sprite (3629)
+definequote 162 and give it the same hitag as this sprite.
+definequote 163 XVEL = Opening sound
+definequote 164 YVEL = Duration of Transfer (26 = 1 second)
+definequote 165 ZVEL = Closing Sound
+definequote 166 Spritepal 1 = AMC TC transition effect
+definequote 167 Spritepal 2 = Start Flashlight effect
+definequote 168 Spritepal 3 = Stop flashlight effect
+definequote 169 Press Space on this sprite to take to it's exit point!
+
+definequote 170 PADLOCK SPRITE
+definequote 171 Can lock Door Transport; place infront of door and give
+definequote 172 this sprite a lotag and door transport the same hitag.
+definequote 173 Hitag determines what key type can unlock it.
+definequote 174 HITAG 0 = Generic Key
+definequote 175 HITAG 1 = Flame Key
+definequote 176 HITAG 2 = Spider Key
+definequote 177 HITAG 4 = Dagger Key
+definequote 178 HITAG 8 = Moon Key
+definequote 179 HITAG 16 = Skull key
+definequote 180 HITAG 32 = Eye key
+
+definequote 181 OLD LOCK SPRITE
+definequote 182 Lotag = Tag to activate when unlocked
+
+definequote 183 FLOOR CEILING SCROLL
+definequote 184 Lotag = X Scroll speed
+definequote 185 Hitag = Y Scroll speed
+definequote 186 Spritepal 0 = Ceiling scroll
+definequote 187 Spritepal 1 = Floor scroll
+definequote 188 Spritepal 2 = Both Scroll
+
+definequote 197 EXTRA -1 = Current Character
+definequote 198 DUMMY PLAYER SPRITE
+definequote 199 CAMERA SPRITE
+
+definequote 210 RANDOM SOUND EFFECTER
+definequote 211 SPRITEPAL 0 = Night Woodland sounds
+definequote 212 SPRITEPAL 1 = Metal Groaning sounds
+definequote 213 SPRITEPAL 2 = City emergency Sounds
+definequote 214 SPRITEPAL 3 = Spooky Sounds
+definequote 215 SPRITEPAL 4 = Hell/Abyss Sounds
+definequote 216 SPRITEPAL 5 = Warfare sounds
+definequote 217 SPRITEPAL 6 = Angry PA system sounds
+definequote 218 SPRITEPAL 7 = Birds Chirping sounds
+definequote 219 SPRITEPAL 8 = City Sounds
+
+definequote 220 LOCKED DOOR
+definequote 221 SPRITEPAL 0 = Standard Door locked
+definequote 222 SPRITEPAL 1 = Gate locked
+definequote 223 SPRITEPAL 2 = Standard Door locked 2
+definequote 224 SPRITEPAL 3 = Hi-tech Door locked
+definequote 225 SPRITEPAL 4 = Standard Door locked 3
+definequote 226 SPRITEPAL 5 = Standard Door locked 4
+definequote 227 Hitag = (Can be unlocked by Generic Key actor)
+definequote 228 Lotag = (Will activate lotag if kicked)
+definequote 229 XVEL = (Will disapear if XVEL is activated)
+definequote 230 SPRITEPAL 6 = Hi-tech door locked 2
+
+definequote 235 GRANDFATHER CLOCK
+definequote 236 Will produce ticking noise, and will activate
+definequote 237 it's lotag when real world times reaches 'o clock.
+
+definequote 238 LOTAG 4 = Spawn Rocks 3
+definequote 239 LOTAG 5 = Spawn metal scraps
+definequote 240 DEBRIS SPAWNER
+definequote 241 LOTAG 1 = Spawn Wood
+definequote 242 LOTAG 2 = Spawn Rocks
+definequote 243 LOTAG 3 = Spawn Rocks 2
+definequote 244 Spritepal 3 = Spawn smoke
+
+definequote 245 DOCUMENT
+definequote 246 HITAG = Tile Number to display
+definequote 247 LOTAG = Sound to play when Opened
+definequote 248 EXTRA = number of pages
+definequote 249 XVEL = Page Turning Sound
+
+
+definequote 250 GUNS MACHINE
+definequote 251 SPRITEPAL 0 = Gives Low-tier weapons
+definequote 252 SPRITEPAL 25 = Gives Hi-tier weapons
+definequote 253 SPRITEPAL 20 = Upgrade Machine
+
+definequote 255 LOCATION
+definequote 256
+
+definequote 260 CHOPPER WAYPOINT
+definequote 261 Hitag (amount to rise)
+definequote 262 Lotag (amount to lower)
+definequote 263 YVEL (0 = Fast, 1 = slow, 2 = Stop)
+definequote 264 ZVEL (Troop type)
+definequote 265 XVEL (Time to stop)
+definequote 266 Owner (refill passenger count)
+definequote 267 Pal 4 = Ignore if empty
+
+definequote 270 PARTICLE SPAWNER
+definequote 271 Lotag = 0 Small Smoke
+definequote 272 Lotag = 1 Lava Ball
+definequote 273 Lotag = 2 Water splashes; Hitag = Radius
+definequote 274 Lotag = 3 Sparks
+definequote 275 Lotag = 4 Sparks when activated
+definequote 276 Lotag = 5 Big Smoke type 3
+definequote 277 Hitag = Radius
+definequote 278 Hitag = Activator
+definequote 279 Extra = Size of smoke spawned
+definequote 280 Zvel 1 = Affected by gravity
+
+definequote 281 YVEL 1 = Move smoke up
+definequote 282 YVEL 2 = Move smoke down
+definequote 283 YVEL 3 = Move smoke forward
+definequote 284 YVEL 4 = Move smoke forward and up
+definequote 285 YVEL 5 = Move smoke forward and down
+
+definequote 289 Lotag = Not correct number
+
+definequote 290 Lotag = 9 Particles move inwards (towards tile no 23747) Hitag = activation
+definequote 291 Lotag = 6 Teleport particle; Hitag = Radius
+definequote 292 Lotag = 7 Water bubbles; Hitag = Radius
+definequote 293 Lotag = 8 Sparkle; Hitag = Radius
+definequote 294 Lotag = 11 Big Smoke type 2
+
+
+definequote 300 RAIN/SNOW EFFECT
+definequote 301 Extra = Positive for Rain (Higher = more rain)
+definequote 302 Negative for Snow (lower = more snow) to max of 32
+definequote 303 Hitag 1 = Only snow/rain in this parallexed sky tex
+definequote 304 Lotag 1 = Replace texes with rain versions, global rain sound
+
+definequote 305 RAIN/SNOW EFFECT STARTER
+definequote 306 Can trigger Rain/Snow effect. Place sprite 3696 in level and leave
+definequote 307 extra at 0. Place this sprite and give it the extra value you'd give
+definequote 308 the RAIN/SNOW effect sprite. Will trigger when player comes close.
+definequote 309 Give a YVEL of 1 to play rain sound and replace textures.
+
+definequote 310 RAIN SOUND
+definequote 311 If Raining, will play rain sound.
+
+definequote 320 Lotag = Will be activated by this tag
+definequote 321 Hitag = Will be activated by this tag
+
+definequote 323 Lotag = Will activate this tag
+
+definequote 352 MOVE PLAYER
+definequote 353 When Hitag is activated, will move player to this
+definequote 354 sprite's position and angle.
+
+definequote 360 Hitag 1 = Only work if Bombshell is with player
+definequote 361 Hitag 2 = Only work if Vladmir is with player
+
+definequote 370 ACTIVATE IF PLAYER Nearby
+definequote 371 Activates Lotag when the player steps close
+definequote 372 can be locked or detect if has certain item
+definequote 373 Spritepal 1 = C4
+definequote 374 Spritepal 2 = Gasmask
+definequote 375 Spritepal 3 = Toolbox
+definequote 376 Xvel = locked until this tag is activated
+definequote 377 Hitag = Distance (Defaults to 1024 if left at zero)
+
+definequote 380 WEAPONS/ITEM STRIP
+definequote 381 Removes the player's items/weapons when activated; set Hitag
+definequote 382 to an activator or leave at zero to take stuff at level start.
+definequote 383 Spritepal 0 = Take Both
+definequote 384 Spritepal 1 = Take just items
+definequote 385 Spritepal 2 = Take just Weapons
+definequote 386 Spritepal 3 = Take Both, play sound WEAPON_TAKE
+definequote 387 Spritepal 4 = Take Both, give player assigned equipment
+
+definequote 400 SCIENTIST WAYPOINT
+definequote 401 Spritepal 0 = Normal waypoint
+definequote 402 Spritepal 2 = Random waypoint, 25% of following it
+definequote 403 Spritepal 3 = Interest waypoint, 50% of looking at it
+
+definequote 410 RESEARCH PROJECT
+definequote 411 Hitag = Department, Lotag = Item
+definequote 412 Hitag 1 = Weapons
+definequote 413 Hitag 2 = Equipment
+definequote 414 Hitag 3 = Personel Data
+definequote 415 Hitag 4 = Base data
+definequote 416 Hitag 5 = Mystical data
+definequote 417 Hitag 6 = Melee data
+
+definequote 420 redefine_me
+
+definequote 430 Extra 1 = will assign selected loadout
+
+definequote 440 CUTSCENE TEXT SPRITE
+definequote 441 Hitag = tag to be activated by (leave blank for proximity)
+definequote 442 Zvel = text id tag (leave blank to be activated by proximity)
+definequote 443 Xvel = text id tag to trigger when time is up
+definequote 444 Yvel = time to trigger next idea (Value of 30 = 1 second)
+definequote 445 Extra = Sound effect to play
+definequote 446 Clipdist = Change it's value to anything other than 32 to play radio start/stop sound
+
+definequote 450 GAS/HEAT EFFECT SPRITE
+definequote 451 Pal 0 = Gas effect, protected by gasmask or enviro-suit
+definequote 452 Pal 2 = Heat effect, protected only by enviro-suit
+definequote 453 Extra -1 = triggers by proximity
+definequote 454 Extra 1 = Triggered if player is in sector
+definequote 455 Extra 2 = Triggered if player is in sector and below sprite's level
+definequote 456 ZVEL 1 = Starts off
+definequote 457 XVEL = Will be turned OFF by this activator tag
+definequote 458 YVEL = Will be turned ON by this activator tag
+
+definequote 460 SOUND PLAYER SPRITE
+definequote 461 Unconditionally plays a sound when triggered.
+definequote 462 Lotag = sound number to be played (F2 in 2D mode for a list)
+definequote 463 Hitag = tag to be triggered by
+
+definequote 465 ACTIVATE LEVEL
+definequote 466 Takes player to level defined by lotag when hitag is triggered
+definequote 467 Set ZVEL to 1 to not add player score to base budget
+definequote 468 Set XVEL to 1 to take player to the last AMC base level they were on
+
+definequote 470 Air bubbles, will top up player's oxygen if they have no airtank
+
+definequote 471 AUTOSAVE
+definequote 472 Will attempt on auto-save on last saveslot. Can be triggered by
+definequote 473 it's hitag, or leave hitag at 0 for save on proximity.
+
+definequote 475 C4 POSITIONING SLOT
+definequote 476 Sets a place for a player to place C4. Will spawn an explosion.
+definequote 477 Hitag = tag to activate when C4 is placed (optional)
+definequote 478 Lotag = tag to activate when C4 explodes after timer (optional)
+
+definequote 480 COUNTDOWN SPRITE
+definequote 481 Starts a countdown with a visible timer.
+definequote 482 Lotag = tag to be triggered by (Leave at 0 to start activated)
+definequote 483 Hitag = minutes till countdown finishes
+definequote 484 Extra = tag to trigger when countdown finishes
+definequote 485 Spritepal 1 = Will cancel any countdowns when activated instead
+definequote 486 Spritepal 2 = Will make screen go red and play an alarm sound
+
+definequote 490 INSTANT RESPAWN SPRITE
+definequote 491 works same as default respawn, but does not have delay
+definequote 492 EXTRA 1 = Will spawn a transporter beam and play sound
+
+definequote 500
+definequote 501
+definequote 502
+definequote 503
+definequote 504
+
+definequote 505 Press Ctrl + Space to move to camera's viewpoint
+
+definequote 510 AMC SHIP commands
+definequote 511 Spritepal 3 = ship will fly up
+definequote 512 Spritepal 5 = ship will fly forward
+definequote 513 Spritepal 10 = ship will fly forward slow
+definequote 514 Spritepal 13 = ship spawns an explosion and crashes
+definequote 515 Spritepal 15 = ship crashes
+definequote 516 Spritepal 16 = ship will move down and stop at floor
+
+definequote 520 Counter sprite
+definequote 521 Will activate it's extra when all tags linked to
+definequote 522 lotag, hitag, xvel, yvel and zvel are activated.
+definequote 523 (not all need to be set however)
+
+definequote 530 AMC SHIP TYPE BRANCHER
+definequote 531 Will activate its hitag if the advanced AMC ship
+definequote 532 is available, otherwise it will use its lotag.
+definequote 533 Set its extra to be activated by that tag, or
+definequote 534 leave it at -1 to be activated at start.
+
+definequote 550 COMBAT CHECK
+definequote 551 Will activate its Hitag when ALL enemies are dead.
+definequote 552 Set its lotag to activate, otherwise leave at zero.
+definequote 553 Spritepal 12 = White flash when finished
+definequote 554 Spritepal 13 = Black flash when finished
+definequote 555 Extra = play this sound whilst active
+definequote 556 XVEL = play this sound when finished
+
+definequote 560 ZVEL 1 = Will not be affected by gravity
+definequote 561 Hitag 1 = Will only appear in cutscenes
+definequote 562 Owner = will be deleted when this tag is activated
+definequote 563 Lotag = When this tag is set, will start running forward
+definequote 564 YVEL = time to run for when activated (30 = 1 second)
+definequote 565 Pal 100 = Stop music
+
+definequote 601 Spritepal 4 = Operate OWNER var when used
+definequote 602 Spritepal 5 = Level load effect
+definequote 603 Spritepal 10 = locked from this side message
+definequote 604 Spritepal 18 = unlocked from this side + activate OWNER tags
+
+definequote 620 SPRITE CHECKER
+definequote 621 Will active LOTAG when specified sprite
+definequote 622 is found within HOTAG radius
+definequote 623 pal 0 = battery sprite
+definequote 624 Hitag = radius to search (default is 1024)
+definequote 625 Lotag = Active this tag when sprite is found
+
+definequote 630 SE60 = SECTOR ATTRIBUTE COPIER
+definequote 631 Paired with SE61; give both sprites same hitag
+definequote 632 Will copy ALL sector attributes from paired SE61 when extra tag is activated
+definequote 633 SE61 = SECTOR ATTRIBUTE COPIER COPY
+
+definequote 640 SE82 = SKYBOX ANCHOR
+definequote 641 Anchor point for skyboxes
+definequote 642 Lotag 58 = Change ceiling texture when Hitag is activated
+definequote 643 ceiling will take on this sprite's palette and shade
+definequote 644 XVEL 1 = Turn on Texture expansion
+definequote 645 XVEL 2 = Turn TROR into water section
+
+definequote 653 Lotag 57 = Change floor texture when floor is lower than sprite
+
+definequote 660 TIME PORTAL - ONLY JAMES CAN USE THESE
+definequote 661 COLOURS - Doesn't affect gameplay, just for story purposes
+definequote 662 Blue = One-way transport
+definequote 663 Green = To present
+definequote 664 Grey = To Past
+definequote 665 Red = To Future
+
+definequote 1133 SPRITEPAL 13 = Micky
+definequote 1134 SPRITEPAL 14 = Snowfall
+
+definequote 1142 EXTRA 13 = Micky
+definequote 1143 EXTRA 14 = Snowfall
+definequote 1144 EXTRA 17 = Kagura
+
+definequote 1150 Change Clipdist to anybut but 32 to make usable only by Zaxtor and Kagura (ALT+D)
+
+definequote 1503 WALL SCROLL
+definequote 1504 Spritepal 0, hitag = scroll down
+definequote 1505 Spritepal 0, lotag = scroll left
+definequote 1506 Spritepal 1, hitag = scroll up
+definequote 1507 Spritepal 1, lotag = scroll right
+
+definequote 1600 Type: Cycloids
+definequote 1601 Type: Abyssal
+definequote 1602 Type: Cultists
+definequote 1603 Type: Supernatural
+definequote 1604 Type: Mercenary
+definequote 1605 Type: Empirical Union
+definequote 1606 Type: Triad/Yakuza
+definequote 1607 Type: Underworld
+definequote 1608 Type: Beyonder
+

@@ -1,0 +1,1493 @@
+defstate item_box_stuff
+        rotatesprite 220 50 32767 0 3308 0 0 33 0 0 xdim ydim
+        ifvarn sprite[searchwall].lotag 0 rotatesprite 230 25 16384 0 sprite[searchwall].lotag 0 0 0 0 0 xdim ydim
+        ifvarn sprite[searchwall].hitag 0 rotatesprite 253 25 16384 0 sprite[searchwall].hitag 0 0 0 0 0 xdim ydim
+        ifvarn sprite[searchwall].extra 0 rotatesprite 230 50 16384 0 sprite[searchwall].extra 0 0 0 0 0 xdim ydim
+        ifvarn sprite[searchwall].xvel 0 rotatesprite 253 50 16384 0 sprite[searchwall].xvel 0 0 0 0 0 xdim ydim
+        ifvarn sprite[searchwall].yvel 0 rotatesprite 230 75 16384 0 sprite[searchwall].yvel 0 0 0 0 0 xdim ydim
+        ifvarn sprite[searchwall].zvel 0 rotatesprite 253 75 16384 0 sprite[searchwall].zvel 0 0 0 0 0 xdim ydim
+ends
+
+onevent EVENT_DRAW3DSCREEN
+
+    // test cutscene overlay
+    ife cinbars 1
+        rotatesprite 160 100 65536 0 3542 0 0 1024 0 0 xdim ydim
+
+
+    add ENEMY_ANIM1 1
+    ifg ENEMY_ANIM1 30
+    {
+        add ENEMY_ANIM2 1
+        ifg ENEMY_ANIM2 3 set ENEMY_ANIM2 0
+        set ENEMY_ANIM1 0
+    }
+    
+    
+    // Print information about sprites currently under the cursor in 3D Mode
+    ife searchstat 3 // sprite
+    {
+
+        ife sprite[searchwall].picnum 1 // SECTOR EFFECTOR
+        {
+        printext256 30 580 20 31 0 65536
+
+        ife sprite[searchwall].lotag 79
+            {
+            printext256 25 580 30 31 0 65536
+            printext256 26 580 40 31 0 65536
+            printext256 27 580 50 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 80
+            {
+            printext256 20 580 30 31 0 65536
+            printext256 21 580 40 31 0 65536
+            printext256 22 580 50 31 0 65536
+            printext256 23 580 60 31 0 65536
+            printext256 24 580 70 31 0 65536
+            printext256 19 580 80 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 82
+            {
+            printext256 640 580 30 31 0 65536
+            printext256 641 580 40 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 71
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].hitag 0 0 0 0 0 xdim ydim
+            printext256 31 580 30 31 0 65536
+            printext256 32 580 40 143 0 65536
+            printext256 33 580 50 31 0 65536
+            printext256 34 580 60 143 0 65536
+            }
+        ife sprite[searchwall].lotag 51
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra sprite[searchwall].shade sprite[searchwall].pal 0 0 0 xdim ydim
+            printext256 35 580 30 31 0 65536
+            printext256 36 580 40 31 0 65536
+            printext256 37 580 50 143 0 65536
+            ife sprite[searchwall].ang 512  printext256 38 580 60 72 0 65536
+            else printext256 38 580 60 31 0 65536
+            ife sprite[searchwall].ang 1024 printext256 39 580 70 248 0 65536
+            else printext256 39 580 70 143 0 65536
+            printext256 42 580 80 31 0 65536
+            printext256 43 580 100 143 0 65536
+            ife sprite[searchwall].xvel 2 printext256 641 580 90 72 0 65536
+            else printext256 641 580 90 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 52
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra 0 0 0 0 0 xdim ydim
+            printext256 40 580 30 31 0 65536
+            printext256 41 580 40 143 0 65536
+            printext256 36 580 50 31 0 65536
+            printext256 37 580 60 143 0 65536
+            printext256 38 580 70 31 0 65536
+            printext256 39 580 80 143 0 65536
+            printext256 42 580 90 31 0 65536
+            printext256 43 580 100 143 0 65536
+            }
+
+        ife sprite[searchwall].lotag 53
+            {
+            printext256 44 580 30 31 0 65536
+            printext256 41 580 40 143 0 65536
+            printext256 45 580 50 31 0 65536
+            printext256 46 580 60 143 0 65536
+            }
+        ife sprite[searchwall].lotag 54
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra sprite[searchwall].shade sprite[searchwall].pal 0 0 0 xdim ydim
+            rotatesprite 290 60 16384 0 sprite[searchwall].yvel sprite[searchwall].shade sprite[searchwall].pal 0 0 0 xdim ydim
+            printext256 47 580 30 31 0 65536
+            printext256 48 580 40 143 0 65536
+            printext256 41 580 50 31 0 65536
+            printext256 37 580 60 143 0 65536
+            }
+
+        ife sprite[searchwall].lotag 55
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra 0 0 0 0 0 xdim ydim
+            printext256 49 580 30 31 0 65536
+            printext256 41 580 40 143 0 65536
+            printext256 37 580 50 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 56
+            {
+            printext256 28 580 30 31 0 65536
+            printext256 41 580 40 143 0 65536
+            printext256 29 580 50 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 57
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra 0 0 0 0 0 xdim ydim
+            printext256 653 580 30 31 0 65536
+            printext256 41 580 40 143 0 65536
+            printext256 36 580 50 31 0 65536
+            printext256 37 580 60 143 0 65536
+            printext256 38 580 70 31 0 65536
+            printext256 39 580 80 143 0 65536
+            printext256 42 580 90 31 0 65536
+            printext256 43 580 100 143 0 65536
+            }
+
+        ife sprite[searchwall].lotag 58
+            {
+            rotatesprite 290 30 16384 0 sprite[searchwall].extra 0 0 0 0 0 xdim ydim
+            printext256 642 580 30 31 0 65536
+            printext256 643 580 40 143 0 65536
+            printext256 36 580 50 31 0 65536
+            printext256 37 580 60 143 0 65536
+            printext256 38 580 70 31 0 65536
+            printext256 39 580 80 143 0 65536
+            printext256 42 580 90 31 0 65536
+            printext256 640 580 100 31 0 65536
+            ife sprite[searchwall].xvel 2 printext256 641 580 90 72 0 65536
+            else printext256 641 580 90 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 60
+            {
+            printext256 630 580 30 31 0 65536
+            printext256 631 580 40 143 0 65536
+            printext256 632 580 50 31 0 65536
+            }
+
+        ife sprite[searchwall].lotag 61
+            {
+            printext256 633 580 30 31 0 65536
+            printext256 631 580 40 143 0 65536
+            printext256 632 580 50 31 0 65536
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 9 // RESPAWN
+        {
+         ife sprite[searchwall].hitag 3795
+            {
+            printext256 510 580 30 31 0 65536
+            printext256 511 580 40 31 0 65536
+            printext256 512 580 50 31 0 65536
+            printext256 513 580 60 31 0 65536
+            printext256 514 580 70 31 0 65536
+            printext256 515 580 80 31 0 65536
+            printext256 516 580 90 31 0 65536
+            }
+         ife sprite[searchwall].hitag 22521
+            {
+            printext256 510 580 30 31 0 65536
+            printext256 511 580 40 31 0 65536
+            printext256 512 580 50 31 0 65536
+            printext256 513 580 60 31 0 65536
+            printext256 514 580 70 31 0 65536
+            printext256 515 580 80 31 0 65536
+            printext256 516 580 90 31 0 65536
+            }
+         ife sprite[searchwall].hitag 21612
+            {
+            printext256 510 580 30 31 0 65536
+            printext256 511 580 40 31 0 65536
+            printext256 512 580 50 31 0 65536
+            printext256 513 580 60 31 0 65536
+            printext256 514 580 70 31 0 65536
+            printext256 515 580 80 31 0 65536
+            printext256 516 580 90 31 0 65536
+            }
+        }
+
+        ife sprite[searchwall].picnum 3664 // Cutscene text
+        {
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+                soundonce sprite[searchwall].extra
+            }
+        }
+
+        ife sprite[searchwall].picnum 3602 // Sound player
+        {
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+                soundonce sprite[searchwall].lotag
+            }
+        }
+
+        ife sprite[searchwall].picnum SPRITE_DETECT // item scanner
+        {
+        printext256 620 580 20 31 0 65536
+        printext256 621 580 30 31 0 65536
+        printext256 622 580 40 31 0 65536
+        printext256 623 580 50 31 0 65536
+        printext256 624 580 60 31 0 65536
+        printext256 625 580 70 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 22446 // combat checker
+        {
+        printext256 550 580 20 31 0 65536
+        printext256 551 580 30 31 0 65536
+        printext256 552 580 40 31 0 65536
+        printext256 553 580 50 31 0 65536
+        printext256 554 580 60 31 0 65536
+        printext256 555 580 70 31 0 65536
+        printext256 556 580 80 31 0 65536
+        }
+
+
+        ife sprite[searchwall].picnum 22520 // Ship type
+        {
+        printext256 530 580 20 31 0 65536
+        printext256 531 580 30 31 0 65536
+        printext256 532 580 40 31 0 65536
+        printext256 533 580 50 31 0 65536
+        printext256 534 580 60 31 0 65536
+        }
+
+
+        ife sprite[searchwall].picnum 10570 // Guns machine
+        {
+        printext256 250 580 20 31 0 65536
+        printext256 251 580 30 111 0 65536
+        printext256 252 580 40 143 0 65536
+        printext256 253 580 50 74 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3624 // Debris
+        {
+        printext256 240 580 20 31 0 65536
+        printext256 241 580 30 31 0 65536
+        printext256 242 580 40 31 0 65536
+        printext256 243 580 50 31 0 65536
+        printext256 238 580 60 31 0 65536
+        printext256 239 580 70 31 0 65536
+        printext256 244 580 80 31 0 65536
+
+        ife sprite[searchwall].lotag 1 rotatesprite 290 30 32767 0 3770 0 0 0 0 0 xdim ydim // wood
+        ife sprite[searchwall].lotag 2 rotatesprite 290 30 32767 0 3813 0 0 0 0 0 xdim ydim // rock 1
+        ife sprite[searchwall].lotag 3 rotatesprite 290 30 32767 0 10118 0 23 0 0 0 xdim ydim // rock 2
+        ife sprite[searchwall].lotag 4 rotatesprite 290 30 16384 0 9976 0 23 0 0 0 xdim ydim // rock 2
+
+        }
+
+        ife sprite[searchwall].picnum MUSICCHANGE
+        {
+        printext256 80 10 20 31 0 65536
+        printext256 81 10 30 31 0 65536
+        printext256 82 10 40 254 0 65536
+        printext256 83 10 50 31 0 65536
+        printext256 565 10 60 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum PRELOAD_MUSIC
+        {
+        printext256 84 580 20 31 0 65536
+        printext256 85 580 30 31 0 65536
+        printext256 86 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 4954 // broken switch
+        {
+        printext256 67 580 20 31 0 65536
+        printext256 68 580 30 31 0 65536
+        printext256 69 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 4483 // broken switch
+        {
+        printext256 67 580 20 31 0 65536
+        printext256 68 580 30 31 0 65536
+        printext256 69 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12358 // broken switch
+        {
+        printext256 67 580 20 31 0 65536
+        printext256 68 580 30 31 0 65536
+        printext256 69 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12432 // Toolbox Fixing sprite
+        {
+        printext256 70 580 20 31 0 65536
+        printext256 71 580 30 31 0 65536
+        printext256 72 580 40 31 0 65536
+        printext256 73 580 50 31 0 65536
+        printext256 74 580 60 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3828 // Wall scroll
+        {
+        printext256 1503 580 20 31 0 65536
+        printext256 1504 580 30 31 0 65536
+        printext256 1505 580 40 31 0 65536
+        printext256 1506 580 50 31 0 65536
+        printext256 1507 580 60 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3829 // Floor Ceiling scroll
+        {
+        printext256 183 580 20 31 0 65536
+        printext256 184 580 30 31 0 65536
+        printext256 185 580 40 31 0 65536
+        printext256 186 580 50 31 0 65536
+        printext256 187 580 60 31 0 65536
+        printext256 188 580 70 143 0 65536
+        }
+
+        ife sprite[searchwall].picnum GRANDFATHER_CLOCK
+        {
+        printext256 235 580 20 31 0 65536
+        printext256 236 580 30 31 0 65536
+        printext256 237 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum DOCUMENTD
+        {
+        printext256 245 580 20 31 0 65536
+        printext256 246 580 30 31 0 65536
+        printext256 247 580 40 31 0 65536
+        printext256 248 580 50 31 0 65536
+        printext256 249 580 60 31 0 65536
+        rotatesprite 260 70 16384 0 sprite[searchwall].hitag 0 0 0 0 0 xdim ydim
+        }
+
+        ife sprite[searchwall].picnum 12437 // Battery spot
+        {
+        printext256 75 580 20 31 0 65536
+        printext256 76 580 30 31 0 65536
+        printext256 77 580 40 31 0 65536
+        printext256 78 580 50 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12116 // research
+        {
+        printext256 410 580 20 31 0 65536
+        printext256 411 580 30 31 0 65536
+        ife sprite[searchwall].hitag 1 printext256 412 580 40 31 0 65536 else printext256 412 580 40 21 0 65536
+        ife sprite[searchwall].hitag 2 printext256 413 580 50 31 0 65536 else printext256 413 580 50 21 0 65536
+        ife sprite[searchwall].hitag 3 printext256 414 580 60 31 0 65536 else printext256 414 580 60 21 0 65536
+        ife sprite[searchwall].hitag 4 printext256 415 580 70 31 0 65536 else printext256 415 580 70 21 0 65536
+        ife sprite[searchwall].hitag 5 printext256 416 580 80 31 0 65536 else printext256 416 580 80 21 0 65536
+        ife sprite[searchwall].hitag 6 printext256 417 580 90 31 0 65536 else printext256 417 580 90 21 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12117 // research
+        {
+        printext256 410 580 20 31 0 65536
+        printext256 411 580 30 31 0 65536
+        ife sprite[searchwall].hitag 1 printext256 412 580 40 31 0 65536 else printext256 412 580 40 21 0 65536
+        ife sprite[searchwall].hitag 2 printext256 413 580 50 31 0 65536 else printext256 413 580 50 21 0 65536
+        ife sprite[searchwall].hitag 3 printext256 414 580 60 31 0 65536 else printext256 414 580 60 21 0 65536
+        ife sprite[searchwall].hitag 4 printext256 415 580 70 31 0 65536 else printext256 415 580 70 21 0 65536
+        ife sprite[searchwall].hitag 5 printext256 416 580 80 31 0 65536 else printext256 416 580 80 21 0 65536
+        ife sprite[searchwall].hitag 6 printext256 417 580 90 31 0 65536 else printext256 417 580 90 21 0 65536
+        }
+
+        ife sprite[searchwall].picnum 17917 // research
+        {
+        printext256 410 580 20 31 0 65536
+        printext256 411 580 30 31 0 65536
+        ife sprite[searchwall].hitag 1 printext256 412 580 40 31 0 65536 else printext256 412 580 40 21 0 65536
+        ife sprite[searchwall].hitag 2 printext256 413 580 50 31 0 65536 else printext256 413 580 50 21 0 65536
+        ife sprite[searchwall].hitag 3 printext256 414 580 60 31 0 65536 else printext256 414 580 60 21 0 65536
+        ife sprite[searchwall].hitag 4 printext256 415 580 70 31 0 65536 else printext256 415 580 70 21 0 65536
+        ife sprite[searchwall].hitag 5 printext256 416 580 80 31 0 65536 else printext256 416 580 80 21 0 65536
+        ife sprite[searchwall].hitag 6 printext256 417 580 90 31 0 65536 else printext256 417 580 90 21 0 65536
+        }
+
+        ife sprite[searchwall].picnum 1247 // c9
+        {
+
+        ifhitkey KEY_SPACE
+            {
+            set sprite[searchwall].xrepeat 4
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 3694 // rain / snow sound
+        {
+        printext256 310 580 20 31 0 65536
+        printext256 311 580 30 31 0 65536
+
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+            ife sprite[searchwall].pal 1 soundonce 899
+            ife sprite[searchwall].pal 2 soundonce 822
+            ife sprite[searchwall].pal 3 soundonce 710
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 621 // camera
+        {
+        printext256 505 580 20 31 0 65536
+
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+            set posx sprite[searchwall].x
+            set posy sprite[searchwall].y
+            set posz sprite[searchwall].z
+            set ang sprite[searchwall].ang
+            }
+
+        }
+
+
+        ife sprite[searchwall].picnum 3695 // rain / snow starter
+        {
+        printext256 305 580 20 31 0 65536
+        printext256 306 480 30 31 0 65536
+        printext256 307 480 40 31 0 65536
+        printext256 308 480 50 31 0 65536
+        printext256 309 480 60 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3696 // rain / snow
+        {
+        printext256 300 580 20 31 0 65536
+        printext256 301 580 30 31 0 65536
+        printext256 302 580 40 31 0 65536
+        printext256 303 580 50 31 0 65536
+        printext256 304 520 60 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3713 // move player
+        {
+        printext256 352 580 20 31 0 65536
+        printext256 353 580 30 31 0 65536
+        printext256 354 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3347 // Activate if player near
+        {
+        printext256 370 580 20 31 0 65536
+        printext256 371 580 30 31 0 65536
+        printext256 372 580 40 31 0 65536
+        printext256 373 580 50 31 0 65536
+        printext256 374 580 60 31 0 65536
+        printext256 375 580 70 31 0 65536
+        printext256 376 580 80 31 0 65536
+        printext256 377 580 90 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3610 // Inventory strip
+        {
+        printext256 380 580 20 31 0 65536
+        printext256 381 560 30 31 0 65536
+        printext256 382 560 40 31 0 65536
+        printext256 383 580 50 31 0 65536
+        printext256 384 580 60 73 0 65536
+        printext256 385 580 70 143 0 65536
+        printext256 386 580 80 31 0 65536
+        printext256 387 580 90 16 0 65536
+        }
+
+        ife sprite[searchwall].picnum 14548 // Scientist waypoint
+        {
+        printext256 400 580 20 31 0 65536
+        printext256 401 580 30 31 0 65536
+        printext256 402 580 40 143 0 65536
+        printext256 403 580 50 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3602 // sound player
+        {
+        printext256 460 580 20 31 0 65536
+        printext256 461 580 30 31 0 65536
+        printext256 462 580 40 31 0 65536
+        printext256 463 580 50 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3658 // level change
+        {
+        printext256 465 580 20 31 0 65536
+        printext256 466 580 30 31 0 65536
+        printext256 467 580 40 31 0 65536
+        printext256 468 580 50 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3697 // air bubbles
+        printext256 470 580 20 31 0 65536
+
+        ife sprite[searchwall].picnum 9412 // autosave
+        {
+        printext256 471 580 20 31 0 65536
+        printext256 472 580 30 31 0 65536
+        printext256 473 580 40 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 8432 // C4 Place here
+        {
+        printext256 475 580 20 31 0 65536
+        printext256 476 580 30 31 0 65536
+        printext256 477 580 40 31 0 65536
+        printext256 478 580 50 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3806 // Countdown
+        {
+        printext256 480 580 20 31 0 65536
+        printext256 481 580 30 31 0 65536
+        printext256 482 580 40 31 0 65536
+        printext256 483 580 50 31 0 65536
+        printext256 484 580 60 31 0 65536
+        printext256 485 580 70 31 0 65536
+        printext256 486 580 80 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 14 // instant respawn
+        {
+        printext256 490 580 20 31 0 65536
+        printext256 491 580 30 31 0 65536
+        printext256 492 580 40 31 0 65536
+        }
+
+
+        ife sprite[searchwall].picnum 9456 // MAKE_SWITCH
+        {
+        rotatesprite 290 30 32768 0 sprite[searchwall].zvel 0 0 0 0 0 xdim ydim
+        printext256 150 580 20 31 0 65536
+        printext256 41 580 30 143 0 65536
+        printext256 151 580 40 31 0 65536
+        printext256 152 580 50 31 0 65536
+        printext256 153 580 60 31 0 65536
+        printext256 154 580 70 4 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12430 // MAKE_SWITCH
+        {
+        ife sprite[searchwall].pal 5 rotatesprite 290 60 8192 0 sprite[searchwall].lotag 0 0 0 0 0 xdim ydim
+        }
+
+
+
+        ife sprite[searchwall].picnum DOORTRANSPORT // DOOR TRANSPORT
+        {
+        printext256 160 580 20 31 0 65536
+        printext256 161 580 30 31 0 65536
+        printext256 162 580 40 31 0 65536
+        printext256 163 580 50 31 0 65536
+        printext256 164 580 60 31 0 65536
+        printext256 165 580 70 31 0 65536
+        printext256 166 580 80 74 0 65536
+        printext256 167 580 90 143 0 65536
+        printext256 168 580 100 31 0 65536
+        printext256 601 580 110 16 0 65536
+        printext256 602 580 120 31 0 65536
+        printext256 603 580 130 143 0 65536
+        printext256 604 580 140 238 0 65536
+        printext256 169 580 150 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 11772 // TIME PORTAL
+        {
+        printext256 660 580 20 31 0 65536
+        printext256 161 580 30 31 0 65536
+        printext256 162 580 40 31 0 65536
+        printext256 661 580 50 31 0 65536
+        printext256 662 580 60 74 0 65536
+        printext256 663 580 70 123 0 65536
+        printext256 664 580 80 16 0 65536
+        printext256 665 580 90 143 0 65536
+        }
+
+        ife sprite[searchwall].picnum 8038 // PADLOCK
+        {
+        printext256 170 580 20 31 0 65536
+        printext256 171 580 30 143 0 65536
+        printext256 172 580 40 143 0 65536
+        printext256 173 580 50 143 0 65536
+        ife sprite[searchwall].hitag 0 { setvar TEMP 15 rotatesprite 260 25 32767 0 GENERICKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 174 580 60 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 1 { setvar TEMP 15 rotatesprite 260 25 32767 0 FLAMEKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 175 580 70 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 2 { setvar TEMP 15 rotatesprite 260 25 32767 0 SPIDERKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 176 580 80 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 4 { setvar TEMP 15 rotatesprite 260 25 32767 0 DAGGERKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 177 580 90 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 8 { setvar TEMP 15 rotatesprite 260 25 32767 0 MOONKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 178 580 100 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 16 { setvar TEMP 15 rotatesprite 260 25 32767 0 SKULLKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 179 580 110 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 32 { setvar TEMP 15 rotatesprite 260 25 32767 0 EYEKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 64 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY1 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 181 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 128 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY2 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 182 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 256 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY3 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 183 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 512 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY4 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 184 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 1024 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY5 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 185 580 120 TEMP 0 65536
+        }
+
+        ife sprite[searchwall].picnum OLDLOCK // OLD LOCK
+        {
+        printext256 181 580 20 31 0 65536
+        printext256 182 580 30 143 0 65536
+        printext256 173 580 40 143 0 65536
+        ife sprite[searchwall].hitag 0 { setvar TEMP 15 rotatesprite 260 25 32767 0 GENERICKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 174 580 50 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 1 { setvar TEMP 15 rotatesprite 260 25 32767 0 FLAMEKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 175 580 60 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 2 { setvar TEMP 15 rotatesprite 260 25 32767 0 SPIDERKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 176 580 70 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 4 { setvar TEMP 15 rotatesprite 260 25 32767 0 DAGGERKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 177 580 80 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 8 { setvar TEMP 15 rotatesprite 260 25 32767 0 MOONKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 178 580 90 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 16 { setvar TEMP 15 rotatesprite 260 25 32767 0 SKULLKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 179 580 100 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 32 { setvar TEMP 15 rotatesprite 260 25 32767 0 EYEKEY 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 110 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 64 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY1 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 128 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY2 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 256 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY3 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 512 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY4 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        ifvarand sprite[searchwall].hitag 1024 { setvar TEMP 15 rotatesprite 260 25 32767 0 NORMAL_KEY5 0 0 0 0 0 xdim ydim } else setvar TEMP 7
+        printext256 180 580 120 TEMP 0 65536
+        }
+
+        ife sprite[searchwall].picnum 3654 // Mission
+        {
+        printext256 87 580 20 31 0 65536
+        printext256 88 580 30 31 0 65536
+        ife sprite[searchwall].lotag 0
+            {
+            printext256 89 580 40 31 0 65536
+            printext256 90 580 50 31 0 65536
+            printext256 91 580 60 143 0 65536
+            printext256 92 580 70 143 0 65536
+            printext256 93 580 80 143 0 65536
+            printext256 94 580 90 143 0 65536
+            printext256 95 580 100 143 0 65536
+            printext256 96 580 110 143 0 65536
+            printext256 97 580 120 143 0 65536
+            printext256 98 580 130 143 0 65536
+            printext256 99 580 140 143 0 65536
+            printext256 100 580 150 31 0 65536
+            }
+        }
+
+        ife sprite[searchwall].picnum 3655 // Particle spawner
+        {
+        printext256 270 580 20 31 0 65536
+
+        ife sprite[searchwall].lotag 0 setvar TEMP2 271
+        else ife sprite[searchwall].lotag 1 setvar TEMP2 272
+        else ife sprite[searchwall].lotag 2 setvar TEMP2 273
+        else ife sprite[searchwall].lotag 3 setvar TEMP2 274
+        else ife sprite[searchwall].lotag 4 setvar TEMP2 275
+        else ife sprite[searchwall].lotag 5 setvar TEMP2 276
+        else ife sprite[searchwall].lotag 6 setvar TEMP2 291
+        else ife sprite[searchwall].lotag 7 setvar TEMP2 292
+        else ife sprite[searchwall].lotag 8 setvar TEMP2 293
+        else ife sprite[searchwall].lotag 9 setvar TEMP2 290
+        else ife sprite[searchwall].lotag 11 setvar TEMP2 294
+        else setvar TEMP2 289
+        printext256 TEMP2 580 30 254 0 65536
+
+        ife sprite[searchwall].lotag 0 printext256 277 580 40 31 0 65536
+        ife sprite[searchwall].lotag 2 printext256 277 580 40 31 0 65536
+        ife sprite[searchwall].lotag 4 printext256 278 580 40 31 0 65536
+        ife sprite[searchwall].lotag 5
+            {
+            printext256 277 580 40 31 0 65536
+            printext256 279 580 50 248 0 65536
+            printext256 280 580 60 248 0 65536
+
+            ife sprite[searchwall].yvel 1 setvar TEMP 30 else setvar TEMP 16
+            printext256 281 580 70 TEMP 0 65536
+            ife sprite[searchwall].yvel 2 setvar TEMP 30 else setvar TEMP 16
+            printext256 282 580 80 TEMP 0 65536
+            ife sprite[searchwall].yvel 3 setvar TEMP 30 else setvar TEMP 16
+            printext256 283 580 90 TEMP 0 65536
+            ife sprite[searchwall].yvel 4 setvar TEMP 30 else setvar TEMP 16
+            printext256 284 580 100 TEMP 0 65536
+            ife sprite[searchwall].yvel 5 setvar TEMP 30 else setvar TEMP 16
+            printext256 285 580 110 TEMP 0 65536
+
+            }
+        ife sprite[searchwall].lotag 11
+            {
+            printext256 277 580 40 31 0 65536
+            printext256 279 580 50 248 0 65536
+            printext256 280 580 60 248 0 65536
+
+            ife sprite[searchwall].yvel 1 setvar TEMP 30 else setvar TEMP 16
+            printext256 281 580 70 TEMP 0 65536
+            ife sprite[searchwall].yvel 2 setvar TEMP 30 else setvar TEMP 16
+            printext256 282 580 80 TEMP 0 65536
+            ife sprite[searchwall].yvel 3 setvar TEMP 30 else setvar TEMP 16
+            printext256 283 580 90 TEMP 0 65536
+            ife sprite[searchwall].yvel 4 setvar TEMP 30 else setvar TEMP 16
+            printext256 284 580 100 TEMP 0 65536
+            ife sprite[searchwall].yvel 5 setvar TEMP 30 else setvar TEMP 16
+            printext256 285 580 110 TEMP 0 65536
+
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 3831 // LOCATION
+        {
+        printext256 255 780 20 31 0 65536
+
+        ifvarn sprite[searchwall].lotag 0 rotatesprite 300 50 16384 0 sprite[searchwall].lotag 0 0 0 0 0 xdim ydim
+        ife sprite[searchwall].lotag 8448 redefinequote 256 Earth
+        ife sprite[searchwall].lotag 8449 redefinequote 256 Moon
+        ife sprite[searchwall].lotag 8450 redefinequote 256 Mars
+        ife sprite[searchwall].lotag 8451 redefinequote 256 Ganymede
+        ife sprite[searchwall].lotag 8452 redefinequote 256 Xuglop
+        ife sprite[searchwall].lotag 8453 redefinequote 256 Ractonia
+        ife sprite[searchwall].lotag 8454 redefinequote 256 X64-2
+        ife sprite[searchwall].lotag 8455 redefinequote 256 Terra
+        ife sprite[searchwall].lotag 8456 redefinequote 256 Aliran
+        ife sprite[searchwall].lotag 8457 redefinequote 256 Venus
+        ife sprite[searchwall].lotag 8458 redefinequote 256 Beta "Ravlon" 16
+        ife sprite[searchwall].lotag 8459 redefinequote 256 Earth
+        ife sprite[searchwall].lotag 8460 redefinequote 256 Jupiter
+        ife sprite[searchwall].lotag 8461 redefinequote 256 Unknown
+        ife sprite[searchwall].lotag 8462 redefinequote 256 Space Station
+        ife sprite[searchwall].lotag 8463 redefinequote 256 Earth
+        printext256 256 780 30 31 0 65536
+
+        }
+
+        ife sprite[searchwall].picnum 12379
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Dragon
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12380
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 City of Radio
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12445
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 reside, fish
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12446
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Danger, Raging, emperor, imperialism, dinosaur
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12447
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 reside, fish
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12449
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Danger, soldier, lot, inside
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12450
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Destroy, demolish, damage
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12454
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Gold transporation street service
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12454
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Gold transporation street service
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12455
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Special day, pot of cooked vegetables
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12456
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Car
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12457
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Gold (name)
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12458
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Drunk
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12459
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Finally lucky two
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12462
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Advert for a grindstone producer
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12477
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Advert
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12478
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Soap Factory
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12479
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Law Court
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12480
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Storm Wind
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12481
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Rain
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16298
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Ninja
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16376
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Jewels and Gold store
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16377
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Chow Sang Sang jeweler
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16378
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Street Intersection
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16379
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 China large great mortage
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 16951
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Last of Samurai
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 18119
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Ocean Skydiving
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 18133
+        {
+        printext256 13 780 20 31 0 65536
+        redefinequote 256 Hell
+        printext256 256 780 30 31 0 65536
+        }
+
+        ife sprite[searchwall].picnum 12031 state item_box_stuff
+
+        ife sprite[searchwall].picnum 11249 state item_box_stuff
+
+        ife sprite[searchwall].picnum 5664 state item_box_stuff
+
+        // CUTSCENE TEXT
+        ife sprite[searchwall].picnum 3664
+        {
+        printext256 440 580 20 31 0 65536
+        printext256 441 580 30 31 0 65536
+        printext256 442 580 40 31 0 65536
+        printext256 443 580 50 31 0 65536
+        printext256 444 580 60 31 0 65536
+        printext256 445 580 70 31 0 65536
+        printext256 446 580 80 31 0 65536
+
+            ifhitkey KEY_SPACE
+            ifeitherctrl
+            ifn sprite[searchwall].extra -1
+            {
+            soundonce sprite[searchwall].extra
+            }
+
+        }
+
+        // gas effect
+        ife sprite[searchwall].picnum 7924
+        {
+        printext256 450 580 20 62 0 65536
+        printext256 451 580 30 112 0 65536
+        printext256 452 580 40 143 0 65536
+        printext256 453 580 50 62 0 65536
+        printext256 454 580 60 62 0 65536
+        printext256 455 580 70 62 0 65536
+        printext256 456 580 80 62 0 65536
+        printext256 457 580 90 62 0 65536
+        printext256 458 580 100 62 0 65536
+        }
+
+        // counter
+        ife sprite[searchwall].picnum 17636
+        {
+        printext256 520 580 20 62 0 65536
+        printext256 521 580 30 112 0 65536
+        printext256 522 580 40 143 0 65536
+        printext256 523 580 50 62 0 65536
+        }
+
+
+        // RANDOM SOUND EFFECTOR
+        ife sprite[searchwall].picnum RANDOMSOUND
+        {
+        printext256 210 580 20 31 0 65536
+        printext256 211 580 30 31 0 65536
+        printext256 212 580 40 64 0 65536
+        printext256 213 580 50 143 0 65536
+        printext256 214 580 60 31 0 65536
+        printext256 215 580 70 120 0 65536
+        printext256 216 580 80 31 0 65536
+        printext256 217 580 90 127 0 65536
+        printext256 218 580 100 156 0 65536
+        printext256 219 580 110 112 0 65536
+        }
+
+        ife sprite[searchwall].picnum LOCKED_DOOR
+        {
+        printext256 220 580 20 31 0 65536
+        printext256 221 580 30 31 0 65536
+        printext256 222 580 40 64 0 65536
+        printext256 223 580 50 143 0 65536
+        printext256 224 580 60 31 0 65536
+        printext256 225 580 70 120 0 65536
+        printext256 226 580 80 31 0 65536
+        printext256 230 580 90 31 0 65536
+
+        printext256 227 580 100 31 0 65536
+        printext256 228 580 110 31 0 65536
+        printext256 229 580 120 31 0 65536
+
+            ifhitkey KEY_SPACE
+            ifeitherctrl
+            {
+                ife sprite[searchwall].pal 0 soundonce 1063 else
+                ife sprite[searchwall].pal 1 soundonce 1064 else
+                ife sprite[searchwall].pal 2 soundonce 1065 else
+                ife sprite[searchwall].pal 3 soundonce 1228 else
+                ife sprite[searchwall].pal 4 soundonce 1783 else
+                ife sprite[searchwall].pal 5 soundonce 1784 else
+                ife sprite[searchwall].pal 6 soundonce 2735
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 13251
+        {
+        printext256 260 580 20 31 0 65536
+        printext256 261 580 30 31 0 65536
+        printext256 262 580 40 31 0 65536
+        printext256 263 580 50 31 0 65536
+        printext256 264 580 60 31 0 65536
+        printext256 265 580 70 31 0 65536
+        printext256 266 580 80 31 0 65536
+        printext256 267 580 90 31 0 65536
+
+        ifvarn sprite[searchwall].zvel 0 rotatesprite 280 30 25000 0 sprite[searchwall].zvel 0 sprite[searchwall].pal 0 0 0 xdim ydim
+        }
+
+        ife sprite[searchwall].picnum 10564
+        {
+        printext256 60 580 20 31 0 65536
+
+        qsprintf 62 61 sprite[searchwall].lotag
+        printext256 62 580 30 31 0 65536
+
+        qsprintf 62 63 sprite[searchwall].hitag
+        printext256 62 580 40 250 0 65536
+
+        qsprintf 62 64 sprite[searchwall].yvel
+        printext256 62 580 50 247 0 65536
+
+        ife sprite[searchwall].xvel 1 printext256 66 580 60 244 0 65536
+
+
+        ife sprite[searchwall].pal 3 printext256 65 580 70 31 0 65536
+        ifvarn sprite[searchwall].extra 0 rotatesprite 280 30 25000 0 sprite[searchwall].extra 0 sprite[searchwall].pal 0 0 0 xdim ydim
+        }
+
+        ife sprite[searchwall].picnum RESPAWN
+        {
+        printext256 50 580 20 31 0 65536
+
+        ifvarn sprite[searchwall].hitag 0 rotatesprite 250 30 25000 0 sprite[searchwall].hitag 0 sprite[searchwall].pal 0 0 0 xdim ydim
+            ife sprite[searchwall].hitag 1404 // If the player is respawning the fake player sprite
+                {
+                printext256 198 580 20 31 0 65536
+                printext256 134 580 30 31 0 65536
+                printext256 135 580 40 64 0 65536
+                printext256 136 580 50 143 0 65536
+                printext256 137 580 60 31 0 65536
+                printext256 138 580 70 120 0 65536
+                printext256 139 580 80 31 0 65536
+                printext256 141 580 90 31 0 65536
+                printext256 142 580 100 31 0 65536
+                printext256 197 580 110 31 0 65536
+
+                ife sprite[searchwall].extra 0 rotatesprite 290 30 32767 0 5245 0 0 0 0 0 xdim ydim // James
+                ife sprite[searchwall].extra 1 rotatesprite 290 30 32767 0 5501 0 0 0 0 0 xdim ydim // Zaxtor
+                ife sprite[searchwall].extra 2 rotatesprite 290 30 32767 0 6400 0 21 0 0 0 xdim ydim // Merlijn
+                ife sprite[searchwall].extra 3 rotatesprite 290 30 32767 0 6013 0 11 0 0 0 xdim ydim // Highwire
+                ife sprite[searchwall].extra 4 rotatesprite 290 30 32767 0 6336 0 21 0 0 0 xdim ydim // Sang
+                ife sprite[searchwall].extra 5 rotatesprite 290 30 28767 0 6656 0 12 0 0 0 xdim ydim // Rusty
+                ife sprite[searchwall].extra 6 rotatesprite 290 30 32767 0 6429 0 21 0 0 0 xdim ydim // Geoffrey
+                ife sprite[searchwall].extra 7 rotatesprite 290 30 32767 0 6912 0 11 0 0 0 xdim ydim // Mikko
+                ife sprite[searchwall].extra 13 rotatesprite 290 30 32767 0 16384 0 0 0 0 0 xdim ydim // Micky
+                ife sprite[searchwall].extra 14 rotatesprite 290 30 32767 0 20736 0 0 0 0 0 xdim ydim // Snowfall
+                ife sprite[searchwall].extra 17 rotatesprite 290 30 32767 0 27146 0 0 0 0 0 xdim ydim // Kagura
+            }
+        }
+
+        ife sprite[searchwall].picnum 1404 // player dummy
+        {
+        printext256 198 10 20 31 0 65536
+
+        printext256 134 10 30 31 0 65536
+        printext256 135 10 40 182 0 65536
+        printext256 136 10 50 143 0 65536
+        printext256 137 10 60 111 0 65536
+        printext256 138 10 70 143 0 65536
+        printext256 139 10 80 31 0 65536
+        printext256 141 10 90 143 0 65536
+        printext256 142 10 100 112 0 65536
+        printext256 1142 10 110 64 0 65536
+        printext256 1143 10 120 239 0 65536
+        printext256 1144 10 130 78 0 65536
+        printext256 197 10 140 31 0 65536
+
+        printext256 560 10 160 31 0 65536
+        printext256 561 10 170 31 0 65536
+        printext256 562 10 180 31 0 65536
+        printext256 563 10 190 31 0 65536
+        printext256 564 10 200 31 0 65536
+
+        ife sprite[searchwall].extra 0 rotatesprite 290 30 32767 0 5245 0 0 0 0 0 xdim ydim // James
+        ife sprite[searchwall].extra 1 rotatesprite 290 30 32767 0 5501 0 0 0 0 0 xdim ydim // Zaxtor
+        ife sprite[searchwall].extra 2 rotatesprite 290 30 32767 0 6400 0 21 0 0 0 xdim ydim // Merlijn
+        ife sprite[searchwall].extra 3 rotatesprite 290 30 32767 0 6013 0 11 0 0 0 xdim ydim // Highwire
+        ife sprite[searchwall].extra 4 rotatesprite 290 30 32767 0 6336 0 21 0 0 0 xdim ydim // Sang
+        ife sprite[searchwall].extra 5 rotatesprite 290 30 28767 0 6656 0 12 0 0 0 xdim ydim // Rusty
+        ife sprite[searchwall].extra 6 rotatesprite 290 30 32767 0 6429 0 21 0 0 0 xdim ydim // Geoffrey
+        ife sprite[searchwall].extra 7 rotatesprite 290 30 32767 0 6912 0 11 0 0 0 xdim ydim // Mikko
+        ife sprite[searchwall].extra 13 rotatesprite 290 30 22767 0 16384 0 0 0 0 0 xdim ydim // Micky
+        ife sprite[searchwall].extra 14 rotatesprite 290 30 22767 0 20736 0 0 0 0 0 xdim ydim // Snowfall
+        ife sprite[searchwall].extra 17 rotatesprite 290 30 22767 0 27146 0 0 0 0 0 xdim ydim // Kagura
+        }
+
+        ife sprite[searchwall].picnum 3712 // character spawn point
+        {
+        printext256 119 580 20 31 0 65536
+        printext256 121 580 30 31 0 65536
+        printext256 122 580 40 64 0 65536
+        printext256 123 580 50 143 0 65536
+        printext256 124 580 60 31 0 65536
+        printext256 125 580 70 120 0 65536
+        printext256 126 580 80 31 0 65536
+        printext256 127 580 90 31 0 65536
+        printext256 128 580 100 31 0 65536
+
+        ife sprite[searchwall].pal 0 rotatesprite 290 90 32767 0 5245 0 0 0 0 0 xdim ydim // James
+        ife sprite[searchwall].pal 1 rotatesprite 290 90 32767 0 5501 0 0 0 0 0 xdim ydim // Zaxtor
+        ife sprite[searchwall].pal 2 rotatesprite 290 90 32767 0 6400 0 23 0 0 0 xdim ydim // Merlijn
+        ife sprite[searchwall].pal 3 rotatesprite 290 90 32767 0 6013 0 11 0 0 0 xdim ydim // Highwire
+        ife sprite[searchwall].pal 4 rotatesprite 290 90 32767 0 6336 0 21 0 0 0 xdim ydim // Sang
+        ife sprite[searchwall].pal 5 rotatesprite 290 90 28767 0 6656 0 12 0 0 0 xdim ydim // Rusty
+        ife sprite[searchwall].pal 6 rotatesprite 290 90 32767 0 6429 0 21 0 0 0 xdim ydim // Geoffrey
+        ife sprite[searchwall].pal 7 rotatesprite 290 90 32767 0 6912 0 11 0 0 0 xdim ydim // Mikko
+        ife sprite[searchwall].pal 13 rotatesprite 290 90 32767 0 16384 0 0 0 0 0 xdim ydim // Micky
+        ife sprite[searchwall].extra 14 rotatesprite 290 30 32767 0 20736 0 0 0 0 0 xdim ydim // Snowfall
+        ife sprite[searchwall].extra 17 rotatesprite 290 30 32767 0 27146 0 0 0 0 0 xdim ydim // Kagura
+        }
+
+
+        ife sprite[searchwall].picnum 3805 // Force player
+        {
+        printext256 120 580 20 31 0 65536
+
+        printext256 121 580 30 31 0 65536
+        printext256 122 580 40 182 0 65536
+        printext256 123 580 50 143 0 65536
+        printext256 124 580 60 111 0 65536
+        printext256 125 580 70 143 0 65536
+        printext256 126 580 80 31 0 65536
+        printext256 127 580 90 143 0 65536
+        printext256 128 580 100 112 0 65536
+        printext256 129 580 110 31 0 65536
+        printext256 130 580 120 47 0 65536
+        printext256 131 580 130 159 0 65536
+        printext256 132 580 140 64 0 65536
+        printext256 133 580 150 79 0 65536
+        printext256 1133 580 160 64 0 65536
+        printext256 1134 580 170 239 0 65536
+
+        printext256 320 580 180 31 0 65536
+        printext256 430 580 190 31 0 65536
+
+
+
+        ife sprite[searchwall].pal 0 rotatesprite 290 90 32767 0 5245 0 0 0 0 0 xdim ydim // James
+        ife sprite[searchwall].pal 1 rotatesprite 290 90 32767 0 5501 0 0 0 0 0 xdim ydim // Zaxtor
+        ife sprite[searchwall].pal 2 rotatesprite 290 90 32767 0 6400 0 23 0 0 0 xdim ydim // Merlijn
+        ife sprite[searchwall].pal 3 rotatesprite 290 90 32767 0 6013 0 11 0 0 0 xdim ydim // Highwire
+        ife sprite[searchwall].pal 4 rotatesprite 290 90 32767 0 6336 0 21 0 0 0 xdim ydim // Sang
+        ife sprite[searchwall].pal 5 rotatesprite 290 90 28767 0 6656 0 12 0 0 0 xdim ydim // Rusty
+        ife sprite[searchwall].pal 6 rotatesprite 290 90 32767 0 6429 0 21 0 0 0 xdim ydim // Geoffrey
+        ife sprite[searchwall].pal 7 rotatesprite 290 90 32767 0 6912 0 11 0 0 0 xdim ydim // Mikko
+        ife sprite[searchwall].pal 9 rotatesprite 290 90 28767 0 CULTIST 0 0 0 0 0 xdim ydim // Cultist
+        ife sprite[searchwall].pal 10 rotatesprite 290 90 32767 0 10365 0 0 0 0 0 xdim ydim // Bombshell
+        ife sprite[searchwall].pal 11 rotatesprite 290 90 32767 0 11956 0 0 0 0 0 xdim ydim // Maarten
+        ife sprite[searchwall].pal 12 rotatesprite 290 90 32767 0 12801 0 12 0 0 0 xdim ydim // Jane
+        ife sprite[searchwall].pal 13 rotatesprite 290 90 22767 0 16384 0 0 0 0 0 xdim ydim // Micky
+        ife sprite[searchwall].pal 14 rotatesprite 290 90 32767 0 20736 0 0 0 0 0 xdim ydim // Snowfall
+        ife sprite[searchwall].pal 17 rotatesprite 290 90 32767 0 27146 0 0 0 0 0 xdim ydim // Kagura
+        }
+
+        ife sprite[searchwall].picnum 3649 // Trigger only if char
+        {
+        printext256 140 580 20 31 0 65536
+        printext256 121 580 30 31 0 65536
+        printext256 122 580 40 64 0 65536
+        printext256 123 580 50 143 0 65536
+        printext256 124 580 60 31 0 65536
+        printext256 125 580 70 120 0 65536
+        printext256 126 580 80 31 0 65536
+        printext256 127 580 90 31 0 65536
+        printext256 128 580 100 31 0 65536
+        printext256 130 580 110 31 0 65536
+        printext256 131 580 120 31 0 65536
+        printext256 132 580 130 31 0 65536
+        printext256 133 580 140 31 0 65536
+        printext256 323 580 150 31 0 65536
+        printext256 360 580 160 31 0 65536
+        printext256 361 580 170 31 0 65536
+
+        ife sprite[searchwall].pal 0 rotatesprite 290 90 32767 0 5245 0 0 0 0 0 xdim ydim // James
+        ife sprite[searchwall].pal 1 rotatesprite 290 90 32767 0 5501 0 0 0 0 0 xdim ydim // Zaxtor
+        ife sprite[searchwall].pal 2 rotatesprite 290 90 32767 0 6400 0 23 0 0 0 xdim ydim // Merlijn
+        ife sprite[searchwall].pal 3 rotatesprite 290 90 32767 0 6013 0 11 0 0 0 xdim ydim // Highwire
+        ife sprite[searchwall].pal 4 rotatesprite 290 90 32767 0 6336 0 21 0 0 0 xdim ydim // Sang
+        ife sprite[searchwall].pal 5 rotatesprite 290 90 28767 0 6656 0 12 0 0 0 xdim ydim // Rusty
+        ife sprite[searchwall].pal 6 rotatesprite 290 90 32767 0 6429 0 21 0 0 0 xdim ydim // Geoffrey
+        ife sprite[searchwall].pal 7 rotatesprite 290 90 32767 0 6912 0 11 0 0 0 xdim ydim // Mikko
+        ife sprite[searchwall].pal 9 rotatesprite 290 90 28767 0 CULTIST 0 0 0 0 0 xdim ydim // Cultist
+        ife sprite[searchwall].pal 10 rotatesprite 290 90 32767 0 9936 0 0 0 0 0 xdim ydim // Bombshell
+        ife sprite[searchwall].pal 11 rotatesprite 290 90 32767 0 11956 0 0 0 0 0 xdim ydim // Maarten
+        ife sprite[searchwall].pal 12 rotatesprite 290 90 32767 0 12801 0 12 0 0 0 xdim ydim // Jane
+        ife sprite[searchwall].pal 13 rotatesprite 290 90 32767 0 16384 0 0 0 0 0 xdim ydim // Micky
+        ife sprite[searchwall].pal 14 rotatesprite 290 90 32767 0 20736 0 0 0 0 0 xdim ydim // Snowfall
+        ife sprite[searchwall].pal 17 rotatesprite 290 90 32767 0 27146 0 0 0 0 0 xdim ydim // Kagura
+        }
+
+
+        ife sprite[searchwall].picnum CUTSCENECAM
+        {
+        printext256 199 580 20 31 0 65536
+        ife sprite[searchwall].pal 0 redefinequote 500 Pal 0 = No Transition
+        else ife sprite[searchwall].pal 3 redefinequote 500 Pal 3 = Fade in Black, Fade out Black
+        else ife sprite[searchwall].pal 5 redefinequote 500 Pal 5 = Fade in black, fade out white
+        else ife sprite[searchwall].pal 6 redefinequote 500 Pal 6 = Fade in white, fade out black
+        else ife sprite[searchwall].pal 9 redefinequote 500 Pal 9 = Fade in white, fade out white
+        else ife sprite[searchwall].pal 10 redefinequote 500 Pal 10 = Fade out black
+        else ife sprite[searchwall].pal 11 redefinequote 500 Pal 11 = Fade out White
+        else ife sprite[searchwall].pal 12 redefinequote 500 Pal 12 = AMC transition effect
+        else ife sprite[searchwall].pal 13 redefinequote 500 Pal 13 = Fade out black
+        else ife sprite[searchwall].pal 14 redefinequote 500 Pal 14 = Fade in white
+        else ife sprite[searchwall].pal 20 redefinequote 500 Pal 20 = Fade in black
+        else ife sprite[searchwall].pal 21 redefinequote 500 Pal 21 = Clear last fade, fade out black
+        else ife sprite[searchwall].pal 22 redefinequote 500 Pal 22 = Clear last fade, fade out white
+        else ife sprite[searchwall].pal 40 redefinequote 500 Pal 40 = fade to black and loading transition
+        else ife sprite[searchwall].pal 41 redefinequote 500 Pal 41 = fade to white and loading transition
+        printext256 500 580 30 31 0 65536
+        ife sprite[searchwall].yvel 0 redefinequote 501 YVEL 0 = Normal type
+        else ife sprite[searchwall].yvel 1 redefinequote 501 YVEL 1 = Cinematic bars
+        else ife sprite[searchwall].yvel 2 redefinequote 501 YVEL 2 = lock player, Cinematic bars
+        else ife sprite[searchwall].yvel 3 redefinequote 501 YVEL 3 = lock player, Cinematic bars, clear text
+        else ife sprite[searchwall].yvel 4 redefinequote 501 YVEL 4 = AMC ship's cockpit
+        printext256 501 580 40 31 0 65536
+        setvar TEMP 50
+        ife sprite[searchwall].zvel 0 printext256 101 580 TEMP 31 0 65536
+        else
+            {
+            setvarvar TEMP4 sprite[searchwall].zvel
+            ifvarand TEMP4 1 { printext256 102 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 2 { addvar TEMP 10 printext256 103 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 4 { addvar TEMP 10 printext256 104 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 8 { addvar TEMP 10 printext256 105 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 16 { addvar TEMP 10 printext256 106 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 32 { addvar TEMP 10 printext256 107 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 64 { addvar TEMP 10 printext256 108 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 128 { addvar TEMP 10 printext256 109 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 256 { addvar TEMP 10 printext256 110 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 512 { addvar TEMP 10 printext256 111 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 1024 { addvar TEMP 10 printext256 112 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 2048 { addvar TEMP 10 printext256 113 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 4096 { addvar TEMP 10 printext256 114 580 TEMP 31 0 65536 }
+            }
+        ife sprite[searchwall].owner -1 redefinequote 502 OWNER -1 = Normal type
+        else ife sprite[searchwall].owner 0 redefinequote 502 OWNER 0 = Normal type
+        else ife sprite[searchwall].owner 1 redefinequote 502 OWNER 1 = Water/Blue
+        else ife sprite[searchwall].owner 2 redefinequote 502 OWNER 2 = Nightvision/Green
+        else ife sprite[searchwall].owner 3 redefinequote 502 OWNER 3 = Flashback/Slomo
+        else ife sprite[searchwall].owner 4 redefinequote 502 OWNER 4 = Greyscale
+        else ife sprite[searchwall].owner 5 redefinequote 502 OWNER 5 = Heat/Red
+        addvar TEMP 10
+        printext256 502 580 TEMP 31 0 65536
+        ifvarand TEMP4 4096
+            {
+            setvarvar TEMP2 sprite[searchwall].shade
+            ifvarg TEMP2 116 mulvar TEMP2 10
+            else ifvarg TEMP2 96 mulvar TEMP2 5
+            else ifvarg TEMP2 64 mulvar TEMP2 4
+            else ifvarg TEMP2 32 mulvar TEMP2 3
+            else ifvarg TEMP2 16 mulvar TEMP2 2
+            ifvarl TEMP2 -116 mulvar TEMP2 10
+            else ifvarl TEMP2 -96 mulvar TEMP2 5
+            else ifvarl TEMP2 -64 mulvar TEMP2 4
+            else ifvarl TEMP2 -32 mulvar TEMP2 3
+            else ifvarl TEMP2 -16 mulvar TEMP2 2
+            qsprintf 116 115 TEMP2
+            addvar TEMP 10 printext256 116 580 TEMP 31 0 65536
+            }
+
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+            set posx sprite[searchwall].x
+            set posy sprite[searchwall].y
+            set posz sprite[searchwall].z
+            set ang sprite[searchwall].ang
+            set horiz sprite[searchwall].extra
+            }
+
+        }
+
+        ife sprite[searchwall].picnum 3811
+        {
+        printext256 199 580 20 31 0 65536
+        ife sprite[searchwall].pal 0 redefinequote 500 Pal 0 = No Transition
+        else ife sprite[searchwall].pal 3 redefinequote 500 Pal 3 = Fade in Black, Fade out Black
+        else ife sprite[searchwall].pal 5 redefinequote 500 Pal 5 = Fade in black, fade out white
+        else ife sprite[searchwall].pal 6 redefinequote 500 Pal 6 = Fade in white, fade out black
+        else ife sprite[searchwall].pal 9 redefinequote 500 Pal 9 = Fade in white, fade out white
+        else ife sprite[searchwall].pal 10 redefinequote 500 Pal 10 = Fade out black
+        else ife sprite[searchwall].pal 11 redefinequote 500 Pal 11 = Fade out White
+        else ife sprite[searchwall].pal 12 redefinequote 500 Pal 12 = AMC transition effect
+        else ife sprite[searchwall].pal 13 redefinequote 500 Pal 13 = Fade out black
+        else ife sprite[searchwall].pal 14 redefinequote 500 Pal 14 = Fade in white
+        else ife sprite[searchwall].pal 20 redefinequote 500 Pal 20 = Fade in black
+        else ife sprite[searchwall].pal 21 redefinequote 500 Pal 21 = Clear last fade, fade out black
+        else ife sprite[searchwall].pal 22 redefinequote 500 Pal 22 = Clear last fade, fade out white
+        printext256 500 580 30 31 0 65536
+        ife sprite[searchwall].yvel 0 redefinequote 501 YVEL 0 = Normal type
+        else ife sprite[searchwall].yvel 1 redefinequote 501 YVEL 1 = Cinematic bars
+        else ife sprite[searchwall].yvel 2 redefinequote 501 YVEL 2 = lock player, Cinematic bars
+        else ife sprite[searchwall].yvel 3 redefinequote 501 YVEL 3 = lock player, Cinematic bars, clear text
+        else ife sprite[searchwall].yvel 4 redefinequote 501 YVEL 4 = AMC ship's cockpit
+        printext256 501 580 40 31 0 65536
+        setvar TEMP 50
+        ife sprite[searchwall].zvel 0 printext256 101 580 TEMP 31 0 65536
+        else
+            {
+            setvarvar TEMP4 sprite[searchwall].zvel
+            ifvarand TEMP4 1 { printext256 102 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 2 { addvar TEMP 10 printext256 103 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 4 { addvar TEMP 10 printext256 104 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 8 { addvar TEMP 10 printext256 105 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 16 { addvar TEMP 10 printext256 106 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 32 { addvar TEMP 10 printext256 107 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 64 { addvar TEMP 10 printext256 108 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 128 { addvar TEMP 10 printext256 109 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 256 { addvar TEMP 10 printext256 110 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 512 { addvar TEMP 10 printext256 111 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 1024 { addvar TEMP 10 printext256 112 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 2048 { addvar TEMP 10 printext256 113 580 TEMP 31 0 65536 }
+            ifvarand TEMP4 4096 { addvar TEMP 10 printext256 114 580 TEMP 31 0 65536 }
+            }
+        ife sprite[searchwall].owner -1 redefinequote 502 OWNER -1 = Normal type
+        else ife sprite[searchwall].owner 0 redefinequote 502 OWNER 0 = Normal type
+        else ife sprite[searchwall].owner 1 redefinequote 502 OWNER 1 = Water/Blue
+        else ife sprite[searchwall].owner 2 redefinequote 502 OWNER 2 = Nightvision/Green
+        else ife sprite[searchwall].owner 3 redefinequote 502 OWNER 3 = Flashback/Slomo
+        else ife sprite[searchwall].owner 4 redefinequote 502 OWNER 4 = Greyscale
+        else ife sprite[searchwall].owner 5 redefinequote 502 OWNER 5 = Heat/Red
+        addvar TEMP 10
+        printext256 502 580 TEMP 31 0 65536
+        ifvarand TEMP4 4096
+            {
+            setvarvar TEMP2 sprite[searchwall].shade
+            ifvarg TEMP2 116 mulvar TEMP2 10
+            else ifvarg TEMP2 96 mulvar TEMP2 5
+            else ifvarg TEMP2 64 mulvar TEMP2 4
+            else ifvarg TEMP2 32 mulvar TEMP2 3
+            else ifvarg TEMP2 16 mulvar TEMP2 2
+            ifvarl TEMP2 -116 mulvar TEMP2 10
+            else ifvarl TEMP2 -96 mulvar TEMP2 5
+            else ifvarl TEMP2 -64 mulvar TEMP2 4
+            else ifvarl TEMP2 -32 mulvar TEMP2 3
+            else ifvarl TEMP2 -16 mulvar TEMP2 2
+            qsprintf 116 115 TEMP2
+            addvar TEMP 10 printext256 116 580 TEMP 31 0 65536
+            }
+
+        ifhitkey KEY_SPACE
+        ifeitherctrl
+            {
+            set posx sprite[searchwall].x
+            set posy sprite[searchwall].y
+            set posz sprite[searchwall].z
+            set ang sprite[searchwall].ang
+            set horiz sprite[searchwall].extra
+            }
+
+        }
+
+        ife sprite[searchwall].picnum LADDER
+        {
+        redefinequote 500 LADDER
+        printext256 500 580 20 31 0 65536
+        ife sprite[searchwall].xvel 1 redefinequote 500 Allow sliding = Yes
+        else redefinequote 500 Allow sliding = No
+        printext256 500 580 30 254 0 65536
+        redefinequote 500 Place one sprite at top and bottom of climbable location,
+        printext256 500 580 40 248 0 65536
+        redefinequote 500 and give both the same hitag. Give an XVEL of 1 to allow
+        printext256 500 580 50 248 0 65536
+        redefinequote 500 sliding down. Give a spritepal of 3 to allow climbing from
+        printext256 500 580 60 248 0 65536
+        redefinequote 500 all directions. Give a YVEL equal to an activator's tag to
+        printext256 500 580 70 248 0 65536
+        redefinequote 500 make it unlockable.
+        printext256 500 580 80 248 0 65536
+        redefinequote 500 LADDER SOUND
+        printext256 500 580 100 31 0 65536
+        redefinequote 500 Lotag 903 = Metal Ladder 1
+        printext256 500 580 110 31 0 65536
+        redefinequote 500 Lotag 904 = Metal Ladder 2
+        printext256 500 580 120 31 0 65536
+        redefinequote 500 Lotag 906 = Rope Ladder
+        printext256 500 580 130 31 0 65536
+        redefinequote 500 Lotag 408 = Wood Ladder
+        printext256 500 580 140 31 0 65536
+        redefinequote 500 Lotag 2617 = Rock climb
+        printext256 500 580 150 31 0 65536
+        redefinequote 500 Spritepal 3 = climbable from all angles
+        printext256 500 580 170 31 0 65536
+        redefinequote 500 Give a ZVEL to both parts if you want it to be
+        printext256 500 580 180 31 0 65536
+        redefinequote 500 usable only when the player uses the rope item (no 17916)
+        printext256 500 580 190 31 0 65536
+        redefinequote 500 Give sprite 18481 same hitag as this ZVEL to make it appear
+        printext256 500 580 200 31 0 65536
+
+        printext256 1150 580 220 31 0 65536
+
+        }
+
+        ife sprite[searchwall].picnum 3592
+        {
+        redefinequote 500 Time Delay
+        printext256 500 580 20 31 0 65536
+        redefinequote 500 When activated, will wait an amount of time and then trigger another tag
+        printext256 500 580 30 31 0 65536
+        redefinequote 500 Hitag - tag to be triggered by
+        printext256 500 580 40 31 0 65536
+        redefinequote 500 Extra - time to wait (30 = 1 second)
+        printext256 500 580 50 31 0 65536
+        redefinequote 500 Lotag - tag to activate when time is up
+        printext256 500 580 60 31 0 65536
+        redefinequote 500 Give a spritepal of 3 to print it's timer to console for testing purposes
+        printext256 500 580 70 31 0 65536
+        }
+
+    }
+
+endevent

@@ -1,0 +1,459 @@
+// ================
+// AMC TC -- Custom Hotkeys for 3D mode. 
+// Some hotkeys (including sprite sloping) were contributed by Max "oasiz" Ylitalo. Many thanks!
+// ================
+
+gamevar clipboard_slope 0 0
+
+define stat_ceiling 1
+define stat_floor 2
+define stat_sprite 3
+define cstat_sprite_floor 32
+define cstat_sprite_wall 16
+
+/*
+*-----------------------------------------------------------------
+* Additional 3D Mode Hotkeys + Description:
+* ----------------------------------------------------------------
+*
+*  - [Mouse 5]: Return 3D mode camera view to center
+*  - [W]: Reset repeat of walls and masked walls under the cursor to default
+*  - [SPACE (cursor on door)]: Test sound of doors under the cursor.
+*  - [CTRL + SPACE (cursor on door)]: Test sound + trajectory of swinging door under the cursor. 
+*  - [CTRL + SPACE (cursor on transport)]: Test teleport destination of transport sprite (can also be door transition, timeportal etc.)
+
+* -------- Sloped Sprites ----------
+*
+*  - [SHIFT + J]: Take floor sloping and apply it to sprite
+*  - [SHIFT + U]: Take ceiling sloping and apply it to sprite
+*  - [TAB]: Copy current sprite slope into clipboard (in addition to other sprite data)
+*  - [SHIFT + Y]: Paste slope in clipboard to floor/ceiling/sprite
+*  - [CTRL + SHIFT + U] Take ceiling slope value and apply it to sprite, and "flatten" the sprite against the ceiling
+*  - [CTRL + SHIFT + J] Take floor slope value and apply it to sprite, and "flatten" the sprite against the floor
+* ----------------------------------------------------------------
+*/
+
+
+/* Triggered before the keypress is handled */
+onevent EVENT_PREKEYS3D
+    
+    // reset repeat of walls back to default
+    ifaimingwall
+        ife keystatus[KEY_W] 1
+        {
+            ife searchstat 0 fixrepeats searchwall
+            ife searchstat 4 fixrepeats searchwall
+            
+            redefinequote hud_quote Repeat of wall %d reset to default
+            qsprintf hud_quote hud_quote searchwall
+            quote hud_quote
+        }
+
+    // TAB - Store sprite slope in clipboard
+    ife keystatus[KEY_TAB] 1
+    {
+        switch searchstat
+        case stat_ceiling
+            set clipboard_slope sector[searchsector].ceilingslope
+            break
+        case stat_floor
+            set clipboard_slope sector[searchsector].floorslope
+            break
+        case stat_sprite
+            set h searchwall
+            set clipboard_slope 0
+            set TEMP sprite[h].yoffset
+            addlogvar TEMP
+            shiftvarl TEMP 8
+            or clipboard_slope TEMP
+            set TEMP sprite[h].xoffset
+            and TEMP 255
+            add clipboard_slope TEMP
+            addlogvar TEMP
+            addlogvar clipboard_slope
+            break
+        endswitch
+        
+        redefinequote hud_quote Clipboard slope: %ld
+        qsprintf hud_quote hud_quote clipboard_slope
+        quote hud_quote
+    }
+    
+    // Sprite sloping hotkeys
+    ifeithershift 
+    {
+        // Take ceiling slope in which the sprite is placed, and apply it to sprite under the cursor
+        ifhitkey KEY_U 
+        {
+            set h searchstat
+            ife h 3 
+            {
+                set h searchwall
+                set TEMP sprite[h].sectnum
+                set TEMP2 sector[TEMP].ceilingslope
+                or sprite[h].cstat cstat_sprite_wall
+                or sprite[h].cstat cstat_sprite_floor
+                addlogvar TEMP2
+                shiftvarl TEMP2 8
+                shiftvarr TEMP2 8
+                set sprite[h].xoffset TEMP2
+                set TEMP2 sector[TEMP].ceilingslope
+                shiftvarr TEMP2 8
+                set sprite[h].yoffset TEMP2
+                set TEMP2 sector[TEMP].ceilingslope
+                redefinequote hud_quote Sprite %ld slope set to %ld
+                ifeitherctrl 
+                {
+                    getceilzofslope sprite[h].sectnum sprite[h].x sprite[h].y sprite[h].z
+                    redefinequote hud_quote Sprite %ld slope set to %ld and slapped against sector ceiling!
+                }
+                qsprintf hud_quote hud_quote h TEMP2
+                quote hud_quote
+            }
+        }
+        
+        // Take floor slope in which the sprite is placed, and apply it to sprite under the cursor
+        ifhitkey KEY_J 
+        {
+            set h searchstat
+            ife h 3 
+            {
+                set h searchwall
+                set TEMP sprite[h].sectnum
+                set TEMP2 sector[TEMP].floorslope
+                or sprite[h].cstat cstat_sprite_wall
+                or sprite[h].cstat cstat_sprite_floor
+                addlogvar TEMP2
+                shiftvarl TEMP2 8
+                shiftvarr TEMP2 8
+                set sprite[h].xoffset TEMP2
+                set TEMP2 sector[TEMP].floorslope
+                shiftvarr TEMP2 8
+                set sprite[h].yoffset TEMP2
+                set TEMP2 sector[TEMP].floorslope
+                redefinequote hud_quote Sprite %ld slope set to %ld
+                ifeitherctrl 
+                {
+                    getflorzofslope sprite[h].sectnum sprite[h].x sprite[h].y sprite[h].z
+                    redefinequote hud_quote Sprite %ld slope set to %ld and slapped against sector floor!
+                }
+                qsprintf hud_quote hud_quote h TEMP2
+                quote hud_quote
+            }
+        }
+        
+        // Paste slope to floor/ceiling/sprite
+        ifhitkey KEY_Y 
+        {
+            switch searchstat
+                case stat_ceiling
+                    set sector[searchsector].ceilingslope clipboard_slope
+                    redefinequote hud_quote Ceiling slope set to: %ld
+                    qsprintf hud_quote hud_quote clipboard_slope
+                    quote hud_quote
+                    break
+                case stat_floor
+                    set sector[searchsector].floorslope clipboard_slope
+                    redefinequote hud_quote Floor slope set to: %ld
+                    qsprintf hud_quote hud_quote clipboard_slope
+                    quote hud_quote
+                    break
+                case stat_sprite
+                    set h searchwall
+                    ifn clipboard_slope 0 
+                    {
+                        or sprite[h].cstat cstat_sprite_wall
+                        or sprite[h].cstat cstat_sprite_floor
+                        set TEMP clipboard_slope
+                        shiftvarl TEMP 8
+                        shiftvarr TEMP 8
+                        set sprite[h].xoffset TEMP
+                        set TEMP clipboard_slope
+                        shiftvarr TEMP 8
+                        set sprite[h].yoffset TEMP
+                    } 
+                    else 
+                    {
+                        set sprite[h].xoffset 0
+                        set sprite[h].yoffset 0
+                        or sprite[h].cstat cstat_sprite_wall
+                        or sprite[h].cstat cstat_sprite_floor
+                        xor sprite[h].cstat cstat_sprite_wall
+                    }
+                    break
+            endswitch
+        }
+    }
+    
+endevent
+
+
+/* Triggered after the keypress is handled */
+onevent EVENT_KEYS3D
+
+    // Return camera view to center
+    ife mousebits 64 // Mouse 5
+    {
+        set horiz 90
+        redefinequote hud_quote View reset
+        quote hud_quote
+    }
+
+    ifaimingwall
+    {
+        // door sound tester
+        ifholdkey KEY_SPACE
+        {
+            set k wall[searchwall].nextsector
+            ifl k 0 set k searchsector
+
+            ife sector[k].lotag 0 return
+
+            for i spritesofsector k
+            {
+                ifactor MUSICANDSFX
+                  ifge .lotag 0 
+                    ifl .lotag MAXSOUNDS
+                    {
+                        getsoundflags .lotag m
+                        ifand m 1 nullop else soundonce .lotag
+                    }
+            }
+        }
+    }
+    
+    // swinging doors tester -- hit space on a door wall
+    ife searchstat 0
+    ifeitherctrl
+    ifhitkey KEY_SPACE  // SE11 ST23 up:ccw
+    {
+        set k wall[searchwall].nextsector
+        ifl k 0 return
+        ifn sector[k].lotag 23 return
+        set TEMP4 0
+        for i loopofwall searchwall
+        {
+            ifl wall[i].nextsector 0 set TEMP4 1 else
+            ifn wall[i].nextsector k set TEMP4 1
+        }
+// a weaker condition
+//        for i loopofwall wall[searchwall].nextwall
+//        {
+//            ifl wall[i].nextsector 0 set TEMP4 1 else
+//            ifn wall[i].nextsector searchsector set TEMP4 1
+//        }
+        ifn TEMP4 0
+        {
+            quote 7
+            return
+        }
+
+        set l -1
+        for i spritesofsector k
+        {
+            ifactor SECTOREFFECTOR ife sprite[i].lotag 11
+            {
+                set l i
+                ifn sprite[i].ang 512 ifn sprite[i].ang 1024 ifn sprite[i].ang 1536 set l -1
+            }
+        }
+        ifl l 0
+        {
+            quote 8
+            return
+        }
+
+        for TEMP4 wallsofsector k
+        {
+            rotatepoint (sprite[l].x sprite[l].y) (wall[TEMP4].x wall[TEMP4].y) sprite[l].ang (i j)
+            dragpoint TEMP4 i j
+        }
+        for TEMP4 spritesofsector k
+        {
+            ifn TEMP4 l
+            {
+                rotatepoint (sprite[l].x sprite[l].y) (sprite[TEMP4].x sprite[TEMP4].y) sprite[l].ang (i j)
+                bsetsprite TEMP4 i j sprite[TEMP4].z
+            }
+        }
+        inv sprite[l].ang
+    }
+
+
+    // Follow transporter sprites to their destination in 3D mode
+    ife searchstat 3 // sprite
+    ifeitherctrl
+    ifhitkey KEY_SPACE
+    {
+        ife sprite[searchwall].picnum 9
+        {
+        setvar TEMP 0
+            whilevarn TEMP MAXSPRITES
+                {
+                ifvare sprite[TEMP].hitag 14848
+                 ife sprite[TEMP].picnum 9
+                    {
+                    set sprite[TEMP].hitag 19969
+                    set sprite[TEMP].pal 3
+                    }
+                ifvare sprite[TEMP].hitag 14849
+                 ife sprite[TEMP].picnum 9
+                    {
+                    set sprite[TEMP].hitag 19970
+                    set sprite[TEMP].pal 3
+                    }
+                addvar TEMP 1
+                }
+        }
+        ife sprite[searchwall].picnum 14848
+        {
+        setvar TEMP 0
+            whilevarn TEMP MAXSPRITES
+                {
+                ifvare sprite[TEMP].picnum 14848
+                    {
+                    set sprite[TEMP].picnum 19969
+                    set sprite[TEMP].pal 3
+                    }
+                addvar TEMP 1
+                }
+        }
+        ife sprite[searchwall].picnum 14849
+        {
+        setvar TEMP 0
+            whilevarn TEMP MAXSPRITES
+                {
+                ifvare sprite[TEMP].picnum 14849
+                    {
+                    set sprite[TEMP].picnum 19970
+                    set sprite[TEMP].pal 3
+                    }
+                addvar TEMP 1
+                }
+        }
+
+
+        ife sprite[searchwall].picnum DOORTRANSPORT
+        {
+        ife sprite[searchwall].lotag 0 { quote 10 return }
+            for i allsprites
+            {
+                ifn i searchwall, ifactor DOORTRANSPORTEXIT, ife sprite[i].hitag sprite[searchwall].lotag
+                {
+                    set posx sprite[i].x
+                    set posy sprite[i].y
+                    set posz sprite[i].z
+                    set ang sprite[i].ang
+
+                    soundonce sprite[searchwall].xvel
+
+                    updatecursectnum
+
+                    return
+                }
+            }
+        }
+
+        ife sprite[searchwall].picnum TIME_PORTAL
+        {
+        ife sprite[searchwall].lotag 0 { quote 10 return }
+            for i allsprites
+            {
+                ifn i searchwall, ifactor DOORTRANSPORTEXIT, ife sprite[i].hitag sprite[searchwall].lotag
+                {
+                    set posx sprite[i].x
+                    set posy sprite[i].y
+                    set posz sprite[i].z
+                    set ang sprite[i].ang
+
+                    updatecursectnum
+
+                    return
+                }
+            }
+        }
+
+        ife sprite[searchwall].picnum VR_BOOTH
+        {
+        ife sprite[searchwall].lotag 0 { quote 10 return }
+            for i allsprites
+            {
+                ifn i searchwall, ifactor DOORTRANSPORTEXIT, ife sprite[i].hitag sprite[searchwall].lotag
+                {
+                    set posx sprite[i].x
+                    set posy sprite[i].y
+                    set posz sprite[i].z
+                    set ang sprite[i].ang
+
+                    updatecursectnum
+
+                    return
+                }
+            }
+        }
+
+        ife sprite[searchwall].picnum DOORTRANSPORTEXIT
+        {
+        ife sprite[searchwall].hitag 0 { quote 12 return }
+            for i allsprites
+            {
+                ifn i searchwall, ifactor DOORTRANSPORT, ife sprite[i].lotag sprite[searchwall].hitag
+                {
+                    set posx sprite[i].x
+                    set posy sprite[i].y
+                    set posz sprite[i].z
+                    set ang sprite[i].ang
+
+                    updatecursectnum
+
+                    return
+                }
+            }
+        }
+
+        ife sprite[searchwall].picnum SECTOREFFECTOR
+        {
+            set TEMP4 0
+            ife sprite[searchwall].lotag 7 set TEMP4 1
+            ife sprite[searchwall].lotag 17 set TEMP4 1
+            ife TEMP4 0 return
+
+
+            for i allsprites
+            {
+                ifn i searchwall, ifactor SECTOREFFECTOR
+                    {
+                    ife sprite[i].lotag sprite[searchwall].lotag
+                        {
+                        ife sprite[i].hitag sprite[searchwall].hitag
+                            {
+                                add posx sprite[i].x, sub posx sprite[searchwall].x
+                                add posy sprite[i].y, sub posy sprite[searchwall].y
+                                add posz sprite[i].z, sub posz sprite[searchwall].z
+
+                                updatecursectnum
+
+                                return
+                            }
+                        }
+                    else
+                    ife sprite[i].lotag 23
+                        {
+                        ife sprite[i].hitag sprite[searchwall].hitag
+                            {
+                                add posx sprite[i].x, sub posx sprite[searchwall].x
+                                add posy sprite[i].y, sub posy sprite[searchwall].y
+                                add posz sprite[i].z, sub posz sprite[searchwall].z
+
+                                updatecursectnum
+
+                                return
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+endevent
+

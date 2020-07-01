@@ -1,0 +1,1013 @@
+
+/* The states defined in this file are manually called as commands through the console. */
+/* Sorted Alphabetically */
+/* Usage: do <state> */
+
+
+defstate add_exp
+    for i allsectors
+    {
+     ife sector[i].floorpicnum 4827
+        {
+        set TEMP sector[i].floorstat
+        ifand sector[i].floorstat 8 nullop else
+        xorvar TEMP 8
+        set sector[i].floorstat TEMP
+        }
+    }
+
+ends
+
+
+defstate allpal
+    for i allsectors
+    {
+        set sector[i].floorpal 52
+        set sector[i].ceilingpal 52
+    }
+
+    for i allwalls
+    {
+        set wall[i].pal 52
+    }
+ends
+
+
+defstate bodies
+    
+    for i allsprites
+    {
+        switch sprite[i].picnum
+            case 1855
+            case 1876
+            case 1714
+            case 1734
+            case 1737
+                set sprite[i].xrepeat 24
+                set sprite[i].yrepeat 24
+            break
+            case 2060
+            case 2092
+            case 9449
+            case 2185
+            case 24134
+                set sprite[i].xrepeat 28
+                set sprite[i].yrepeat 28
+            break
+            case 1957
+                set sprite[i].xrepeat 28
+                set sprite[i].yrepeat 28
+            break
+            endswitch
+
+        ifactor 1734
+            {
+            setvarvar TEMP i
+            ifvarand TEMP 1 set sprite[i].picnum 1714
+            }
+    }
+
+ends
+
+
+defstate changeblock
+    for i allsprites
+    {
+        ifand sprite[i].cstat 32
+         ifand sprite[i].cstat 1
+            {
+            set TEMP2 sprite[i].sectnum
+            ife sprite[i].z sector[TEMP2].floorz
+                {
+                addlogvar i
+                set TEMP sprite[i].cstat
+                xorvar TEMP 1
+                set sprite[i].cstat TEMP
+                }
+            }
+    }
+ends
+
+
+defstate changewalls
+
+    for i selsectors
+    {
+        for j wallsofsector i
+        {
+            ifvare wall[j].picnum 21647
+            {
+                set wall[j].picnum 20616
+            }
+        }
+    }
+
+ends
+
+
+defstate del_se
+  for i allsprites
+    {
+    ifactor 1
+        {
+        ifvare sprite[i].lotag 49 deletesprite i
+        ifvare sprite[i].lotag 50 deletesprite i
+        addlog
+        }
+    }
+ends
+
+
+defstate del_sprites
+  for i allsprites
+    {
+    ifvarn sprite[i].picnum 1 deletesprite i
+    }
+ends
+
+
+defstate fix_e_pal
+
+    for i allsprites
+    {
+    switch sprite[i].picnum
+        case 9
+        ife sprite[i].hitag 7424 ife sprite[i].pal 24
+            {
+            addlogvar i
+            set sprite[i].pal 47
+            }
+        break
+        case 7424
+        case 7425
+        ife sprite[i].pal 24
+            {
+            addlogvar i
+            set sprite[i].pal 47
+            }
+        break
+        endswitch
+    }
+
+ends
+
+
+defstate fix_letters
+
+    for i allsprites
+    {
+    ifg sprite[i].picnum 2939
+     ifl sprite[i].picnum 2966
+        {
+            addlogvar i
+            set TEMP sprite[i].picnum
+            add TEMP 26
+            set sprite[i].picnum TEMP
+        }
+    }
+
+ends
+
+
+defstate fixart
+    for i allsectors
+    {
+    ifg sector[i].floorpicnum 3583
+     ifl sector[i].floorpicnum 3840
+        {
+        set TEMP sector[i].floorpicnum
+        add TEMP 16896
+        set sector[i].floorpicnum TEMP
+        }
+    ifg sector[i].ceilingpicnum 3583
+     ifl sector[i].ceilingpicnum 3840
+        {
+        set TEMP sector[i].ceilingpicnum
+        add TEMP 16896
+        set sector[i].ceilingpicnum TEMP
+        }
+    }
+
+    for i allwalls
+    {
+    ifg wall[i].picnum 3583
+     ifl wall[i].picnum 3840
+        {
+        set TEMP wall[i].picnum
+        add TEMP 16896
+        set wall[i].picnum TEMP
+        }
+    ifg wall[i].overpicnum 3583
+     ifl wall[i].overpicnum 3840
+        {
+        set TEMP wall[i].overpicnum
+        add TEMP 16896
+        set wall[i].overpicnum TEMP
+        }
+    }
+
+    for i allsprites
+    {
+    ifg sprite[i].picnum 3583
+     ifl sprite[i].picnum 3840
+        {
+        set TEMP sprite[i].picnum
+        add TEMP 16896
+        set sprite[i].picnum TEMP
+        }
+    }
+ends
+
+
+defstate fixmick
+  for i allsprites
+    {
+    ife sprite[i].picnum 21617
+        {
+        set TEMP sprite[i].xrepeat
+        mul TEMP 2
+        set sprite[i].xrepeat TEMP
+        set TEMP sprite[i].yrepeat
+        mul TEMP 2
+        set sprite[i].yrepeat TEMP
+        }
+    }
+ends
+
+
+defstate fixmpal
+    for i allsectors
+    {
+    ife sector[i].floorpal 43 set sector[i].floorpal 0
+    ife sector[i].ceilingpal 43 set sector[i].ceilingpal 0
+    }
+
+    for i allwalls
+    {
+    ife wall[i].pal 43 set wall[i].pal 0
+    }
+
+    for i allsprites
+    {
+    switch sprite[i].picnum
+        default
+        // ife sprite[i].pal 26 set sprite[i].pal 128
+
+
+        ife sprite[i].pal 43 set sprite[i].pal 0
+
+
+        break
+        endswitch
+    }
+ends
+
+
+defstate fixpal
+    for i allsectors
+    {
+        // ife sector[i].floorpal 26 set sector[i].floorpal 128
+        // ife sector[i].ceilingpal 26 set sector[i].ceilingpal 128
+
+        ife sector[i].floorpal 19 set sector[i].floorpal 52
+        ife sector[i].ceilingpal 19 set sector[i].ceilingpal 52
+
+        ife sector[i].floorpal 26 set sector[i].floorpal 128
+        ife sector[i].ceilingpal 26 set sector[i].ceilingpal 128
+
+        ife sector[i].floorpal 27 set sector[i].floorpal 129
+        ife sector[i].ceilingpal 27 set sector[i].ceilingpal 129
+
+        ife sector[i].floorpal 28 set sector[i].floorpal 130
+        ife sector[i].ceilingpal 28 set sector[i].ceilingpal 130
+
+        ife sector[i].floorpal 29 set sector[i].floorpal 131
+        ife sector[i].ceilingpal 29 set sector[i].ceilingpal 131
+
+        ife sector[i].floorpal 30 set sector[i].floorpal 140
+        ife sector[i].ceilingpal 30 set sector[i].ceilingpal 140
+
+        ife sector[i].floorpal 31 set sector[i].floorpal 141
+        ife sector[i].ceilingpal 31 set sector[i].ceilingpal 141
+
+        ife sector[i].floorpal 32 set sector[i].floorpal 142
+        ife sector[i].ceilingpal 32 set sector[i].ceilingpal 142
+
+        ife sector[i].floorpal 33 set sector[i].floorpal 143
+        ife sector[i].ceilingpal 3 set sector[i].ceilingpal 143
+
+        ife sector[i].floorpal 34 set sector[i].floorpal 144
+        ife sector[i].ceilingpal 34 set sector[i].ceilingpal 144
+
+        ife sector[i].floorpal 35 set sector[i].floorpal 145
+        ife sector[i].ceilingpal 35 set sector[i].ceilingpal 145
+
+        ife sector[i].floorpal 36 set sector[i].floorpal 146
+        ife sector[i].ceilingpal 36 set sector[i].ceilingpal 146
+
+        ife sector[i].floorpal 17 set sector[i].floorpal 27
+        ife sector[i].ceilingpal 17 set sector[i].ceilingpal 27
+
+        ife sector[i].floorpal 18 set sector[i].floorpal 49
+        ife sector[i].ceilingpal 18 set sector[i].ceilingpal 49
+
+        ife sector[i].floorpal 22 set sector[i].floorpal 36
+        ife sector[i].ceilingpal 22 set sector[i].ceilingpal 36
+
+    }
+
+    for i allwalls
+    {
+
+        ife wall[i].pal 26 set wall[i].pal 128
+        ife wall[i].pal 27 set wall[i].pal 129
+        ife wall[i].pal 28 set wall[i].pal 130
+        ife wall[i].pal 29 set wall[i].pal 131
+
+        ife wall[i].pal 30 set wall[i].pal 140
+        ife wall[i].pal 31 set wall[i].pal 141
+        ife wall[i].pal 32 set wall[i].pal 142
+        ife wall[i].pal 33 set wall[i].pal 143
+        ife wall[i].pal 34 set wall[i].pal 144
+        ife wall[i].pal 35 set wall[i].pal 145
+        ife wall[i].pal 36 set wall[i].pal 146
+
+        ife wall[i].pal 17 set wall[i].pal 27
+        ife wall[i].pal 18 set wall[i].pal 49
+        ife wall[i].pal 19 set wall[i].pal 52
+        ife wall[i].pal 22 set wall[i].pal 36
+    }
+
+    for i allsprites
+    {
+    switch sprite[i].picnum
+        case 0
+        case 1
+        case 2
+        case 3
+        case 4
+        case 5
+        case 6
+        case 7
+        case 8
+        case 10
+        case AMCTSPAWNPOINT
+        case ACTIVATELEVEL
+        case CUTSCENECAM
+        case CUTSCENETEXT
+        case COUNTDOWN_TIMER
+        case DOCUMENTD
+        case DEBRISSPAWNER
+        case DOORTRANSPORT
+        case DOORTRANSPORTEXIT
+        case FLOORCEILSCROLL
+        case FORCE_CHARACTER
+        case JETPACKCIVSPAWNER
+        case HOVERCARSPAWNER
+        case BOX
+        case LADDER
+        case LOCATION
+        case LOCKED_DOOR
+        case MAKE_SWITCH
+        case MOVEPLAYER
+        case MISSIONFAILED
+        case MUSICCHANGE
+        case PARTICLEE
+        case MONS_SPAWNER
+        case GRANDFATHER_CLOCK
+        case PRELOAD_MUSIC
+        case RAINSNOWEFFECT
+        case RAINSNOWSTARTER
+        case RAINSNOWSOUND
+        case RANDOMSOUND
+        case RIGHTLEVEL
+        case TREESPAWNER
+        case SPRITE_LIFT
+        case SLO_MO_TRIGGER
+        case SPOOKY_TRIGGER
+        case TRIGGERONLYIFCHAR
+        case TIME_ZONE
+        case MISSIONOBJECTIVES
+        case WALLSCROLL
+        case WEAP_EQUIP_STRIP
+        case 10742
+        case TOOLBOX_FIX
+        case 3347
+        case 3788
+        case AMCSCIENTIST_WAYPOINT
+        case SPECIAL_EFFECTS
+        case TIME_DELAY
+        case 3601
+        case 3602
+        case 3609
+        case 17636
+        case 22446
+        case 22771
+        break
+        default
+            // ife sprite[i].pal 26 set sprite[i].pal 128
+
+            ife sprite[i].pal 26 set sprite[i].pal 128
+            ife sprite[i].pal 27 set sprite[i].pal 129
+            ife sprite[i].pal 28 set sprite[i].pal 130
+            ife sprite[i].pal 29 set sprite[i].pal 131
+
+            ife sprite[i].pal 30 set sprite[i].pal 140
+            ife sprite[i].pal 31 set sprite[i].pal 141
+            ife sprite[i].pal 32 set sprite[i].pal 142
+            ife sprite[i].pal 33 set sprite[i].pal 143
+            ife sprite[i].pal 34 set sprite[i].pal 144
+            ife sprite[i].pal 35 set sprite[i].pal 145
+            ife sprite[i].pal 36 set sprite[i].pal 146
+
+            ife sprite[i].pal 17 set sprite[i].pal 27
+            ife sprite[i].pal 18 set sprite[i].pal 49
+            ife sprite[i].pal 19 set sprite[i].pal 52
+            ife sprite[i].pal 22 set sprite[i].pal 36
+
+        break
+        endswitch
+    }
+ends
+
+
+defstate fixpalse
+
+    for i allsprites
+    {
+    switch sprite[i].picnum
+        case 0
+        case 1
+        case 2
+        case 3
+        case 4
+        case 5
+        case 6
+        case 7
+        case 8
+        case 10
+            // ife sprite[i].pal 26 set sprite[i].pal 128
+
+            ife sprite[i].pal 26 set sprite[i].pal 128
+            ife sprite[i].pal 27 set sprite[i].pal 129
+            ife sprite[i].pal 28 set sprite[i].pal 130
+            ife sprite[i].pal 29 set sprite[i].pal 131
+
+            ife sprite[i].pal 30 set sprite[i].pal 140
+            ife sprite[i].pal 31 set sprite[i].pal 141
+            ife sprite[i].pal 32 set sprite[i].pal 142
+            ife sprite[i].pal 33 set sprite[i].pal 143
+            ife sprite[i].pal 34 set sprite[i].pal 144
+            ife sprite[i].pal 35 set sprite[i].pal 145
+            ife sprite[i].pal 36 set sprite[i].pal 146
+
+        break
+        endswitch
+    }
+ends
+
+
+defstate fogsprites
+    for i selsprites
+    {
+        set sprite[i].pal 128
+    }
+ends
+
+
+defstate girder
+    for i allsprites
+    {
+    ifactor 9
+     ife sprite[i].hitag 8254
+        {
+        set sprite[i].hitag 8257
+        addlog
+        }
+    }
+ends
+
+
+defstate globelight
+    for i allsprites
+    {
+        ifactor 18113
+        {
+            set TEMP sprite[i].xrepeat
+            div TEMP 2
+            set sprite[i].xrepeat TEMP
+            set TEMP sprite[i].yrepeat
+            div TEMP 2
+            set sprite[i].yrepeat TEMP
+        }
+    }
+ends
+
+
+defstate greyfog
+    for i allsectors
+    {
+        set sector[i].floorpal 128
+        set sector[i].ceilingpal 128
+    }
+
+    for i allwalls
+    {
+        set wall[i].pal 128
+    }
+ends
+
+
+defstate jbladeshade
+    for i selsectors
+    {
+        set sector[i].floorshade setshade
+        set sector[i].ceilingshade setshade
+
+        for j wallsofsector i
+        {
+            set wall[j].shade setshade
+        }
+
+        for j spritesofsector i
+        {
+            set sprite[j].shade setshade
+        }
+    }
+
+    for i selwalls
+    {
+        set wall[i].shade setshade
+    }
+
+    for i selsprites
+    {
+        set sprite[i].shade setshade
+    }
+ends
+
+
+defstate movetextures
+    for i allsectors
+    {
+        ifg sector[i].floorpicnum 3583
+         ifl sector[i].floorpicnum 3840
+            {
+            set TEMP sector[i].floorpicnum
+            add TEMP 16896
+            set sector[i].floorpicnum TEMP
+            }
+        ifg sector[i].ceilingpicnum 3583
+         ifl sector[i].ceilingpicnum 3840
+            {
+            set TEMP sector[i].ceilingpicnum
+            add TEMP 16896
+            set sector[i].ceilingpicnum TEMP
+            }
+    }
+
+    for i allwalls
+    {
+        ifg wall[i].picnum 3583
+         ifl wall[i].picnum 3840
+            {
+            set TEMP wall[i].picnum
+            add TEMP 16896
+            set wall[i].picnum TEMP
+            }
+        ifg wall[i].overpicnum 3583
+         ifl wall[i].overpicnum 3840
+            {
+            set TEMP wall[i].overpicnum
+            add TEMP 16896
+            set wall[i].overpicnum TEMP
+            }
+    }
+
+    for i allsprites
+    {
+        ifg sprite[i].picnum 3583
+         ifl sprite[i].picnum 3840
+            {
+            set TEMP sprite[i].picnum
+            add TEMP 16896
+            set sprite[i].picnum TEMP
+            }
+    }
+ends
+
+
+defstate night
+    for i allsectors
+    {
+        ifand sector[i].ceilingstat 1
+        {
+            set sector[i].floorpal 61
+            set sector[i].floorshade 17
+            set sector[i].ceilingpal 61
+            set sector[i].ceilingshade 17
+
+            for j wallsofsector i,
+            {
+                set wall[j].pal 61
+                set wall[j].shade 17
+            }
+        }
+    }
+
+    for i allsprites
+    {
+    switch sprite[i].picnum
+        case 0
+        case 1
+        case 2
+        case 3
+        case 4
+        case 5
+        case 6
+        case 7
+        case 8
+        case 10
+        case AMCTSPAWNPOINT
+        case ACTIVATELEVEL
+        case CUTSCENECAM
+        case CUTSCENETEXT
+        case SPCOMM_LINK
+        case COUNTDOWN_TIMER
+        case DOCUMENTD
+        case DEBRISSPAWNER
+        case DOORTRANSPORT
+        case DOORTRANSPORTEXIT
+        case FLOORCEILSCROLL
+        case FORCE_CHARACTER
+        case JETPACKCIVSPAWNER
+        case HOVERCARSPAWNER
+        case ITEM_BOX
+        case LADDER
+        case LOCATION
+        case LOCKED_DOOR
+        case MAKE_SWITCH
+        case MOVEPLAYER
+        case MISSIONFAILED
+        case MUSICCHANGE
+        case PARTICLEE
+        case MONS_SPAWNER
+        case GRANDFATHER_CLOCK
+        case PRELOAD_MUSIC
+        case RAINSNOWEFFECT
+        case RAINSNOWSTARTER
+        case RAINSNOWSOUND
+        case RANDOMSOUND
+        case RIGHTLEVEL
+        case TREESPAWNER
+        case SPRITE_LIFT
+        case SLO_MO_TRIGGER
+        case SPOOKY_TRIGGER
+        case TRIGGERONLYIFCHAR
+        case TIME_ZONE
+        case MISSIONOBJECTIVES
+        case WALLSCROLL
+        case WEAP_EQUIP_STRIP
+        case 10742
+        case TOOLBOX_FIX
+        case 3347
+        case 3788
+        case AMCSCIENTIST_WAYPOINT
+        case SPECIAL_EFFECTS
+        case TIME_DELAY
+        case 3601
+        case 3602
+        case 3609
+        case 17636
+        case 22446
+        case 22771
+            break
+        default
+            set TEMP sprite[i].sectnum
+            ifg sector[TEMP].floorshade 9 set sprite[i].pal 61
+            else set sprite[i].pal 67
+            break
+        endswitch
+    }
+ends
+
+
+defstate redfog
+    for i allsectors
+    {
+        set sector[i].floorpal 129
+        set sector[i].ceilingpal 129
+    }
+
+    for i allwalls
+    {
+        set wall[i].pal 129
+    }
+ends
+
+
+defstate rem_exp
+    for i selsectors
+    {
+        ifand sector[i].floorstat 8
+        {
+            set TEMP sector[i].floorstat
+            xorvar TEMP 8
+            set sector[i].floorstat TEMP
+        }
+    }
+
+ends
+
+
+defstate rem_exp_all
+    for i allsectors
+    {
+        ifand sector[i].floorstat 8
+        {
+            set TEMP sector[i].floorstat
+            xorvar TEMP 8
+            set sector[i].floorstat TEMP
+        }
+    }
+
+ends
+
+
+defstate removetree
+    for i allsprites
+    {
+        ifactor 9
+         ife sprite[i].pal 40
+          ife sprite[i].hitag 1820
+          {
+            set sprite[i].pal 41
+          }
+    }
+ends
+
+
+defstate shade_sprite
+    for i allsprites
+    {
+        set TEMP sprite[i].sectnum
+        set sprite[i].shade sector[TEMP].floorshade
+    }
+ends
+
+
+defstate skyboxsky
+    for i allsectors
+    {
+        ifvare sector[i].ceilingpicnum 178
+        {
+            set TEMP sector[i].ceilingstat
+            ifand TEMP 1 { } else { xor TEMP 1 set sector[i].ceilingstat TEMP }
+        }
+    }
+ends
+
+
+defstate skyfog
+    for i selsectors
+    {
+        set sector[i].floorpal 143
+        set sector[i].ceilingpal 143
+
+        for j wallsofsector i,
+        {
+            set wall[i].pal 143
+        }
+    }
+
+ends
+
+
+defstate skyfog2
+    for i allsectors
+    {
+        set sector[i].floorpal 143
+        set sector[i].ceilingpal 143
+    }
+
+    for i allwalls
+    {
+        set wall[i].pal 143
+    }
+
+ends
+
+
+defstate skypal
+    for i allsectors
+    {
+        ife sector[i].ceilingpal 143 ifand sector[i].ceilingstat 1 set sector[i].ceilingpal 0
+    }
+ends
+
+
+defstate soundfix
+    for i allsprites
+    {
+        switch sprite[i].picnum
+        case 5
+            ife sprite[i].lotag 951 set sprite[i].lotag 273
+            break
+        endswitch
+    }
+
+ends
+
+
+defstate stars
+    for i selsprites
+    {
+        set TEMP sprite[i].cstat
+        ifand TEMP 1 sub TEMP 1
+        set sprite[i].cstat TEMP
+    }
+ends
+
+
+defstate sunlight
+    for i selsectors
+    {
+        ifg sector[i].floorshade 9 set sector[i].floorpal 61
+        else set sector[i].floorpal 67
+
+        ifg sector[i].ceilingshade 9 set sector[i].ceilingpal 61
+        else set sector[i].ceilingpal 67
+
+        for j wallsofsector i,
+        {
+            ifg wall[j].shade 9 set wall[j].pal 61
+            else set wall[j].pal 67
+        }
+    }
+
+    for i selwalls
+    {
+        ifg wall[i].shade 9 set wall[i].pal 61
+        else set wall[i].pal 67
+    }
+
+    for i selsprites
+    {
+        switch sprite[i].picnum
+            case 0
+            case 1
+            case 2
+            case 3
+            case 4
+            case 5
+            case 6
+            case 7
+            case 8
+            case 10
+            case AMCTSPAWNPOINT
+            case ACTIVATELEVEL
+            case CUTSCENECAM
+            case CUTSCENETEXT
+            case SPCOMM_LINK
+            case COUNTDOWN_TIMER
+            case DOCUMENTD
+            case DEBRISSPAWNER
+            case DOORTRANSPORT
+            case DOORTRANSPORTEXIT
+            case FLOORCEILSCROLL
+            case FORCE_CHARACTER
+            case JETPACKCIVSPAWNER
+            case HOVERCARSPAWNER
+            case ITEM_BOX
+            case LADDER
+            case LOCATION
+            case LOCKED_DOOR
+            case MAKE_SWITCH
+            case MOVEPLAYER
+            case MISSIONFAILED
+            case MUSICCHANGE
+            case PARTICLEE
+            case MONS_SPAWNER
+            case GRANDFATHER_CLOCK
+            case PRELOAD_MUSIC
+            case RAINSNOWEFFECT
+            case RAINSNOWSTARTER
+            case RAINSNOWSOUND
+            case RANDOMSOUND
+            case RIGHTLEVEL
+            case TREESPAWNER
+            case SPRITE_LIFT
+            case SLO_MO_TRIGGER
+            case SPOOKY_TRIGGER
+            case TRIGGERONLYIFCHAR
+            case TIME_ZONE
+            case MISSIONOBJECTIVES
+            case WALLSCROLL
+            case WEAP_EQUIP_STRIP
+            case 10742
+            case TOOLBOX_FIX
+            case 3347
+            case 3788
+            case AMCSCIENTIST_WAYPOINT
+            case SPECIAL_EFFECTS
+            case TIME_DELAY
+            case 3601
+            case 3602
+            case 3609
+            case 17636
+            case 22446
+            case 22771
+                break
+            default
+                set TEMP sprite[i].sectnum
+                ifg sector[TEMP].floorshade 9 set sprite[i].pal 61
+                else set sprite[i].pal 67
+                break
+            endswitch
+    }
+ends
+
+
+defstate vis
+    for i allsectors
+    {
+        set sector[i].visibility 0
+    }
+ends
+
+
+defstate wasp
+    for i allsprites
+    {
+        ifactor 9
+         ife sprite[i].hitag 17152
+         {
+            addlog
+            set sprite[i].hitag 13577
+         }
+        ifactor 17152 
+        { 
+            addlog cactor 13577 
+        }
+    }
+ends
+
+defstate water
+    for i allsectors
+    {
+        ifvare sector[i].floorpicnum 14261
+        {
+            set sector[i].lotag 1
+        }
+        ifand sector[i].lotag 1
+        {
+            set TEMP sector[i].floorstat
+            ifand TEMP 512 { } else { xor TEMP 512 set sector[i].floorstat TEMP }
+            ifand TEMP 2048 { } else { xor TEMP 2048 set sector[i].floorstat TEMP }
+        }
+        ifand sector[i].lotag 2
+        {
+            set sector[i].floorpal 60
+            // set sector[i].floorshade 17
+            set sector[i].ceilingpal 60
+            // set sector[i].ceilingshade 17
+            set TEMP sector[i].ceilingstat
+            
+            ifvare sector[i].ceilingpicnum 14261
+            {
+                ifand TEMP 512 { } else { xor TEMP 512 set sector[i].ceilingstat TEMP }
+                ifand TEMP 2048 { } else { xor TEMP 2048 set sector[i].ceilingstat TEMP }
+            }
+            
+            for j wallsofsector i,
+            {
+                set wall[j].pal 60
+                // set wall[j].shade 17
+            }
+        }
+    }
+ends
+
+
+defstate zax
+    for i allsectors
+    {
+        ife sector[i].floorpal 7 set sector[i].floorpal 56
+        ife sector[i].ceilingpal 7 set sector[i].ceilingpal 56
+    }
+
+    for i allwalls
+    {
+        ife wall[i].pal 7 set wall[i].pal 56
+        ife wall[i].picnum 20253
+        {
+            ife wall[i].pal 1 set wall[i].pal 74
+            ife wall[i].pal 2 set wall[i].pal 82
+        }
+        ife wall[i].picnum 20275 ife wall[i].pal 2 set wall[i].pal 82
+        ife wall[i].picnum 20285 ife wall[i].pal 2 set wall[i].pal 82
+        ife wall[i].picnum 20286 ife wall[i].pal 2 set wall[i].pal 82
+        ife wall[i].picnum 20270 ife wall[i].pal 2 set wall[i].pal 82
+    }
+
+ends

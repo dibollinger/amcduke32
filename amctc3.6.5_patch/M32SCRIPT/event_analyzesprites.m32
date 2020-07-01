@@ -1,0 +1,2016 @@
+
+onevent EVENT_ANALYZESPRITES
+
+
+    var ts ow pic z
+    var k onumtspr
+
+    ife showrespawn_always 0
+    {
+        ifaimingsprite ife sprite[searchwall].picnum RESPAWN nullop
+        else break
+    }
+
+
+    set onumtspr spritesortcnt
+
+    for ts range onumtspr
+    {
+        set ow tsprite[ts].owner
+        ife showrespawn_always 0 ifn ow searchwall nullop else
+        {
+            ife sprite[ow].picnum RESPAWN
+            {
+                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                set pic sprite[ow].hitag
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                ifvarn showrespawn_fulltrans 0
+                    or tsprite[k].cstat 512
+            }
+
+            ife sprite[ow].picnum SPRITE_DETECT
+            {
+                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                ife sprite[ow].pal 0 set pic BATTERY_SPRITE
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                ifvarn showrespawn_fulltrans 0
+                    or tsprite[k].cstat 512
+            }
+
+            ife sprite[ow].picnum 14
+            {
+                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                set pic sprite[ow].hitag
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                ifvarn showrespawn_fulltrans 0
+                    or tsprite[k].cstat 512
+            }
+
+
+            ife sprite[ow].picnum 16011
+            {
+                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                set pic sprite[ow].hitag
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                ifvarn showrespawn_fulltrans 0
+                    or tsprite[k].cstat 512
+            }
+
+
+            ife sprite[ow].picnum 2001
+                {
+                set sprite[ow].xrepeat 40
+                set sprite[ow].yrepeat 40
+                }
+
+            ife sprite[ow].picnum 1232
+                {
+                set pic sprite[ow].lotag
+                ifvarg pic 0
+                    {
+                                    set k spritesortcnt
+                    tdupsprite ow
+
+                    // XXX: doesn't work with E1L5 boss RESPAWN...
+                    // Something's wrong with setting tsprite[] members.
+                    sub tsprite[k].z 6096
+
+                    set tsprite[k].xrepeat 32
+                    set tsprite[k].yrepeat 32
+
+
+
+                    ifl pic MAXTILES
+                        set tsprite[k].picnum pic
+
+                    and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                    or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                    }
+                }
+
+            ife sprite[ow].picnum 23761
+                {
+                set pic sprite[ow].hitag
+                ifvarg pic 0
+                    {
+                                    set k spritesortcnt
+                    tdupsprite ow
+
+                    // XXX: doesn't work with E1L5 boss RESPAWN...
+                    // Something's wrong with setting tsprite[] members.
+                    sub tsprite[k].z 6096
+
+                    set tsprite[k].xrepeat 32
+                    set tsprite[k].yrepeat 32
+
+
+
+                    ifl pic MAXTILES
+                        set tsprite[k].picnum pic
+
+                    and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                    or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                    }
+                }
+
+            ife sprite[ow].picnum 4087
+                {
+                set pic sprite[ow].hitag
+                ifvarg pic 0
+                    {
+                                    set k spritesortcnt
+                    tdupsprite ow
+
+                    // XXX: doesn't work with E1L5 boss RESPAWN...
+                    // Something's wrong with setting tsprite[] members.
+                    sub tsprite[k].z 12096
+
+                    set tsprite[k].xrepeat 32
+                    set tsprite[k].yrepeat 32
+
+
+
+                    ifl pic MAXTILES
+                        set tsprite[k].picnum pic
+
+                    and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                    or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                    }
+                }
+
+            ife sprite[ow].picnum FIRSTGUNSPRITE
+                {
+                                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                ife sprite[ow].xvel 0 setvar pic 3587
+                ife sprite[ow].xvel 1 setvar pic 5245
+                ife sprite[ow].xvel 2 setvar pic 5501
+                ife sprite[ow].xvel 4 setvar pic 6400
+                ife sprite[ow].xvel 8 setvar pic 6013
+                ife sprite[ow].xvel 16 setvar pic 6336
+                ife sprite[ow].xvel 32 setvar pic 6656
+                ife sprite[ow].xvel 64 setvar pic 6429
+                ife sprite[ow].xvel 128 setvar pic 6912
+                ife sprite[ow].xvel 256 setvar pic 16384
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                }
+
+            ife sprite[ow].picnum SHOTGUNSPRITE
+                {
+                                set k spritesortcnt
+                tdupsprite ow
+
+                // XXX: doesn't work with E1L5 boss RESPAWN...
+                // Something's wrong with setting tsprite[] members.
+                sub tsprite[k].z 4096
+
+                set tsprite[k].xrepeat 32
+                set tsprite[k].yrepeat 32
+
+                ife sprite[ow].xvel 0 setvar pic 3587
+                ife sprite[ow].xvel 1 setvar pic 5245
+                ife sprite[ow].xvel 2 setvar pic 5501
+                ife sprite[ow].xvel 4 setvar pic 6400
+                ife sprite[ow].xvel 8 setvar pic 6013
+                ife sprite[ow].xvel 16 setvar pic 6336
+                ife sprite[ow].xvel 32 setvar pic 6656
+                ife sprite[ow].xvel 64 setvar pic 6429
+                ife sprite[ow].xvel 128 setvar pic 6912
+                ife sprite[ow].xvel 256 setvar pic 16384
+                ifge pic 0 ifl pic MAXTILES
+                    set tsprite[k].picnum pic
+
+                and tsprite[k].cstat 0xfffffdff  // clear bit 512 (reverse translucency)
+                or tsprite[k].cstat 2  // set bit 2 (33% translucency)
+                }
+
+
+        }
+    }
+
+    for i drawnsprites
+    {
+        set j tsprite[i].owner
+        switch sprite[j].picnum
+        case 5
+         ifg sprite[j].hitag 32767
+            set sprite[j].hitag 32767
+         ifl sprite[j].hitag 0
+            set sprite[j].hitag 32767
+            break
+        case 25360
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case 675
+        case 676
+        case 677
+                set sprite[j].xrepeat 20
+                set sprite[j].yrepeat 20
+                break
+        case 10436
+        case 10605
+        case 10595
+        case 3550
+        case 3569
+        case 8439
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case 5783
+        case 5784
+        case 5787
+        case 5870
+        case 8741
+        case 8742
+        case 22966
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                break
+        case 11772
+        case 11775
+                set sprite[j].blend 255
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                break
+        case 8960
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+                break
+        case 5867
+                set sprite[j].xrepeat 34
+                set sprite[j].yrepeat 34
+                break
+        case 8689
+        case 12682
+        case 12667
+        case 12672
+        case 12673
+        case 12683
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                break
+        case WASP_DRONE
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case GORILLA
+            ife ENEMY_ANIM2 1 cactor 22785
+            ife ENEMY_ANIM2 2 cactor 22790
+            ife ENEMY_ANIM2 3 cactor 22795
+            ife ENEMY_ANIM2 0 cactor 22800
+            ife sprite[j].pal 10
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            else
+            ife sprite[j].pal 13
+                {
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                }
+            else
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 35
+                set sprite[j].yrepeat 35
+                }
+            else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            break
+        case GORILLA_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 22786
+            ife ENEMY_ANIM2 2 cactor 22791
+            ife ENEMY_ANIM2 3 cactor 22796
+            ife ENEMY_ANIM2 0 cactor 22801
+            ife sprite[j].pal 10
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            else
+            ife sprite[j].pal 13
+                {
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                }
+            else
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 35
+                set sprite[j].yrepeat 35
+                }
+            else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            break
+        case NAZI
+            ife ENEMY_ANIM2 1 cactor 22887
+            ife ENEMY_ANIM2 2 cactor 22892
+            ife ENEMY_ANIM2 3 cactor 22897
+            ife ENEMY_ANIM2 0 cactor 22902
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case NAZI_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 22888
+            ife ENEMY_ANIM2 2 cactor 22893
+            ife ENEMY_ANIM2 3 cactor 22898
+            ife ENEMY_ANIM2 0 cactor 22903
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case FASCIST
+            ife ENEMY_ANIM2 1 cactor 13076
+            ife ENEMY_ANIM2 2 cactor 13061
+            ife ENEMY_ANIM2 3 cactor 13066
+            ife ENEMY_ANIM2 0 cactor 13071
+            ife sprite[j].pal 0 set sprite[j].pal 22
+            set sprite[j].xrepeat 25
+            set sprite[j].yrepeat 25
+            break
+        case FASCIST_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 13077
+            ife ENEMY_ANIM2 2 cactor 13062
+            ife ENEMY_ANIM2 3 cactor 13067
+            ife ENEMY_ANIM2 0 cactor 13072
+            ife sprite[j].pal 0 set sprite[j].pal 22
+            set sprite[j].xrepeat 25
+            set sprite[j].yrepeat 25
+            break
+        case 13061
+        case 13062
+        case 13063
+        case 13066
+        case 13071
+        case 13079
+        case 13080
+        case 13082
+        case 13086
+        case 13087
+            ife sprite[j].pal 0 set sprite[j].pal 22
+            set sprite[j].xrepeat 25
+            set sprite[j].yrepeat 25
+            break
+        case 14222
+        case 18744
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case 22877
+            set sprite[j].xrepeat 26
+            set sprite[j].yrepeat 26
+            break
+        case CULTIST
+            ife ENEMY_ANIM2 1 cactor 7685
+            ife ENEMY_ANIM2 2 cactor 7690
+            ife ENEMY_ANIM2 3 cactor 7695
+            ife ENEMY_ANIM2 0 cactor 7700
+            ife sprite[j].pal 0 set sprite[j].pal 15
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case CULTISTSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 7686
+            ife ENEMY_ANIM2 2 cactor 7691
+            ife ENEMY_ANIM2 3 cactor 7696
+            ife ENEMY_ANIM2 0 cactor 7701
+            ife sprite[j].pal 0 set sprite[j].pal 15
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case CULTISTJUMP
+            ife ENEMY_ANIM2 1 cactor 7706
+            ife ENEMY_ANIM2 2 cactor 7711
+            ife ENEMY_ANIM2 3 cactor 7716
+            ife ENEMY_ANIM2 0 cactor 7721
+            ife sprite[j].pal 0 set sprite[j].pal 15
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case LOST
+            ife ENEMY_ANIM2 1 cactor 9728
+            ife ENEMY_ANIM2 2 cactor 9743
+            ife ENEMY_ANIM2 3 cactor 9728
+            ife ENEMY_ANIM2 0 cactor 9743
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case SORCERER
+            ife ENEMY_ANIM2 1 cactor 9772
+            ife ENEMY_ANIM2 2 cactor 9777
+            ife ENEMY_ANIM2 3 cactor 9772
+            ife ENEMY_ANIM2 0 cactor 9777
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            ife sprite[j].pal 0 set sprite[j].pal 21
+            break
+        case CYBERCULTIST
+            ife ENEMY_ANIM2 1 cactor 19974
+            ife ENEMY_ANIM2 2 cactor 19979
+            ife ENEMY_ANIM2 3 cactor 19984
+            ife ENEMY_ANIM2 0 cactor 19989
+            set sprite[j].xrepeat 28
+            set sprite[j].yrepeat 28
+            break
+        case CYBERCULTISTSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 19975
+            ife ENEMY_ANIM2 2 cactor 19980
+            ife ENEMY_ANIM2 3 cactor 19985
+            ife ENEMY_ANIM2 0 cactor 19990
+            set sprite[j].xrepeat 28
+            set sprite[j].yrepeat 28
+            break
+        case CYBERCULTISTJUMP
+            ife ENEMY_ANIM2 1 cactor 19995
+            ife ENEMY_ANIM2 2 cactor 20000
+            ife ENEMY_ANIM2 3 cactor 20005
+            ife ENEMY_ANIM2 0 cactor 20010
+            set sprite[j].xrepeat 36
+            set sprite[j].yrepeat 36
+            ife sprite[j].pal 0 set sprite[j].pal 20
+            break
+        case ZOMBIE
+            ife ENEMY_ANIM2 1 cactor 9869
+            ife ENEMY_ANIM2 2 cactor 9874
+            ife ENEMY_ANIM2 3 cactor 9879
+            ife ENEMY_ANIM2 0 cactor 9884
+            set sprite[j].xrepeat 38
+            set sprite[j].yrepeat 38
+            break
+        case AMCSOLDIER
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case AMCSOLDIER_ACTIVE
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case 9048
+            set sprite[j].xrepeat 24
+            set sprite[j].yrepeat 24
+            break
+        case SPIDER2
+            ife ENEMY_ANIM2 1 cactor 23510
+            ife ENEMY_ANIM2 2 cactor 23495
+            ife ENEMY_ANIM2 3 cactor 23500
+            ife ENEMY_ANIM2 0 cactor 23505
+            ife sprite[j].pal 11
+                {
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            else
+            ife sprite[j].pal 21
+                {
+                set sprite[j].xrepeat 16
+                set sprite[j].yrepeat 16
+                }
+            else
+            ife sprite[j].pal 36
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            else
+            ife sprite[j].pal 12
+                {
+                set sprite[j].xrepeat 60
+                set sprite[j].yrepeat 60
+                }
+            else
+                {
+                set sprite[j].xrepeat 36
+                set sprite[j].yrepeat 36
+                }
+            break
+        case CHRYSSALID
+            ife ENEMY_ANIM2 1 cactor 24200
+            ife ENEMY_ANIM2 2 cactor 24205
+            ife ENEMY_ANIM2 3 cactor 24210
+            ife ENEMY_ANIM2 0 cactor 24215
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+            break
+        case SHAMBLER
+            ife ENEMY_ANIM2 1 cactor 24345
+            ife ENEMY_ANIM2 2 cactor 24330
+            ife ENEMY_ANIM2 3 cactor 24335
+            ife ENEMY_ANIM2 0 cactor 24340
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+            break
+        case MERC
+            ife ENEMY_ANIM2 1 cactor 8799
+            ife ENEMY_ANIM2 2 cactor 8804
+            ife ENEMY_ANIM2 3 cactor 8809
+            ife ENEMY_ANIM2 0 cactor 8814
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+            break
+        case MERCSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8800
+            ife ENEMY_ANIM2 2 cactor 8805
+            ife ENEMY_ANIM2 3 cactor 8810
+            ife ENEMY_ANIM2 0 cactor 8815
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+            break
+        case MERC2
+            ife ENEMY_ANIM2 1 cactor 13640
+            ife ENEMY_ANIM2 2 cactor 13645
+            ife ENEMY_ANIM2 3 cactor 13650
+            ife ENEMY_ANIM2 0 cactor 13655
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+            break
+        case MERC2STAYPUT
+            ife ENEMY_ANIM2 1 cactor 13641
+            ife ENEMY_ANIM2 2 cactor 13646
+            ife ENEMY_ANIM2 3 cactor 13651
+            ife ENEMY_ANIM2 0 cactor 13656
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+            break
+        case LPOWERSUIT
+            ife ENEMY_ANIM2 1 cactor 8704
+            ife ENEMY_ANIM2 2 cactor 8709
+            ife ENEMY_ANIM2 3 cactor 8714
+            ife ENEMY_ANIM2 0 cactor 8719
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+            break
+        case LPOWERSUITSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8705
+            ife ENEMY_ANIM2 2 cactor 8710
+            ife ENEMY_ANIM2 3 cactor 8715
+            ife ENEMY_ANIM2 0 cactor 8720
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+            break
+        case TRIAD
+            ife ENEMY_ANIM2 1 cactor 3926
+            ife ENEMY_ANIM2 2 cactor 3931
+            ife ENEMY_ANIM2 3 cactor 3936
+            ife ENEMY_ANIM2 0 cactor 3941
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+            break
+        case TRIADSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 3927
+            ife ENEMY_ANIM2 2 cactor 3932
+            ife ENEMY_ANIM2 3 cactor 3937
+            ife ENEMY_ANIM2 0 cactor 3942
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+            break
+        case TRIADJUMP
+            ife ENEMY_ANIM2 1 cactor 3997
+            ife ENEMY_ANIM2 2 cactor 4002
+            ife ENEMY_ANIM2 3 cactor 4007
+            ife ENEMY_ANIM2 0 cactor 3992
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+            break
+        case NINJA
+            ife ENEMY_ANIM2 1 cactor 14848
+            ife ENEMY_ANIM2 2 cactor 14853
+            ife ENEMY_ANIM2 3 cactor 14858
+            ife ENEMY_ANIM2 0 cactor 14863
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case NINJASTAYPUT
+            ife ENEMY_ANIM2 1 cactor 14849
+            ife ENEMY_ANIM2 2 cactor 14854
+            ife ENEMY_ANIM2 3 cactor 14859
+            ife ENEMY_ANIM2 0 cactor 14864
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case NINJAJUMP
+            ife ENEMY_ANIM2 1 cactor 14919
+            ife ENEMY_ANIM2 2 cactor 14924
+            ife ENEMY_ANIM2 3 cactor 14929
+            ife ENEMY_ANIM2 0 cactor 14914
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+            break
+        case GUARDIAN
+            ife ENEMY_ANIM2 1 cactor 17783
+            ife ENEMY_ANIM2 2 cactor 17788
+            ife ENEMY_ANIM2 3 cactor 17793
+            ife ENEMY_ANIM2 0 cactor 17798
+            ife sprite[j].pal 36
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                ife sprite[j].pal 0 spritepal 11
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case GUARDIANSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 17784
+            ife ENEMY_ANIM2 2 cactor 17789
+            ife ENEMY_ANIM2 3 cactor 17794
+            ife ENEMY_ANIM2 0 cactor 17799
+            ife sprite[j].pal 36
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                ife sprite[j].pal 0 spritepal 11
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case MAMANO
+            ife ENEMY_ANIM2 1 cactor 15730
+            ife ENEMY_ANIM2 2 cactor 15735
+            ife ENEMY_ANIM2 3 cactor 15740
+            ife ENEMY_ANIM2 0 cactor 15745
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+
+            break
+        case MAMANOJUMP
+            ife ENEMY_ANIM2 1 cactor 15790
+            ife ENEMY_ANIM2 2 cactor 15795
+            ife ENEMY_ANIM2 3 cactor 15800
+            ife ENEMY_ANIM2 3 cactor 15805
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+
+            break
+        case RIPPER
+            ife ENEMY_ANIM2 1 cactor 17689
+            ife ENEMY_ANIM2 2 cactor 17694
+            ife ENEMY_ANIM2 3 cactor 17699
+            ife ENEMY_ANIM2 0 cactor 17704
+            ife sprite[j].pal 50
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+                }
+            break
+        case RIPPERJUMP
+            ife ENEMY_ANIM2 1 cactor 17714
+            ife ENEMY_ANIM2 2 cactor 17719
+            ife ENEMY_ANIM2 3 cactor 17724
+            ife ENEMY_ANIM2 0 cactor 17709
+            ife sprite[j].pal 50
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+                }
+            break
+        case THOTH
+            ife ENEMY_ANIM2 1 cactor 12544
+            ife ENEMY_ANIM2 2 cactor 12549
+            ife ENEMY_ANIM2 3 cactor 12554
+            ife ENEMY_ANIM2 0 cactor 12559
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 41
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case THOTH_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 12545
+            ife ENEMY_ANIM2 2 cactor 12550
+            ife ENEMY_ANIM2 3 cactor 12555
+            ife ENEMY_ANIM2 0 cactor 12560
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 41
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case ANUBIS_MUMMY
+            ife ENEMY_ANIM2 1 cactor 12727
+            ife ENEMY_ANIM2 2 cactor 12732
+            ife ENEMY_ANIM2 3 cactor 12737
+            ife ENEMY_ANIM2 0 cactor 12742
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case ANUBIS_MUMMY_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 12728
+            ife ENEMY_ANIM2 2 cactor 12733
+            ife ENEMY_ANIM2 3 cactor 12738
+            ife ENEMY_ANIM2 0 cactor 12743
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case SIREN
+            ife sprite[j].pal 0 set sprite[j].pal 10
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+            break
+        case ALUDRAN
+            ife ENEMY_ANIM2 1 cactor 22200
+            ife ENEMY_ANIM2 2 cactor 22205
+            ife ENEMY_ANIM2 3 cactor 22210
+            ife ENEMY_ANIM2 0 cactor 22215
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+            break
+        case ALUDRAN_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 22201
+            ife ENEMY_ANIM2 2 cactor 22206
+            ife ENEMY_ANIM2 3 cactor 22211
+            ife ENEMY_ANIM2 0 cactor 22216
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+            break
+        case LIL_SCORP
+            ife ENEMY_ANIM2 1 cactor 22139
+            ife ENEMY_ANIM2 2 cactor 22144
+            ife ENEMY_ANIM2 3 cactor 22139
+            ife ENEMY_ANIM2 0 cactor 22144
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+            break
+        case LIL_SCORP_LEAP
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+            break
+        case COBRA
+            ife ENEMY_ANIM2 1 cactor 22840
+            ife ENEMY_ANIM2 2 cactor 22845
+            ife ENEMY_ANIM2 3 cactor 22850
+            ife ENEMY_ANIM2 0 cactor 22855
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+            break
+        case COBRA_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 22841
+            ife ENEMY_ANIM2 2 cactor 22846
+            ife ENEMY_ANIM2 3 cactor 22851
+            ife ENEMY_ANIM2 0 cactor 22856
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+            break
+        case SCORPIONESS
+            ife ENEMY_ANIM2 1 cactor 22155
+            ife ENEMY_ANIM2 2 cactor 22160
+            ife ENEMY_ANIM2 3 cactor 22165
+            ife ENEMY_ANIM2 0 cactor 22170
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 42
+                {
+                set sprite[j].xrepeat 65
+                set sprite[j].yrepeat 65
+                }
+            else
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            break
+        case SCORPIONESS_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 22156
+            ife ENEMY_ANIM2 2 cactor 22161
+            ife ENEMY_ANIM2 3 cactor 22166
+            ife ENEMY_ANIM2 0 cactor 22171
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 42
+                {
+                set sprite[j].xrepeat 65
+                set sprite[j].yrepeat 65
+                }
+            else
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            break
+        case BRUISER
+            ife ENEMY_ANIM2 1 cactor 7535
+            ife ENEMY_ANIM2 2 cactor 7540
+            ife ENEMY_ANIM2 3 cactor 7545
+            ife ENEMY_ANIM2 0 cactor 7550
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 36
+                set sprite[j].yrepeat 36
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case BRUISERSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 7536
+            ife ENEMY_ANIM2 2 cactor 7541
+            ife ENEMY_ANIM2 3 cactor 7546
+            ife ENEMY_ANIM2 0 cactor 7551
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 36
+                set sprite[j].yrepeat 36
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case SPIRIT
+            ife ENEMY_ANIM2 1 cactor 22016
+            ife ENEMY_ANIM2 2 cactor 22021
+            ife ENEMY_ANIM2 3 cactor 22026
+            ife ENEMY_ANIM2 0 cactor 22031
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            else
+                {
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case SPIRITSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 22017
+            ife ENEMY_ANIM2 2 cactor 22022
+            ife ENEMY_ANIM2 3 cactor 22027
+            ife ENEMY_ANIM2 0 cactor 22032
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            else
+                {
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case SHADE
+            ife ENEMY_ANIM2 1 cactor 7472
+            ife ENEMY_ANIM2 2 cactor 7477
+            ife ENEMY_ANIM2 3 cactor 7482
+            ife ENEMY_ANIM2 0 cactor 7487
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case SHADESTAYPUT
+            ife ENEMY_ANIM2 1 cactor 7473
+            ife ENEMY_ANIM2 2 cactor 7478
+            ife ENEMY_ANIM2 3 cactor 7483
+            ife ENEMY_ANIM2 0 cactor 7488
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 60
+                set sprite[j].yrepeat 60
+                }
+            else
+                {
+                set sprite[j].xrepeat 50
+                set sprite[j].yrepeat 50
+                }
+            break
+        case HADESPHERE
+            ife ENEMY_ANIM2 1 cactor 8192
+            ife ENEMY_ANIM2 2 cactor 8197
+            ife ENEMY_ANIM2 3 cactor 8192
+            ife ENEMY_ANIM2 0 cactor 8197
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                }
+            else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            break
+        case HADESPHERESTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8193
+            ife ENEMY_ANIM2 2 cactor 8198
+            ife ENEMY_ANIM2 3 cactor 8193
+            ife ENEMY_ANIM2 0 cactor 8198
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 70
+                set sprite[j].yrepeat 70
+                }
+            else
+                {
+                set sprite[j].xrepeat 50
+                set sprite[j].yrepeat 50
+                }
+            break
+        case MAEPHISTO
+            ife ENEMY_ANIM2 1 cactor 14336
+            ife ENEMY_ANIM2 2 cactor 14341
+            ife ENEMY_ANIM2 3 cactor 14346
+            ife ENEMY_ANIM2 0 cactor 14351
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+            break
+        case FLESHWIZARD
+            ife ENEMY_ANIM2 1 cactor 8368
+            ife ENEMY_ANIM2 2 cactor 8373
+            ife ENEMY_ANIM2 3 cactor 8368
+            ife ENEMY_ANIM2 0 cactor 8373
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case FLESHWIZARDSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8369
+            ife ENEMY_ANIM2 2 cactor 8374
+            ife ENEMY_ANIM2 3 cactor 8369
+            ife ENEMY_ANIM2 0 cactor 8374
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case SATYR
+            ife ENEMY_ANIM2 1 cactor 7424
+            ife ENEMY_ANIM2 2 cactor 7429
+            ife ENEMY_ANIM2 3 cactor 7434
+            ife ENEMY_ANIM2 0 cactor 7439
+            ifand sprite[j].cstat 2 nullop else set sprite[j].blend 0
+            ife sprite[j].pal 47
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case SATYRSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 7425
+            ife ENEMY_ANIM2 2 cactor 7430
+            ife ENEMY_ANIM2 3 cactor 7435
+            ife ENEMY_ANIM2 0 cactor 7440
+            ife sprite[j].pal 47
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case Z_GRENADEL
+            ife ENEMY_ANIM2 1 cactor 16640
+            ife ENEMY_ANIM2 2 cactor 16645
+            ife ENEMY_ANIM2 3 cactor 16650
+            ife ENEMY_ANIM2 0 cactor 16655
+            ife sprite[j].pal 24
+                {
+                set sprite[j].pal 43
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+            ife sprite[j].pal 43
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+                {
+                ife sprite[j].pal 0 set sprite[j].pal 21
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case Z_GRENADEL_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 16641
+            ife ENEMY_ANIM2 2 cactor 16646
+            ife ENEMY_ANIM2 3 cactor 16651
+            ife ENEMY_ANIM2 0 cactor 16656
+            ife sprite[j].pal 24
+                {
+                set sprite[j].pal 43
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+            ife sprite[j].pal 43
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+                {
+                ife sprite[j].pal 0 set sprite[j].pal 21
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case ZCHAING
+            ife ENEMY_ANIM2 1 cactor 8323
+            ife ENEMY_ANIM2 2 cactor 8328
+            ife ENEMY_ANIM2 3 cactor 8333
+            ife ENEMY_ANIM2 0 cactor 8338
+            ife sprite[j].pal 24
+                {
+                set sprite[j].pal 43
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+            ife sprite[j].pal 43
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+                {
+                ife sprite[j].pal 0 set sprite[j].pal 10
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case ZCHAINGSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8324
+            ife ENEMY_ANIM2 2 cactor 8329
+            ife ENEMY_ANIM2 3 cactor 8334
+            ife ENEMY_ANIM2 0 cactor 8339
+            ife sprite[j].pal 24
+                {
+                set sprite[j].pal 43
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+            ife sprite[j].pal 43
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            else
+                {
+                ife sprite[j].pal 0 set sprite[j].pal 10
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                }
+            break
+        case ZSOLDIER
+            ife ENEMY_ANIM2 1 cactor 13979
+            ife ENEMY_ANIM2 2 cactor 13984
+            ife ENEMY_ANIM2 3 cactor 13989
+            ife ENEMY_ANIM2 0 cactor 13994
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case ZSOLDIER_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 13980
+            ife ENEMY_ANIM2 2 cactor 13985
+            ife ENEMY_ANIM2 3 cactor 13980
+            ife ENEMY_ANIM2 0 cactor 13995
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case ZSOLDIER2
+            ife ENEMY_ANIM2 1 cactor 15283
+            ife ENEMY_ANIM2 2 cactor 15288
+            ife ENEMY_ANIM2 3 cactor 15293
+            ife ENEMY_ANIM2 0 cactor 15298
+            ife sprite[j].pal 24 set sprite[j].pal 25
+            ife sprite[j].pal 25
+                {
+                set sprite[j].xrepeat 29
+                set sprite[j].yrepeat 29
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case ZSOLDIER2_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 15284
+            ife ENEMY_ANIM2 2 cactor 15289
+            ife ENEMY_ANIM2 3 cactor 15294
+            ife ENEMY_ANIM2 0 cactor 15299
+            ife sprite[j].pal 24 set sprite[j].pal 25
+            ife sprite[j].pal 25
+                {
+                set sprite[j].xrepeat 29
+                set sprite[j].yrepeat 29
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case ZSCIEN
+            ife ENEMY_ANIM2 1 cactor 7633
+            ife ENEMY_ANIM2 2 cactor 7638
+            ife ENEMY_ANIM2 3 cactor 7643
+            ife ENEMY_ANIM2 0 cactor 7648
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 29
+                set sprite[j].yrepeat 29
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case ZSCIENSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 7634
+            ife ENEMY_ANIM2 2 cactor 7639
+            ife ENEMY_ANIM2 3 cactor 7644
+            ife ENEMY_ANIM2 0 cactor 7649
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 29
+                set sprite[j].yrepeat 29
+                }
+            else
+                {
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                }
+            break
+        case INFERNAL
+            ife ENEMY_ANIM2 1 cactor 15104
+            ife ENEMY_ANIM2 2 cactor 15109
+            ife ENEMY_ANIM2 3 cactor 15114
+            ife ENEMY_ANIM2 0 cactor 15119
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case INFERNAL_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 15105
+            ife ENEMY_ANIM2 2 cactor 15110
+            ife ENEMY_ANIM2 3 cactor 15115
+            ife ENEMY_ANIM2 0 cactor 15120
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case TERMINATOR
+         ife sprite[j].extra -1
+            {
+            ife ENEMY_ANIM2 1 cactor 24741
+            ife ENEMY_ANIM2 2 cactor 24746
+            ife ENEMY_ANIM2 3 cactor 24751
+            ife ENEMY_ANIM2 0 cactor 24756
+            }
+            set sprite[j].xrepeat 29
+            set sprite[j].yrepeat 25
+            break
+        case TERMINATORSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 24742
+            ife ENEMY_ANIM2 2 cactor 24747
+            ife ENEMY_ANIM2 3 cactor 24752
+            ife ENEMY_ANIM2 0 cactor 24757
+            set sprite[j].xrepeat 29
+            set sprite[j].yrepeat 25
+            break
+        case TERMINATORDUCKING
+            ife ENEMY_ANIM2 1 cactor 24771
+            ife ENEMY_ANIM2 2 cactor 24776
+            ife ENEMY_ANIM2 3 cactor 24771
+            ife ENEMY_ANIM2 0 cactor 24776
+            set sprite[j].xrepeat 29
+            set sprite[j].yrepeat 25
+            break
+        case TERMINATORCRAWLING
+            ife ENEMY_ANIM2 1 cactor 24781
+            ife ENEMY_ANIM2 2 cactor 24786
+            ife ENEMY_ANIM2 3 cactor 24791
+            ife ENEMY_ANIM2 0 cactor 24796
+            set sprite[j].xrepeat 29
+            set sprite[j].yrepeat 25
+            break
+        case OGRE
+            ife ENEMY_ANIM2 1 cactor 12603
+            ife ENEMY_ANIM2 2 cactor 12608
+            ife ENEMY_ANIM2 3 cactor 12613
+            ife ENEMY_ANIM2 0 cactor 12618
+            ife sprite[j].pal 0 set sprite[j].pal 36
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case OGRE_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 12604
+            ife ENEMY_ANIM2 2 cactor 12609
+            ife ENEMY_ANIM2 3 cactor 12614
+            ife ENEMY_ANIM2 0 cactor 12619
+            ife sprite[j].pal 0 set sprite[j].pal 36
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                }
+            else
+                {
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                }
+            break
+        case NETHERBRUTE
+            ife ENEMY_ANIM2 1 cactor 15190
+            ife ENEMY_ANIM2 2 cactor 15195
+            ife ENEMY_ANIM2 3 cactor 15200
+            ife ENEMY_ANIM2 0 cactor 15205
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+            break
+        case NETHERBRUTE_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 15191
+            ife ENEMY_ANIM2 2 cactor 15196
+            ife ENEMY_ANIM2 3 cactor 15201
+            ife ENEMY_ANIM2 0 cactor 15206
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+            break
+        case WOOFER
+            ife ENEMY_ANIM2 1 cactor 28325
+            ife ENEMY_ANIM2 2 cactor 28330
+            ife ENEMY_ANIM2 3 cactor 28335
+            ife ENEMY_ANIM2 0 cactor 28340
+            ifspritepal 47
+                {
+                set sprite[j].xrepeat 36
+                set sprite[j].yrepeat 36
+                }
+                else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                }
+            break
+        case ORC
+            ife ENEMY_ANIM2 1 cactor 24406
+            ife ENEMY_ANIM2 2 cactor 24411
+            ife ENEMY_ANIM2 3 cactor 24416
+            ife ENEMY_ANIM2 0 cactor 24421
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case ORC_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 24407
+            ife ENEMY_ANIM2 2 cactor 24412
+            ife ENEMY_ANIM2 3 cactor 24417
+            ife ENEMY_ANIM2 0 cactor 24422
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+            break
+        case ARCHER
+            ife ENEMY_ANIM2 1 cactor 24447
+            ife ENEMY_ANIM2 2 cactor 24452
+            ife ENEMY_ANIM2 3 cactor 24457
+            ife ENEMY_ANIM2 0 cactor 24462
+            ifspritepal 15
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 24
+                }
+                else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 26
+                }
+            break
+        case ARCHER_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 24448
+            ife ENEMY_ANIM2 2 cactor 24453
+            ife ENEMY_ANIM2 3 cactor 24458
+            ife ENEMY_ANIM2 0 cactor 24463
+            ifspritepal 15
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 24
+                }
+                else
+                {
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 26
+                }
+            break
+        case BERSERKER
+            ife ENEMY_ANIM2 1 cactor 11696
+            ife ENEMY_ANIM2 2 cactor 11701
+            ife ENEMY_ANIM2 3 cactor 11706
+            ife ENEMY_ANIM2 0 cactor 11711
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+            break
+        case BERSERKER_STAYPUT
+            ife ENEMY_ANIM2 1 cactor 11697
+            ife ENEMY_ANIM2 2 cactor 11702
+            ife ENEMY_ANIM2 3 cactor 11707
+            ife ENEMY_ANIM2 0 cactor 11712
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+            break
+        case CYBERTOUR
+            ife ENEMY_ANIM2 1 cactor 8258
+            ife ENEMY_ANIM2 2 cactor 8263
+            ife ENEMY_ANIM2 3 cactor 8268
+            ife ENEMY_ANIM2 0 cactor 8273
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 34
+                set sprite[j].yrepeat 34
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case CYBERTOURSTAYPUT
+            ife ENEMY_ANIM2 1 cactor 8259
+            ife ENEMY_ANIM2 2 cactor 8264
+            ife ENEMY_ANIM2 3 cactor 8269
+            ife ENEMY_ANIM2 0 cactor 8274
+            ife sprite[j].pal 24
+                {
+                set sprite[j].xrepeat 34
+                set sprite[j].yrepeat 34
+                }
+            else
+                {
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                }
+            break
+        case MJ12_ASSASSIN
+                ife ENEMY_ANIM2 1 cactor 18812
+                ife ENEMY_ANIM2 2 cactor 18817
+                ife ENEMY_ANIM2 3 cactor 18822
+                ife ENEMY_ANIM2 0 cactor 18827
+                ife sprite[j].pal 0 set sprite[j].pal 12
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case MJ12_ASSASSIN_JUMP
+                ife ENEMY_ANIM2 1 cactor 18832
+                ife ENEMY_ANIM2 2 cactor 18833
+                ife ENEMY_ANIM2 3 cactor 18834
+                ife ENEMY_ANIM2 0 cactor 18835
+                ife sprite[j].pal 0 set sprite[j].pal 12
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case MJ12_TROOP
+                ife ENEMY_ANIM2 1 cactor 15000
+                ife ENEMY_ANIM2 2 cactor 15005
+                ife ENEMY_ANIM2 3 cactor 15010
+                ife ENEMY_ANIM2 0 cactor 15015
+                ife sprite[j].pal 0 set sprite[j].pal 12
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                break
+        case MJ12_TROOP_STAYPUT
+                ife ENEMY_ANIM2 1 cactor 15001
+                ife ENEMY_ANIM2 2 cactor 15006
+                ife ENEMY_ANIM2 3 cactor 15011
+                ife ENEMY_ANIM2 0 cactor 15016
+                ife sprite[j].pal 0 set sprite[j].pal 12
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                break
+        case PITFIEND
+        case PITFIEND_STAYPUT
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                break
+        case PE_SENTRY
+                set sprite[j].xrepeat 30
+                set sprite[j].yrepeat 30
+                break
+        case PE_ELDER
+                ife ENEMY_ANIM2 1 cactor 18766
+                ife ENEMY_ANIM2 2 cactor 18771
+                ife ENEMY_ANIM2 3 cactor 18776
+                ife ENEMY_ANIM2 0 cactor 18781
+                ife sprite[j].pal 24
+                    {
+                    set sprite[j].xrepeat 26
+                    set sprite[j].yrepeat 26
+                    }
+                else
+                    {
+                    set sprite[j].xrepeat 24
+                    set sprite[j].yrepeat 24
+                    }
+                break
+        case PE_ELDER_STAYPUT
+                ife ENEMY_ANIM2 1 cactor 18767
+                ife ENEMY_ANIM2 2 cactor 18772
+                ife ENEMY_ANIM2 3 cactor 18777
+                ife ENEMY_ANIM2 0 cactor 18782
+                ife sprite[j].pal 24
+                    {
+                    set sprite[j].xrepeat 26
+                    set sprite[j].yrepeat 26
+                    }
+                else
+                    {
+                    set sprite[j].xrepeat 24
+                    set sprite[j].yrepeat 24
+                    }
+                break
+        case PE_TROOP
+                ife ENEMY_ANIM2 1 cactor 18688
+                ife ENEMY_ANIM2 2 cactor 18693
+                ife ENEMY_ANIM2 3 cactor 18698
+                ife ENEMY_ANIM2 0 cactor 18703
+                ife sprite[j].pal 24
+                    {
+                    set sprite[j].xrepeat 26
+                    set sprite[j].yrepeat 26
+                    }
+                else
+                    {
+                    ife sprite[j].pal 0 spritepal 12
+                    set sprite[j].xrepeat 24
+                    set sprite[j].yrepeat 24
+                    }
+                break
+        case PE_TROOP_STAYPUT
+                ife ENEMY_ANIM2 1 cactor 18689
+                ife ENEMY_ANIM2 2 cactor 18694
+                ife ENEMY_ANIM2 3 cactor 18699
+                ife ENEMY_ANIM2 0 cactor 18704
+                ife sprite[j].pal 24
+                    {
+                    set sprite[j].xrepeat 26
+                    set sprite[j].yrepeat 26
+                    }
+                else
+                    {
+                    ife sprite[j].pal 0 spritepal 12
+                    set sprite[j].xrepeat 24
+                    set sprite[j].yrepeat 24
+                    }
+                break
+        case DARKAVATAR
+                set sprite[j].xrepeat 34
+                set sprite[j].yrepeat 34
+                break
+        case LIZTROOP
+        case 1681
+        case 1715
+        case 1725
+        case 1741
+        case 1742
+        case 1744
+        case 1710
+        case 1711
+                ife sprite[j].pal 0 spritepal 11
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case 1682
+                ife ENEMY_ANIM2 1 cactor 1682
+                ife ENEMY_ANIM2 2 cactor 1687
+                ife ENEMY_ANIM2 3 cactor 1692
+                ife ENEMY_ANIM2 0 cactor 1697
+                ife sprite[j].pal 0 spritepal 11
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case SPACE_LIZTROOP
+        case 1880
+                ife sprite[j].pal 0 spritepal 11
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                break
+        case 916
+                set sprite[j].xrepeat 16
+                set sprite[j].yrepeat 16
+                break
+        case TANK
+            ife ENEMY_ANIM2 1 cactor 3185
+            ife ENEMY_ANIM2 2 cactor 3190
+            ife ENEMY_ANIM2 3 cactor 3185
+            ife ENEMY_ANIM2 0 cactor 3195
+                set sprite[j].xrepeat 32
+                set sprite[j].yrepeat 32
+                break
+        case PIGCOP
+        case 2001
+        case 2045
+                set sprite[j].xrepeat 28
+                set sprite[j].yrepeat 28
+                break
+        case OCTABRAIN
+        case OCTABRAINSTAYPUT
+                set sprite[j].xrepeat 24
+                set sprite[j].yrepeat 24
+                break
+        case 1920
+        case 2120
+        case 2121
+        case 2150
+        case 2160
+        case 2165
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                break
+        case 14070
+        case 14060
+        case 14063
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+                break
+        case RUSSIAN
+        case 9012
+        case 11858
+                set sprite[j].xrepeat 23
+                set sprite[j].yrepeat 23
+                break
+        case 17850
+                ife ENEMY_ANIM2 1 cactor 17850
+                ife ENEMY_ANIM2 2 cactor 17855
+                ife ENEMY_ANIM2 3 cactor 17860
+                ife ENEMY_ANIM2 0 cactor 17865
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                break
+        case 17851
+                ife ENEMY_ANIM2 1 cactor 17851
+                ife ENEMY_ANIM2 2 cactor 17856
+                ife ENEMY_ANIM2 3 cactor 17861
+                ife ENEMY_ANIM2 0 cactor 17866
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                break
+        case 24064
+                ife ENEMY_ANIM2 1 cactor 24064
+                ife ENEMY_ANIM2 2 cactor 24069
+                ife ENEMY_ANIM2 3 cactor 24074
+                ife ENEMY_ANIM2 0 cactor 24079
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                break
+        case 24065
+                ife ENEMY_ANIM2 1 cactor 24065
+                ife ENEMY_ANIM2 2 cactor 24070
+                ife ENEMY_ANIM2 3 cactor 24075
+                ife ENEMY_ANIM2 0 cactor 24080
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                break
+        case 24109
+                ife ENEMY_ANIM2 1 cactor 24109
+                ife ENEMY_ANIM2 2 cactor 24114
+                ife ENEMY_ANIM2 3 cactor 24109
+                ife ENEMY_ANIM2 0 cactor 24114
+                set sprite[j].xrepeat 40
+                set sprite[j].yrepeat 40
+                break
+        case ELITE_LIZMAN
+                ife ENEMY_ANIM2 1 cactor 24137
+                ife ENEMY_ANIM2 2 cactor 24142
+                ife ENEMY_ANIM2 3 cactor 24147
+                ife ENEMY_ANIM2 0 cactor 24152
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                break
+        case ELITE_LIZMAN_STAYPUT
+                ife ENEMY_ANIM2 1 cactor 24138
+                ife ENEMY_ANIM2 2 cactor 24143
+                ife ENEMY_ANIM2 3 cactor 24148
+                ife ENEMY_ANIM2 0 cactor 24153
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                break
+        case ELITE_LIZMAN_JUMP
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                break
+        case CYBERALIEN
+                ife ENEMY_ANIM2 1 cactor 15679
+                ife ENEMY_ANIM2 2 cactor 15684
+                ife ENEMY_ANIM2 3 cactor 15679
+                ife ENEMY_ANIM2 0 cactor 15674
+                set sprite[j].xrepeat 26
+                set sprite[j].yrepeat 26
+                break
+        case CYBERALIEN_STAYPUT
+                ife ENEMY_ANIM2 1 cactor 15680
+                ife ENEMY_ANIM2 2 cactor 15685
+                ife ENEMY_ANIM2 3 cactor 15680
+                ife ENEMY_ANIM2 0 cactor 15675
+                set sprite[j].xrepeat 45
+                set sprite[j].yrepeat 45
+                break
+        case 15584
+        case 15589
+        case 15604
+        case 15574
+        case 17388
+        case 14522
+        case 11088
+        case 4540
+        case 4541
+        case 4542
+        case 4543
+        case 4544
+        case 4545
+        case 4546
+        case 4547
+        case 4548
+        case 4549
+                set sprite[j].xrepeat 25
+                set sprite[j].yrepeat 25
+                break
+        case 5883
+        case 16928
+        case 16929
+        case 16930
+        case 16931
+        case 16932
+        case 16933
+        case 16934
+        case 16945
+        case 16946
+                set sprite[j].xrepeat 18
+                set sprite[j].yrepeat 18
+                break
+        case 14073
+                set sprite[j].xrepeat 22
+                set sprite[j].yrepeat 22
+                break
+        case 8175
+        case 8180
+                set sprite[j].xrepeat 23
+                set sprite[j].yrepeat 23
+                break
+        case 8965
+        ife sprite[j].pal 21
+            {
+            set sprite[j].xrepeat 28
+            set sprite[j].yrepeat 28
+            }
+        else
+            {
+            set sprite[j].xrepeat 25
+            set sprite[j].yrepeat 25
+            }
+            break
+        case PIGBOSS
+                ife ENEMY_ANIM2 1 cactor 24576
+                ife ENEMY_ANIM2 2 cactor 24581
+                ife ENEMY_ANIM2 3 cactor 24586
+                ife ENEMY_ANIM2 0 cactor 24591
+                ife sprite[j].pal 0
+                    {
+                    set sprite[j].xrepeat 45
+                    set sprite[j].yrepeat 45
+                    }
+                else
+                    {
+                    set sprite[j].xrepeat 32
+                    set sprite[j].yrepeat 32
+                    }
+                break
+        case LIZBOSS
+                ife ENEMY_ANIM2 1 cactor 24641
+                ife ENEMY_ANIM2 2 cactor 24646
+                ife ENEMY_ANIM2 3 cactor 24651
+                ife ENEMY_ANIM2 0 cactor 24656
+                ife sprite[j].pal 0
+                    {
+                    set sprite[j].xrepeat 52
+                    set sprite[j].yrepeat 52
+                    }
+                else
+                    {
+                    set sprite[j].xrepeat 26
+                    set sprite[j].yrepeat 26
+                    }
+                break
+        case 1404 // FAKE PLAYER
+        ife sprite[j].extra 0 { cactor 5245 set sprite[j].yrepeat 23 } // James
+        ife sprite[j].extra 1 { cactor 5501 set sprite[j].yrepeat 22 } // Zaxtor
+        ife sprite[j].extra 2 { cactor 6400 ifspritepal 0 spritepal 21 set sprite[j].yrepeat 22 } // Merlijn
+        ife sprite[j].extra 3 { cactor 6013 ifspritepal 0 spritepal 11 set sprite[j].yrepeat 22 } // Highwire
+        ife sprite[j].extra 4 { cactor 6336 ifspritepal 0 spritepal 21 set sprite[j].yrepeat 25 } // Sang
+        ife sprite[j].extra 5 { cactor 6656 ifspritepal 0 spritepal 12 set sprite[j].yrepeat 23 } // Rusty
+        ife sprite[j].extra 6 { cactor 6430 ifspritepal 0 spritepal 21 set sprite[j].yrepeat 24 } // Geoffrey
+        ife sprite[j].extra 7 { cactor 6912 ifspritepal 0 spritepal 11 set sprite[j].yrepeat 23 } // Mikko
+        ife sprite[j].extra 13 { cactor 16384 set sprite[j].yrepeat 24 }  // Micky
+        ife sprite[j].extra 14 { cactor 20736 set sprite[j].yrepeat 26 } // Snowfall
+        ife sprite[j].extra 17 { cactor 27146 set sprite[j].yrepeat 23 } // Kagura
+        break
+        case 9098 set sprite[j].picnum 9087 break // Abyssal stick
+        case 8420 set sprite[j].picnum 8414 break
+        case 1405
+        cactor 1404
+        break
+        case 8623
+            set sprite[j].blend 255
+        break
+        case 901
+        case 902
+                set sprite[j].xrepeat 4
+                set sprite[j].yrepeat 4
+                break
+        case 490
+        case 10037
+        case 5868
+        case 5869
+        case 1095
+        case 3375
+        case 14296
+        case 3792
+        case 1020
+        case 3070
+        case 21616
+        case 7676
+        case 2271
+        case 2311
+        case 7038
+        case 17133
+        case 9175
+        case 1220
+        case 9433
+        case 9805
+        case 18225
+        case 18224
+        case 16290
+        case 16327
+        case 10613
+        case 13949
+        case 13950
+        case 13951
+        case 13952
+        case 11309
+        case 11686
+        case 16234
+        case 16292
+        case 17128
+        case 17129
+        case 17130
+        case 17131
+        case 17323
+        case 18333
+        case 18428
+        case 18429
+        case 18431
+        case 18473
+        case 18646
+        case 18647
+        case 18648
+        case 18649
+        case 19619
+        case 19620
+        case 19621
+        case 19622
+        case 19712
+        case 19713
+        case 19714
+        case 19715
+        case 19716
+        case 19717
+        case 19718
+        case 19719
+        case 19720
+        case 19721
+        case 19722
+        case 19723
+        case 19724
+        case 19725
+        case 19726
+        case 19727
+        case 19728
+        case 19729
+        case 19730
+        case 19731
+        case 19732
+        case 19733
+        case 19734
+        case 19735
+        case 19736
+        case 19737
+        case 19738
+        case 19739
+        case 19740
+        case 19741
+        case 19742
+        case 19743
+        case 19744
+        case 19745
+        case 19746
+        case 19747
+        case 19748
+        case 19749
+        case 19750
+        case 19751
+        case 19752
+        case 19753
+        case 19754
+        case 19755
+        case 19756
+        case 19757
+        case 19623
+        case 19624
+        case 19625
+        case 19626
+        case 19627
+        case 19628
+        case 19629
+        case 19630
+        case 19631
+        case 19632
+        case 19654
+        case 19336
+        case 19340
+        case 20409
+        case 1677
+        case 1678
+        case 1635
+        case 1634
+        case 1633
+        case 1632
+        case 2310
+        case 20420
+        case 10078
+        case 22428
+        case 3582
+        case 18470
+        case 18654
+        case 19685
+        case 17922
+        case 23693
+        case 13867
+        case 22729
+        case 23784
+        case 8254
+        case 24268
+        case 25149
+        case 25152
+        case 25154
+        case 25254
+        case 25255
+        case 25256
+        case 5515
+        set sprite[j].blend 255
+        break
+        endswitch
+    }
+endevent
