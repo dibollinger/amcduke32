@@ -3570,7 +3570,8 @@ static int32_t DrawTiles(int32_t iTopLeft, int32_t iSelected, int32_t nXTiles, i
             glDrawBuffer(GL_FRONT_AND_BACK);
     }
 #endif
-    videoClearViewableArea(-1);
+    if (purpleon) videoClearViewableArea(255L);
+    else videoClearViewableArea(-1);
 
     videoBeginDrawing();
 
