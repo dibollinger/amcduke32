@@ -260,19 +260,20 @@ onevent EVENT_DISPLAYROOMS
             // else getp[].ang PREV_MELEE_ANG
         }
     
-    // Vehicles Fix:
+    // Vehicles angle fix:
     ifg player_in_vehicle 0
-        ifn VEHICLE_ANG -1 set cameraang VEHICLE_ANG 
-    else ifg PLAYERONTHEBIKE 0
         ifn VEHICLE_ANG -1 set cameraang VEHICLE_ANG 
     else ifg VEHICLE_ANG -1 
         set VEHICLE_ANG -1
     
+    // bike horiz fix
     ifg PLAYERONTHEBIKE 0
+    {
         ifn VEHICLE_HORIZ -1 
-            {
+        {
             set camerahoriz VEHICLE_HORIZ
-            }
+        }
+    }
     else ifg VEHICLE_HORIZ -1
         set VEHICLE_HORIZ -1
 

@@ -315,9 +315,11 @@ else ife BIKESTATE 1
   
   ife bike_mode 1
   {
-  getincangle e3 sprite[].ang player[].ang
-  ifg e3 475 { geta[].ang e1 add e1 475 setp[].ang e1 set VEHICLE_ANG e1 }
-  ifl e3 -475 { geta[].ang e1 sub e1 475 setp[].ang e1 set VEHICLE_ANG e1 }
+      getincangle e3 sprite[].ang player[].ang
+      ifg e3 475 { geta[].ang e1 add e1 475 setp[].ang e1 }
+      else ifl e3 -475 { geta[].ang e1 sub e1 475 setp[].ang e1 }
+      else { getp[].ang e1 }
+      set VEHICLE_ANG e1
   }
   else { setp[].ang e1 set VEHICLE_ANG e1 }
   getp[].oang e1
