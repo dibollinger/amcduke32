@@ -1098,13 +1098,16 @@ useractor notenemy WTANKGUN
       move WTANKSTOPPED faceplayer
       setactorvar[SET].SET THISACTOR
     }
-    else
+    else ifg player_in_vehicle 0
     {
       getactorvar[SET].SET x
       geta[x].ang x
 	  geta[].ang TEMP4
 	  ifvarvarn TEMP4 x soundonce TANK_ROTATE else stopactorsound THISACTOR TANK_ROTATE
       seta[].ang x
+
+      // This should fix cameraang issues in event_displayrooms
+      setplayervar[].VEHICLE_ANG x
     }
   }
   geta[SET].x x
