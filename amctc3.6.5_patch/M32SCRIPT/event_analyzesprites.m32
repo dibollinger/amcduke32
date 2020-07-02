@@ -750,7 +750,7 @@ onevent EVENT_ANALYZESPRITES
                 set sprite[j].yrepeat 22
                 }
             break
-        case THOTH
+        case ANUBIS
             ife ENEMY_ANIM2 1 cactor 12544
             ife ENEMY_ANIM2 2 cactor 12549
             ife ENEMY_ANIM2 3 cactor 12554
@@ -767,7 +767,7 @@ onevent EVENT_ANALYZESPRITES
                 set sprite[j].yrepeat 28
                 }
             break
-        case THOTH_STAYPUT
+        case ANUBIS_STAYPUT
             ife ENEMY_ANIM2 1 cactor 12545
             ife ENEMY_ANIM2 2 cactor 12550
             ife ENEMY_ANIM2 3 cactor 12555
@@ -1382,70 +1382,6 @@ onevent EVENT_ANALYZESPRITES
             ife ENEMY_ANIM2 0 cactor 15206
                 set sprite[j].xrepeat 40
                 set sprite[j].yrepeat 40
-            break
-        case WOOFER
-            ife ENEMY_ANIM2 1 cactor 28325
-            ife ENEMY_ANIM2 2 cactor 28330
-            ife ENEMY_ANIM2 3 cactor 28335
-            ife ENEMY_ANIM2 0 cactor 28340
-            ifspritepal 47
-                {
-                set sprite[j].xrepeat 36
-                set sprite[j].yrepeat 36
-                }
-                else
-                {
-                set sprite[j].xrepeat 30
-                set sprite[j].yrepeat 30
-                }
-            break
-        case ORC
-            ife ENEMY_ANIM2 1 cactor 24406
-            ife ENEMY_ANIM2 2 cactor 24411
-            ife ENEMY_ANIM2 3 cactor 24416
-            ife ENEMY_ANIM2 0 cactor 24421
-                set sprite[j].xrepeat 26
-                set sprite[j].yrepeat 26
-            break
-        case ORC_STAYPUT
-            ife ENEMY_ANIM2 1 cactor 24407
-            ife ENEMY_ANIM2 2 cactor 24412
-            ife ENEMY_ANIM2 3 cactor 24417
-            ife ENEMY_ANIM2 0 cactor 24422
-                set sprite[j].xrepeat 26
-                set sprite[j].yrepeat 26
-            break
-        case ARCHER
-            ife ENEMY_ANIM2 1 cactor 24447
-            ife ENEMY_ANIM2 2 cactor 24452
-            ife ENEMY_ANIM2 3 cactor 24457
-            ife ENEMY_ANIM2 0 cactor 24462
-            ifspritepal 15
-                {
-                set sprite[j].xrepeat 28
-                set sprite[j].yrepeat 24
-                }
-                else
-                {
-                set sprite[j].xrepeat 30
-                set sprite[j].yrepeat 26
-                }
-            break
-        case ARCHER_STAYPUT
-            ife ENEMY_ANIM2 1 cactor 24448
-            ife ENEMY_ANIM2 2 cactor 24453
-            ife ENEMY_ANIM2 3 cactor 24458
-            ife ENEMY_ANIM2 0 cactor 24463
-            ifspritepal 15
-                {
-                set sprite[j].xrepeat 28
-                set sprite[j].yrepeat 24
-                }
-                else
-                {
-                set sprite[j].xrepeat 30
-                set sprite[j].yrepeat 26
-                }
             break
         case BERSERKER
             ife ENEMY_ANIM2 1 cactor 11696
