@@ -40,6 +40,7 @@ static void process_vacapp15(int32_t crcval);
 //    name                                     crc          size      flags                         dependency  scriptname     postprocessing
 static internalgrpinfo_t const internalgrpfiles[] =
 {
+#ifndef AMC_BUILD
     { "Duke Nukem 3D",                         DUKE13_CRC,  26524524, GAMEFLAG_DUKE,                         0, NULL, NULL},
     { "Duke Nukem 3D (South Korean Censored)", DUKEKR_CRC,  26385383, GAMEFLAG_DUKE,                         0, NULL, NULL},
     { "Duke Nukem 3D: Atomic Edition",         DUKE15_CRC,  44356548, GAMEFLAG_DUKE,                         0, NULL, NULL},
@@ -69,6 +70,9 @@ static internalgrpinfo_t const internalgrpfiles[] =
     { "NAPALM",                                NAPALM_CRC,  44365728, GAMEFLAG_NAM|GAMEFLAG_NAPALM,          0, NULL, NULL},
     { "WWII GI",                               WW2GI_CRC,   77939508, GAMEFLAG_WW2GI,                        0, NULL, NULL},
     { "Platoon Leader",                        PLATOONL_CRC, 37852572, GAMEFLAG_WW2GI|GAMEFLAG_ADDON,        WW2GI_CRC, "PLATOONL.DEF", NULL},
+#else
+    { "AMC TC",                                AMCTC_CRC,   16888715, GAMEFLAG_STANDALONE,                   0, "CODE/AMC_MAIN.CON", NULL},
+#endif
 };
 #endif
 

@@ -33,10 +33,16 @@ const char *g_gameNamePtr = NULL;
 // grp/con handling
 
 static const char *defaultconfilename                = "GAME.CON";
+#ifdef AMC_BUILD
+static const char *defaultgamegrp[GAMECOUNT]         = { "AMCTC.GRP" };
+static const char *defaultdeffilename[GAMECOUNT]     = { "AMCTC.DEF" };
+static const char *defaultgameconfilename[GAMECOUNT] = { "CODE/AMCTC.CON", "EDUKE.CON" };
+#else
 #ifndef EDUKE32_STANDALONE
 static const char *defaultgamegrp[GAMECOUNT]         = { "DUKE3D.GRP", "NAM.GRP", "NAPALM.GRP", "WW2GI.GRP" };
 static const char *defaultdeffilename[GAMECOUNT]     = { "duke3d.def", "nam.def", "napalm.def", "ww2gi.def" };
 static const char *defaultgameconfilename[GAMECOUNT] = { "EDUKE.CON", "NAM.CON", "NAPALM.CON", "WW2GI.CON" };
+#endif
 #endif
 
 // g_grpNamePtr can ONLY point to a malloc'd block (length BMAX_PATH)

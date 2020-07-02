@@ -6214,6 +6214,12 @@ void C_Compile(const char *fileName)
     {
         if (g_loadFromGroupOnly == 1 || numgroupfiles == 0)
         {
+#ifdef AMC_BUILD
+            char const *gf = G_GrpFile();
+            Bsprintf(tempbuf,"Required game data was not found.  This binary is only intended to be run in a valid AMC TC install folder!\n\n"
+                     "You must copy this binary to your AMC TC directory before continuing!");
+            G_GameExit(tempbuf);
+#else
 #ifndef EDUKE32_STANDALONE
             char const *gf = G_GrpFile();
             Bsprintf(tempbuf,"Required game data was not found.  A valid copy of \"%s\" or other compatible data is needed to run EDuke32.\n\n"
@@ -6221,6 +6227,7 @@ void C_Compile(const char *fileName)
             G_GameExit(tempbuf);
 #else
             G_GameExit(" ");
+#endif
 #endif
         }
         else
