@@ -156,13 +156,7 @@ onevent EVENT_DISPLAYROOMS
     ifg CHOKE 0 ifl camerahoriz 50 set camerahoriz 50
     ifg FCHOKE 0 ifl camerahoriz 50 set camerahoriz 50
    
-   // Horse view fix
-   ifn player_using_horse -1 ifl player[].horiz 0 
-        {
-        set camerahoriz 0
-        setp[].horiz 0
-        }
-   
+ 
     // Phantasm ball attack
     ifg PHANTASM_STICK -1
     {
@@ -259,13 +253,22 @@ onevent EVENT_DISPLAYROOMS
             }
             // else getp[].ang PREV_MELEE_ANG
         }
-    
-    // Vehicles angle fix:
+
+    // Vehicles angle fix (if not on horse)
     ifg player_in_vehicle 0
+      ife player_using_horse -1
         ifn VEHICLE_ANG -1 set cameraang VEHICLE_ANG 
     else ifg VEHICLE_ANG -1 
         set VEHICLE_ANG -1
-    
+
+   // Horse horiz fix
+   ifn player_using_horse -1 ifl player[].horiz 0 
+   {
+        set camerahoriz 0
+        setp[].horiz 0
+   }
+
+
     // bike horiz fix
     ifg PLAYERONTHEBIKE 0
     {
