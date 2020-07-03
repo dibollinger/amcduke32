@@ -5916,6 +5916,8 @@ endevent
 // HORSE
 // *************************************************
 
+move HORSE_FORWARD 10 0
+
 action HORSE_INACTION 5
 
 define HORSE 21760
@@ -5947,7 +5949,7 @@ ifspritepal 3 // starts player on horse
 
 ifaction ACAR
 {
-ifcansee ifrnd 2 sound HORSE_NEIGH2
+ifcansee ifrnd 1 sound HORSE_NEIGH2
 ifpdistl 1524
 ife player_in_vehicle 0
  ifp palive
@@ -6091,7 +6093,7 @@ ifand EXTBITS_PRESS 2
 	else
 		{
 		ifg TEMP5 0 sub TEMP5 1
-		ifg forward_accelerate -4200 sub forward_accelerate 8
+		ifg forward_accelerate -256 sub forward_accelerate 8
 		}
 	}
 	else ifl forward_accelerate 0 add forward_accelerate 4
@@ -6152,7 +6154,7 @@ ifand EXTBITS_PRESS 2
 	
 	ifl forward_accelerate 400
 		{
-		ifrnd 4 sound HORSE_NEIGH2
+		ifrnd 2 sound HORSE_NEIGH2
 		}
 	ifg forward_accelerate 1600 
 		{
@@ -6187,7 +6189,7 @@ ifand EXTBITS_PRESS 2
 	else
 	ifl forward_accelerate -1
 	{
-	move BOAT_FORWARD geth
+	move HORSE_FORWARD geth
 	geta[].xvel TEMP
 	add TEMP forward_accelerate
 	seta[].xvel TEMP
