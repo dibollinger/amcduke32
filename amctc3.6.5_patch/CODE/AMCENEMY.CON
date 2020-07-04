@@ -11830,7 +11830,7 @@ ifai 0
 	spawn SHOOTME
 	state monst_glow
 	sound BRUISER_ALERT
-	ifspritepal 24 { strength 2000 sizeat 36 36 set CURBOSS THISACTOR set BOSS_TYPE 2 }
+	ifspritepal 24 { strength 2000 sizeat 36 36 }
 	else { strength 1250 sizeat 28 28 }
 	action ABRUISERRUN
 	ai AIBRUISERSEEKENEMY

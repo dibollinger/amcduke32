@@ -4252,56 +4252,51 @@ state player_huds
     }
     // set boss type inside switch in future
     switch DISP_TEMP2 
-    case BRUISER 
-		divvar DISP_TEMP 21
-        set BOSS_TYPE 2
-		qputs 1666 Balgaar
-		break
 	case MISTERH 
 		divvar DISP_TEMP 41
         set BOSS_TYPE 5
-		ife sprite[CURBOSS].pal 41 qputs 1666 Abomination
+		ife sprite[CURBOSS].pal 41 qputs 1666
 		else qputs 1666 Mr Hyde
 		break
 	case BOSS1 
 		divvar DISP_TEMP 46
         set BOSS_TYPE 1
-		qputs 1666 Battlelord
+		qputs 1666
 		break
 	case BOSS2 
 		divvar DISP_TEMP 46
         set BOSS_TYPE 1
-		qputs 1666 Cycloid Emperor
+		qputs 1666
 		break
 	case BOSS3 
 		divvar DISP_TEMP 46
         set BOSS_TYPE 1
-        qputs 1666 Cycloid Overlord
+        qputs 1666
 		break
 	case BOSS4 
 		divvar DISP_TEMP 61
         set BOSS_TYPE 1
-		qputs 1666 Alien Queen
+		qputs 1666
 		break
 	case LAVA_BEAST 
 		divvar DISP_TEMP 41
         set BOSS_TYPE 7
-		qputs 1666 Fire Serpent
+		qputs 1666
 		break
 	case ALUDRAN 
 		divvar DISP_TEMP 31
         set BOSS_TYPE 7
-		qputs 1666 Aludran Highlander 
+		qputs 1666
 		break
 	case LIZBOSS 
 		divvar DISP_TEMP 61
         set BOSS_TYPE 1
-		qputs 1666 X-42 Cyber Enforcer
+		qputs 1666
 		break
 	case PIGBOSS 
 		divvar DISP_TEMP 46
         set BOSS_TYPE 1
-		qputs 1666 Pigcop Chieftain
+		qputs 1666
 		break
 	case BOSS5 
 		divvar DISP_TEMP 91
@@ -4311,17 +4306,17 @@ state player_huds
 	case HPOWERSUIT 
 		divvar DISP_TEMP 61
         set BOSS_TYPE 4
-		qputs 1666 Heavy Powersuit
+		qputs 1666
 		break
 	case EAST_ROBOT
 		divvar DISP_TEMP 61
         set BOSS_TYPE 6
-		qputs 1666 Zilla. Inc Powersuit
+		qputs 1666
 		break		
 	case VILMOS_ROBOT 
 		divvar DISP_TEMP 91
         set BOSS_TYPE 4
-		qputs 1666 Vilmos
+		qputs 1666
 		break
 	case TRENTON_SOLARI 
 		divvar DISP_TEMP 101
@@ -4333,24 +4328,24 @@ state player_huds
 		{
 		divvar DISP_TEMP 61 
         set BOSS_TYPE 2
-		qputs 1666 Abyssal Overseer 
+		qputs 1666
 		}
 		else 
 		{ 
 		divvar DISP_TEMP 121
         set BOSS_TYPE 2
-		qputs 1666 Abyssal Despot
+		qputs 1666
 		}
 		break
 	case SPIDERDEMON 
 		divvar DISP_TEMP 121
         set BOSS_TYPE 2
-		qputs 1666 Aranea Imperatrix
+		qputs 1666
 		break
     case CYBERDEMON
         divvar DISP_TEMP 61
         set BOSS_TYPE 2
-        qputs 1666 Tyrant
+        qputs 1666
         break
 	case 5460 // Zaxtor Boss ?
 		divvar DISP_TEMP 6
@@ -4365,7 +4360,7 @@ state player_huds
 	case DARKAVATAR 
 		divvar DISP_TEMP 81
         set BOSS_TYPE 5
-		qputs 1666 Dark Avatar
+		qputs 1666
 		break
 	case SERPENT_GOD 
 		divvar DISP_TEMP 81
@@ -4375,7 +4370,7 @@ state player_huds
 	case MADRAX 
 		divvar DISP_TEMP 51
         set BOSS_TYPE 0
-		qputs 1666 Madrax
+		qputs 1666 Maddrax
 		break
 	case 21341 // Zaxtor Boss Eyes?
 		divvar DISP_TEMP 71
@@ -4392,17 +4387,17 @@ state player_huds
         ife sprite[CURBOSS].pal 42 divvar DISP_TEMP 26
         else divvar DISP_TEMP 11
         set BOSS_TYPE 7
-		qputs 1666 Scorpion Queen
+		qputs 1666
         break
     case GWBOSS
         divvar DISP_TEMP 61
         set BOSS_TYPE 4
-        qputs 1666 Drone Class LRW-B23  
+        qputs 1666 
         break
     case SHAMBLER
         divvar DISP_TEMP 31
         set BOSS_TYPE 5
-        qputs 1666 Dimensional Shambler
+        qputs 1666
         break
 	default
         set BOSS_TYPE 0
