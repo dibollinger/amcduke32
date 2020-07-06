@@ -4728,6 +4728,12 @@ ends
 
 useractor notenemy 10569
 
+ifaction 0
+	{
+	set TEMP 0
+	action ZERO
+	}
+
  ifp pfacing
   ifpdistl 1024
    ifp palive
@@ -4745,16 +4751,18 @@ useractor notenemy 10569
 			state give_assigned_weapon
 			whilevarn TEMP 12
 				{
-				ife TEMP 11 ife WEAPON_SPECIAL[6] 512 set TEMP 12 // skip the expander if they don't have that slot
-				setp[].gotweapon TEMP 1
-				setp[].ammo_amount TEMP 999 
+				// skip the expander if they don't have that slot
+				ife TEMP 11 ife WEAPON_SPECIAL[6] 512 nullop else 
+					{
+					setp[].gotweapon TEMP 1
+					setp[].ammo_amount TEMP 999 
+					}
 				add TEMP 1
 				}
 			resetcount
 			}
 		}
 	 }
-
 enda
 
 // UPGRADES MACHINE
