@@ -4926,20 +4926,19 @@ void P_ProcessInput(int playerNum)
     if ((lowZhit & 49152) == 16384 && sectorLotag == 1 && trueFloorDist > PHEIGHT + ZOFFSET2)
         sectorLotag = 0;
 
+    actor[pPlayer->i].floorz   = floorZ;
+    actor[pPlayer->i].ceilingz = ceilZ;
+
     if ((highZhit & 49152) == 49152)
     {
         int const spriteNum = highZhit & (MAXSPRITES-1);
 
-        if ((spriteNum != pPlayer->i && sprite[spriteNum].z + PMINHEIGHT > pPlayer->pos.z)
-            || (sprite[spriteNum].statnum == STAT_ACTOR && sprite[spriteNum].extra >= 0))
+        if (sprite[spriteNum].statnum == STAT_ACTOR && sprite[spriteNum].extra >= 0)
         {
             highZhit = 0;
             ceilZ    = pPlayer->truecz;
         }
     }
-
-    actor[pPlayer->i].floorz   = floorZ;
-    actor[pPlayer->i].ceilingz = ceilZ;
 
     if ((lowZhit & 49152) == 49152)
     {
