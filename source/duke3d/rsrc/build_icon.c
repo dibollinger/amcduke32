@@ -1,1 +1,1 @@
-#include "amc_build_icon.c"
+#include "eduke32_icon.c"

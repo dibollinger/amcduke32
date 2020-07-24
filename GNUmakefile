@@ -518,6 +518,11 @@ ifeq ($(FURY),1)
         duke3d_rsrc := $(duke3d_root)/rsrc/fury
     endif
     duke3d_obj := $(obj)/fury
+else ifneq ($(NO_AMCTC), 1)
+    ifeq ($(PLATFORM),WINDOWS)
+        duke3d_rsrc := $(duke3d_root)/rsrc/amctc
+    endif
+    duke3d_obj := $(obj)/amctc
 endif
 
 duke3d_cflags := -I$(duke3d_src)
