@@ -3281,6 +3281,15 @@ badindex:
                     dispatch();
                 }
 
+            vInstruction(CON_SETMUSICVOLUME):
+                insptr++;
+                {
+                    int const perc = Gv_GetVar(*insptr++);
+                    VM_ASSERT((unsigned) perc <= 100, "invalid percentage %d\n", perc);
+                    S_MusicVolume((ud.config.MusicVolume * perc) / 100);
+                    dispatch();
+                }
+
             vInstruction(CON_TIP):
                 insptr++;
                 vm.pPlayer->tipincs = GAMETICSPERSEC;
