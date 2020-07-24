@@ -65,6 +65,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 const char* AppProperName = "Mapster32 (AMC Fork)";
 const char* AppTechnicalName = "mapster32";
 
+#ifdef AMC_BUILD
+
 #if defined(_WIN32)
 #define DEFAULT_GAME_EXEC "amctc.exe"
 #define DEFAULT_GAME_LOCAL_EXEC "amctc.exe"
@@ -74,6 +76,21 @@ const char* AppTechnicalName = "mapster32";
 #else
 #define DEFAULT_GAME_EXEC "amctc"
 #define DEFAULT_GAME_LOCAL_EXEC "./amctc"
+#endif
+
+#else
+
+#if defined(_WIN32)
+#define DEFAULT_GAME_EXEC "eduke32.exe"
+#define DEFAULT_GAME_LOCAL_EXEC "eduke32.exe"
+#elif defined(__APPLE__)
+#define DEFAULT_GAME_EXEC "EDuke32.app/Contents/MacOS/eduke32"
+#define DEFAULT_GAME_LOCAL_EXEC "EDuke32.app/Contents/MacOS/eduke32"
+#else
+#define DEFAULT_GAME_EXEC "eduke32"
+#define DEFAULT_GAME_LOCAL_EXEC "./eduke32"
+#endif
+
 #endif
 
 const char* DefaultGameExec = DEFAULT_GAME_EXEC;
