@@ -892,8 +892,10 @@ int32_t G_SavePlayer(savebrief_t & sv, bool isAutoSave)
     if (!g_netServer && ud.multimode < 2)
     {
         OSD_Printf("Saved: %s\n", fn);
+#ifndef AMC_BUILD
         Bstrcpy(apStrings[QUOTE_RESERVED4], "Game Saved");
         P_DoQuote(QUOTE_RESERVED4, g_player[myconnectindex].ps);
+#endif
     }
 
     ready2send = 1;
