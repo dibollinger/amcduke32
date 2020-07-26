@@ -127,6 +127,7 @@ enum scripttoken_t
     T_NEWGAMECHOICES,
     T_LOCALIZATION, T_STRING,
     T_TILEFONT, T_CHARACTER,
+    T_KEYCONFIGORDER,
 };
 
 static int32_t lastmodelid = -1, lastvoxid = -1, modelskin = -1, lastmodelskin = -1, seenframe = 0;
@@ -409,6 +410,7 @@ static int32_t defsparser(scriptfile *script)
         { "newgamechoices",  T_NEWGAMECHOICES   },
         { "localization",    T_LOCALIZATION     },
         { "tilefont",        T_TILEFONT         },
+        { "keyconfigorder",  T_KEYCONFIGORDER   },
     };
 
     while (1)
@@ -3866,6 +3868,15 @@ static int32_t defsparser(scriptfile *script)
                     }
                 }
             }
+            break;
+        }
+
+        case T_KEYCONFIGORDER: // stub
+        {
+            char *blockend;
+            if (scriptfile_getbraces(script,&blockend))
+                break;
+            script->textptr = blockend+1;
             break;
         }
 

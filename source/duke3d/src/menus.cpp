@@ -212,6 +212,11 @@ they effectively stand in for curly braces as struct initializers.
 
 MenuGameplayStemEntry g_MenuGameplayEntries[MAXMENUGAMEPLAYENTRIES];
 
+// j > 0 -> index i remapped to (j-1)
+// j == 0 -> no remapping
+// j == -1 -> index i unmapped
+uint8_t g_KeyEntryOrder[NUMGAMEFUNCTIONS] = {0};
+
 // common font types
 // tilenums are set after namesdyn runs
 
@@ -868,7 +873,7 @@ static MenuEntry_t *MEL_DISPLAYSETUP_GL_POLYMER[] = {
 static char const MenuKeyNone[] = "  -";
 static char const *MEOSN_Keys[NUMKEYS];
 
-static MenuCustom2Col_t MEO_KEYBOARDSETUPFUNCS_TEMPLATE = { { NULL, NULL, }, MEOSN_Keys, &MF_Minifont, NUMKEYS, 54<<16, 0 };
+static MenuCustom2Col_t MEO_KEYBOARDSETUPFUNCS_TEMPLATE = { { NULL, NULL, }, MEOSN_Keys, &MF_Minifont, NUMKEYS, 54<<16, 0, 0};
 static MenuCustom2Col_t MEO_KEYBOARDSETUPFUNCS[NUMGAMEFUNCTIONS];
 static MenuEntry_t ME_KEYBOARDSETUPFUNCS_TEMPLATE = MAKE_MENUENTRY( NULL, &MF_Minifont, &MEF_KBFuncList, &MEO_KEYBOARDSETUPFUNCS_TEMPLATE, Custom2Col );
 static MenuEntry_t ME_KEYBOARDSETUPFUNCS[NUMGAMEFUNCTIONS];
@@ -2009,7 +2014,22 @@ void Menu_Init(void)
         MEO_KEYBOARDSETUPFUNCS[i] = MEO_KEYBOARDSETUPFUNCS_TEMPLATE;
         MEO_KEYBOARDSETUPFUNCS[i].column[0] = &ud.config.KeyboardKeys[i][0];
         MEO_KEYBOARDSETUPFUNCS[i].column[1] = &ud.config.KeyboardKeys[i][1];
+        MEO_KEYBOARDSETUPFUNCS[i].gameFuncIndex = i;
     }
+
+    // reorder keyboard control menu entries based on DEF
+    MenuEntry_t* tempkeyboardfuncs[NUMGAMEFUNCTIONS];
+    for (i = 0; i < NUMGAMEFUNCTIONS; ++i)
+    {
+        if (g_KeyEntryOrder[i] > 0 && g_KeyEntryOrder[i] < 255)
+            tempkeyboardfuncs[i] = MEL_KEYBOARDSETUPFUNCS[g_KeyEntryOrder[i] - 1];
+        else if (g_KeyEntryOrder[i] == 255)
+            tempkeyboardfuncs[i] = NULL;
+        else
+            tempkeyboardfuncs[i] = MEL_KEYBOARDSETUPFUNCS[i];
+    }
+    Bmemcpy(MEL_KEYBOARDSETUPFUNCS, tempkeyboardfuncs, NUMGAMEFUNCTIONS * sizeof(MenuEntry_t*));
+
     M_KEYBOARDKEYS.numEntries = NUMGAMEFUNCTIONS;
     for (i = 0; i < MENUMOUSEFUNCTIONS; ++i)
     {
@@ -3149,10 +3169,10 @@ static void Menu_PreInput(MenuEntry_t *entry)
         {
             auto column = (MenuCustom2Col_t*)entry->entry;
             char key[2];
-            key[0] = ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][0];
-            key[1] = ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][1];
+            key[0] = ud.config.KeyboardKeys[column->gameFuncIndex][0];
+            key[1] = ud.config.KeyboardKeys[column->gameFuncIndex][1];
             *column->column[M_KEYBOARDKEYS.currentColumn] = 0xff;
-            CONFIG_MapKey(M_KEYBOARDKEYS.currentEntry, ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][0], key[0], ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][1], key[1]);
+            CONFIG_MapKey(M_KEYBOARDKEYS.currentEntry, ud.config.KeyboardKeys[column->gameFuncIndex][0], key[0], ud.config.KeyboardKeys[column->gameFuncIndex][1], key[1]);
             S_PlaySound(KICK_HIT);
             KB_ClearKeyDown(sc_Delete);
         }
@@ -3208,14 +3228,14 @@ static int32_t Menu_PreCustom2ColScreen(MenuEntry_t *entry)
         if (sc != sc_None)
         {
             char key[2];
-            key[0] = ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][0];
-            key[1] = ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][1];
+            key[0] = ud.config.KeyboardKeys[column->gameFuncIndex][0];
+            key[1] = ud.config.KeyboardKeys[column->gameFuncIndex][1];
 
             S_PlaySound(PISTOL_BODYHIT);
 
             *column->column[M_KEYBOARDKEYS.currentColumn] = sc;
 
-            CONFIG_MapKey(M_KEYBOARDKEYS.currentEntry, ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][0], key[0], ud.config.KeyboardKeys[M_KEYBOARDKEYS.currentEntry][1], key[1]);
+            CONFIG_MapKey(M_KEYBOARDKEYS.currentEntry, ud.config.KeyboardKeys[column->gameFuncIndex][0], key[0], ud.config.KeyboardKeys[column->gameFuncIndex][1], key[1]);
 
             KB_ClearKeyDown(sc);
 

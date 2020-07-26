@@ -183,6 +183,9 @@ enum gametokens
     T_HIDDEN,
     T_USERCONTENT,
     T_LOCALIZATION,
+    T_KEYCONFIGORDER,
+    T_REMAP,
+    T_HIDE,
 };
 
 static void gameTimerHandler(void)
@@ -5351,6 +5354,7 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
         { "globalgameflags", T_GLOBALGAMEFLAGS  },
         { "newgamechoices",  T_NEWGAMECHOICES   },
         { "localization"  ,  T_LOCALIZATION     },
+        { "keyconfigorder",  T_KEYCONFIGORDER   },
     };
 
     static const tokenlist soundTokens[] =
@@ -5392,6 +5396,11 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
         { "name",          T_NAME },
         { "locked",        T_LOCKED },
         { "hidden",        T_HIDDEN },
+    };
+    static const tokenlist keyRemapTokens[] =
+    {
+        { "remap",         T_REMAP },
+        { "hide",          T_HIDE  },
     };
 
     do
@@ -5775,6 +5784,70 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
             break;
         }
 
+        case T_KEYCONFIGORDER:
+        {
+
+            char * keyRemapEnd;
+            if (scriptfile_getbraces(pScript,&keyRemapEnd))
+                break;
+
+            if (firstPass)
+            {
+                pScript->textptr = keyRemapEnd+1;
+                break;
+            }
+
+            while (pScript->textptr < keyRemapEnd)
+            {
+                switch (getatoken(pScript, keyRemapTokens, ARRAY_SIZE(keyRemapTokens)))
+                {
+                    case T_REMAP:
+                    {
+                        char * mapPtr = pScript->ltextptr;
+                        int32_t to;
+                        int32_t from;
+                        if (scriptfile_getnumber(pScript, &to))
+                            break;
+                        if (scriptfile_getnumber(pScript, &from))
+                            break;
+
+                        if ((unsigned)from >= NUMGAMEFUNCTIONS || (unsigned)to >= NUMGAMEFUNCTIONS)
+                        {
+                            initprintf("Error: Invalid gamefunction (%d -> %d) remapping near line %s:%d\n",
+                                to, from, pScript->filename, scriptfile_getlinum(pScript, mapPtr));
+                            pScript->textptr = keyRemapEnd+1;
+                            break;
+                        }
+
+                        g_KeyEntryOrder[to] = from + 1;
+
+                        // remove the original entry if not yet overridden
+                        if (g_KeyEntryOrder[from] == 0)
+                            g_KeyEntryOrder[from] = 255;
+
+                        break;
+                    }
+                    case T_HIDE:
+                    {
+                        char * mapPtr = pScript->ltextptr;
+                        int32_t keyIdx;
+                        if (scriptfile_getnumber(pScript, &keyIdx))
+                            break;
+                        if ((unsigned)keyIdx >= NUMGAMEFUNCTIONS)
+                        {
+                            initprintf("Error: Invalid gamefunction %d unmapped near line %s:%d\n",
+                                keyIdx, pScript->filename, scriptfile_getlinum(pScript, mapPtr));
+                            pScript->textptr = keyRemapEnd+1;
+                            break;
+                        }
+
+                        g_KeyEntryOrder[keyIdx] = 255;
+                        break;
+                    }
+                }
+            }
+            break;
+        }
         case T_EOF: return 0;
         default: break;
         }
