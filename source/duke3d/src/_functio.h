@@ -122,6 +122,71 @@ char gamefunctions[NUMGAMEFUNCTIONS][MAXGAMEFUNCLEN] =
 
 const char keydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
    {
+#ifdef AMC_BUILD
+   "W", "",
+   "S", "",
+   "Left", "",
+   "Right", "",
+   "LAlt", "",
+   "", "",
+   "E", "",
+   "", "",
+   "G", "",            // Throw Grenade
+   "Space", "/",
+   "C", "",
+   "V", "",            // Voice Menu
+   "F", "",            // Fire Mode Menu
+   "", "",             // Alt Fire
+   "R", "",            // Reload
+   "A", "",
+   "D", "",
+   "PgUp", "",
+   "PgDn", "",
+   "1", "",
+   "2", "",
+   "3", "",
+   "4", "",
+   "5", "",
+   "6", "",
+   "7", "",
+   "8", "",
+   "9", "",
+   "0", "",
+   "Q", "Enter",
+   "[", "",
+   "]", "",
+   "H", "",
+   "J", "",
+   "N", "",
+   "M", "",
+   "LShift", "",      // Sprint
+   "", "",
+   "Tab", "",
+   "-", "Kpad-",
+   "=", "Kpad+",
+   "Home", "",
+   "X", "",           // PDA
+   "", "",
+   "KPad5", "",
+   "", "",
+   "", "",
+   "", "",
+   "", "",
+   "", "",
+   "'", "",
+   ";", "",
+   "`", "",
+   "", "",
+   "", "",
+   "", "",
+   "CapLck", "",
+   "", "",
+   "F6", "",
+   "F9", "",
+   "", "",
+   "F7", "",
+   "", "",
+#else
    "W", "Kpad8",
    "S", "Kpad2",
    "Left", "Kpad4",
@@ -185,7 +250,10 @@ const char keydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
    "", "",
    "F7", "",
    "C", "",
+#endif
    };
+
+
 
 const char oldkeydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
    {
@@ -256,12 +324,21 @@ const char oldkeydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
 
 static const char * mousedefaults[MAXMOUSEBUTTONS] =
    {
+#ifdef AMC_BUILD
+   "PRIMARY_FIRE",
+   "ALTERNATE_FIRE",
+   "MELEE_ATTACK",
+   "",
+   "Previous_Weapon",
+   "Next_Weapon",
+#else
    "Fire",
    "Alt_Fire",
    "MedKit",
    "",
    "Previous_Weapon",
    "Next_Weapon",
+#endif
    };
 
 
