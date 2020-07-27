@@ -262,8 +262,13 @@ void CONFIG_SetDefaults(void)
     ud.cashman                = 0;
     ud.color                  = 0;
     ud.config.AmbienceToggle  = 1;
+#ifdef AMC_BUILD
+    ud.config.AutoAim         = 0;
+    ud.config.CheckForUpdates = 0;
+#else
     ud.config.AutoAim         = 1;
     ud.config.CheckForUpdates = 1;
+#endif
     ud.config.FXVolume        = 255;
     ud.config.JoystickAimWeight = 4;
     ud.config.JoystickViewCentering = 4;
