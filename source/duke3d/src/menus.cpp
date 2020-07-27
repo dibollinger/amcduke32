@@ -1826,13 +1826,20 @@ void Menu_Init(void)
             if (MenuGameFuncs[i][j] == '_')
                 MenuGameFuncs[i][j] = ' ';
 
-        if (gamefunctions[i][0] != '\0')
+        if (g_KeyEntryOrder[i] != 255)
         {
-            MEOSN_Gamefuncs[k] = MenuGameFuncs[i];
-            MEOSV_Gamefuncs[k] = i;
-            ++k;
+            if (g_KeyEntryOrder[i] > 0) j = g_KeyEntryOrder[i] - 1;
+            else j = i;
+
+            if (gamefunctions[j][0] != '\0')
+            {
+                MEOSN_Gamefuncs[k] = MenuGameFuncs[j];
+                MEOSV_Gamefuncs[k] = j;
+                ++k;
+            }
         }
     }
+    MEOS_Gamefuncs.features |= 4; //unsorted
     MEOS_Gamefuncs.numOptions = k;
 
     for (i = 1; i < NUMKEYS-1; ++i)
@@ -5048,6 +5055,15 @@ static int32_t Menu_FindOptionBinarySearch(MenuOption_t *object, const int32_t q
     return Menu_FindOptionBinarySearch(object, query, searchstart, searchend);
 }
 
+static int32_t Menu_FindOptionLinearSearch(MenuOption_t *object, const int32_t query, uint16_t searchstart, uint16_t searchend)
+{
+    for (int i = searchstart; i < searchend; ++i)
+        if (object->options->optionValues[i] == query)
+            return i;
+
+    return -1;
+}
+
 static int32_t Menu_MouseOutsideBounds(vec2_t const * const pos, const int32_t x, const int32_t y, const int32_t width, const int32_t height)
 {
     return pos->x < x || pos->x >= x + width || pos->y < y || pos->y >= y + height;
@@ -5327,8 +5343,14 @@ static int32_t M_RunMenu_Menu(Menu_t *cm, MenuMenu_t *menu, MenuEntry_t *current
                         break;
                     case Option:
                     {
+                        int32_t currentOption;
                         auto object = (MenuOption_t*)entry->entry;
-                        int32_t currentOption = Menu_FindOptionBinarySearch(object, object->data == NULL ? Menu_EntryOptionSource(entry, object->currentOption) : *object->data, 0, object->options->numOptions);
+
+                        // if unsorted, use linear search; otherwise use binary search
+                        if (object->options->features & 4)
+                            currentOption = Menu_FindOptionLinearSearch(object, object->data == NULL ? Menu_EntryOptionSource(entry, object->currentOption) : *object->data, 0, object->options->numOptions);
+                        else
+                            currentOption = Menu_FindOptionBinarySearch(object, object->data == NULL ? Menu_EntryOptionSource(entry, object->currentOption) : *object->data, 0, object->options->numOptions);
 
                         if (currentOption >= 0)
                             object->currentOption = currentOption;
