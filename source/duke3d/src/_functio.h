@@ -326,7 +326,7 @@ static const char * mousedefaults[MAXMOUSEBUTTONS] =
    {
 #ifdef AMC_BUILD
    "PRIMARY_FIRE",
-   "ALTERNATE_FIRE",
+   "SECONDARY_FIRE",
    "MELEE_ATTACK",
    "",
    "Previous_Weapon",
