@@ -7056,7 +7056,8 @@ ACTOR_STATIC void G_MoveEffectors(void)   //STATNUM 3
             else pData[0]=0;
             break;
 
-        case SE_11_SWINGING_DOOR:
+        case SE_11_SWINGING_DOOR: //Swingdoor
+
             if (pData[5] > 0)
             {
                 pData[5]--;
@@ -7065,81 +7066,40 @@ ACTOR_STATIC void G_MoveEffectors(void)   //STATNUM 3
 
             if (pData[4])
             {
-                auto dukeLivesMatter = [&](vec2_t const *const pos, int const w, int const clipdist)
-                {
-                    if (clipinsidebox(pos, w, clipdist))
-                    {
-                        uint16_t const tag = sector[pSprite->sectnum].lotag & 0x8000u;
-
-                        for (auto SPRITES_OF(STAT_EFFECTOR, i))
-                        {
-                            if (tag == (sector[SECT(i)].lotag & 0x8000u) && SLT(i) == SE_11_SWINGING_DOOR && pSprite->hitag == SHT(i))
-                            {
-                                actor[i].t_data[5] = 2; // delay
-                                actor[i].t_data[2] -= l;
-                                actor[i].t_data[4] -= l;
-                                A_MoveSector(i);
-
-                                actor[i].t_data[3] = -actor[i].t_data[3];
-                                if (actor[i].t_data[4] < 0)
-                                    actor[i].t_data[4] += 512;
-                                else
-                                    actor[i].t_data[4] -= 512;
-
-                                if (sector[SECT(i)].lotag & 0x8000u) sector[SECT(i)].lotag &= 0x7fff;
-                                else sector[SECT(i)].lotag |= 0x8000u;
-                            }
-                        }
-
-                        A_CallSound(pSprite->sectnum, spriteNum);
-
-                        return true;
-                    }
-
-                    return false;
-                };
-
                 int const endWall = pSector->wallptr+pSector->wallnum;
+
+                for (j=pSector->wallptr; j<endWall; j++)
+                {
+                    for (SPRITES_OF(STAT_ACTOR, k))
+                    {
+                        if (sprite[k].extra > 0 &&
+                            (pSprite->sectnum == sprite[k].sectnum ||
+                             sectoradjacent(pSprite->sectnum, sprite[k].sectnum)) &&
+                            A_CheckEnemySprite(&sprite[k]) &&
+                            clipinsidebox(&sprite[k].pos.vec2, j, 256) == 1)
+                            goto next_sprite;
+                    }
+                }
 
                 l = (SP(spriteNum) >> 3) * pData[3];
                 pData[2] += l;
                 pData[4] += l;
-
                 A_MoveSector(spriteNum);
+                setsprite(spriteNum, &pSprite->pos);
 
-                for (auto SPRITES_OF(STAT_ACTOR, spr))
+                for (j=pSector->wallptr; j<endWall; j++)
                 {
-                    auto const foundSprite = (uspriteptr_t)&sprite[spr];
-
-                    int32_t floorZ, ceilZ;
-                    getcorrectzsofslope(pSprite->sectnum, foundSprite->pos.x, foundSprite->pos.y, &ceilZ, &floorZ);
-
-                    if ((foundSprite->pos.z > floorZ || foundSprite->pos.z - ((foundSprite->yrepeat * tilesiz[foundSprite->picnum].y) << 2) < ceilZ)
-                        && foundSprite->extra > 0 && A_CheckEnemySprite(foundSprite))
+                    for (SPRITES_OF(STAT_PLAYER, k))
                     {
-                        auto const clipdist = A_GetClipdist(spr, -1);
-
-                        for (int w = pSector->wallptr; w < endWall; w++)
+                        if (sprite[k].owner >= 0 && clipinsidebox(&sprite[k].pos.vec2, j, pPlayer->clipdist))
                         {
-                            if (dukeLivesMatter(&foundSprite->pos.vec2, w, clipdist))
-                                break;
+                            pData[5] = 8;  // Delay
+                            pData[2] -= l;
+                            pData[4] -= l;
+                            A_MoveSector(spriteNum);
+                            setsprite(spriteNum, &pSprite->pos);
+                            goto next_sprite;
                         }
-                    }
-                }
-
-                for (auto TRAVERSE_CONNECT(plr))
-                {
-                    auto const foundPlayer = g_player[plr].ps;
-                    auto const foundPlayerSprite = &sprite[foundPlayer->i];
-
-                    int32_t floorZ, ceilZ;
-                    getcorrectzsofslope(pSprite->sectnum, foundPlayer->pos.x, foundPlayer->pos.y, &ceilZ, &floorZ);
-
-                    for (int w = pSector->wallptr; w < endWall; w++)
-                    {
-                        if ((foundPlayerSprite->pos.z > floorZ || foundPlayer->pos.z < ceilZ) && foundPlayerSprite->extra > 0
-                            && dukeLivesMatter(&foundPlayer->pos.vec2, w, foundPlayer->clipdist))
-                            break;
                     }
                 }
 
@@ -7148,6 +7108,8 @@ ACTOR_STATIC void G_MoveEffectors(void)   //STATNUM 3
                     pData[4] = 0;
                     pData[2] &= 0xffffff00;
                     A_MoveSector(spriteNum);
+                    setsprite(spriteNum, &pSprite->pos);
+                    break;
                 }
             }
             break;
