@@ -11218,7 +11218,7 @@ ifg CUS_WACK 0
 ifg saving 0
 	{
 	sub saving 1
-	ife saving 28 savenn 9
+	ife saving AUTOSAVE_END savenn 9
 	}
 	
 ifn ALLYSLOT2 -1
@@ -19751,4 +19751,10 @@ ifaction OK
   }
 
 enda
+
+
+appendevent EVENT_POSTSAVEGAME
+    ifl saving MANUALSAVE_START
+        set saving MANUALSAVE_START
+endevent
 

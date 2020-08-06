@@ -13054,21 +13054,21 @@ enda
 useractor notenemy 9412
 cstat 32768
 
-ife AUTOSAVE_ENABLED YES
+ife userdef[].autosave 1
 {
 ifn HITAGSAVED 0
 	{
 	checkactivatormotion HITAGSAVED
 	ife RETURN 1
 		{
-		set saving 30
+		set saving AUTOSAVE_START
 		killit
 		}
 	}
 else
 	ifpdistl 1024
 	{
-	set saving 30
+	set saving AUTOSAVE_START
 	killit
 	}
 }

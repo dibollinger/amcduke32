@@ -100,6 +100,11 @@ definecheat 18 weeb
 definecheat 19 sang
 undefinecheat 26
 
+// SAVING COUNTERS
+define AUTOSAVE_START 30
+define AUTOSAVE_END 28
+define MANUALSAVE_START 27
+
 setgamename AMC TC
 
 define JETPACKCIVSPAWNER 3614
