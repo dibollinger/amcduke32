@@ -919,6 +919,7 @@ cstat 32768
 add INTERNALCOUNT 1
 ifg INTERNALCOUNT 520
 	{
+      set INTERNALCOUNT 0
 	  globalsound MIAGUN_APPEAR
 	  espawn TRANSPORTERBEAM
 	  seta[RETURN].pal 12
@@ -1043,6 +1044,7 @@ ife BULLET_HIT_TYPE 9376 // MIA GUN
 	  ifactor LIZBOSS ifspritepal 0 break
 	  ifactor PIGBOSS ifspritepal 0 break
 	  ifactor BRUISER ifspritepal 24 break
+	  ifactor CYBERDEMON ifspritepal 0 break
 	  
 	  ifactor LIZTROOP
 	  {
