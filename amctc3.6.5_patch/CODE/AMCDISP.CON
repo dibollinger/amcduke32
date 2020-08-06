@@ -4400,7 +4400,7 @@ state player_huds
         qputs 1666
         break
 	default
-        set BOSS_TYPE 0
+        set BOSS_TYPE -1
 		qputs 1666
 		break
 	endswitch
@@ -4431,7 +4431,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 39 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 1 // Cycloid
+	else ife BOSS_TYPE 1 // Cycloid
 		{
 		rotatesprite 158 25 16384 0 11186 0 0 0 0 0 xdim ydim
 			set digx 110
@@ -4453,7 +4453,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 40 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 2 // Demonic
+	else ife BOSS_TYPE 2 // Demonic
 		{
 		rotatesprite 158 25 16384 0 11184 0 0 0 0 0 xdim ydim
 			set digx 110
@@ -4475,7 +4475,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 40 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 3 // Medievil
+	else ife BOSS_TYPE 3 // Medievil
 		{
 		rotatesprite 158 25 16384 0 11188 0 0 0 0 0 xdim ydim
 			set digx 110
@@ -4497,7 +4497,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 40 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 4 // Robotic/Mech
+	else ife BOSS_TYPE 4 // Robotic/Mech
 		{
 		rotatesprite 158 15 16384 0 11192 0 0 8 0 0 xdim ydim
 			set digx 110
@@ -4518,7 +4518,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 32 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 5 // Paranormal
+	else ife BOSS_TYPE 5 // Paranormal
 		{
 		rotatesprite 158 25 16384 0 11193 0 49 0 0 0 xdim ydim
 			set digx 110
@@ -4539,7 +4539,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 38 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 6 // Japanese/Shadow Realm
+	else ife BOSS_TYPE 6 // Japanese/Shadow Realm
 		{
 		rotatesprite 158 25 18384 0 11194 0 0 0 0 0 xdim ydim
 			set digx 110
@@ -4560,7 +4560,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 40 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 7 // Egypt
+	else ife BOSS_TYPE 7 // Egypt
 		{
 		rotatesprite 158 25 16384 0 11190 0 0 0 0 0 xdim ydim
 			set digx 110
@@ -4582,7 +4582,7 @@ state player_huds
         	gametextz STARTALPHANUM 320 41 1666 0 24 0 0 0 xdim ydim HALFSIZE
 		}
 
-	ife BOSS_TYPE 8 // Vampire
+	else ife BOSS_TYPE 8 // Vampire
 		{
 		rotatesprite 158 25 16384 0 11195 0 0 0 0 0 xdim ydim
 			set digx 110
