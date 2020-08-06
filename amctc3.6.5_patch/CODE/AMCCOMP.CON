@@ -181,6 +181,7 @@ eventloadactor 3792 state GETALLTAGS seta[].blend 255 enda
 
 useractor notenemy 3792 // Computer
 ifp palive
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 2048
    ifp pfacing
    ifcansee
@@ -4736,6 +4737,7 @@ ifaction 0
 
  ifp pfacing
   ifpdistl 1024
+ ife player[].newowner -1 // prevent viewscreen bugs 
    ifp palive
     ifcansee
 	 {
@@ -4779,6 +4781,7 @@ ifaction 0
 
 ifaction ZERO
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1024
    ifp palive
     ifcansee
@@ -18743,6 +18746,7 @@ ifn LOTAGSAVED 0
 
 ifaction ZERO
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1024
    ifp palive
     ifcansee
@@ -19147,6 +19151,7 @@ action ZERO
 
 ifaction ZERO
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1024
    ifp palive
     ifcansee
@@ -24069,6 +24074,7 @@ ifaction ZERO
 {
 
 ifp palive
+ ife player[].newowner -1 // prevent viewscreen bugs 
  ifp pfacing
   ifpdistl 1526
   {
@@ -25268,6 +25274,7 @@ ife CHAR 3 ifg VOLUME 0 break
 ife CHAR 7 ifg VOLUME 0 break
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -25487,6 +25494,7 @@ ifp palive
 else
 {
 ifpdistl 1024
+ ife player[].newowner -1 // prevent viewscreen bugs 
  ifp palive
   ifp pfacing
    ifcansee
@@ -25569,6 +25577,7 @@ useractor notenemy 12261
 ife CHAR 5
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -25656,6 +25665,7 @@ action ZERO
 ifspritepal 3
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -25744,6 +25754,7 @@ ifspritepal 3
 ifspritepal 3
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
 	  {
 	  ife MOUSEUP 0 set player_use 0
@@ -25846,6 +25857,7 @@ ifaction ZERO
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -25951,6 +25963,7 @@ ife SAVED_MATVEI 0 killit
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26027,6 +26040,7 @@ ifaction ZERO
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26124,6 +26138,7 @@ ife SAVED_LIZ 0 killit
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26201,6 +26216,7 @@ ifaction ZERO
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26295,6 +26311,7 @@ ifaction ZERO
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26457,6 +26474,7 @@ ifn ZVELSAVED 0
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26576,6 +26594,7 @@ ifaction ALSTAND
 {
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26659,6 +26678,7 @@ action ZERO
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26736,6 +26756,7 @@ ifaction ZERO
 {
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
@@ -26893,6 +26914,7 @@ ifn ZVELSAVED 0
 
 ifp palive
  ifp pfacing
+ ife player[].newowner -1 // prevent viewscreen bugs 
   ifpdistl 1526
   {
   ife MOUSEUP 0 set player_use 0
