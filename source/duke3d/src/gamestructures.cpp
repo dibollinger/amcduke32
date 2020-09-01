@@ -1070,7 +1070,8 @@ memberlabel_t const UserdefsLabels[]=
     { "newgamecustomsubopen",   USERDEFS_NEWGAMECUSTOMSUBOPEN,   LABEL_HASPARM2, MAXMENUGAMEPLAYENTRIES, -1 },
     { "gamepadactive",          USERDEFS_GAMEPADACTIVE,          0, 0, -1 },
     { "m_newgamecustom",        USERDEFS_M_NEWGAMECUSTOM,        0, 0, -1 },
-    { "m_newgamecustomsub",     USERDEFS_M_NEWGAMECUSTOMSUB,     0, 0, -1 }
+    { "m_newgamecustomsub",     USERDEFS_M_NEWGAMECUSTOMSUB,     0, 0, -1 },
+    { "voicetoggle",            USERDEFS_VOICETOGGLE,            0, 0, -1 },
 };
 
 int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
@@ -1264,6 +1265,7 @@ int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
         case USERDEFS_GAMEPADACTIVE:          labelNum = (CONTROL_LastSeenInput == LastSeenInput::Joystick); break;
         case USERDEFS_M_NEWGAMECUSTOM:        labelNum = ud.m_newgamecustom;              break;
         case USERDEFS_M_NEWGAMECUSTOMSUB:     labelNum = ud.m_newgamecustomsub;           break;
+        case USERDEFS_VOICETOGGLE:            labelNum = ud.config.VoiceToggle;           break;
 
         default: EDUKE32_UNREACHABLE_SECTION(labelNum = -1; break);
     }
