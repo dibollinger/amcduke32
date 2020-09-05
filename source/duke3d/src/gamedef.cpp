@@ -39,6 +39,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #if MICROPROFILE_ENABLED != 0
 MicroProfileToken g_eventTokens[MAXEVENTS];
+MicroProfileToken g_eventCounterTokens[MAXEVENTS];
 MicroProfileToken g_actorTokens[MAXTILES];
 MicroProfileToken g_statnumTokens[MAXSTATUS];
 #if 0
@@ -54,7 +55,6 @@ char g_scriptFileName[BMAX_PATH] = "(none)";  // file we're currently compiling
 
 int32_t g_totalLines;
 int32_t g_lineNumber;
-uint32_t g_scriptcrc;
 char g_szBuf[1024];
 
 static char *textptr;
@@ -136,7 +136,6 @@ static hashtable_t *const tables[] = {
 static hashtable_t *const tables_free[] = {
     &h_iter,
     &h_keywords,
-    &h_labels,
 };
 
 static tokenmap_t const vm_keywords[] =
@@ -852,6 +851,9 @@ static const tokenmap_t keywords_for_private_opcodes[] =
 
     { "getsector", CON_GETSECTORSTRUCT },
     { "setsector", CON_SETSECTORSTRUCT },
+
+    { "getplayer", CON_GETPLAYERSTRUCT },
+    { "setplayer", CON_SETPLAYERSTRUCT },
 };
 
 char const *VM_GetKeywordForID(int32_t id)
@@ -1597,10 +1599,18 @@ static void C_GetNextVarType(int32_t type)
                 }
                 break;
             case STRUCT_PLAYER:
-                scriptWriteValue(PlayerLabels[labelNum].lId);
+                {
+                    auto const &label = PlayerLabels[labelNum];
 
-                if (PlayerLabels[labelNum].flags & LABEL_HASPARM2)
-                    C_GetNextVarType(0);
+                    scriptWriteValue(label.lId);
+
+                    Bassert((*varptr & (MAXGAMEVARS-1)) == g_structVarIDs + STRUCT_PLAYER);
+
+                    if (label.flags & LABEL_HASPARM2)
+                        C_GetNextVarType(0);
+                    else if (label.offset != -1 && (label.flags & LABEL_READFUNC) == 0)
+                        *varptr = (*varptr & ~(MAXGAMEVARS-1)) + g_structVarIDs + STRUCT_PLAYER_INTERNAL__;
+                }
                 break;
             case STRUCT_ACTORVAR:
             case STRUCT_PLAYERVAR:
@@ -1962,7 +1972,6 @@ static void C_Include(const char *confile)
     kclose(fp);
 
     mptr[len] = 0;
-    g_scriptcrc = Bcrc32(mptr, len, g_scriptcrc);
 
     if (*textptr == '"') // skip past the closing quote if it's there so we don't screw up the next line
         textptr++;
@@ -3363,6 +3372,7 @@ DO_DEFSTATE:
                 continue;
             }
 
+
         case CON_FINDNEARACTOR3D:
         case CON_FINDNEARACTOR:
         case CON_FINDNEARACTORZ:
@@ -3431,19 +3441,50 @@ DO_DEFSTATE:
             }
 
         case CON_SETPLAYER:
-        case CON_GETPLAYER:
             {
+                intptr_t * const ins = &g_scriptPtr[-1];
                 int const labelNum = C_GetStructureIndexes(1, &h_player);
 
                 if (labelNum == -1)
                     continue;
 
-                scriptWriteValue(PlayerLabels[labelNum].lId);
+                Bassert((*ins & VM_INSTMASK) == CON_SETPLAYER);
 
-                if (PlayerLabels[labelNum].flags & LABEL_HASPARM2)
+                auto const &label = PlayerLabels[labelNum];
+
+                if (label.offset != -1 && (label.flags & (LABEL_WRITEFUNC|LABEL_HASPARM2)) == 0)
+                    *ins = CON_SETPLAYERSTRUCT | LINE_NUMBER;
+
+                scriptWriteValue(label.lId);
+
+                if (label.flags & LABEL_HASPARM2)
                     C_GetNextVar();
 
-                C_GetNextVarType((tw == CON_GETPLAYER) ? GAMEVAR_READONLY : 0);
+                C_GetNextVar();
+                continue;
+            }
+
+        case CON_GETPLAYER:
+            {
+                intptr_t * const ins = &g_scriptPtr[-1];
+                int const labelNum = C_GetStructureIndexes(1, &h_player);
+
+                if (labelNum == -1)
+                    continue;
+
+                Bassert((*ins & VM_INSTMASK) == CON_GETPLAYER);
+
+                auto const &label = PlayerLabels[labelNum];
+
+                if (label.offset != -1 && (label.flags & (LABEL_READFUNC|LABEL_HASPARM2)) == 0)
+                    *ins = CON_GETPLAYERSTRUCT | LINE_NUMBER;
+
+                scriptWriteValue(label.lId);
+
+                if (label.flags & LABEL_HASPARM2)
+                    C_GetNextVar();
+
+                C_GetNextVarType(GAMEVAR_READONLY);
                 continue;
             }
 
@@ -6374,9 +6415,6 @@ void C_Compile(const char *fileName)
     kread(kFile, (char *)textptr, kFileLen);
     kclose(kFile);
 
-    g_scriptcrc = Bcrc32(NULL, 0, 0L);
-    g_scriptcrc = Bcrc32(textptr, kFileLen, g_scriptcrc);
-
     Xfree(apScript);
 
     apScript = (intptr_t *)Xcalloc(1, g_scriptSize * sizeof(intptr_t));
@@ -6397,7 +6435,7 @@ void C_Compile(const char *fileName)
     for (char * m : g_scriptModules)
     {
         C_Include(m);
-        free(m);
+        Bfree(m);
     }
     g_scriptModules.clear();
 
@@ -6462,7 +6500,10 @@ void C_Compile(const char *fileName)
     for (int i=0; i<MAXEVENTS; i++)
     {
         if (VM_HaveEvent(i))
-            g_eventTokens[i] = MicroProfileGetToken("CON VM Events", EventNames[i], MP_AUTO, MicroProfileTokenTypeCpu);
+        {
+            g_eventTokens[i]        = MicroProfileGetToken("CON VM Events", EventNames[i], MP_AUTO, MicroProfileTokenTypeCpu);
+            g_eventCounterTokens[i] = MicroProfileGetCounterToken(EventNames[i]);
+        }
     }
 
 #if 0

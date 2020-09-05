@@ -1361,10 +1361,11 @@ int32_t A_InsertSprite(int16_t whatsect,int32_t s_x,int32_t s_y,int32_t s_z,int1
 
     a.stayput = -1;
     a.extra   = -1;
-#ifdef POLYMER
-    a.lightId = -1;
-#endif
     a.owner = s_ow;
+
+#ifdef POLYMER
+    practor[newSprite].lightId = -1;
+#endif
 
     G_InitActor(newSprite, s_pn, 1);
 
@@ -1455,10 +1456,11 @@ int A_Spawn(int spriteNum, int tileNum)
 
         a.floorz   = sector[s.sectnum].floorz;
         a.ceilingz = sector[s.sectnum].ceilingz;
-        a.stayput  = a.extra = -1;
+        a.stayput = a.extra = -1;
+        a.florhit = a.lzsum = 0;
 
 #ifdef POLYMER
-        a.lightId = -1;
+        practor[newSprite].lightId = -1;
 #endif
 
         if ((s.cstat & 48)
@@ -2679,7 +2681,7 @@ int A_Spawn(int spriteNum, int tileNum)
             if (pSprite->yrepeat > 32)
             {
                 G_AddGameLight(0, newSprite, ((pSprite->yrepeat*tilesiz[pSprite->picnum].y)<<1), 32768, 255+(95<<8),PR_LIGHT_PRIO_MAX_GAME);
-                pActor->lightcount = 2;
+                practor[newSprite].lightcount = 2;
             }
             fallthrough__;
 #endif
@@ -3980,7 +3982,7 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
             {
                 int32_t v = getangle(t->xvel, t->zvel>>4);
 
-                spriteext[i].pitch = (v > 1023 ? v-2048 : v);
+                spriteext[i].mdpitch = (v > 1023 ? v-2048 : v);
                 t->cstat &= ~4;
                 break;
             }
@@ -4018,17 +4020,17 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
                 {
                     static int32_t targetang = 0;
 
-                    if (g_player[playerNum].input->extbits&(1<<1))
+                    if (g_player[playerNum].input.extbits&(1<<1))
                     {
-                        if (g_player[playerNum].input->extbits&(1<<2))targetang += 16;
-                        else if (g_player[playerNum].input->extbits&(1<<3)) targetang -= 16;
+                        if (g_player[playerNum].input.extbits&(1<<2))targetang += 16;
+                        else if (g_player[playerNum].input.extbits&(1<<3)) targetang -= 16;
                         else if (targetang > 0) targetang -= targetang>>2;
                         else if (targetang < 0) targetang += (-targetang)>>2;
                     }
                     else
                     {
-                        if (g_player[playerNum].input->extbits&(1<<2))targetang -= 16;
-                        else if (g_player[playerNum].input->extbits&(1<<3)) targetang += 16;
+                        if (g_player[playerNum].input.extbits&(1<<2))targetang -= 16;
+                        else if (g_player[playerNum].input.extbits&(1<<3)) targetang += 16;
                         else if (targetang > 0) targetang -= targetang>>2;
                         else if (targetang < 0) targetang += (-targetang)>>2;
                     }
@@ -4060,7 +4062,7 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
                     spritesortcnt++;
                 }
 
-                if (g_player[playerNum].input->extbits & (1 << 7) && !ud.pause_on && spritesortcnt < maxspritesonscreen)
+                if (g_player[playerNum].input.extbits & (1 << 7) && !ud.pause_on && spritesortcnt < maxspritesonscreen)
                 {
                     auto const playerTyping = &tsprite[spritesortcnt];
 
@@ -4208,8 +4210,13 @@ PALONLY:
 
         if (G_TileHasActor(pSprite->picnum))
         {
-            if ((unsigned)scrofs_action + ACTION_PARAM_COUNT > (unsigned)g_scriptSize)
+            if ((unsigned)scrofs_action + ACTION_PARAM_COUNT > (unsigned)g_scriptSize || apScript[scrofs_action + ACTION_PARAM_COUNT] != CON_ACTION)
+            {
+                if (scrofs_action)
+                    OSD_Printf("Sprite %d tile %d: invalid action at offset %d\n", i, pSprite->picnum, scrofs_action);
+
                 goto skip;
+            }
 
             int32_t viewtype = apScript[scrofs_action + ACTION_VIEWTYPE];
             uint16_t const action_flags = apScript[scrofs_action + ACTION_FLAGS];
@@ -4267,6 +4274,8 @@ PALONLY:
 
             t->picnum += frameOffset + apScript[scrofs_action + ACTION_STARTFRAME] + viewtype*curframe;
             // XXX: t->picnum can be out-of-bounds by bad user code.
+
+            Bassert((unsigned)t->picnum < MAXTILES);
 
             if (viewtype > 0)
                 while (tilesiz[t->picnum].x == 0 && t->picnum > 0)
@@ -5938,15 +5947,11 @@ static void G_Cleanup(void)
     }
 
     for (i=MAXPLAYERS-1; i>=0; i--)
-    {
         Xfree(g_player[i].ps);
-        Xfree(g_player[i].input);
-    }
 
     for (i=MAXSOUNDS-1; i>=0; i--)
-    {
         Xfree(g_sounds[i].filename);
-    }
+
     if (label != (char *)&sprite[0]) Xfree(label);
     if (labelcode != (int32_t *)&sector[0]) Xfree(labelcode);
     Xfree(apScript);
@@ -6387,8 +6392,6 @@ void G_MaybeAllocPlayer(int32_t pnum)
 {
     if (g_player[pnum].ps == NULL)
         g_player[pnum].ps = (DukePlayer_t *)Xcalloc(1, sizeof(DukePlayer_t));
-    if (g_player[pnum].input == NULL)
-        g_player[pnum].input = (input_t *)Xcalloc(1, sizeof(input_t));
 }
 
 // TODO: reorder (net)actor_t to eliminate slop and update assertion
@@ -6721,7 +6724,7 @@ int app_main(int argc, char const* const* argv)
     loaddefinitions_game(defsfile, FALSE);
 
     for (char * m : g_defModules)
-        free(m);
+        Bfree(m);
     g_defModules.clear();
 
     cacheAllSounds();
@@ -6797,7 +6800,7 @@ int app_main(int argc, char const* const* argv)
         initprintf("There was an error loading the sprite clipping map (status %d).\n", clipMapError);
 
     for (char * m : g_clipMapFiles)
-        free(m);
+        Bfree(m);
     g_clipMapFiles.clear();
 #endif
 
@@ -7197,7 +7200,7 @@ int G_DoMoveThings(void)
         randomseed = ticrandomseed;
 
     for (bssize_t TRAVERSE_CONNECT(i))
-        Bmemcpy(g_player[i].input, &inputfifo[(g_netServer && myconnectindex == i)][i], sizeof(input_t));
+        Bmemcpy(&g_player[i].input, &inputfifo[(g_netServer && myconnectindex == i)][i], sizeof(input_t));
 
     G_UpdateInterpolations();
 
