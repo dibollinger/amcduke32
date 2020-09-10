@@ -9230,6 +9230,8 @@ enum
 
     T_GAMESTARTUP,
 
+    T_DEFINESOUNDV,
+
     T_DUMMY,
 };
 
@@ -9760,6 +9762,7 @@ static int32_t parseconsounds(scriptfile *script)
         { "define",          T_DEFINE           },
         { "#define",         T_DEFINE           },
         { "definesound",     T_DEFINESOUND      },
+        { "definesoundv",    T_DEFINESOUNDV     },
         { "gamestartup",     T_GAMESTARTUP      },
     };
 
@@ -9799,9 +9802,10 @@ static int32_t parseconsounds(scriptfile *script)
             break;
         }
         case T_DEFINESOUND:
+        case T_DEFINESOUNDV:
         {
             char *definedname, *filename;
-            int32_t sndnum, ps, pe, pr, m, vo;
+            int32_t sndnum, ps, pe, pr, m, vo, volume;
             int32_t slen, duplicate=0;
 
             if (scriptfile_getsymbol(script, &sndnum)) break;
@@ -9850,6 +9854,10 @@ static int32_t parseconsounds(scriptfile *script)
             if (scriptfile_getnumber(script, &m)) goto BAD;
             if (ParentalLock && (m&8)) goto BAD;
             if (scriptfile_getnumber(script, &vo)) goto BAD;
+            if (tokn == T_DEFINESOUNDV)
+            {
+                if (scriptfile_getsymbol(script, &volume)) goto BAD;
+            }
             if (0)
             {
 BAD:
@@ -9867,12 +9875,22 @@ BAD:
             if (duplicate)
                 initprintf("warning: duplicate sound #%d, overwriting\n", sndnum);
 
+
             g_sounds[sndnum].definedname = definedname;  // we want to keep it for display purposes
             g_sounds[sndnum].ps = ps;
             g_sounds[sndnum].pe = pe;
             g_sounds[sndnum].pr = pr;
             g_sounds[sndnum].m = m;
             g_sounds[sndnum].vo = vo;
+
+            // Volume ranges from 0 to 16384 where 1024 is default. (i.e. up to 16x increase)
+            if (tokn == T_DEFINESOUNDV && volume < 16384 && volume >= 0)
+            {
+                g_sounds[sndnum].volume = (fix16_t) (volume << 6);
+            }
+            else
+                g_sounds[sndnum].volume = fix16_one;
+
             if (!duplicate)
             {
                 g_sndnum[g_numsounds] = g_definedsndnum[g_numsounds] = sndnum;
