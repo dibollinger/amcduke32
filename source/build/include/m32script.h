@@ -104,7 +104,7 @@ extern uint16_t aEventNumLocals[MAXEVENTS];
 
 
 enum GamevarFlags_t {
-    MAXGAMEVARS        = 1024,       // must be a power of two between 256 and 4096, inclusive
+    MAXGAMEVARS        = 2048,       // must be a power of two between 256 and 4096, inclusive
     LOG2MAXGV          = 10,
     MAXVARLABEL        = MAXLABELLEN, //26,
 
