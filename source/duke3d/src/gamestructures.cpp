@@ -1102,6 +1102,8 @@ memberlabel_t const UserdefsLabels[]=
     { "m_newgamecustomsub",     USERDEFS_M_NEWGAMECUSTOMSUB,     0, 0, -1 },
     { "m_newgamecustoml3",      USERDEFS_M_NEWGAMECUSTOML3,      0, 0, -1 },
     { "voicetoggle",            USERDEFS_VOICETOGGLE,            0, 0, -1 },
+    { "userquote_xoffset",      USERDEFS_USERQUOTE_XOFFSET,      0, 0, -1 },
+    { "userquote_yoffset",      USERDEFS_USERQUOTE_YOFFSET,      0, 0, -1 },
 };
 
 int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
@@ -1297,6 +1299,8 @@ int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
         case USERDEFS_M_NEWGAMECUSTOMSUB:     labelNum = ud.m_newgamecustomsub;           break;
         case USERDEFS_M_NEWGAMECUSTOML3:      labelNum = ud.m_newgamecustoml3;           break;
         case USERDEFS_VOICETOGGLE:            labelNum = ud.config.VoiceToggle;           break;
+        case USERDEFS_USERQUOTE_XOFFSET:      labelNum = ud.userquote_xoffset;            break;
+        case USERDEFS_USERQUOTE_YOFFSET:      labelNum = ud.userquote_yoffset;            break;
 
         default: EDUKE32_UNREACHABLE_SECTION(labelNum = -1; break);
     }
@@ -1509,6 +1513,8 @@ void __fastcall VM_SetUserdef(int const labelNum, int const lParm2, int32_t cons
                 if (iSet & (1u<<b))
                     ME_NEWGAMECUSTOMSUBENTRIES[lParm2][b].flags = 0;
             break;
+        case USERDEFS_USERQUOTE_XOFFSET:            ud.userquote_xoffset             = iSet; break;
+        case USERDEFS_USERQUOTE_YOFFSET:            ud.userquote_yoffset             = iSet; break;
     }
 }
 

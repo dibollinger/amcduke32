@@ -167,7 +167,8 @@ typedef struct {
     int32_t runkey_mode,statusbarscale,mouseaiming,weaponswitch,drawweapon;   // JBF 20031125
     int32_t democams,color,msgdisptime,statusbarmode;
     int32_t m_noexits,noexits,autovote,automsg,idplayers;
-    int32_t team, viewbob, weaponsway, althud, weaponscale, textscale;
+    int32_t team, viewbob, weaponsway, althud, weaponscale;
+    int32_t userquote_xoffset, userquote_yoffset, textscale;
     int32_t statusbarflags, statusbarrange, statusbarcustom;
     int32_t hudontop;
     int32_t menu_slidebarz, menu_slidebarmargin, menu_slidecursorz;
