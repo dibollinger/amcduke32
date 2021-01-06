@@ -526,7 +526,7 @@ void G_PrintGameQuotes(int32_t snum)
         // int32_t const sh = hud_glowingquotes ? sintable[((totalclock+(i<<2))<<5)&2047]>>11 : 0;
 
         // could use some kind of word wrap here
-        height = mpgametext(mpgametext_x, y, user_quote[i], textsh(k), texto(k), texta(k), 0).y + textsc(1<<16);
+        height = mpgametext(mpgametext_x + (ud.userquote_xoffset << 16), y + (ud.userquote_yoffset << 16), user_quote[i], textsh(k), texto(k), texta(k), 0).y + textsc(1<<16);
         y += k <= 4 ? (height * (k-1))>>2 : height;
     }
 }
