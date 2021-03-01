@@ -467,9 +467,11 @@ static MenuOptionSet_t MEOS_DemoRec = MAKE_MENUOPTIONSET( MEOSN_DemoRec, NULL, 0
 static MenuOption_t MEO_GAMESETUP_DEMOREC = MAKE_MENUOPTION( &MF_Redfont, &MEOS_OffOn, &ud.m_recstat );
 static MenuEntry_t ME_GAMESETUP_DEMOREC = MAKE_MENUENTRY( "Record demo:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_GAMESETUP_DEMOREC, Option );
 
+#if 0
 #ifdef _WIN32
 static MenuOption_t MEO_GAMESETUP_UPDATES = MAKE_MENUOPTION( &MF_Redfont, &MEOS_NoYes, &ud.config.CheckForUpdates );
 static MenuEntry_t ME_GAMESETUP_UPDATES = MAKE_MENUENTRY( "Online updates:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_GAMESETUP_UPDATES, Option );
+#endif
 #endif
 
 static MenuOption_t MEO_ADULTMODE = MAKE_MENUOPTION(&MF_Redfont, &MEOS_OffOn, &ud.lockout);
@@ -496,8 +498,10 @@ static MenuEntry_t *MEL_GAMESETUP[] = {
 #endif
 #ifndef EDUKE32_ANDROID_MENU
     &ME_GAMESETUP_DEMOREC,
+#if 0
 #ifdef _WIN32
     &ME_GAMESETUP_UPDATES,
+#endif
 #endif
 #endif
     &ME_GAMESETUP_CHEATS,
@@ -4075,9 +4079,11 @@ static int32_t Menu_EntryOptionModify(MenuEntry_t *entry, int32_t newOption)
         if ((ps->gm&MODE_GAME))
             G_CloseDemoWrite();
     }
+#if 0
 #ifdef _WIN32
     else if (entry == &ME_GAMESETUP_UPDATES)
         ud.config.LastUpdateCheck = 0;
+#endif
 #endif
     else if (entry == &ME_GAMESETUP_WEAPSWITCH_PICKUP)
     {
