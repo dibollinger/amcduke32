@@ -33,6 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 int32_t windowsCheckForUpdates(char *buffer)
 {
+    return 0;
+#if 0
     static int32_t wsainitialized = 0;
     int32_t i=0, j=0, r=0;
     struct sockaddr_in dest_addr;
@@ -127,5 +129,6 @@ done:
     WSACleanup();
 
     return r;
+#endif
 }
 #endif
