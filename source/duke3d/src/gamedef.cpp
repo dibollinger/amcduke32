@@ -2024,7 +2024,7 @@ static void C_Include(const char *confile)
     int32_t const len = kfilelength(fp);
     char *mptr = (char *)Xmalloc(len+1);
 
-    VLOG_F(LOG_CON, "Including: %s (%d bytes)",confile, len);
+    DVLOG_F(LOG_CON, "Including: %s (%d bytes)",confile, len);
 
     C_AddFileOffset((g_scriptPtr - apScript), confile);
 
