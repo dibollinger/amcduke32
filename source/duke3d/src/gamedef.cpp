@@ -2011,7 +2011,9 @@ static void C_Include(const char *confile)
     int32_t const len = kfilelength(fp);
     char *mptr = (char *)Xmalloc(len+1);
 
+#ifdef DEBUGGINGAIDS
     initprintf("Including: %s (%d bytes)\n",confile, len);
+#endif
 
     kread(fp, mptr, len);
     kclose(fp);
