@@ -5609,8 +5609,11 @@ void P_ProcessInput(int playerNum)
 
         if (sectorLotag == ST_2_UNDERWATER)
             playerSpeedReduction = pPlayer->swimspeedmodifier;
-        else if (((pPlayer->on_ground && TEST_SYNC_KEY(playerBits, SK_CROUCH))
-                  || (*weaponFrame > 10 && PWEAPON(playerNum, pPlayer->curr_weapon, WorksLike) == KNEE_WEAPON)))
+        else if ( (pPlayer->on_ground && TEST_SYNC_KEY(playerBits, SK_CROUCH))
+#ifndef AMC_BUILD
+                  || (*weaponFrame > 10 && PWEAPON(playerNum, pPlayer->curr_weapon, WorksLike) == KNEE_WEAPON)
+#endif
+                )
             playerSpeedReduction = pPlayer->crouchspeedmodifier;
         else if (pPlayer->on_ground && !pPlayer->jumping_toggle && !TEST_SYNC_KEY(playerBits, SK_CROUCH)
                  && !playerShrunk && (klabs(pPlayer->truefz - pPlayer->truecz) - (PMINHEIGHT << 1)) < stepHeight)
