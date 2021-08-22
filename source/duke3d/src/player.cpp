@@ -4980,16 +4980,17 @@ void P_ProcessInput(int playerNum)
         pPlayer->cursectnum = 0;
     }
 
+    int32_t floorZ, ceilZ, highZhit, lowZhit;
+
     // sectorLotag can be set to 0 later on, but the same block sets spritebridge to 1
     int sectorLotag       = sector[pPlayer->cursectnum].lotag;
     int getZRangeClipDist = pPlayer->clipdist - GETZRANGECLIPDISTOFFSET;
-    int getZRangeOffset   = (((TEST_SYNC_KEY(playerBits, SK_CROUCH) && sectorLotag != ST_2_UNDERWATER && (FURY || (pPlayer->on_ground && !pPlayer->jumping_toggle)))
-                            || (sectorLotag == ST_1_ABOVE_WATER && pPlayer->spritebridge != 1)))
-                            ? pPlayer->autostep_sbw
-                            : pPlayer->autostep;
 
-    int32_t floorZ, ceilZ, highZhit, lowZhit;
-    int const stepHeight = getZRangeOffset;
+    bool const sbwActive = ((TEST_SYNC_KEY(playerBits, SK_CROUCH) && sectorLotag != ST_2_UNDERWATER && (FURY || (pPlayer->on_ground && !pPlayer->jumping_toggle)))
+                              || (sectorLotag == ST_1_ABOVE_WATER && pPlayer->spritebridge != 1));
+
+    int getZRangeOffset  = sbwActive ? pPlayer->autostep_sbw : pPlayer->autostep;
+    int const stepHeight = getZRangeOffset - (FURY || sbwActive || pPlayer->on_ground ? 0 : (2 << 8));
 
     // if not running Ion Fury, purposely break part of the clipping system
     // this is what makes Duke step up onto sprite constructions he shouldn't automatically step up onto
