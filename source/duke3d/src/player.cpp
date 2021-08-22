@@ -5036,8 +5036,9 @@ void P_ProcessInput(int playerNum)
     if ((highZhit & 49152) == 49152)
     {
         int const spriteNum = highZhit & (MAXSPRITES-1);
+        int pHeightOffset = (FURY) ? PMINHEIGHT : 0;
 
-        if ((spriteNum != pPlayer->i && sprite[spriteNum].z + PMINHEIGHT > pPlayer->pos.z)
+        if ((spriteNum != pPlayer->i && sprite[spriteNum].z + pHeightOffset > pPlayer->pos.z)
             || (!playerShrunk && sprite[spriteNum].statnum == STAT_ACTOR && sprite[spriteNum].extra >= 0))
         {
             highZhit = 0;
