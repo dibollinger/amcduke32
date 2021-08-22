@@ -5202,6 +5202,9 @@ void P_ProcessInput(int playerNum)
     int                  velocityModifier = TICSPERFRAME;
     const uint8_t *const weaponFrame      = &pPlayer->kickback_pic;
     int                  floorZOffset     = pPlayer->floorzoffset;
+#ifdef AMC_BUILD
+    int const            playerSlide      = (pSprite->yrepeat == 35); // regular player yrepeat is 36
+#endif
     vec3_t const         backupPos        = pPlayer->opos;
 
     if (pPlayer->on_crane >= 0)
@@ -5648,6 +5651,13 @@ void P_ProcessInput(int playerNum)
     if (!FURY && playerShrunk && pPlayer->jetpack_on == 0 && sectorLotag != ST_2_UNDERWATER && sectorLotag != ST_1_ABOVE_WATER)
         pPlayer->pos.z += ZOFFSET5 - (sprite[pPlayer->i].yrepeat<<8);
 #endif
+
+#ifdef AMC_BUILD
+    // Update pos.z before clipmove() during sliding to enable old sliding behavior in AMC TC
+    if (playerSlide && !pPlayer->jetpack_on && sectorLotag != ST_2_UNDERWATER)
+        pPlayer->pos.z += pPlayer->vel.z;
+#endif
+
 HORIZONLY:;
     if (ud.noclip)
     {
@@ -5680,10 +5690,17 @@ HORIZONLY:;
 
         P_ClampZ(pPlayer, sectorLotag, ceilZ, floorZ);
 
+#ifdef AMC_BUILD
+        int const touchObject = playerSlide ? clipmove(&pPlayer->pos, &pPlayer->cursectnum, pPlayer->vel.x, pPlayer->vel.y, pPlayer->clipdist,
+                                                   (4L << 8), getZRangeOffset, CLIPMASK0)
+                                             : clipmove(&pPlayer->pos, &pPlayer->cursectnum, pPlayer->vel.x, pPlayer->vel.y, pPlayer->clipdist,
+                                                    (4L << 8), stepHeight, CLIPMASK0);
+#else
         int const touchObject = FURY ? clipmove(&pPlayer->pos, &pPlayer->cursectnum, pPlayer->vel.x + (pPlayer->fric.x << 9),
                                                    pPlayer->vel.y + (pPlayer->fric.y << 9), pPlayer->clipdist, (4L << 8), stepHeight, CLIPMASK0)
                                         : clipmove(&pPlayer->pos, &pPlayer->cursectnum, pPlayer->vel.x, pPlayer->vel.y, pPlayer->clipdist,
                                                    (4L << 8), stepHeight, CLIPMASK0);
+#endif
 
         if (touchObject)
             P_CheckTouchDamage(pPlayer, touchObject);
@@ -5705,9 +5722,13 @@ HORIZONLY:;
         }
         else if (sectorLotag != ST_2_UNDERWATER && sectorLotag != ST_1_ABOVE_WATER)
             pPlayer->pyoff = 0;
-
+#ifdef AMC_BUILD
+        if (!playerSlide && sectorLotag != ST_2_UNDERWATER)
+            pPlayer->pos.z += pPlayer->vel.z;
+#else
         if (sectorLotag != ST_2_UNDERWATER)
             pPlayer->pos.z += pPlayer->vel.z;
+#endif
     }
 
     P_ClampZ(pPlayer, sectorLotag, ceilZ, floorZ);
