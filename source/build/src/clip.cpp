@@ -1073,6 +1073,16 @@ static int clipupdatesector(vec2_t const pos, int16_t * const sectnum, int walld
                 bfirst_search_try(sectlist, sectbitmap, &nsecs, uwal->nextsector);
     }
 
+#ifdef YAX_ENABLE
+    // Workaround: If failed to find a valid sectnum, could be a shallow TROR sector.
+    // Use legacy approach in this case.
+    if (yax_getbunch(*sectnum, YAX_CEILING) != -1)
+    {
+        updatesector(pos.x, pos.y, sectnum);
+        return 0;
+    }
+#endif
+
     return 1;
 }
 
