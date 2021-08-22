@@ -1592,6 +1592,7 @@ int32_t registerosdcommands(void)
 
         { "cl_cheatmask", "bitmask controlling cheats unlocked in menu", (void *)&cl_cheatmask, CVAR_UINT, 0, ~0 },
         { "cl_democams", "third-person cameras in demos" CVAR_BOOL_OPTSTR, (void *)&ud.democams, CVAR_BOOL, 0, 1 },
+        { "cl_keybindmode", "mode for assigning gamefuncs in the keyboard config menu:\n 0: multiple gamefuncs can be assigned to a single key\n 1: at most one gamefunc per unique key", (void *)&ud.config.keybind_mode, CVAR_BOOL, 0, 1 },
         { "cl_runmode", "run key behavior with cl_autorun enabled:\n 0: walk\n 1: do nothing", (void *)&ud.runkey_mode, CVAR_BOOL, 0, 1 },
 
         { "cl_showcoords", "DEBUG: coordinate display", (void *)&ud.coords, CVAR_INT, 0,

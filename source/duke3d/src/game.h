@@ -258,6 +258,7 @@ typedef struct {
         int32_t CheckForUpdates;
         int32_t LastUpdateCheck;
         int32_t useprecache;
+        int32_t keybind_mode;
     } config;
 
     ud_setup_t setup;

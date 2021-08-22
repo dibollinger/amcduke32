@@ -3555,6 +3555,20 @@ static int32_t Menu_PreCustom2ColScreen(MenuEntry_t *entry)
 
             S_PlaySound(PISTOL_BODYHIT);
 
+            // remove old gamefuncs for that scancode
+            if (ud.config.keybind_mode == 1)
+            {
+                for (int i = 0; i < NUMGAMEFUNCTIONS; i++)
+                {
+                    if (ud.config.KeyboardKeys[i][0] == sc)
+                        ud.config.KeyboardKeys[i][0] = 0xff;
+
+                    if (ud.config.KeyboardKeys[i][1] == sc)
+                        ud.config.KeyboardKeys[i][1] = 0xff;
+                }
+            }
+
+            // set new keybind
             *column->column[M_KEYBOARDKEYS.currentColumn] = sc;
 
             CONFIG_MapKey(column->linkIndex, ud.config.KeyboardKeys[column->linkIndex][0], key[0], ud.config.KeyboardKeys[column->linkIndex][1], key[1]);
