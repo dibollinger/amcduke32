@@ -600,13 +600,17 @@ int32_t S_DefineSound(int sndidx, const char *name, int minpitch, int maxpitch, 
     snd->minpitch   = clamp(minpitch, INT16_MIN, INT16_MAX);
     snd->maxpitch   = clamp(maxpitch, INT16_MIN, INT16_MAX);
     snd->priority   = priority & 0xFF;
-    snd->flags       = type & ~SF_ONEINST_INTERNAL;
     snd->distOffset = clamp(distance, INT16_MIN, INT16_MAX);
     snd->volume     = volume * fix16_one;
     snd->voices     = &nullvoice;
 
+#ifdef AMC_BUILD
+    snd->flags      = type;
+#else
+    snd->flags      = type & ~SF_ONEINST_INTERNAL;
     if (snd->flags & SF_LOOP)
         snd->flags |= SF_ONEINST_INTERNAL;
+#endif
 
     return 0;
 }
