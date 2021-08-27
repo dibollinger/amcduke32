@@ -4310,7 +4310,7 @@ static void P_ProcessWeapon(int playerNum)
 
 
                     case TRIPBOMB_WEAPON:
-                        if (pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
+                        if (!pPlayer->disable_tripbomb_code && pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
                         {
                             hitdata_t hitData;
                             int const pq16ang = fix16_to_int(pPlayer->q16ang);
@@ -4359,7 +4359,11 @@ static void P_ProcessWeapon(int playerNum)
                                     }
                                 }
                         }
-                        break;
+
+                        if (!pPlayer->disable_tripbomb_code)
+                            break;
+
+                        fallthrough__;
 
                     case PISTOL_WEAPON:
                     case SHOTGUN_WEAPON:
