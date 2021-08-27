@@ -730,9 +730,10 @@ static MenuOption_t MEO_SCREENSETUP_STATUSBARONTOP = MAKE_MENUOPTION(&MF_Redfont
 static MenuEntry_t ME_SCREENSETUP_STATUSBARONTOP = MAKE_MENUENTRY( "Status bar:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_SCREENSETUP_STATUSBARONTOP, Option );
 #endif
 
+#ifndef AMC_BUILD
 static MenuRangeInt32_t MEO_SCREENSETUP_SBARSIZE = MAKE_MENURANGE( &ud.statusbarscale, &MF_Redfont, 50, 100, 0, 10, DisplayTypePercent );
 static MenuEntry_t ME_SCREENSETUP_SBARSIZE = MAKE_MENUENTRY( s_Scale, &MF_Redfont, &MEF_BigOptions_Apply, &MEO_SCREENSETUP_SBARSIZE, RangeInt32 );
-
+#endif
 
 static MenuLink_t MEO_DISPLAYSETUP_SCREENSETUP = { MENU_SCREENSETUP, MA_Advance, };
 static MenuEntry_t ME_DISPLAYSETUP_SCREENSETUP = MAKE_MENUENTRY( "HUD setup", &MF_Redfont, &MEF_BigOptionsRt, &MEO_DISPLAYSETUP_SCREENSETUP, Link );
@@ -1234,7 +1235,9 @@ static MenuEntry_t *MEL_SCREENSETUP[] = {
     &ME_SCREENSETUP_STATUSBARONTOP,
 #endif
     &ME_SCREENSETUP_SCREENSIZE,
+#ifndef AMC_BUILD
     &ME_SCREENSETUP_SBARSIZE,
+#endif
 
     &ME_SCREENSETUP_CROSSHAIR,
     &ME_SCREENSETUP_CROSSHAIRSIZE,
@@ -4338,8 +4341,10 @@ static int32_t Menu_EntryRangeInt32Modify(MenuEntry_t *entry, int32_t newValue)
 {
     if (entry == &ME_SCREENSETUP_SCREENSIZE)
         G_SetViewportShrink((newValue - vpsize) * 4);
+#ifndef AMC_BUILD
     else if (entry == &ME_SCREENSETUP_SBARSIZE)
         G_SetStatusBarScale(newValue);
+#endif
     else if (entry == &ME_SOUND_VOLUME_FX)
         FX_SetVolume(newValue);
     else if (entry == &ME_SOUND_VOLUME_MUSIC)
