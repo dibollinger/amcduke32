@@ -558,6 +558,11 @@ int A_GetClipdist(int spriteNum)
     {
         if (pSprite->statnum == STAT_PROJECTILE)
         {
+#ifndef EDUKE32_STANDALONE
+            if (!FURY && pSprite->picnum == SHRINKSPARK)
+                clipDist = 8;
+            else
+#endif
             if ((SpriteProjectile[spriteNum].workslike & PROJECTILE_REALCLIPDIST) == 0)
                 clipDist = 16;
         }
@@ -619,7 +624,19 @@ int32_t A_MoveSpriteClipdist(int32_t spriteNum, vec3_t const &change, uint32_t c
     spriteheightofs(spriteNum, &diffZ, 1);
 
     if (pSprite->statnum == STAT_PROJECTILE)
+    {
+#ifndef EDUKE32_STANDALONE
+        if (!FURY && pSprite->picnum == SHRINKSPARK)
+        {
+            int32_t oldZ = pSprite->z;
+            pSprite->z -= 2 * tilesiz[pSprite->picnum].y * pSprite->yrepeat;
+            returnValue = clipmovex(&pSprite->xyz, &newSectnum, change.x << 13, change.y << 13, clipDist, ZOFFSET6, ZOFFSET6, clipType, 1);
+            pSprite->z = oldZ;
+        }
+        else
+#endif
         returnValue = clipmovex(&pSprite->xyz, &newSectnum, change.x << 13, change.y << 13, clipDist, diffZ >> 3, diffZ >> 3, clipType, 1);
+    }
     else
     {
         pSprite->z -= diffZ >> 1;
