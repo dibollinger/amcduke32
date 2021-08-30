@@ -9356,6 +9356,7 @@ enum
     T_TYPE,
     T_DISTANCE,
     T_VOLUME,
+    T_DEFINESOUNDV,
 
     T_DUMMY,
 };
@@ -9966,6 +9967,7 @@ static int32_t parseconsounds(scriptfile *script)
         { "define",          T_DEFINE           },
         { "#define",         T_DEFINE           },
         { "definesound",     T_DEFINESOUND      },
+        { "definesoundv",    T_DEFINESOUNDV     },
         { "gamestartup",     T_GAMESTARTUP      },
     };
 
@@ -10005,9 +10007,10 @@ static int32_t parseconsounds(scriptfile *script)
             break;
         }
         case T_DEFINESOUND:
+        case T_DEFINESOUNDV:
         {
             char * filename;
-            int32_t sndnum, ps, pe, pr, m, vo;
+            int32_t sndnum, ps, pe, pr, m, vo, temp_volume;
             int32_t slen;
 
             if (scriptfile_getsymbol(script, &sndnum)) break;
@@ -10044,6 +10047,11 @@ static int32_t parseconsounds(scriptfile *script)
             if (scriptfile_getnumber(script, &m)) goto BAD;
             if (ParentalLock && (m&8)) goto BAD;
             if (scriptfile_getnumber(script, &vo)) goto BAD;
+            if (tokn == T_DEFINESOUNDV)
+            {
+                if (scriptfile_getsymbol(script, &temp_volume)) goto BAD;
+                volume = (float) (temp_volume << 6) / ((float) fix16_one);
+            }
             if (0)
             {
 BAD:

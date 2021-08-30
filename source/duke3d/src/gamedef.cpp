@@ -207,6 +207,7 @@ static tokenmap_t const vm_keywords[] =
     { "definequote",            CON_DEFINEQUOTE },
     { "defineskillname",        CON_DEFINESKILLNAME },
     { "definesound",            CON_DEFINESOUND },
+    { "definesoundv",           CON_DEFINESOUNDV },
     { "definevolumeflags",      CON_DEFINEVOLUMEFLAGS },
     { "definevolumename",       CON_DEFINEVOLUMENAME },
     { "defstate",               CON_DEFSTATE },
@@ -5889,6 +5890,7 @@ repeatcase:
             continue;
 
         case CON_DEFINESOUND:
+        case CON_DEFINESOUNDV:
         {
             g_scriptPtr--;
             C_GetNextValue(LABEL_DEFINE);
@@ -5967,7 +5969,25 @@ repeatcase:
 
             g_scriptPtr -= 5;
 
-            float volume = 1.0;
+            float volume;
+
+            // Volume ranges from 0 to CON_MAXSOUNDVOLUME where 1024 is default.
+            if (tw == CON_DEFINESOUNDV)
+            {
+                C_GetNextValue(LABEL_DEFINE);
+                i = g_scriptPtr[-1];
+
+                if (EDUKE32_PREDICT_FALSE((unsigned) i > CON_MAXSOUNDVOLUME))
+                {
+                    initprintf("%s:%d provided sound volume exceeds limit of %d.\n", g_scriptFileName, g_lineNumber, CON_MAXSOUNDVOLUME);
+                    g_errorCnt++;
+                    i = (int) (fix16_one >> 6);
+                }
+                volume = (float) (i << 6) / ((float) fix16_one);
+                g_scriptPtr--;
+            }
+            else
+                volume = 1.0;
 
             S_DefineSound(k, filename, minpitch, maxpitch, priority, type, distance, volume);
 
@@ -5978,7 +5998,6 @@ repeatcase:
                 G_ProcessDynamicNameMapping(label + (j << 6), g_dynSoundList, k);
             continue;
         }
-
         case CON_ENDEVENT:
 
             if (EDUKE32_PREDICT_FALSE(!g_scriptEventOffset))
