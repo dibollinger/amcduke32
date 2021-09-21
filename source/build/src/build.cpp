@@ -4383,7 +4383,7 @@ skipinput:
             {
                 ////// draw mouse pointer
 
-                col = searchlock ? editorcolors[13] : gridlock ? 255 : batmanandthrobbin();
+                col = searchlock ? editorcolors[13] : gridlock ?  (editorcolors[15 - 3*gridlock]) : batmanandthrobbin();
 
                 if (joinsector[0] >= 0)
                     col = editorcolors[11];
