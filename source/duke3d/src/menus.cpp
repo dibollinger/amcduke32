@@ -45,6 +45,7 @@ droidinput_t droidinput;
 // common positions
 #define MENU_MARGIN_REGULAR 40
 #define MENU_MARGIN_WIDE    32
+#define MENU_MARGIN_AMCSK   36
 #define MENU_MARGIN_CENTER  160
 #define MENU_HEIGHT_CENTER  100
 
@@ -159,6 +160,9 @@ static FORCE_INLINE int32_t Menu_CursorShade(void)
 }
 static void Menu_DrawCursorCommon(int32_t x, int32_t y, int32_t z, int32_t picnum, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
 {
+#ifdef AMC_BUILD
+    z = (z * 2) / 5; // downscale cursor icon
+#endif
     rotatesprite_(x, y, z, 0, picnum, Menu_CursorShade(), 0, 2|8, 0, 0, 0, ydim_upper, xdim-1, ydim_lower);
 }
 static void Menu_DrawCursorLeft(int32_t x, int32_t y, int32_t z)
@@ -215,15 +219,27 @@ MenuGameplayEntry g_MenuGameplayEntries[MAXMENUGAMEPLAYENTRIES];
 
 //                                      emptychar x,y       between x,y         zoom                cursorLeft          cursorCenter        cursorScale         textflags
 //                                      tilenum             shade_deselected    shade_disabled      pal                 pal_selected        pal_deselected      pal_disabled
-MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             110<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
+#ifdef AMC_BUILD
+MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             128<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
                                         -1,                 10,                 0,                  0,                  0,                  0,                  1,
                                         0,                  0,                  1 };
-MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        65536,              10<<16,             110<<16,            32768,              0,
+MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        65536,              10<<16,             128<<16,            32768,              0,
                                         -1,                 10,                 0,                  0,                  10,                 10,                 16,
                                         0,                  0,                  16 };
-MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             110<<16,            32768,              0,
+MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             128<<16,            32768,              0,
                                         -1,                 10,                 0,                  0,                  2,                  2,                  0,
                                         0,                  0,                  16 };
+#else
+MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             110<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
+                                         -1,                 10,                 0,                  0,                  0,                  0,                  1,
+                                         0,                  0,                  1 };
+MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        65536,              10<<16,             110<<16,            32768,              0,
+                                         -1,                 10,                 0,                  0,                  10,                 10,                 16,
+                                         0,                  0,                  16 };
+MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             110<<16,            32768,              0,
+                                         -1,                 10,                 0,                  0,                  2,                  2,                  0,
+                                         0,                  0,                  16 };
+#endif
 
 
 static MenuMenuFormat_t MMF_Top_Main =             { {  MENU_MARGIN_CENTER<<16, 55<<16, }, -(170<<16) };
@@ -231,7 +247,13 @@ static MenuMenuFormat_t MMF_Top_Episode =          { {  MENU_MARGIN_CENTER<<16, 
 static MenuMenuFormat_t MMF_Top_NewGameCustom =    { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustomSub = { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustomL3 =  { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
+
+#ifdef AMC_BUILD
+static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_AMCSK<<16, 58<<16, }, -(190<<16) };
+#else
 static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_CENTER<<16, 58<<16, }, -(190<<16) };
+#endif
+
 static MenuMenuFormat_t MMF_Top_Options =          { {  MENU_MARGIN_CENTER<<16, 38<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_Joystick_Network = { {  MENU_MARGIN_CENTER<<16, 70<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_BigOptions =           { {    MENU_MARGIN_WIDE<<16, 38<<16, }, -(190<<16) };
@@ -425,7 +447,12 @@ static MenuEntry_t *MEL_NEWGAMECUSTOML3[MAXMENUGAMEPLAYENTRIES];
 
 static char const s_Undefined[] = "Undefined";
 
+#ifdef AMC_BUILD
+static MenuEntry_t ME_SKILL_TEMPLATE = MAKE_MENUENTRY( NULL, &MF_Redfont, &MEF_LeftMenu, &MEO_NULL, Link );
+#else
 static MenuEntry_t ME_SKILL_TEMPLATE = MAKE_MENUENTRY( NULL, &MF_Redfont, &MEF_CenterMenu, &MEO_NULL, Link );
+#endif
+
 static MenuEntry_t ME_SKILL[MAXSKILLS];
 static MenuEntry_t *MEL_SKILL[MAXSKILLS];
 
