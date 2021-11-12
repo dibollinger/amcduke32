@@ -484,6 +484,7 @@ static tokenmap_t const vm_keywords[] =
     { "setgamepalette",         CON_SETGAMEPALETTE },
     { "setinput",               CON_SETINPUT },
     { "setmusicposition",       CON_SETMUSICPOSITION },
+    { "setmusicvolume",         CON_SETMUSICVOLUME },
     { "setngcflags",            CON_SETNGCFLAGS },
     { "setplayer",              CON_SETPLAYER },
     { "setplayerangle",         CON_SETPLAYERANGLE },
@@ -3743,6 +3744,7 @@ DO_DEFSTATE:
         case CON_SETACTORANGLE:
         case CON_SETGAMEPALETTE:
         case CON_SETMUSICPOSITION:
+        case CON_SETMUSICVOLUME:
         case CON_SETPLAYERANGLE:
         case CON_SHOOT:
         case CON_SOUNDONCE:
