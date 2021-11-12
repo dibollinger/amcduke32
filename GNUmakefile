@@ -2,6 +2,8 @@
 # EDuke32 Makefile for GNU Make
 #
 
+### Global Profiles
+
 AMCTC ?= 1
 
 ### AMC TC Profile
@@ -12,7 +14,6 @@ ifeq ($(AMCTC),1)
     POLYMER := 0
 endif
 
-### Global Profiles
 ifeq ($(FURY),1)
     APPBASENAME := fury
     APPNAME := Ion Fury
