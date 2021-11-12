@@ -2,6 +2,8 @@
 # EDuke32 Makefile for GNU Make
 #
 
+### Global Profiles
+
 AMCTC ?= 1
 
 ### AMC TC Profile
@@ -12,7 +14,6 @@ ifeq ($(AMCTC),1)
     POLYMER := 0
 endif
 
-### Global Profiles
 ifeq ($(FURY),1)
     APPBASENAME := fury
     APPNAME := Ion Fury
@@ -551,6 +552,11 @@ ifeq ($(FURY),1)
         duke3d_rsrc := $(duke3d_root)/rsrc/fury
     endif
     duke3d_obj := $(obj)/fury
+else ifeq ($(AMCTC), 1)
+    ifeq ($(PLATFORM),WINDOWS)
+        duke3d_rsrc := $(duke3d_root)/rsrc/amctc
+    endif
+    duke3d_obj := $(obj)/amctc
 endif
 
 duke3d_cflags := -I$(duke3d_src)
