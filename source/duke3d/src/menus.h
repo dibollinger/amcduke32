@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "compat.h"
 #include "pragmas.h"
 #include "vfs.h"
+#include "function.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -208,7 +209,7 @@ typedef struct MenuOptionSet_t
     int32_t scrollPos;
 
     // appearance
-    uint8_t features; // bit 1 = disable left/right arrows, bit 2 = disable list
+    uint8_t features; // bit 1 = disable left/right arrows, bit 2 = disable list, bit 4 = unsorted list
 
     int32_t getMarginBottom() const { return mulscale16(entryFormat->marginBottom, font->zoom); }
     int32_t getIndent() const { return mulscale16(entryFormat->indent, font->zoom); }
@@ -244,6 +245,9 @@ typedef struct MenuCustom2Col_t
 
     // state
     int8_t screenOpen;
+
+    // decoupled link (e.g. gamefunc index)
+    int32_t linkIndex;
 } MenuCustom2Col_t;
 
 enum MenuRangeFlags_t
@@ -531,6 +535,8 @@ extern MenuGameplayEntry g_MenuGameplayEntries[MAXMENUGAMEPLAYENTRIES];
 extern MenuEntry_t ME_NEWGAMECUSTOMENTRIES[MAXMENUGAMEPLAYENTRIES];
 extern MenuEntry_t ME_NEWGAMECUSTOMSUBENTRIES[MAXMENUGAMEPLAYENTRIES][MAXMENUGAMEPLAYENTRIES];
 extern MenuEntry_t ME_NEWGAMECUSTOML3ENTRIES[MAXMENUGAMEPLAYENTRIES][MAXMENUGAMEPLAYENTRIES][MAXMENUGAMEPLAYENTRIES];
+
+extern int32_t g_keyEntryOrder[NUMGAMEFUNCTIONS];
 
 #ifdef __cplusplus
 }
