@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "renderlayer.h"
 
-int32_t windowsCheckForUpdates(char *buffer)
+int32_t windowsCheckForUpdates(char* UNUSED(buffer))
 {
     return 0;
 #if 0
