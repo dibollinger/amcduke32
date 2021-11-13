@@ -3429,8 +3429,6 @@ void P_GetInput(int const playerNum)
     localInput.bits = input.bits;
     localInput.extbits = input.extbits;
 
-    int const movementLocked = P_CheckLockedMovement(playerNum);
-
     if (ud.scrollmode && ud.overhead_on)
     {
         ud.folfvel = input.fvel;
@@ -5197,7 +5195,9 @@ void P_ProcessInput(int playerNum)
     }
 
     int                  velocityModifier = TICSPERFRAME;
+#ifndef AMC_BUILD
     const uint8_t *const weaponFrame      = &pPlayer->kickback_pic;
+#endif
     int                  floorZOffset     = pPlayer->floorzoffset;
 #ifdef AMC_BUILD
     int const            playerSlide      = (pSprite->yrepeat == 35); // regular player yrepeat is 36
