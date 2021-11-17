@@ -8,6 +8,7 @@
    * [CON Commands](#con-commands)
        * [definesoundv](#definesoundv)
        * [setmusicvolume](#setmusicvolume)
+       * [mkdir](#mkdir)
    * [DEF Commands](#def-commands)
        * [keyconfig](#keyconfig)
    * [Struct Members](#struct-members)
@@ -27,7 +28,7 @@ by Ken Silverman, released under the Build license.
 
 Its primary purpose is to raise engine limits and alter hardcoded game behaviour, to allow
 for greater flexibility in the development of the game. It also adds a small set of CON script
-commands that enable modification of features not available in base eduke32. The changes are 
+commands that enable modification of features not available in base eduke32. The changes are
 generally kept sparse to make merging with mainline eduke32 as smooth as possible.
 
 Note that the AMC TC makes extensive use of eduke32 modding features, and hence will not be
@@ -57,7 +58,7 @@ For Linux and MacOS, we recommend compiling the binary from source, using the in
 ### Building from Source
 
 __Required packages:__
-    
+
      * Basic dev environment (GCC >= 4.8, GNU make, etc)
      * SDL2 >= 2.0 (SDL >= 1.2.10 also supported with SDL_TARGET=1)
      * SDL2_mixer >= 2.0 (SDL_mixer >= 1.2.7 also supported with SDL_TARGET=1)
@@ -79,17 +80,17 @@ __On Fedora 22-25__
     sudo dnf groupinstall "Development Tools"
     sudo dnf install g++ nasm mesa-libGL-devel mesa-libGLU-devel SDL2-devel SDL2_mixer-devel alsa-lib-devel libvorbis-devel libvpx-devel gtk2-devel flac flac-devel
 
-Freepats is not packaged in Fedora, you must download and install it by yourself if desired. 
+Freepats is not packaged in Fedora, you must download and install it by yourself if desired.
 See also the "timidity-patch-freepats" package on others RPM based distros.
 
 __Compiling__
 
-To compile, simply run the command `make` in the base folder (with parameter `-j#` to speed up compilation 
+To compile, simply run the command `make` in the base folder (with parameter `-j#` to speed up compilation
 with multiple threads). If successful, this should produce the following binaries in the base folder:
 * `amctc`
 * `mapster32`
 
-The binaries do not support game autodetection. Instead, you should copy the binaries into the folder that 
+The binaries do not support game autodetection. Instead, you should copy the binaries into the folder that
 contains the AMC TC data, i.e. the folder where the `amctc.grpinfo` file is located.
 
 __Additional build instructions can be found here:__
@@ -140,14 +141,22 @@ This command is intended to allow scripts to temporarily lower the music volume,
 
 * `<percent>`: Value from 0 to 100, acting as a percentage of the player's current music volume.
 
+#### __mkdir__
+
+Usage: `mkdir <quote_label>`
+
+Creates a directory in the current moddir/profile directory/current working directory, with the given quote as path.
+
+Does not throw an error if directory already exists.
+
 ### DEF Commands
 
 Commands that extend the DEF script functionality.
 
 #### __keyconfig__
 
-Usage: 
-``` 
+Usage:
+```
 keyconfig
 {
     gamefunc_Move_Forward
@@ -169,7 +178,7 @@ New struct members added by the fork.
 * `player[].disable_tripbomb_code`: If set to 1, disabled the tripmine code for slot 9, allowing the CON code to treat the slot like that of other weapons.
 * `userdef[].userquote_xoffset` and `userdef[].userquote_yoffset`: Alters the x and y position of the `userquote` text. Can be positive and negative.
 * `userdef[].voicetoggle`: Read-only userdefs struct member, which acts as a bitfield.
-    * __1__: If set, character voices are enabled (Duke-Talk). 
+    * __1__: If set, character voices are enabled (Duke-Talk).
     * __2__: Dummy value, reserved.
     * __4__: Character voices from other players are enabled.
 
@@ -189,9 +198,9 @@ New struct members added by the fork.
 
 The AMCDuke32 fork was created and is being maintained by Dino Bollinger.
 
-* eduke32 was created by Richard "TerminX" Gobeille, and is maintained the eduke32 contributors. It is licensed under the GPL v2.0, see `gpl-2.0.txt`.  
+* eduke32 was created by Richard "TerminX" Gobeille, and is maintained the eduke32 contributors. It is licensed under the GPL v2.0, see `gpl-2.0.txt`.
   * It can be found at: https://voidpoint.io/terminx/eduke32
-* The Build Engine was created by Ken Silverman and is licensed under the BUILD license. See `source/build/buildlic.txt`. 
+* The Build Engine was created by Ken Silverman and is licensed under the BUILD license. See `source/build/buildlic.txt`.
 * The AMC TC was created by James Stanfield and the AMC team.
   * The game can be found at: https://www.moddb.com/games/the-amc-tc
 
