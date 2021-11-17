@@ -395,6 +395,7 @@ static tokenmap_t const vm_keywords[] =
     { "mail",                   CON_MAIL },
     { "mikesnd",                CON_MIKESND },
     { "minitext",               CON_MINITEXT },
+    { "mkdir",                  CON_MKDIR },
     { "modvar",                 CON_MODVAR },
     { "modvarvar",              CON_MODVARVAR },
     { "money",                  CON_MONEY },
@@ -3346,6 +3347,7 @@ DO_DEFSTATE:
             C_GetNextValue(LABEL_DEFINE);
             continue;
 
+        case CON_MKDIR:
         case CON_QUOTE:
             C_GetNextValue(LABEL_DEFINE);
             if (EDUKE32_PREDICT_FALSE(((unsigned)g_scriptPtr[-1] >= MAXQUOTES) || apStrings[g_scriptPtr[-1]] == NULL))

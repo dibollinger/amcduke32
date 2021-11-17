@@ -5881,6 +5881,30 @@ badindex:
                 insptr += 2;
                 dispatch();
 
+            vInstruction(CON_MKDIR):
+                insptr++;
+                {
+                    int const quoteDirname = *insptr++;
+
+                    VM_ABORT_IF(bad_quote(quoteDirname), "invalid quote %d", quoteDirname);
+                    char temp[BMAX_PATH];
+
+                    if (EDUKE32_PREDICT_FALSE(G_ModDirSnprintf(temp, sizeof(temp), "%s", apStrings[quoteDirname])))
+                    {
+                        CON_ERRPRINTF("directory name in quote %d too long\n", quoteDirname);
+                        abort_after_error();
+                    }
+
+                    if (!buildvfs_isdir(temp))
+                    {
+                        if (buildvfs_mkdir(temp, S_IRWXU) != 0)
+                            CON_ERRPRINTF("Failed to create directory \"%s\"!\n", temp);
+                        else DLOG_F(INFO, "Script: %s - L=%d: Created directory '%s'.\n", VM_FILENAME(insptr), VM_DECODE_LINE_NUMBER(g_tw), temp);
+                    }
+                    else DLOG_F(INFO, "Script: %s  - L=%d: Directory '%s' already exists.\n", VM_FILENAME(insptr), VM_DECODE_LINE_NUMBER(g_tw), temp);
+                    dispatch();
+                }
+
             vInstruction(CON_SETARRAY):
                 insptr++;
                 {
