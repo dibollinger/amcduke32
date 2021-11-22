@@ -186,6 +186,12 @@ enum gametokens
     T_USERCONTENT,
     T_LOCALIZATION,
     T_KEYCONFIG,
+    T_CUSTOMSETTINGS,
+    T_INDEX,
+    T_LINK,
+    T_FONT,
+    T_VSTRINGS,
+    T_VALUES,
 };
 
 static void gameTimerHandler(void)
@@ -5413,6 +5419,7 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
         { "newgamechoices",  T_NEWGAMECHOICES   },
         { "localization"  ,  T_LOCALIZATION     },
         { "keyconfig"  ,     T_KEYCONFIG        },
+        { "customsettings",  T_CUSTOMSETTINGS   },
     };
 
     static const tokenlist soundTokens[] =
@@ -5436,6 +5443,24 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
         { "forcenofilter", T_FORCENOFILTER },
         { "texturefilter", T_TEXTUREFILTER },
     };
+
+    static const tokenlist settingsListTokens [] =
+    {
+        { "title",           T_NAME },
+        { "entry",           T_CHOICE },
+        { "link",            T_LINK},
+    };
+
+    static const tokenlist settingsEntryTokens [] =
+    {
+        { "name",          T_NAME },
+        { "index",         T_INDEX },
+        { "font",          T_FONT },
+        { "type",          T_TYPE },
+        { "vstrings",      T_VSTRINGS },
+        { "values",        T_VALUES },
+    };
+
 
     for (int f = 0; f < NUMGAMEFUNCTIONS; f++)
        scriptfile_addsymbolvalue(internal_gamefunctions[f], f);
@@ -5865,6 +5890,189 @@ static int parsedefinitions_game(scriptfile *pScript, int firstPass)
             break;
         }
 
+        case T_CUSTOMSETTINGS:
+        {
+            char * customSettingsEnd;
+            if (scriptfile_getbraces(pScript,&customSettingsEnd))
+                break;
+            if (firstPass)
+            {
+                pScript->textptr = customSettingsEnd+1;
+                break;
+            }
+
+            int32_t entryCount = 0;
+            while (pScript->textptr < customSettingsEnd)
+            {
+                switch (getatoken(pScript, settingsListTokens, ARRAY_SIZE(settingsListTokens)))
+                {
+                    case T_NAME:
+                    {
+                        char *name = NULL;
+                        if (scriptfile_getstring(pScript, &name))
+                            break;
+                        memset(s_CustomSettings, 0, ARRAY_SIZE(s_CustomSettings));
+                        strncpy(s_CustomSettings, name, ARRAY_SIZE(s_CustomSettings)-1);
+                        break;
+                    }
+                    case T_CHOICE:
+                    {
+                        char * entryPtr = pScript->ltextptr;
+                        char * entryEnd;
+                        if (scriptfile_getbraces(pScript,&entryEnd))
+                            break;
+
+                        if ((unsigned)entryCount >= MAXCUSTOMSETTINGSENTRIES)
+                        {
+                            initprintf("Error: Maximum entries exceeded near line %s:%d\n",
+                                pScript->filename, scriptfile_getlinum(pScript, entryPtr));
+                            pScript->textptr = entryEnd+1;
+                            break;
+                        }
+
+                        MenuSettingsEntry & entry = g_MenuSettingsEntries[entryCount];
+                        entry = MenuSettingsEntry{};
+
+                        // Default Settings
+                        entry.font = &MF_Redfont;
+                        entry.type = EmptyAction;
+                        int32_t multiCheckVal = -1;
+
+                        while (pScript->textptr < entryEnd)
+                        {
+                            switch (getatoken(pScript, settingsEntryTokens, ARRAY_SIZE(settingsEntryTokens)))
+                            {
+                                case T_NAME:
+                                {
+                                    char *name = NULL;
+                                    if (scriptfile_getstring(pScript, &name))
+                                        break;
+                                    memset(entry.name, 0, ARRAY_SIZE(entry.name));
+                                    strncpy(entry.name, name, ARRAY_SIZE(entry.name)-1);
+                                    break;
+                                }
+                                case T_INDEX:
+                                    scriptfile_getnumber(pScript, &entry.storeidx);
+                                    break;
+                                case T_FONT:
+                                {
+                                    char *fontstr = NULL;
+                                    if (scriptfile_getstring(pScript, &fontstr))
+                                        break;
+
+                                    if (!Bstrcasecmp(fontstr, "big") || !Bstrcasecmp(fontstr, "bigfont") || !Bstrcasecmp(fontstr, "redfont"))
+                                        entry.font = &MF_Redfont;
+                                    else if (!Bstrcasecmp(fontstr, "small") || !Bstrcasecmp(fontstr, "smallfont") || !Bstrcasecmp(fontstr, "bluefont"))
+                                        entry.font = &MF_Bluefont;
+                                    else if (!Bstrcasecmp(fontstr, "mini") || !Bstrcasecmp(fontstr, "minifont"))
+                                        entry.font = &MF_Minifont;
+                                    else
+                                        initprintf("Error: invalid font '%s' specified near line %s:%d\n",
+                                                    fontstr, pScript->filename, scriptfile_getlinum(pScript, entryPtr));
+                                    break;
+                                }
+                                case T_TYPE:
+                                {
+                                    char *typestr = NULL;
+                                    if (scriptfile_getstring(pScript, &typestr))
+                                        break;
+
+                                    if (!Bstrcasecmp(typestr, "button"))
+                                        entry.type = ButtonAction;
+                                    else if (!Bstrcasecmp(typestr, "yes/no") || !Bstrcasecmp(typestr, "no/yes"))
+                                        entry.type = YesNoAction;
+                                    else if (!Bstrcasecmp(typestr, "on/off") || !Bstrcasecmp(typestr, "off/on") || !Bstrcasecmp(typestr, "toggle"))
+                                        entry.type = OnOffAction;
+                                    else if (!Bstrcasecmp(typestr, "multi") || !Bstrcasecmp(typestr, "choices"))
+                                        entry.type = MultiChoiceAction;
+                                    else if (!Bstrcasecmp(typestr, "range") || !Bstrcasecmp(typestr, "slider"))
+                                        entry.type = SliderAction;
+                                    else if (!Bstrcasecmp(typestr, "spacer2"))
+                                        entry.type = Spacer2Action;
+                                    else if (!Bstrcasecmp(typestr, "spacer4"))
+                                        entry.type = Spacer4Action;
+                                    else if (!Bstrcasecmp(typestr, "spacer6"))
+                                        entry.type = Spacer6Action;
+                                    else if (!Bstrcasecmp(typestr, "spacer8"))
+                                        entry.type = Spacer8Action;
+                                    break;
+                                }
+                                case T_VSTRINGS:
+                                {
+                                    char * vstringPtr = pScript->ltextptr;
+                                    char * vstringListEnd;
+                                    int32_t vindex = 0;
+                                    if (scriptfile_getbraces(pScript,&vstringListEnd))
+                                        break;
+                                    while (pScript->textptr < vstringListEnd - 1)
+                                    {
+                                        char* valueName = NULL;
+                                        if (vindex >= MAXVALUECHOICES)
+                                        {
+                                            initprintf("Error: Maximum value name entries exceeded near line %s:%d\n",
+                                            pScript->filename, scriptfile_getlinum(pScript, vstringPtr));
+                                            pScript->textptr = vstringListEnd+1;
+                                            break;
+                                        }
+
+                                        if (scriptfile_getstring(pScript, &valueName))
+                                        {
+                                            pScript->textptr = vstringListEnd+1;
+                                            break;
+                                        }
+                                        memset(entry.valueNames[vindex], 0, ARRAY_SIZE(entry.valueNames[vindex]));
+                                        strncpy(entry.valueNames[vindex], valueName, ARRAY_SIZE(entry.valueNames[vindex])-1);
+                                        vindex += 1;
+                                    }
+                                    multiCheckVal = (multiCheckVal == -1) ? vindex : min(multiCheckVal, vindex);
+                                    break;
+                                }
+                                case T_VALUES:
+                                {
+                                    char * valuePtr = pScript->ltextptr;
+                                    char * valueListEnd;
+                                    entry.values = (int32_t *) Xcalloc(MAXVALUECHOICES, sizeof(int32_t));
+                                    int32_t vindex = 0;
+                                    if (scriptfile_getbraces(pScript,&valueListEnd))
+                                        break;
+                                    while (pScript->textptr < valueListEnd - 1)
+                                    {
+                                        int32_t valueChoice;
+                                        if (vindex >= MAXVALUECHOICES)
+                                        {
+                                            initprintf("Error: Maximum value entries exceeded near line %s:%d\n",
+                                            pScript->filename, scriptfile_getlinum(pScript, valuePtr));
+                                            pScript->textptr = valueListEnd+1;
+                                            break;
+                                        }
+
+                                        if (scriptfile_getnumber(pScript,&valueChoice))
+                                        {
+                                            pScript->textptr = valueListEnd+1;
+                                            break;
+                                        }
+                                        //snprintf(entry.valueNames[vindex], ARRAY_SIZE(entry.valueNames[vindex]), "%d", valueChoice);
+                                        entry.values[vindex] = valueChoice;
+                                        vindex += 1;
+                                    }
+                                    multiCheckVal = (multiCheckVal == -1) ? vindex : min(multiCheckVal, vindex);
+                                    break;
+                                }
+                            }
+                        }
+                        entry.optionCount = (multiCheckVal <= -1) ? 0 : multiCheckVal;
+                        entryCount++;
+                        break;
+                    }
+                    case T_LINK:
+                        //TODO: Single sublayer of pages
+                        initprintf("Error: Link token not yet implemented, line %s:%d\n",
+                                    pScript->filename, scriptfile_getlinum(pScript, pScript->ltextptr));
+                        break;
+                }
+            }
+            break;
+        }
         case T_EOF: return 0;
         default: break;
         }

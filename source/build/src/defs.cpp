@@ -414,6 +414,7 @@ static int32_t defsparser(scriptfile *script)
         { "animsounds",      T_STUB_STRING_BRACES },
         { "cutscene",        T_STUB_STRING_BRACES },
         { "keyconfig",       T_STUB_BRACES      },
+        { "customsettings",  T_STUB_BRACES      },
     };
 
     while (1)
