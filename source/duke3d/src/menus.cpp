@@ -213,6 +213,8 @@ they effectively stand in for curly braces as struct initializers.
 
 
 MenuGameplayEntry g_MenuGameplayEntries[MAXMENUGAMEPLAYENTRIES];
+MenuSettingsEntry g_MenuSettingsEntries[MAXCUSTOMSETTINGSENTRIES];
+char s_CustomSettings[64] = "";
 
 // common font types
 // tilenums are set after namesdyn runs
@@ -257,6 +259,7 @@ static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_CENTER<<16, 
 
 static MenuMenuFormat_t MMF_Top_Options =          { {  MENU_MARGIN_CENTER<<16, 52<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_Joystick_Network = { {  MENU_MARGIN_CENTER<<16, 70<<16, }, -(190<<16) };
+static MenuMenuFormat_t MMF_CustomSettings =       { {    MENU_MARGIN_WIDE<<16, 50<<16, }, -(170<<16) };
 static MenuMenuFormat_t MMF_BigOptions =           { {    MENU_MARGIN_WIDE<<16, 45<<16, }, -(190<<16) };
 #ifdef USE_OPENGL
 static MenuMenuFormat_t MMF_BigOptionsScrolling =  { {    MENU_MARGIN_WIDE<<16, 45<<16, },  (187<<16) };
@@ -539,9 +542,24 @@ static MenuEntry_t *MEL_GAMESETUP[] = {
 };
 #endif
 
+static char const *MEOSN_CustomValueNames[MAXCUSTOMSETTINGSENTRIES][MAXVALUECHOICES];
+static MenuOptionSet_t MEOS_CUSTOM_VALUE_TEMPLATE = MAKE_MENUOPTIONSETDYN( NULL, NULL, 0, 0x0 );
+
+static MenuOption_t MEO_CUSTOM_OFFON_TEMPLATE = MAKE_MENUOPTION( &MF_Bluefont, &MEOS_OffOn, NULL );
+static MenuOption_t MEO_CUSTOM_NOYES_TEMPLATE = MAKE_MENUOPTION( &MF_Bluefont, &MEOS_NoYes, NULL );
+static MenuOption_t MEO_CUSTOM_EMPTY_TEMPLATE = MAKE_MENUOPTION( &MF_Bluefont, NULL, NULL );
+static MenuEntry_t ME_CUSTOM_ENTRY_TEMPLATE = MAKE_MENUENTRY( NULL, &MF_Bluefont, &MEF_SmallOptions, NULL, Dummy);
+
+
+static MenuOptionSet_t ME_CUSTOM_VALUE_LISTS[MAXCUSTOMSETTINGSENTRIES];
+static MenuOption_t ME_CUSTOM_OPTIONS[MAXCUSTOMSETTINGSENTRIES];
+static MenuEntry_t ME_CUSTOM_SETTINGS[MAXCUSTOMSETTINGSENTRIES];
+static MenuEntry_t *MEL_CUSTOM_SETTINGS[MAXCUSTOMSETTINGSENTRIES];
+
 #if !defined EDUKE32_RETAIL_MENU && !defined AMC_BUILD
 MAKE_MENU_TOP_ENTRYLINK( "Game Setup", MEF_OptionsMenu, OPTIONS_GAMESETUP, MENU_GAMESETUP );
 #endif
+MAKE_MENU_TOP_ENTRYLINK( s_CustomSettings, MEF_OptionsMenu, OPTIONS_CUSTOM, MENU_CUSTOMSETTINGS );
 MAKE_MENU_TOP_ENTRYLINK( "Sound Setup", MEF_OptionsMenu, OPTIONS_SOUNDSETUP, MENU_SOUND );
 MAKE_MENU_TOP_ENTRYLINK( "Display Setup", MEF_OptionsMenu, OPTIONS_DISPLAYSETUP, MENU_DISPLAYSETUP );
 MAKE_MENU_TOP_ENTRYLINK( "Player Setup", MEF_OptionsMenu, OPTIONS_PLAYERSETUP, MENU_PLAYER );
@@ -792,6 +810,7 @@ static MenuEntry_t ME_CheatCodes[] = {
 };
 
 static MenuEntry_t *MEL_OPTIONS[] = {
+    &ME_OPTIONS_CUSTOM,
 #if !defined EDUKE32_RETAIL_MENU && !defined AMC_BUILD
     &ME_OPTIONS_GAMESETUP,
 #endif
@@ -1536,9 +1555,11 @@ static MenuMenu_t M_SKILL = MAKE_MENUMENU( "Select Skill", &MMF_Top_Skill, MEL_S
 static MenuMenu_t M_NEWGAMECUSTOM = MAKE_MENUMENU( s_NewGame, &MMF_Top_NewGameCustom, MEL_NEWGAMECUSTOM );
 static MenuMenu_t M_NEWGAMECUSTOMSUB = MAKE_MENUMENU( s_NewGame, &MMF_Top_NewGameCustomSub, MEL_NEWGAMECUSTOMSUB );
 static MenuMenu_t M_NEWGAMECUSTOML3 = MAKE_MENUMENU( s_NewGame, &MMF_Top_NewGameCustomL3, MEL_NEWGAMECUSTOML3 );
+
 #ifndef EDUKE32_RETAIL_MENU
 static MenuMenu_t M_GAMESETUP = MAKE_MENUMENU( "Game Setup", &MMF_BigOptions, MEL_GAMESETUP );
 #endif
+static MenuMenu_t M_CUSTOM_SETTINGS = MAKE_MENUMENU( s_CustomSettings, &MMF_CustomSettings, MEL_CUSTOM_SETTINGS );
 static MenuMenu_t M_OPTIONS = MAKE_MENUMENU( s_Options, &MMF_Top_Options, MEL_OPTIONS );
 static MenuMenu_t M_VIDEOSETUP = MAKE_MENUMENU( "Video Mode", &MMF_BigOptions, MEL_VIDEOSETUP );
 static MenuMenu_t M_KEYBOARDSETUP = MAKE_MENUMENU( "Keyboard Setup", &MMF_Top_Options, MEL_KEYBOARDSETUP );
@@ -1671,6 +1692,7 @@ static Menu_t Menus[] = {
 #if defined POLYMER
     { &M_POLYMER, MENU_POLYMER, MENU_RENDERER, MA_Return, Menu },
 #endif
+    { &M_CUSTOM_SETTINGS, MENU_CUSTOMSETTINGS, MENU_OPTIONS, MA_Return, Menu },
     { &M_LOAD, MENU_LOAD, MENU_MAIN, MA_Return, List },
     { &M_SAVE, MENU_SAVE, MENU_MAIN, MA_Return, List },
     { &M_STORY, MENU_STORY, MENU_MAIN, MA_Return, Panel },
@@ -2405,6 +2427,89 @@ void Menu_Init(void)
         M_CREDITS.title = M_CREDITS2.title = M_CREDITS3.title = s_Credits;
     }
 
+    MenuEntry_HideOnCondition(&ME_OPTIONS_CUSTOM, s_CustomSettings[0] == '\0');
+    // prepare custom settings menu
+    if (s_CustomSettings[0] != '\0' && g_MenuSettingsEntries[0].isValid())
+    {
+        i = 0;
+        for (MenuSettingsEntry const & ms_entry : g_MenuSettingsEntries)
+        {
+            if (!ms_entry.isValid())
+                break;
+
+            MEL_CUSTOM_SETTINGS[i] = &ME_CUSTOM_SETTINGS[i];
+            MenuEntry_t & curentry = ME_CUSTOM_SETTINGS[i];
+
+            curentry = ME_CUSTOM_ENTRY_TEMPLATE;
+            curentry.name = ms_entry.name;
+            curentry.font = ms_entry.font;
+            switch (ms_entry.type)
+            {
+                case EmptyAction:
+                    curentry.type = Dummy;
+                    break;
+                case ButtonAction:
+                    curentry.type = Link;
+                    curentry.entry = &MEO_NULL;
+                    break;
+                case YesNoAction:
+                case OnOffAction:
+                case MultiChoiceAction:
+                {
+                    curentry.type = Option;
+                    MenuOption_t & cs_meo = ME_CUSTOM_OPTIONS[i];
+                    if (ms_entry.type == YesNoAction)
+                        cs_meo = MEO_CUSTOM_NOYES_TEMPLATE;
+                    else if (ms_entry.type == OnOffAction)
+                        cs_meo = MEO_CUSTOM_OFFON_TEMPLATE;
+                    else
+                    {
+                        cs_meo = MEO_CUSTOM_EMPTY_TEMPLATE;
+                        cs_meo.options = &ME_CUSTOM_VALUE_LISTS[i];
+                        MenuOptionSet_t & moptset = ME_CUSTOM_VALUE_LISTS[i];
+                        moptset = MEOS_CUSTOM_VALUE_TEMPLATE;
+                        for (j = 0; j < ms_entry.optionCount; ++j)
+                        {
+                            char* valueName = (char *) Xcalloc(64, sizeof(char));
+                            strncpy(valueName, ms_entry.valueNames[j], ARRAY_SIZE(ms_entry.valueNames[j])-1);
+                            MEOSN_CustomValueNames[i][j] = valueName;
+                        }
+                        moptset.optionNames = MEOSN_CustomValueNames[i];
+                        moptset.optionValues = ms_entry.values;
+                        moptset.numOptions = ms_entry.optionCount;
+                    }
+                    if (ms_entry.storeidx >= 0)
+                        cs_meo.data = &ud.customsettings[ms_entry.storeidx];
+                    else
+                        cs_meo.data = &ud.customsettings[i];
+                    cs_meo.font = ms_entry.font;
+                    curentry.entry = &cs_meo;
+                    break;
+                }
+                case SliderAction:
+                    //TODO
+                    break;
+                case Spacer2Action:
+                    curentry.type = Spacer;
+                    curentry.entry = &MEO_Space2;
+                    break;
+                case Spacer4Action:
+                    curentry.type = Spacer;
+                    curentry.entry = &MEO_Space4;
+                    break;
+                case Spacer6Action:
+                    curentry.type = Spacer;
+                    curentry.entry = &MEO_Space6;
+                    break;
+                case Spacer8Action:
+                    curentry.type = Spacer;
+                    curentry.entry = &MEO_Space8;
+                    break;
+            }
+            i++;
+        }
+    }
+
     MenuEntry_HideOnCondition(&ME_MAIN_HELP, G_GetLogoFlags() & LOGO_NOHELP);
 #ifndef EDUKE32_RETAIL_MENU
     MenuEntry_HideOnCondition(&ME_MAIN_CREDITS, G_GetLogoFlags() & LOGO_NOCREDITS);
@@ -2865,6 +2970,10 @@ static void Menu_Pre(MenuID_t cm)
 
     case MENU_NEWGAMECUSTOML3:
         ud.m_newgamecustoml3 = M_NEWGAMECUSTOML3.currentEntry;
+        break;
+
+    case MENU_CUSTOMSETTINGS:
+        ud.m_customsettings = g_MenuSettingsEntries[M_CUSTOM_SETTINGS.currentEntry].storeidx;
         break;
 
     default:
@@ -3902,6 +4011,11 @@ static void Menu_EntryLinkActivate(MenuEntry_t *entry)
         VM_OnEventWithReturn(EVENT_NEWGAMECUSTOM, -1, myconnectindex, M_NEWGAMECUSTOM.currentEntry);
         break;
 
+    case MENU_CUSTOMSETTINGS:
+        ud.returnvar[0] = g_MenuSettingsEntries[M_CUSTOM_SETTINGS.currentEntry].storeidx;
+        VM_OnEventWithReturn(EVENT_CSACTIVATELINK, -1, myconnectindex, M_CUSTOM_SETTINGS.currentEntry);
+        break;
+
     case MENU_SKILL:
     {
         int32_t skillsound = PISTOL_BODYHIT;
@@ -4253,8 +4367,12 @@ static int32_t Menu_EntryOptionModify(MenuEntry_t *entry, int32_t newOption)
                 CONTROL_MapDigitalAxis(M_JOYSTICKAXES.currentEntry, newOption, i&1);
     }
         break;
+    case MENU_CUSTOMSETTINGS:
+        ud.returnvar[0] = g_MenuSettingsEntries[M_CUSTOM_SETTINGS.currentEntry].storeidx;
+        ud.returnvar[1] = ME_CUSTOM_OPTIONS[M_CUSTOM_SETTINGS.currentEntry].currentOption;
+        VM_OnEventWithReturn(EVENT_CSPREMODIFYOPTION, -1, myconnectindex, M_CUSTOM_SETTINGS.currentEntry);
+        break;
     }
-
     return 0;
 }
 
@@ -4281,6 +4399,13 @@ static void Menu_EntryOptionDidModify(MenuEntry_t *entry)
         {
             videoSetGameMode(fullscreen, xres, yres, bpp, ud.detail);
         }
+    }
+
+    if (g_currentMenu == MENU_CUSTOMSETTINGS)
+    {
+        ud.returnvar[0] = g_MenuSettingsEntries[M_CUSTOM_SETTINGS.currentEntry].storeidx;
+        ud.returnvar[1] = ME_CUSTOM_OPTIONS[M_CUSTOM_SETTINGS.currentEntry].currentOption;
+        VM_OnEventWithReturn(EVENT_CSPOSTMODIFYOPTION, -1, myconnectindex, M_CUSTOM_SETTINGS.currentEntry);
     }
 #ifdef USE_OPENGL
 #ifndef EDUKE32_STANDALONE
@@ -5141,6 +5266,10 @@ static void Menu_AboutToStartDisplaying(Menu_t * m)
         Menu_PopulateNewGameCustomL3(M_NEWGAMECUSTOM.currentEntry, M_NEWGAMECUSTOMSUB.currentEntry);
         break;
 
+    case MENU_CUSTOMSETTINGS:
+        VM_OnEvent(EVENT_CSPOPULATEMENU, -1, myconnectindex);
+        break;
+
     case MENU_LOAD:
         if (FURY)
             M_LOAD.title = (g_player[myconnectindex].ps->gm & MODE_GAME) ? s_LoadGame : s_Continue;
@@ -5829,10 +5958,11 @@ static int32_t M_RunMenu_Menu(Menu_t *cm, MenuMenu_t *menu, MenuEntry_t *current
                 ++numvalidentries;
 
                 // assumes height == font->get_yline()!
-                totalheight += entry->getHeight();
+                if (numvalidentries <= 7)
+                    totalheight += entry->getHeight();
             }
 
-            calculatedentryspacing = (klabs(menu->format->bottomcutoff) - menu->format->pos.y - totalheight) / (numvalidentries > 1 ? numvalidentries - 1 : 1);
+            calculatedentryspacing = (klabs(menu->format->bottomcutoff) - menu->format->pos.y - totalheight) / (numvalidentries > 1 ? min(7, numvalidentries) - 1 : 1);
         }
 
         // totalHeight calculating pass

@@ -143,6 +143,10 @@ static inline int32_t G_GetLogoFlags(void)
 #define MAXPWLOCKOUT 128
 #define MAXRTSNAME 128
 
+#ifndef MAXCUSTOMSETTINGSENTRIES
+#define MAXCUSTOMSETTINGSENTRIES 64
+#endif
+
 #define MAX_RETURN_VALUES 6
 
 #define MAX_ARRAYRANGE_VALUES 32
@@ -184,6 +188,8 @@ typedef struct {
     int32_t player_skill,level_number,volume_number,m_marker,marker,mouseflip;
     int32_t music_episode, music_level, skill_voice;
     int32_t m_newgamecustom, m_newgamecustomsub, m_newgamecustoml3;
+    int32_t m_customsettings;
+    int32_t customsettings[MAXCUSTOMSETTINGSENTRIES];
 
     int32_t playerbest;
 

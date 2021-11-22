@@ -1104,6 +1104,8 @@ memberlabel_t const UserdefsLabels[]=
     { "voicetoggle",            USERDEFS_VOICETOGGLE,            0, 0, -1 },
     { "userquote_xoffset",      USERDEFS_USERQUOTE_XOFFSET,      0, 0, -1 },
     { "userquote_yoffset",      USERDEFS_USERQUOTE_YOFFSET,      0, 0, -1 },
+    { "m_customsettings",       USERDEFS_M_CUSTOMSETTINGS,       0, 0, -1 },
+    { "csarray",                USERDEFS_CSARRAY,                LABEL_HASPARM2, MAXCUSTOMSETTINGSENTRIES, -1 },
 };
 
 int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
@@ -1301,6 +1303,10 @@ int32_t __fastcall VM_GetUserdef(int32_t labelNum, int const lParm2)
         case USERDEFS_VOICETOGGLE:            labelNum = ud.config.VoiceToggle;           break;
         case USERDEFS_USERQUOTE_XOFFSET:      labelNum = ud.userquote_xoffset;            break;
         case USERDEFS_USERQUOTE_YOFFSET:      labelNum = ud.userquote_yoffset;            break;
+        case USERDEFS_M_CUSTOMSETTINGS:       labelNum = ud.m_customsettings;             break;
+        case USERDEFS_CSARRAY:
+            labelNum = ud.customsettings[lParm2];
+            break;
 
         default: EDUKE32_UNREACHABLE_SECTION(labelNum = -1; break);
     }
@@ -1515,6 +1521,9 @@ void __fastcall VM_SetUserdef(int const labelNum, int const lParm2, int32_t cons
             break;
         case USERDEFS_USERQUOTE_XOFFSET:            ud.userquote_xoffset             = iSet; break;
         case USERDEFS_USERQUOTE_YOFFSET:            ud.userquote_yoffset             = iSet; break;
+        case USERDEFS_CSARRAY:
+            ud.customsettings[lParm2] = iSet;
+            break;
     }
 }
 
