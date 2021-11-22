@@ -336,6 +336,8 @@ static tokenmap_t const vm_keywords[] =
     { "ifp",                    CON_IFP },
     { "ifpdistg",               CON_IFPDISTG },
     { "ifpdistl",               CON_IFPDISTL },
+    { "ifpdistgvar",            CON_IFPDISTGVAR },
+    { "ifpdistlvar",            CON_IFPDISTLVAR },
     { "ifphealthl",             CON_IFPHEALTHL },
     { "ifpinventory",           CON_IFPINVENTORY },
     { "ifplaybackon",           CON_IFPLAYBACKON },
@@ -1949,7 +1951,8 @@ static bool C_CheckEmptyBranch(int tw, intptr_t lastScriptPtr)
     // ifrnd and the others actually do something when the condition is executed
     if ((Bstrncmp(VM_GetKeywordForID(tw), "if", 2) && tw != CON_ELSE) ||
             tw == CON_IFRND || tw == CON_IFHITWEAPON || tw == CON_IFCANSEE || tw == CON_IFCANSEETARGET ||
-            tw == CON_IFPDISTL || tw == CON_IFPDISTG || tw == CON_IFGOTWEAPONCE)
+            tw == CON_IFPDISTL || tw == CON_IFPDISTG || tw == CON_IFPDISTLVAR || tw == CON_IFPDISTGVAR || 
+            tw == CON_IFGOTWEAPONCE)
     {
         g_skipBranch = false;
         return false;
@@ -5078,6 +5081,8 @@ repeatcase:
         case CON_IFP:
         case CON_IFPDISTG:
         case CON_IFPDISTL:
+        case CON_IFPDISTGVAR:
+        case CON_IFPDISTLVAR:
         case CON_IFPHEALTHL:
         case CON_IFPINVENTORY:
         case CON_IFPLAYERSL:
@@ -5094,6 +5099,8 @@ repeatcase:
 
                 switch (tw)
                 {
+                case CON_IFPDISTGVAR:
+                case CON_IFPDISTLVAR:
                 case CON_IFCUTSCENE:
                     C_GetNextVar();
                     break;

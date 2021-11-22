@@ -3171,6 +3171,22 @@ badindex:
                     vm.pActor->timetosleep = SLEEPTIME;
                 dispatch();
 
+            vInstruction(CON_IFPDISTLVAR):
+            {
+                int const dist = Gv_GetVar(*(++insptr));
+                branch(vm.playerDist < dist);
+                if (vm.playerDist > MAXSLEEPDIST && vm.pActor->timetosleep == 0)
+                    vm.pActor->timetosleep = SLEEPTIME;
+                dispatch();
+            }
+            vInstruction(CON_IFPDISTGVAR):
+            {
+                int const dist = Gv_GetVar(*(++insptr));
+                branch(vm.playerDist > dist);
+                if (vm.playerDist > MAXSLEEPDIST && vm.pActor->timetosleep == 0)
+                    vm.pActor->timetosleep = SLEEPTIME;
+                dispatch();
+            }
             vInstruction(CON_IFRESPAWN):
                 if (A_CheckEnemySprite(vm.pSprite))
                     branch(ud.respawn_monsters);
