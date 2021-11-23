@@ -4415,12 +4415,16 @@ badindex:
 
             vInstruction(CON_SAVEGAMEVAR):
             vInstruction(CON_READGAMEVAR):
+            vInstruction(CON_IFCFGVAR):
             {
                 int32_t nValue = 0;
                 insptr++;
                 if (ud.config.scripthandle < 0)
                 {
-                    insptr++;
+                    if (VM_DECODE_INST(tw) == CON_IFCFGVAR)
+                        branch(0);
+                    else
+                        insptr++;
                     dispatch();
                 }
                 switch (VM_DECODE_INST(tw))
@@ -4432,6 +4436,9 @@ badindex:
                     case CON_READGAMEVAR:
                         SCRIPT_GetNumber(ud.config.scripthandle, "Gamevars", aGameVars[*insptr].szLabel, &nValue);
                         Gv_SetVar(*insptr++, nValue);
+                        break;
+                    case CON_IFCFGVAR:
+                        branch(SCRIPT_GetNumber(ud.config.scripthandle, "Gamevars", aGameVars[*insptr].szLabel, &nValue) == 0);
                         break;
                 }
                 dispatch();
