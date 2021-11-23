@@ -315,6 +315,7 @@ static tokenmap_t const vm_keywords[] =
     { "ifcanseetarget",         CON_IFCANSEETARGET },
     { "ifcanshoottarget",       CON_IFCANSHOOTTARGET },
     { "ifceilingdistl",         CON_IFCEILINGDISTL },
+    { "ifcfgvar",               CON_IFCFGVAR },
     { "ifclient",               CON_IFCLIENT },
     { "ifcount",                CON_IFCOUNT },
     { "ifcutscene",             CON_IFCUTSCENE },
@@ -5077,6 +5078,7 @@ repeatcase:
         case CON_IFAI:
         case CON_IFANGDIFFL:
         case CON_IFCEILINGDISTL:
+        case CON_IFCFGVAR:
         case CON_IFCOUNT:
         case CON_IFCUTSCENE:
         case CON_IFFLOORDISTL:
@@ -5104,6 +5106,9 @@ repeatcase:
 
                 switch (tw)
                 {
+                case CON_IFCFGVAR:
+                    C_GetNextVarType(GAMEVAR_READONLY);
+                    break;
                 case CON_IFPDISTGVAR:
                 case CON_IFPDISTLVAR:
                 case CON_IFCUTSCENE:
