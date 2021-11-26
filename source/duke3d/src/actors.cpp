@@ -163,7 +163,7 @@ void A_RadiusDamageObject_Internal(int const spriteNum, int const otherSprite, i
 
         dmgActor.htang = getangle(pOther->x - pSprite->x, pOther->y - pSprite->y);
 
-        if ((pOther->extra > 0 && ((A_CheckSpriteFlags(spriteNum, SFLAG_PROJECTILE) && SpriteProjectile[spriteNum].workslike & PROJECTILE_RADIUS_PICNUM)
+        if ((pOther->extra > 0 && ((A_CheckSpriteFlags(spriteNum, SFLAG_PROJECTILE) && SpriteProjectile[spriteNum].workslike & (PROJECTILE_RADIUS_PICNUM | PROJECTILE_RADIUS_PICNUM_EX))
 #ifndef EDUKE32_STANDALONE
             || pSprite->picnum == RPG
 #endif
@@ -1319,8 +1319,9 @@ int A_IncurDamage(int const spriteNum)
                 break;
 
             default:
-                P_Nudge(playerNum, spriteNum, (A_CheckSpriteFlags(pActor->htowner, SFLAG_PROJECTILE) &&
-                                       (SpriteProjectile[pActor->htowner].workslike & PROJECTILE_RPG))
+                P_Nudge(playerNum, spriteNum, ((g_tile[pActor->htpicnum].flags & SFLAG_PROJECTILE) &&
+                                       (g_tile[pActor->htpicnum].proj->workslike & PROJECTILE_RPG) &&
+                                       (g_tile[pActor->htpicnum].proj->workslike & PROJECTILE_RADIUS_PICNUM_EX))
                                       ? 2
                                       : 1);
                 break;
@@ -1786,7 +1787,8 @@ ACTOR_STATIC void G_MoveFallers(void)
 
             if ((j = A_IncurDamage(spriteNum)) >= 0)
             {
-                if (j == FIREEXT || j == RPG || j == RADIUSEXPLOSION || j == SEENINE || j == OOZFILTER)
+                if (j == FIREEXT || j == RPG || j == RADIUSEXPLOSION || j == SEENINE || j == OOZFILTER ||
+                        ((g_tile[j].flags & SFLAG_PROJECTILE) && (g_tile[j].proj->workslike & PROJECTILE_RPG) && (g_tile[j].proj->workslike & PROJECTILE_RADIUS_PICNUM_EX)))
                 {
                     if (pSprite->extra <= 0)
                     {
@@ -2320,6 +2322,8 @@ ACTOR_STATIC void G_MoveStandables(void)
 
                 if (dmgTile < 0)
                     goto crack_default;
+                if ((g_tile[dmgTile].flags & SFLAG_PROJECTILE) && (g_tile[dmgTile].proj->workslike & PROJECTILE_RPG) && (g_tile[dmgTile].proj->workslike & PROJECTILE_RADIUS_PICNUM_EX))
+                    goto radius_picnum_ex;
 
                 switch (tileGetMapping(dmgTile))
                 {
@@ -2328,6 +2332,7 @@ ACTOR_STATIC void G_MoveStandables(void)
                     case RADIUSEXPLOSION__:
                     case SEENINE__:
                     case OOZFILTER__:
+radius_picnum_ex:
                         for (SPRITES_OF(STAT_STANDABLE, j))
                         {
                             if (pSprite->hitag == sprite[j].hitag &&

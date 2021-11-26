@@ -1950,9 +1950,9 @@ void A_DamageObject_Duke3D(int spriteNum, int const dmgSrc)
 
     int radiusDamage = 0;
 
-    if (A_CheckSpriteFlags(dmgSrc,SFLAG_PROJECTILE))
-        if (SpriteProjectile[dmgSrc].workslike & PROJECTILE_RPG)
-            radiusDamage = 1;
+    if (A_CheckSpriteFlags(dmgSrc,SFLAG_PROJECTILE) &&
+            (SpriteProjectile[dmgSrc].workslike & PROJECTILE_RPG) && (SpriteProjectile[dmgSrc].workslike & PROJECTILE_RADIUS_PICNUM_EX))
+        radiusDamage = 1;
 
     switch (tileGetMapping(PN(spriteNum)))
     {
