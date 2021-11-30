@@ -3429,34 +3429,23 @@ void P_GetInput(int const playerNum)
 
     int const movementLocked = P_CheckLockedMovement(playerNum);
 
-    if ((ud.scrollmode && ud.overhead_on) || (movementLocked & IL_NOTHING) == IL_NOTHING)
+    if (ud.scrollmode && ud.overhead_on)
     {
-        if (ud.scrollmode && ud.overhead_on)
-        {
-            ud.folfvel = input.fvel;
-            ud.folsvel = input.svel;
-            ud.folavel = fix16_to_int(input.q16avel);
-        }
+        ud.folfvel = input.fvel;
+        ud.folsvel = input.svel;
+        ud.folavel = fix16_to_int(input.q16avel);
 
         localInput.fvel = localInput.svel = 0;
         localInput.q16avel = localInput.q16horz = 0;
     }
     else
     {
-        if (!(movementLocked & IL_NOMOVE))
-        {
-            localInput.fvel = clamp(localInput.fvel + input.fvel, -MAXVEL, MAXVEL);
-            localInput.svel = clamp(localInput.svel + input.svel, -MAXSVEL, MAXSVEL);
-        }
+        localInput.fvel = clamp(localInput.fvel + input.fvel, -MAXVEL, MAXVEL);
+        localInput.svel = clamp(localInput.svel + input.svel, -MAXSVEL, MAXSVEL);
 
-        if (!(movementLocked & IL_NOANGLE))
-            localInput.q16avel = fix16_sadd(localInput.q16avel, input.q16avel);
-
-        if (!(movementLocked & IL_NOHORIZ))
-        {
-            float horizAngle   = atan2f(localInput.q16horz, F16(128)) * (512.f / fPI) + fix16_to_float(input.q16horz);
-            localInput.q16horz = fix16_clamp(Blrintf(F16(128) * tanf(horizAngle * (fPI / 512.f))), F16(-MAXHORIZVEL), F16(MAXHORIZVEL));
-        }
+        float horizAngle   = atan2f(localInput.q16horz, F16(128)) * (512.f / fPI) + fix16_to_float(input.q16horz);
+        localInput.q16horz = fix16_clamp(Blrintf(F16(128) * tanf(horizAngle * (fPI / 512.f))), F16(-MAXHORIZVEL), F16(MAXHORIZVEL));
+        localInput.q16avel = fix16_sadd(localInput.q16avel, input.q16avel);
     }
 
 }
