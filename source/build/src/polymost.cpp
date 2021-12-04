@@ -41,7 +41,7 @@ int32_t r_parallaxskypanning = 1;
 int32_t r_polygonmode;     // 0:GL_FILL,1:GL_LINE,2:GL_POINT //FUK
 int32_t r_polymostDebug;
 int32_t r_shadeinterpolate = 1;
-int32_t r_skyzbufferhack;
+int32_t r_skyzbufferhack = 1;
 int32_t r_useindexedcolortextures = 1;
 int32_t r_usenewshading = 4;
 int32_t r_usesamplerobjects = 1;
