@@ -263,6 +263,7 @@ void G_DoCheats(void)
     {
         cheatNum = osdcmd_cheatsinfo_stat.cheatnum;
 
+#ifndef AMC_BUILD
         if (!FURY && ud.player_skill == 4)
         {
             switch (cheatNum)
@@ -280,7 +281,7 @@ void G_DoCheats(void)
                 return;
             }
         }
-
+#endif
         // JBF 20030914
         osdcmd_cheatsinfo_stat.cheatnum = -1;
         consoleCheat = 1;
@@ -732,12 +733,14 @@ void G_DoCheats(void)
         {
             if (pPlayer->cheat_phase == -1)
             {
+#ifndef AMC_BUILD
                 if (!FURY && ud.player_skill == 4)
                 {
                     P_DoQuote(QUOTE_CHEATS_DISABLED, pPlayer);
                     pPlayer->cheat_phase = 0;
                 }
                 else
+#endif
                 {
                     pPlayer->cheat_phase = 1;
                     //                    P_DoQuote(QUOTE_25,pPlayer);
