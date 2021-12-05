@@ -1017,6 +1017,8 @@ EXTERN char faketile[(MAXTILES+7)>>3];
 EXTERN char *faketiledata[MAXTILES];
 EXTERN int faketilesize[MAXTILES];
 
+EXTERN uint8_t tilefilenum[MAXTILES];
+
 EXTERN char spritecol2d[MAXTILES][2];
 EXTERN uint8_t tilecols[MAXTILES];
 

@@ -76,7 +76,8 @@ static pthtyp *texcache_tryart(int32_t const dapicnum, int32_t const dapalnum, i
             if (pth->flags & PTH_INVALIDATED)
             {
                 pth->flags &= ~PTH_INVALIDATED;
-                gloadtile_art(dapicnum, searchpalnum, tintpalnum, dashade, dameth, pth, 0);
+                // this should use MAXARTFILES_BASE but I'm too lazy... -bdino
+                gloadtile_art(dapicnum, searchpalnum, tintpalnum, dashade, dameth, pth, tilefilenum[dapicnum] >= 200 ? 1 : 0);
                 pth->palnum = dapalnum;
             }
 
