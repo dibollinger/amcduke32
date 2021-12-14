@@ -1359,11 +1359,10 @@ static MenuEntry_t ME_SOUND_SAMPLINGRATE = MAKE_MENUENTRY( "Sample rate:", &MF_R
 static MenuOption_t MEO_SOUND_OPL3STEREO = MAKE_MENUOPTION(&MF_Redfont, &MEOS_NoYes, &opl3stereo);
 static MenuEntry_t ME_SOUND_OPL3STEREO = MAKE_MENUENTRY( "OPL3 stereo mode:", &MF_Redfont, &MEF_BigOptionsRtSections, &MEO_SOUND_OPL3STEREO, Option );
 
-static MenuRangeFloat_t MEO_SOUND_OPL3AMP
-= MAKE_MENURANGE(&AL_PostAmp, &MF_Redfont, 1.f, 6.f, 6.f, 21, DisplayTypeInteger | EnforceIntervals);
+static MenuRangeFloat_t MEO_SOUND_OPL3AMP = MAKE_MENURANGE(&AL_PostAmp, &MF_Redfont, 1.f, 6.f, 6.f, 21, DisplayTypeInteger | EnforceIntervals);
 static MenuEntry_t ME_SOUND_OPL3AMP = MAKE_MENUENTRY("OPL3 boost:", &MF_Redfont, &MEF_BigOptionsRtSections, &MEO_SOUND_OPL3AMP, RangeFloat);
 
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
 static MenuOption_t MEO_SOUND_EXTMUSIC = MAKE_MENUOPTION(&MF_Redfont, &MEOS_NoYes, &extmusic);
 static MenuEntry_t  ME_SOUND_EXTMUSIC  = MAKE_MENUENTRY("Load OGG/FLAC music:", &MF_Redfont, &MEF_BigOptionsRtSections, &MEO_SOUND_EXTMUSIC, Option);
 #endif
@@ -1434,7 +1433,7 @@ static MenuEntry_t *MEL_SOUND_DEVSETUP[] = {
     &ME_SOUND_OPL3AMP,
     &ME_SOUND_OPL3STEREO,
     &ME_SOUND_SF2,
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
     &ME_SOUND_EXTMUSIC,
 #endif
 #endif
@@ -2687,7 +2686,7 @@ static void Menu_Pre(MenuID_t cm)
         MenuEntry_DisableOnCondition(&ME_SOUND_OPL3STEREO, !ud.config.MusicToggle);
         MenuEntry_DisableOnCondition(&ME_SOUND_OPL3AMP, !ud.config.MusicToggle);
         MenuEntry_DisableOnCondition(&ME_SOUND_SF2, !ud.config.MusicToggle);
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
         MenuEntry_DisableOnCondition(&ME_SOUND_EXTMUSIC, !ud.config.MusicToggle);
 #endif
         MenuEntry_HideOnCondition(&ME_SOUND_OPL3STEREO, musicdevice != ASS_OPL3);
@@ -2698,7 +2697,7 @@ static void Menu_Pre(MenuID_t cm)
                                                         soundvoices == ud.config.NumVoices &&
                                                         musicdevice == ud.config.MusicDevice &&
                                                         opl3stereo == AL_Stereo &&
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
                                                         extmusic == g_maybeUpgradeMusic &&
 #endif
                                                         !Bstrcmp(sf2bankfile, SF2_BankFile)
@@ -3827,7 +3826,7 @@ static void Menu_RefreshSoundProperties()
     soundvoices  = ud.config.NumVoices;
     musicdevice  = ud.config.MusicDevice;
     opl3stereo   = AL_Stereo;
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
     extmusic     = g_maybeUpgradeMusic;
 #endif
 }
@@ -4032,7 +4031,7 @@ static void Menu_EntryLinkActivate(MenuEntry_t *entry)
                     (ALSA_ClientID != alsadevices[alsadevice].clntid || ALSA_PortID != alsadevices[alsadevice].portid))
 #endif
             );
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
             int const musicdirsToggleUsed = (g_maybeUpgradeMusic != extmusic);
             g_maybeUpgradeMusic = extmusic;
 #endif
@@ -4047,8 +4046,7 @@ static void Menu_EntryLinkActivate(MenuEntry_t *entry)
             }
 
             S_RestartMusic();
-
-#ifdef FORMAT_UPGRADE_ELIGIBLE
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
             if (!musicdirsToggleUsed)
 #endif
             {
