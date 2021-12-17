@@ -719,7 +719,7 @@ static char const s_Scale[] = "Scale:";
 
 static MenuOption_t MEO_SCREENSETUP_CROSSHAIR = MAKE_MENUOPTION(&MF_Redfont, &MEOS_OffOn, &ud.crosshair);
 static MenuEntry_t ME_SCREENSETUP_CROSSHAIR = MAKE_MENUENTRY( "Crosshair:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_SCREENSETUP_CROSSHAIR, Option );
-static MenuRangeInt32_t MEO_SCREENSETUP_CROSSHAIRSIZE = MAKE_MENURANGE( &ud.crosshairscale, &MF_Redfont, 25, 100, 0, 16, DisplayTypePercent );
+static MenuRangeInt32_t MEO_SCREENSETUP_CROSSHAIRSIZE = MAKE_MENURANGE( &ud.crosshairscale, &MF_Redfont, 10, 100, 0, 19, DisplayTypePercent );
 static MenuEntry_t ME_SCREENSETUP_CROSSHAIRSIZE = MAKE_MENUENTRY( s_Scale, &MF_Redfont, &MEF_BigOptions_Apply, &MEO_SCREENSETUP_CROSSHAIRSIZE, RangeInt32 );
 
 static int32_t vpsize;
@@ -1325,7 +1325,11 @@ static int32_t alsadevice;
 static std::vector<alsa_mididevinfo_t> alsadevices;
 #endif
 
-static int32_t soundrate, soundvoices, musicdevice, opl3stereo, extmusic;
+static int32_t soundrate, soundvoices, musicdevice, opl3stereo;
+#if (defined(FORMAT_UPGRADE_ELIGIBLE) && !defined(AMC_BUILD))
+static int32_t extmusic;
+#endif
+
 static char sf2bankfile[BMAX_PATH];
 static MenuOption_t MEO_SOUND = MAKE_MENUOPTION( &MF_Redfont, &MEOS_OffOn, &ud.config.SoundToggle );
 static MenuEntry_t ME_SOUND = MAKE_MENUENTRY( "Sound:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_SOUND, Option );

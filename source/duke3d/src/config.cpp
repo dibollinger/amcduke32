@@ -289,7 +289,7 @@ void CONFIG_SetDefaults(void)
     ud.config.keybind_mode    = 1;
     ud.configversion          = 0;
     ud.crosshair              = 1;
-    ud.crosshairscale         = 50;
+    ud.crosshairscale         = 25;
     ud.default_skill          = 1;
     ud.democams               = 1;
     ud.detail                 = 0;
