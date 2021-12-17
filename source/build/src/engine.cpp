@@ -12490,7 +12490,9 @@ int32_t cansee(int32_t x1, int32_t y1, int32_t z1, int16_t sect1, int32_t x2, in
 
     if (!sectorsareconnected(sect1, sect2))
     {
+#if 0
         DVLOG_F(LOG_DEBUG, "cansee: sector %d can't reach sector %d", sect1, sect2);
+#endif
         return 0;
     }
 
