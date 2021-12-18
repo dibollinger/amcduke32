@@ -47,7 +47,7 @@ uint8_t g_keyAsciiEnd;
 char    g_keyRemapTable[NUMKEYS];
 char    g_keyNameTable[NUMKEYS][24];
 
-int32_t r_maxfps = -1;
+int32_t r_maxfps = 144;
 uint64_t g_frameDelay;
 
 
