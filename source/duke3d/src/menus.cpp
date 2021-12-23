@@ -244,8 +244,11 @@ MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 
 #endif
 
 
-
+#ifdef AMC_BUILD
+static MenuMenuFormat_t MMF_Top_Main =             { {  MENU_MARGIN_CENTER<<16, 68<<16, }, -(190<<16) };
+#else
 static MenuMenuFormat_t MMF_Top_Main =             { {  MENU_MARGIN_CENTER<<16, 60<<16, }, -(190<<16) };
+#endif
 static MenuMenuFormat_t MMF_Top_Episode =          { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustom =    { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustomSub = { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
@@ -3082,7 +3085,6 @@ static void msaveloadtext(const vec2_t& origin, int level, int volume, int skill
 static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
 {
     int32_t i, j, l = 0;
-
     switch (cm)
     {
     case MENU_MAIN_INGAME:
@@ -3091,9 +3093,13 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
     case MENU_MAIN:
         if ((G_GetLogoFlags() & LOGO_NOGAMETITLE) == 0)
         {
+#ifdef AMC_BUILD
+            rotatesprite_fs(origin.x + (MENU_MARGIN_CENTER<<16), origin.y + ((36+l)<<16), 65536L,0,INGAMEDUKETHREEDEE,0,0,10);
+#else
             rotatesprite_fs(origin.x + (MENU_MARGIN_CENTER<<16), origin.y + ((28+l)<<16), 65536L,0,INGAMEDUKETHREEDEE,0,0,10);
             if (PLUTOPAK)   // JBF 20030804
                 rotatesprite_fs(origin.x + ((MENU_MARGIN_CENTER+100)<<16), origin.y + (36<<16), 65536L,0,PLUTOPAKSPRITE+2,(sintable[(timer120()<<4)&2047]>>11),0,2+8);
+#endif
         }
         break;
 
