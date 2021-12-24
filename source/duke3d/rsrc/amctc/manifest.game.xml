@@ -9,10 +9,10 @@
   <assemblyIdentity
       version="2.0.2.1"
       processorArchitecture="*"
-      name="AMC TC"
+      name="The AMC Squad"
       type="win32"
 />
-  <description>AMC TC</description>
+  <description>The AMC Squad</description>
   <dependency>
     <dependentAssembly>
       <assemblyIdentity
