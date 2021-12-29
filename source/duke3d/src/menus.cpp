@@ -1450,7 +1450,11 @@ static MenuEntry_t *MEL_SOUND_DEVSETUP[] = {
 
 
 static MenuOption_t MEO_SAVESETUP_AUTOSAVE = MAKE_MENUOPTION( &MF_Redfont, &MEOS_OffOn, &ud.autosave );
+#ifdef AMC_BUILD
+static MenuEntry_t ME_SAVESETUP_AUTOSAVE = MAKE_MENUENTRY( "Autosaves:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_SAVESETUP_AUTOSAVE, Option );
+#else
 static MenuEntry_t ME_SAVESETUP_AUTOSAVE = MAKE_MENUENTRY( "Checkpoints:", &MF_Redfont, &MEF_BigOptionsRt, &MEO_SAVESETUP_AUTOSAVE, Option );
+#endif
 
 static MenuOption_t MEO_SAVESETUP_AUTOSAVEDELETION = MAKE_MENUOPTION( &MF_Redfont, &MEOS_NoYes, &ud.autosavedeletion );
 static MenuEntry_t ME_SAVESETUP_AUTOSAVEDELETION = MAKE_MENUENTRY( "Auto-Delete:", &MF_Redfont, &MEF_BigOptions_Apply, &MEO_SAVESETUP_AUTOSAVEDELETION, Option );
@@ -1459,7 +1463,9 @@ static MenuEntry_t ME_SAVESETUP_MAXAUTOSAVES = MAKE_MENUENTRY( "Limit:", &MF_Red
 
 static MenuEntry_t ME_SAVESETUP_CLEANUP = MAKE_MENUENTRY( "Clean Up Saves", &MF_Redfont, &MEF_BigOptionsRt, &MEO_NULL, Link );
 
-#ifdef EDUKE32_STANDALONE
+#ifdef AMC_BUILD
+static MenuEntry_t ME_SAVESETUP_RESETSTATS = MAKE_MENUENTRY( "Reset Game Progress", &MF_Redfont, &MEF_BigOptionsRt, &MEO_NULL, Link );
+#elif defined(EDUKE32_STANDALONE)
 static MenuEntry_t ME_SAVESETUP_RESETSTATS = MAKE_MENUENTRY( "Reset Stats/Achievements", &MF_Redfont, &MEF_BigOptionsRt, &MEO_NULL, Link );
 #endif
 
@@ -1468,7 +1474,8 @@ static MenuEntry_t *MEL_SAVESETUP[] = {
     &ME_SAVESETUP_AUTOSAVEDELETION,
     &ME_SAVESETUP_MAXAUTOSAVES,
     &ME_SAVESETUP_CLEANUP,
-#ifdef EDUKE32_STANDALONE
+#if defined(EDUKE32_STANDALONE) || defined(AMC_BUILD)
+    &ME_Space4_Redfont,
     &ME_SAVESETUP_RESETSTATS,
 #endif
 };
@@ -3205,6 +3212,10 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
     case MENU_RESETSTATSVERIFY:
         videoFadeToBlack(1);
 
+#ifdef AMC_BUILD
+        Bsprintf(tempbuf, "Delete all unlocks and game progress?\nThis action cannot be undone!");
+        Menu_DrawVerifyPrompt(origin.x, origin.y, tempbuf, 3);
+#else
         if (communityapiEnabled())
         {
             Bsprintf(tempbuf, "Delete %s stats and achievement data?\nThis action cannot be undone!", communityApiGetPlatformName());
@@ -3212,7 +3223,7 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
         }
         else
             mgametextcenter(origin.x, origin.y + (90<<16), "No data found!");
-
+#endif
         break;
 
     case MENU_LOADVERIFY:
@@ -3239,8 +3250,9 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
 #if AMC_BUILD
             Bsprintf(tempbuf, "Old and potentially incompatible save detected.\n"
                               "Loading this save may result in unexpected issues.\n\n"
+                              "We recommend starting at AMC Base instead.\n"
                               "Load anyways?");
-            Menu_DrawVerifyPrompt(origin.x, origin.y, tempbuf, 5);
+            Menu_DrawVerifyPrompt(origin.x, origin.y, tempbuf, 6);
 #else 
             Bsprintf(tempbuf, "This save was created with an older version of " APPNAME "\n"
                               "and is not 100%% compatible with the current version of the game.\n\n"
@@ -4081,7 +4093,7 @@ static void Menu_EntryLinkActivate(MenuEntry_t *entry)
         g_oldSaveCnt = G_CountOldSaves();
         Menu_Change(MENU_SAVECLEANVERIFY);
     }
-#ifdef EDUKE32_STANDALONE
+#if defined(EDUKE32_STANDALONE) || defined(AMC_BUILD)
     else if (entry == &ME_SAVESETUP_RESETSTATS)
         Menu_Change(MENU_RESETSTATSVERIFY);
 #endif
@@ -4502,6 +4514,11 @@ static void Menu_Verify(int32_t input)
             communityapiResetStats();
             VM_OnEvent(EVENT_CAPIR);
         }
+        break;
+#elif defined(AMC_BUILD)
+    case MENU_RESETSTATSVERIFY:
+        if (input)
+            VM_OnEvent(EVENT_CAPIR);
         break;
 #endif
 
