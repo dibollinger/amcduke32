@@ -227,7 +227,7 @@ int32_t g_keyEntryOrder[NUMGAMEFUNCTIONS] = {-1};
 MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             128<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
                                         -1,                 10,                 0,                  0,                  0,                  0,                  1,
                                         0,                  0,                  1 };
-MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        65536,              10<<16,             128<<16,            32768,              0,
+MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        49152,              10<<16,             128<<16,            32768,              0,
                                         -1,                 10,                 0,                  0,                  10,                 10,                 16,
                                         0,                  0,                  16 };
 MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             128<<16,            32768,              0,
@@ -3236,12 +3236,19 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
         }
         else if (msv.isOldScriptVer)
         {
+#if AMC_BUILD
+            Bsprintf(tempbuf, "Old and potentially incompatible save detected.\n"
+                              "Loading this save may result in unexpected issues.\n\n"
+                              "Load anyways?");
+            Menu_DrawVerifyPrompt(origin.x, origin.y, tempbuf, 5);
+#else 
             Bsprintf(tempbuf, "This save was created with an older version of " APPNAME "\n"
                               "and is not 100%% compatible with the current version of the game.\n\n"
                               "If this data is important to you, we highly recommend that\n"
                               "version of " APPNAME " be used to finish your playthrough instead.\n\n"
                               "Load game:\n\"%s\"", msv.brief.name);
             Menu_DrawVerifyPrompt(origin.x, origin.y, tempbuf, 8);
+#endif
         }
         else
         {
@@ -6645,7 +6652,6 @@ static void Menu_Run(Menu_t *cm, const vec2_t origin)
     {
         case Verify:
         {
-            auto object = (MenuVerify_t*)cm->object;
 
             Menu_Pre(cm->menuID);
 
@@ -6653,7 +6659,10 @@ static void Menu_Run(Menu_t *cm, const vec2_t origin)
 
             Menu_PreDraw(cm->menuID, NULL, origin);
 
+#ifndef AMC_BUILD
+            auto object = (MenuVerify_t*)cm->object;
             Menu_DrawCursorLeft(origin.x + object->cursorpos.x, origin.y + object->cursorpos.y, 65536);
+#endif
 
             break;
         }
