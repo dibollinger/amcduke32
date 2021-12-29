@@ -2662,8 +2662,6 @@ void P_HandleSharedKeys(int playerNum)
 
     if ((extBits & BIT(EK_CHAT_MODE)) == 0)
     {
-        int const aimMode = pPlayer->aim_mode;
-
         pPlayer->aim_mode = (playerBits>>SK_AIMMODE)&1;
         pPlayer->aim_mode |= ((extBits>>EK_GAMEPAD_CENTERING)&1)<<1;
         pPlayer->aim_mode |= ((extBits>>EK_GAMEPAD_AIM_ASSIST)&1)<<2;
