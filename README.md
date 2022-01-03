@@ -10,6 +10,10 @@
        * [ifcfgvar](#ifcfgvar)
        * [ifpdistlvar and ifpdistgvar](#ifpdistlvar-and-ifpdistgvar)
        * [mkdir](#mkdir)
+       * [profilenanostart](#profilenanostart)
+       * [profilenanoend](#profilenanoend)
+       * [profilenanolog](#profilenanolog)
+       * [profilenanoreset](#profilenanoreset)
        * [setmusicvolume](#setmusicvolume)
    * [DEF Commands](#def-commands)
        * [keyconfig](#keyconfig)
@@ -117,6 +121,8 @@ In this section we list the major changes to the modding API, including new CON 
 
 Commands that extend the functionality of the CON VM.
 
+----
+
 #### __definesoundv__
 
 Usage: `definesoundv <soundID> <filename> <pitch_lower> <pitch_upper> <priority> <flags> <distance> <volume>`
@@ -141,6 +147,8 @@ Defines a sound and assigns various properties to it. The maximum number of soun
 * `<distance>`: Negative values increase the distance at which the sound is heard; positive ones reduce it.  Can range from -32768 to 32767.
 * `<volume>`: Ranges from 0 to 16384, with 1024 being the default volume. Changes the actual volume of the sound being played.
 
+----
+
 #### __ifcfgvar__
 
 Usage: `ifcfgvar <var>`
@@ -148,6 +156,8 @@ Usage: `ifcfgvar <var>`
 Can only be used with variables. Will check if the CFG contains the given variable, and if yes, follows the `true` path, `false` otherwise.
 
 Its main use is to allow loading variables stored inside the CFG that have a nonzero default value. The problem is that `loadgamevar` will overwrite the value of the variable with 0 if the variable is not present. By using this conditional, we can prevent this.
+
+----
 
 #### __ifpdistlvar and ifpdistgvar__
 
@@ -161,6 +171,8 @@ Variant of `ifpdistl` and `ifpdistg` that takes variables as arguments instead o
 
 Required to allow customizing the particle effect distance at runtime, rather than at compile-time.
 
+----
+
 #### __mkdir__
 
 Usage: `mkdir <quote_label>`
@@ -169,6 +181,55 @@ Creates a directory in the current moddir/profile directory/current working dire
 
 Does not throw an error if directory already exists.
 
+----
+
+#### __profilenanostart__
+
+Usage: `profilenanostart <idx>`
+
+This command is used for high-precision profiling of CON code. The maximum index is 31.
+
+Running this command records an internal nanosecond timestamp at index `<idx>`, where `<idx>` is a label or a constant. This acts as the startpoint for timing the execution time of a sequence of CON commands.
+
+----
+
+#### __profilenanoend__
+
+Usage: `profilenanoend <idx>`
+
+This command is used for high-precision profiling of CON code. The maximum index is 31.
+
+Records the endpoint nanosecond timestamp, and automatically computes the elapsed time between startpoint and endpoint for the given index. This assumes that `profilenanostart` was executed beforehand.
+
+Timings that are recorded internally is the elapsed time in nanoseconds between start and stop, the cumulative sum of elapsed times, the square sum, as well as the number of timings that were sampled.
+
+To print the results of the timing, use `profilenanolog`.
+
+----
+
+#### __profilenanolog__
+
+Usage: `profilenanolog <idx>`
+
+This command is used for high-precision profiling of CON code. The maximum index is 31.
+
+Prints the current timing stats for index `<idx>`. This includes:
+* The most recent elapsed time sample recorded.
+* The number of measurements `N` in total since the last reset.
+* The mean timing over all `N` measurements, in nanoseconds.
+* The standard deviation over all `N` measurements, in nanoseconds.
+
+----
+
+#### __profilenanoreset__
+
+Usage: `profilenanoreset <idx>`
+
+This command is used for high-precision profiling of CON code. The maximum index is 31.
+
+This command clears the recorded measurements, and resets all internal timestamps back to 0.
+
+----
 
 #### __setmusicvolume__
 
@@ -180,9 +241,13 @@ This command is intended to allow scripts to temporarily lower the music volume,
 
 * `<percent>`: Value from 0 to 100, acting as a percentage of the player's current music volume.
 
+----
+
 ### __DEF Commands__
 
 Commands that extend the DEF script functionality.
+
+----
 
 #### __keyconfig__
 
@@ -204,6 +269,8 @@ List the [gamefunc names](https://wiki.eduke32.com/wiki/Getgamefuncbind) in the 
 
 This command is compatible with the CON commands [definegamefuncname](https://wiki.eduke32.com/wiki/Definegamefuncname) and [undefinegamefunc](https://wiki.eduke32.com/wiki/Undefinegamefunc).
 
+----
+
 #### __customsettings__
 
 Can be used to define the structure of a custom settings menu. Has a maximum of 64 entries.
@@ -222,10 +289,19 @@ customsettings
     }
     entry
     {
-        name "Second Entry 2"
+        name "Settings Entry 2"
         index 1
-        font "small"
+        font "big"
         type "yes/no"
+    }
+    entry
+    {
+        name "Settings Entry 3"
+        index 2
+        font "mini"
+        type "multi"
+        vstrings { "hello" "world" "foo" "bar" }
+        values { 0 10 20 30 }
     }
     ...
 }
@@ -237,7 +313,7 @@ For the token `customsettings`, the following subtokens are supported:
     * To make the system more robust, the order is independent of the index of the entry, see the `index` token.
 * `link`: NOT IMPLEMENTED YET. Defines a link to a subpage of menu options.
 
-For the token:
+For the token `entry`, the following subtokens are supported:
 * `name`: Defines the text of the options entry.
 * `index`: This token defines a index to uniquely identify the custom settings entry. This index separates the entry from the order in the DEF script, allowing the menu to be reordered without needing to alter the CON code. Minimum index is 0, maximum index is 63.
 * `font`: Defines which type of font to use for the custom settings entry. Possible values are:
@@ -277,7 +353,9 @@ The logic of these entries is furthermore controlled through the events:
 * `EVENT_CSACTIVATELINK` : Triggered when a link entry is activated.
 * `EVENT_CSPREMODIFYOPTION` : Triggered on activation of an option entry, before the value is modified.
 * `EVENT_CSPOSTMODIFYOPTION` : Triggered on activation of an option entry, after the value is modified.
-* `EVENT_CSPOPULATEMENU` : Triggered when opening the custom settings menu, before entries are set up. Should be used to update the struct `
+* `EVENT_CSPOPULATEMENU` : Triggered when opening the custom settings menu, before entries are set up.
+
+----
 
 ### __Game Events__
 
@@ -291,6 +369,8 @@ This event is called each time a link entry or button is activated, i.e. an entr
 
 Can be used to define behavior for buttons, e.g. a "set to default" button.
 
+----
+
 #### __EVENT_CSPREMODIFYOPTION__
 
 Used in conjunction with the DEF command [customsettings](#customsettings).
@@ -298,6 +378,8 @@ Used in conjunction with the DEF command [customsettings](#customsettings).
 This event is called each time a custom settings entry option is modified, before `userdef[].cs_array` is updated. This includes the Yes/No, On/Off and multiple choice entries.
 
 Can be used to perform actions before `userdef[].cs_array` is modified.
+
+----
 
 #### __EVENT_CSPOSTMODIFYOPTION__
 
@@ -307,6 +389,8 @@ This event is called each time a custom settings entry option is modified, after
 
 Can be used to perform actions after `userdef[].cs_array` is modified, e.g. to update gamevars and save them in the CFG.
 
+----
+
 #### __EVENT_CSPOPULATEMENU__
 
 Used in conjunction with the DEF command [customsettings](#customsettings).
@@ -314,6 +398,8 @@ Used in conjunction with the DEF command [customsettings](#customsettings).
 This event is called each time the custom settings menu is opened. Altering the values in `userdef[].cs_array` in this event will directly affect the chosen values shown inside the menu.
 
 For instance, this can be used to change the default values of the menu, and/or to load values from the CFG, and update the `cs_array` entries with those values.
+
+----
 
 ### __Struct Members__
 
