@@ -1087,7 +1087,7 @@ void S_ChangeSoundPitch(int soundNum, int spriteNum, int pitchoffset)
             Bassert(spriteNum == -1 || voice.handle > FX_Ok);
             if (EDUKE32_PREDICT_FALSE(spriteNum >= 0 && voice.handle <= FX_Ok))
                 initprintf(OSD_ERROR "S_ChangeSoundPitch(): bad voice %d for sound ID %d index %d!\n", voice.handle, soundNum, j);
-            else if (FX_SoundValidAndActive(voice.handle))
+            else
                 FX_SetPitch(voice.handle, pitchoffset);
         }
     }
