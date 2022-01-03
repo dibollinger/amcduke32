@@ -1,22 +1,33 @@
-# AMCDuke32 - Fork of EDuke32 for the AMC TC
+# AMCDuke32 - Fork of EDuke32 for The AMC Squad
 
 * [About](#About)
-* [The AMC TC](#the-amc-tc)
+* [The AMC Squad](#the-amc-squad)
 * [Installation](#installation)
    * [Building from Source](#building-from-source)
 * [Feature Differences](#feature-differences)
    * [CON Commands](#con-commands)
        * [definesoundv](#definesoundv)
-       * [setmusicvolume](#setmusicvolume)
+       * [ifcfgvar](#ifcfgvar)
+       * [ifpdistlvar and ifpdistgvar](#ifpdistlvar-and-ifpdistgvar)
        * [mkdir](#mkdir)
+       * [setmusicvolume](#setmusicvolume)
    * [DEF Commands](#def-commands)
        * [keyconfig](#keyconfig)
+       * [customsettings](#customsettings)
+   * [Game Events](#game-events)
+       * [EVENT_CSACTIVATELINK](#EVENT_CSACTIVATELINK)
+       * [EVENT_CSPOSTMODIFYOPTION](#EVENT_CSPOSTMODIFYOPTION)
+       * [EVENT_CSPREMODIFYOPTION](#EVENT_CSPREMODIFYOPTION)
+       * [EVENT_CSPOPULATEMENU](#EVENT_CSPOPULATEMENU)
    * [Struct Members](#struct-members)
        * [userquote_xoffset](#struct-members)
        * [userquote_yoffset](#struct-members)
        * [voicetoggle](#struct-members)
-   * [General Changes](#general-changes)
-       * [cl_keybindmode](#general-changes)
+       * [csarray](#struct-members)
+       * [m_customsettings](#struct-members)
+   * [Misc Changes](#general-changes)
+       * [cl_keybindmode](#misc-changes)
+       * [PROJECTILE_RADIUS_PICNUM_EX](#misc-changes)
 * [Credits and Licenses](#credits-and-licenses)
 
 ## About
@@ -30,14 +41,14 @@ for greater flexibility in the development of the game. It also adds a small set
 commands that enable modification of features not available in base eduke32. The changes are
 generally kept sparse to make merging with mainline eduke32 as smooth as possible.
 
-Note that the AMC TC makes extensive use of eduke32 modding features, and hence will not be
+Note that The AMC Squad makes extensive use of eduke32 modding features, and hence will not be
 made compatible with BuildGDX or Raze.
 
 The original eduke32 source port was created by Richard "TerminX" Gobeille, and can be found at: https://voidpoint.io/terminx/eduke32
 
-## The AMC TC
+## The AMC Squad
 
-The AMC TC is a free standalone FPS built on the Duke 3D engine, and is loosely based on the world established by
+"The AMC Squad" is a free standalone FPS built on the Duke 3D engine, and is loosely based on the world established by
 Duke Nukem 3D, Blood, Shadow Warrior, and other FPS classics. It currently features three episodes, with a story
 that involves a multitude of characters, the so-called AMC Squad, who attempt to defend Earth against a large
 variety of threats, including extra-terrestrial and supernatural foes.
@@ -90,7 +101,7 @@ with multiple threads). If successful, this should produce the following binarie
 * `mapster32`
 
 The binaries do not support game autodetection. Instead, you should copy the binaries into the folder that
-contains the AMC TC data, i.e. the folder where the `amctc.grpinfo` file is located.
+contains the AMC Squad data, i.e. the folder where the `amctc.grpinfo` file is located.
 
 __Additional build instructions can be found here:__
 
@@ -102,7 +113,7 @@ __Additional build instructions can be found here:__
 
 In this section we list the major changes to the modding API, including new CON and DEF script commands, and how to use them.
 
-### CON Commands
+### __CON Commands__
 
 Commands that extend the functionality of the CON VM.
 
@@ -130,6 +141,35 @@ Defines a sound and assigns various properties to it. The maximum number of soun
 * `<distance>`: Negative values increase the distance at which the sound is heard; positive ones reduce it.  Can range from -32768 to 32767.
 * `<volume>`: Ranges from 0 to 16384, with 1024 being the default volume. Changes the actual volume of the sound being played.
 
+#### __ifcfgvar__
+
+Usage: `ifcfgvar <var>`
+
+Can only be used with variables. Will check if the CFG contains the given variable, and if yes, follows the `true` path, `false` otherwise.
+
+Its main use is to allow loading variables stored inside the CFG that have a nonzero default value. The problem is that `loadgamevar` will overwrite the value of the variable with 0 if the variable is not present. By using this conditional, we can prevent this.
+
+#### __ifpdistlvar and ifpdistgvar__
+
+Usage: 
+* `ifpdistlvar <var>`
+* `ifpdistgvar <var>`
+
+Branches if the distance from the actor to the player is less/greater than the value in the provided variable.
+
+Variant of `ifpdistl` and `ifpdistg` that takes variables as arguments instead of a constant.
+
+Required to allow customizing the particle effect distance at runtime, rather than at compile-time.
+
+#### __mkdir__
+
+Usage: `mkdir <quote_label>`
+
+Creates a directory in the current moddir/profile directory/current working directory, with the given quote as path.
+
+Does not throw an error if directory already exists.
+
+
 #### __setmusicvolume__
 
 Usage: `setmusicvolume <percent>`
@@ -140,19 +180,13 @@ This command is intended to allow scripts to temporarily lower the music volume,
 
 * `<percent>`: Value from 0 to 100, acting as a percentage of the player's current music volume.
 
-#### __mkdir__
-
-Usage: `mkdir <quote_label>`
-
-Creates a directory in the current moddir/profile directory/current working directory, with the given quote as path.
-
-Does not throw an error if directory already exists.
-
-### DEF Commands
+### __DEF Commands__
 
 Commands that extend the DEF script functionality.
 
 #### __keyconfig__
+
+Allows reordering of gamefunc menu entries.
 
 Usage:
 ```
@@ -166,11 +200,122 @@ keyconfig
 }
 ```
 
-Allows reordering of gamefunc menu entries. List the [gamefunc names](https://wiki.eduke32.com/wiki/Getgamefuncbind) in the order in which you want them to appear inside the keyboard and mouse config menus, separated by newlines or whitespaces. Any omitted gamefuncs will not be listed in the menu.
+List the [gamefunc names](https://wiki.eduke32.com/wiki/Getgamefuncbind) in the order in which you want them to appear inside the keyboard and mouse config menus, separated by newlines or whitespaces. Any omitted gamefuncs will not be listed in the menu.
 
 This command is compatible with the CON commands [definegamefuncname](https://wiki.eduke32.com/wiki/Definegamefuncname) and [undefinegamefunc](https://wiki.eduke32.com/wiki/Undefinegamefunc).
 
-### Struct Members
+#### __customsettings__
+
+Can be used to define the structure of a custom settings menu. Has a maximum of 64 entries.
+
+Usage:
+```
+customsettings
+{
+    title "Custom Settings"
+    entry
+    {
+        name "Settings Entry 1"
+        index 0
+        font "small"
+        type "on/off"
+    }
+    entry
+    {
+        name "Second Entry 2"
+        index 1
+        font "small"
+        type "yes/no"
+    }
+    ...
+}
+```
+For the token `customsettings`, the following subtokens are supported:
+* `title`: Defines the text shown on the menu entry that leads to the custom settings menu. This is always placed inside the "Options" menu.
+* `entry`: Defines an entry for the custom settings menu, see below.
+    * The ordering of the menu is defined by the order in which these entries appear in the DEF file.
+    * To make the system more robust, the order is independent of the index of the entry, see the `index` token.
+* `link`: NOT IMPLEMENTED YET. Defines a link to a subpage of menu options.
+
+For the token:
+* `name`: Defines the text of the options entry.
+* `index`: This token defines a index to uniquely identify the custom settings entry. This index separates the entry from the order in the DEF script, allowing the menu to be reordered without needing to alter the CON code. Minimum index is 0, maximum index is 63.
+* `font`: Defines which type of font to use for the custom settings entry. Possible values are:
+    * `big` | `bigfont` | `redfont`: Uses the large menu font, as seen on the title screen.
+    * `small` | `smallfont` | `bluefont`: Uses the small menu font, as used in the Polymost settings.
+    * `mini` | `minifont`: Uses the smallest menu font, as used in the keybind menu.
+    * Other values are ignored. Default is `small`.
+* `type`: Defines the behavior of the menu entry. Multiple options are available:
+    * `button`: Acts as a simple button, which makes a sound and runs `EVENT_CSACTIVATELINK` when activated. 
+        * Does not alter `userdef[].cs_array`.
+    * `yes/no` | `no/yes`: Displays a boolean "Yes"/"No" toggle menu option. 
+        * When activated, changes the value of `userdef[].cs_array` from 0 to 1, and vice-versa.
+        * Default is set to "No" unless altered in `EVENT_CSPOPULATEMENU`.
+    * `on/off` | `off/on` | `toggle`: Displays a boolean "ON"/"OFF" toggle menu option. 
+        * When activated, changes the value of `userdef[].cs_array` from 0 to 1, and vice-versa. 
+        * Default is set to "OFF" unless altered in `EVENT_CSPOPULATEMENU`.
+    * `multi` | `choices`: Defines a multiple choice menu entry.
+        * When interacted with, displays a range of options to select.
+        * Using the arrow keys cycles through the options.
+        * Requires the tokens `vstrings` and `values` to be defined for the entry, see below.
+        * Can define at most 32 choices per entry.
+    * `range`, `slider`: NOT IMPLEMENTED YET.
+        * In the future, these tokens will define a slider to adjust an integer value gradually, either by keyboard or by using the mouse.
+    * `spacer2` : 2 units of empty space. Cannot be selected. 
+    * `spacer4` : 4 units of empty space. Cannot be selected.
+    * `spacer6` : 6 units of empty space. Cannot be selected.
+    * `spacer8` : 8 units of empty space. Cannot be selected.
+* `vstrings {...}`: Only used for multiple choice menu entries. Defines a list of strings to represent the values inside the selection.
+    * Each entry must be defined in the order of appearance in the menu.
+    * Entries in `values` and `vstrings` must appear in matching order.
+* `values {...}`: Only used for multiple choice menu entries.
+Defines the list of integers that `userdef[].cs_array` will be set to when an option is selected.
+    * Each entry must be defined in the order of appearance in the menu.
+    * Entries in `values` and `vstrings` must appear in matching order.
+
+The logic of these entries is furthermore controlled through the events:
+* `EVENT_CSACTIVATELINK` : Triggered when a link entry is activated.
+* `EVENT_CSPREMODIFYOPTION` : Triggered on activation of an option entry, before the value is modified.
+* `EVENT_CSPOSTMODIFYOPTION` : Triggered on activation of an option entry, after the value is modified.
+* `EVENT_CSPOPULATEMENU` : Triggered when opening the custom settings menu, before entries are set up. Should be used to update the struct `
+
+### __Game Events__
+
+Game events not present in regular eduke32.
+
+#### __EVENT_CSACTIVATELINK__
+
+Used in conjunction with the DEF command [customsettings](#customsettings).
+
+This event is called each time a link entry or button is activated, i.e. an entry that is not a toggleable option.
+
+Can be used to define behavior for buttons, e.g. a "set to default" button.
+
+#### __EVENT_CSPREMODIFYOPTION__
+
+Used in conjunction with the DEF command [customsettings](#customsettings).
+
+This event is called each time a custom settings entry option is modified, before `userdef[].cs_array` is updated. This includes the Yes/No, On/Off and multiple choice entries.
+
+Can be used to perform actions before `userdef[].cs_array` is modified.
+
+#### __EVENT_CSPOSTMODIFYOPTION__
+
+Used in conjunction with the DEF command [customsettings](#customsettings).
+
+This event is called each time a custom settings entry option is modified, after `userdef[].cs_array` is updated. This includes the Yes/No, On/Off and multiple choice entries.
+
+Can be used to perform actions after `userdef[].cs_array` is modified, e.g. to update gamevars and save them in the CFG.
+
+#### __EVENT_CSPOPULATEMENU__
+
+Used in conjunction with the DEF command [customsettings](#customsettings).
+
+This event is called each time the custom settings menu is opened. Altering the values in `userdef[].cs_array` in this event will directly affect the chosen values shown inside the menu.
+
+For instance, this can be used to change the default values of the menu, and/or to load values from the CFG, and update the `cs_array` entries with those values.
+
+### __Struct Members__
 
 New struct members added by the fork.
 
@@ -179,8 +324,15 @@ New struct members added by the fork.
     * __1__: If set, character voices are enabled (Duke-Talk).
     * __2__: Dummy value, reserved.
     * __4__: Character voices from other players are enabled.
+* `userdef[].csarray` : This is an array for the custom settings menu, stores the current state of each entry in the menu by index.
+    * Update the values of this struct inside event `EVENT_CSPOPULATEMENU`, and the entries will reflect the contents of the array.
+    * In order to apply settings, retrieve the value from this array for the corresponding list entry in `EVENT_CSPOSTMODIFYOPTION`, and update your gamevars with it.
+    * To store settings between game launches, use `savegamevar` and `loadgamevar` on your actual option variables.
+* `userdef[].m_customsettings` : Index for the currently selected custom settings entry. 
+    * IMPORTANT: Uses the index defined inside the DEF, not the ordering of the items!
+    * The index will be set to -1 if the index was not defined within the DEF.
 
-### General Changes
+### __Misc Changes__
 
 * `MAXTILES` increased from 30720 to 32512.
 * `MAXGAMEVARS` increased from 2048 to 4096 (also doubles `MAXGAMEARRAYS`).
@@ -190,7 +342,15 @@ New struct members added by the fork.
 * Add cvar `cl_keybindmode` to change keyboard config behaviour.
   * If 0, will allow multiple gamefuncs to be assigned to the same key in the keyboard config menu (original behavior).
   * If 1, will clear all existing gamefuncs for that key when binding a key to a gamefunc. This prevents accidentally assigning multiple gamefuncs to the same key, e.g. when default values exist.
-
+* Added a lower bound for distance between menu items. This allows menus to scroll properly now.
+* Add `PROJECTILE_WORKSLIKE` flag `PROJECTILE_RADIUS_PICNUM_EX`:
+    * Flag value is 1073741824 (0x40000000).
+    * The flag changes the htpicnum of the projectile to the actual picnum, instead of using RADIUSEXPlOSION. However, it also preserves hardcoded behaviors specific to RADIUSEXPLOSION, including destroying spritewalls and spritefloors that have a hitag.
+    * RPG projectiles can only burn trees, tires and boxes if this flag is set. Player will receive the same pushback as with RADIUSEXPLOSION when hit.
+* Hardcoded anti-cheat measure removed from skill 4.
+* Change crosshair size slider to range from 10 to 100.
+* Make save settings menu and reset progress options available.
+* Various bugfixes and changes that affected AMC specifically.
 
 ## Credits and Licenses
 
@@ -199,10 +359,10 @@ The AMCDuke32 fork was created and is being maintained by Dino Bollinger.
 * eduke32 was created by Richard "TerminX" Gobeille, and is maintained the eduke32 contributors. It is licensed under the GPL v2.0, see `gpl-2.0.txt`.
   * It can be found at: https://voidpoint.io/terminx/eduke32
 * The Build Engine was created by Ken Silverman and is licensed under the BUILD license. See `source/build/buildlic.txt`.
-* The AMC TC was created by James Stanfield and the AMC team.
+* The AMC Squad was created by James Stanfield and the AMC team.
   * The game can be found at: https://www.moddb.com/games/the-amc-tc
 
-The AMC Team thanks the developers of eduke32 for their continued assistance and support over the years.
+The maintainers of the game and the engine fork thank the developers of eduke32 for their continued assistance and support over the years.
 
 **THIS SOFTWARE IS PROVIDED ''AS IS'' AND WITHOUT ANY EXPRESS OR
 IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
