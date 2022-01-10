@@ -23,6 +23,8 @@
        * [EVENT_CSPOSTMODIFYOPTION](#EVENT_CSPOSTMODIFYOPTION)
        * [EVENT_CSPREMODIFYOPTION](#EVENT_CSPREMODIFYOPTION)
        * [EVENT_CSPOPULATEMENU](#EVENT_CSPOPULATEMENU)
+       * [EVENT_PREACTORDAMAGE](#EVENT_PREACTORDAMAGE)
+       * [EVENT_POSTACTORDAMAGE](#EVENT_POSTACTORDAMAGE)
    * [Struct Members](#struct-members)
        * [userquote_xoffset](#struct-members)
        * [userquote_yoffset](#struct-members)
@@ -398,6 +400,29 @@ Used in conjunction with the DEF command [customsettings](#customsettings).
 This event is called each time the custom settings menu is opened. Altering the values in `userdef[].cs_array` in this event will directly affect the chosen values shown inside the menu.
 
 For instance, this can be used to change the default values of the menu, and/or to load values from the CFG, and update the `cs_array` entries with those values.
+
+----
+
+#### __EVENT_PREACTORDAMAGE__
+
+This event is called when an actor runs `A_IncurDamage()`, just before decreasing `sprite[].extra` and changing the owner.
+
+i.e. it occurs before the actor has taken damage and its health was updated.
+
+* `sprite[].htextra` stores the damage to be applied, `sprite[].htowner` stores the source of the damage.
+* `sprite[].extra` stores the current health, `sprite[].owner` stores the previous source of damage.
+* Set RETURN to != 0 to cancel damage.
+* Currently, this event is not executed when the player takes damage.
+
+----
+
+#### __EVENT_POSTACTORDAMAGE__
+
+This event is called when an actor runs A_IncurDamage(), just after decreasing sprite[].extra, resetting htextra to -1 and updating htowner.
+
+i.e. it occurs after the actor has taken damage and its health was updated.
+
+* Currently, this event is not executed when the player takes damage.
 
 ----
 

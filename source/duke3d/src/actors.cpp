@@ -1322,6 +1322,9 @@ int A_IncurDamage(int const spriteNum)
             pSprite->owner = pActor->htowner;
 
         pActor->htextra = -1;
+
+        VM_OnEvent(EVENT_POSTACTORDAMAGE, spriteNum, playerNum, playerDist);
+
         return pActor->htpicnum;
     }
     else
