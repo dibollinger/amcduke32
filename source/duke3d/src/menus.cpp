@@ -696,7 +696,7 @@ static MenuEntry_t ME_DISPLAYSETUP_FOV = MAKE_MENUENTRY( "FOV:", &MF_Redfont, &M
 //POGOTODO: allow filtering again in standalone once indexed colour textures support filtering
 #ifdef TEXFILTER_MENU_OPTIONS
 static char const *MEOSN_DISPLAYSETUP_TEXFILTER[][2]
-= { { "Nearest", "Bilinear" }, { "Nearest", "Smear filter" }, { "Nearest", "Terrible" }, { "Nearest", "Vaseline" }, { "Nearest", "Blurry" } };
+= { { "Nearest", "Bilinear" }, { "Nearest", "Filtered" }, { "Nearest", "Smear filter" }, { "Nearest", "Terrible" }, { "Nearest", "Vaseline" }, { "Nearest", "Blurry" }, { "Nearest", "Will break things" }, { "Nearest", "Graf" } };
 static int32_t MEOSV_DISPLAYSETUP_TEXFILTER[] = { TEXFILTER_OFF, TEXFILTER_ON };
 static MenuOptionSet_t MEOS_DISPLAYSETUP_TEXFILTER = MAKE_MENUOPTIONSET( MEOSN_DISPLAYSETUP_TEXFILTER[0], MEOSV_DISPLAYSETUP_TEXFILTER, 0x2 );
 static MenuOption_t MEO_DISPLAYSETUP_TEXFILTER = MAKE_MENUOPTION( &MF_Redfont, &MEOS_DISPLAYSETUP_TEXFILTER, &gltexfiltermode );
