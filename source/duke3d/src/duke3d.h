@@ -69,7 +69,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define RECSYNCBUFSIZ       2520   //2520 is the (LCM of 1-8)*3
 #define MOVEFIFOSIZ         2
 
-#define MAXVOLUMES          7
+#define MAXVOLUMES          8
 #define MAXLEVELS           64
 #define MAXGAMETYPES        16
 #define MAX_ACTIVE_VIEWSCREENS 64
