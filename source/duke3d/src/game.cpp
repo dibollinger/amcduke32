@@ -228,7 +228,9 @@ void G_HandleSpecialKeys(void)
     {
         KB_ClearKeyDown(sc_F12);
         videoCaptureScreen(
-#ifndef EDUKE32_STANDALONE
+#ifdef AMC_BUILD
+        "amc0000.tga"
+#elif !defined(EDUKE32_STANDALONE)
         "duke0000.tga"
 #else
         "capt0000.tga"
