@@ -1369,7 +1369,6 @@ int32_t try_facespr_intersect(uspriteptr_t const spr, vec3_t const in,
 void updatesector(int32_t const x, int32_t const y, int16_t * const sectnum) ATTRIBUTE((nonnull(3)));
 void updatesectorexclude(int32_t const x, int32_t const y, int16_t * const sectnum,
                          const uint8_t * const excludesectbitmap) ATTRIBUTE((nonnull(3,4)));
-void updatesectorz_compat(int32_t const x, int32_t const y, int32_t const z, int16_t * const sectnum) ATTRIBUTE((nonnull(4)));
 void updatesectorz(int32_t const x, int32_t const y, int32_t const z, int16_t * const sectnum) ATTRIBUTE((nonnull(4)));
 void updatesectorneighbor(int32_t const x, int32_t const y, int16_t * const sectnum, int32_t initialMaxDistance = INITIALUPDATESECTORDIST, int32_t maxDistance = MAXUPDATESECTORDIST) ATTRIBUTE((nonnull(3)));
 void updatesectorneighborz(int32_t const x, int32_t const y, int32_t const z, int16_t * const sectnum, int32_t initialMaxDistance = INITIALUPDATESECTORDIST, int32_t maxDistance = MAXUPDATESECTORDIST) ATTRIBUTE((nonnull(4)));
@@ -1703,34 +1702,7 @@ static FORCE_INLINE void renderEnableFog(void)
 #endif
 }
 
-/* Different "is inside" predicates.
- * NOTE: The redundant bound checks are expected to be optimized away in the
- * inlined code. */
-
-static FORCE_INLINE CONSTEXPR int inside_p(int32_t const x, int32_t const y, int const sectnum)
-{
-    return ((unsigned)sectnum < MAXSECTORS && inside(x, y, sectnum) == 1);
-}
-
-static FORCE_INLINE CONSTEXPR int inside_exclude_p(int32_t const x, int32_t const y, int const sectnum, const uint8_t *excludesectbitmap)
-{
-    return ((unsigned)sectnum < MAXSECTORS && !bitmap_test(excludesectbitmap, sectnum) && inside_p(x, y, sectnum));
-}
-
-/* NOTE: no bound check for inside_z_p */
-static FORCE_INLINE int inside_z_p(int32_t const x, int32_t const y, int32_t const z, int const sectnum)
-{
-    int32_t cz, fz;
-    getzsofslope(sectnum, x, y, &cz, &fz);
-    return (z >= cz && z <= fz && inside_p(x, y, sectnum));
-}
-
-static FORCE_INLINE int inside_exclude_z_p(int32_t const x, int32_t const y, int32_t const z, int const sectnum, const uint8_t *excludesectbitmap)
-{
-    int32_t cz, fz;
-    getzsofslope(sectnum, x, y, &cz, &fz);
-    return (z >= cz && z <= fz && inside_exclude_p(x, y, sectnum, excludesectbitmap));
-}
+static FORCE_INLINE CONSTEXPR int inside_p(int32_t const x, int32_t const y, int const sectnum) { return (sectnum >= 0 && inside(x, y, sectnum) == 1); }
 
 #define SET_AND_RETURN(Lval, Rval) \
     do                             \

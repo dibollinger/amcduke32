@@ -1467,7 +1467,7 @@ void editinput(void)
 
     {
         int16_t ocursectnum = cursectnum;
-        (!m32_clipping ? updatesectorz_compat : updatesectorz)(pos.x,pos.y,pos.z, &cursectnum);
+        updatesectorz(pos.x,pos.y,pos.z, &cursectnum);
         if (cursectnum<0)
         {
             if (zmode != 2)
