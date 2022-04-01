@@ -1088,7 +1088,9 @@ static int osdcmd_quickload(osdcmdptr_t UNUSED(parm))
 static int osdcmd_screenshot(osdcmdptr_t parm)
 {
 //    KB_ClearKeysDown();
-#if !defined(AMC_BUILD) && !defined(EDUKE32_STANDALONE)
+#ifdef AMC_BUILD
+    static const char *fn = "amc0000.png";
+#elif !defined(EDUKE32_STANDALONE)
     static const char *fn = "duke0000.png";
 #else
     static const char *fn = "capt0000.png";
