@@ -433,6 +433,10 @@ static tokenmap_t const vm_keywords[] =
     { "prevspritesect",         CON_PREVSPRITESECT },
     { "prevspritestat",         CON_PREVSPRITESTAT },
     { "preloadtrackslotforswap", CON_PRELOADTRACKSLOTFORSWAP },
+    { "profilenanoend",         CON_PROFILENANOEND },
+    { "profilenanolog",         CON_PROFILENANOLOG },
+    { "profilenanoreset",       CON_PROFILENANORESET },
+    { "profilenanostart",       CON_PROFILENANOSTART },
     { "pstomp",                 CON_PSTOMP },
     { "qgetsysstr",             CON_QGETSYSSTR },
     { "qspawnvar",              CON_QSPAWN },
@@ -3347,6 +3351,10 @@ DO_DEFSTATE:
         case CON_MAIL:
         case CON_MONEY:
         case CON_PAPER:
+        case CON_PROFILENANOEND:
+        case CON_PROFILENANOLOG:
+        case CON_PROFILENANORESET:
+        case CON_PROFILENANOSTART:
         case CON_SAVE:
         case CON_SAVENN:
         case CON_SLEEPTIME:

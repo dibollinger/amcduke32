@@ -72,6 +72,13 @@ int32_t g_textureVarID   = -1;  // var ID of "TEXTURE"
 int32_t g_thisActorVarID = -1;  // var ID of "THISACTOR"
 int32_t g_structVarIDs   = -1;
 
+#define MAXPROFILEINDEX 32
+uint64_t last_profile_timings[MAXPROFILEINDEX];
+uint64_t profile_sums[MAXPROFILEINDEX];
+uint64_t profile_squaresums[MAXPROFILEINDEX];
+uint64_t profile_measurecount[MAXPROFILEINDEX];
+uint64_t profile_lastelapsed[MAXPROFILEINDEX];
+
 GAMEEXEC_STATIC void VM_Execute(int loop = false);
 
 void VM_ScriptInfo(intptr_t const * const ptr, int const range)
@@ -6678,6 +6685,78 @@ badindex:
                 insptr++;
                 tw = *insptr++;
                 Gv_SetVar(tw, (intptr_t)(insptr - apScript));
+                dispatch();
+
+            vInstruction(CON_PROFILENANOSTART):
+                {
+                    uint64_t startTime = timerGetNanoTicks();
+
+                    insptr++;
+                    int p_index = *insptr++;
+                    if (EDUKE32_PREDICT_FALSE(p_index < 0 || p_index >= MAXPROFILEINDEX))
+                    {
+                        CON_CRITICALERRPRINTF("Invalid profile index %d!\n", p_index);
+                        abort_after_error();
+                    }
+                    last_profile_timings[p_index] = startTime;
+                }
+                dispatch();
+
+            vInstruction(CON_PROFILENANOEND):
+                {
+                    uint64_t endTime = timerGetNanoTicks();
+
+                    insptr++;
+                    int p_index = *insptr++;
+                    if (EDUKE32_PREDICT_FALSE(p_index < 0 || p_index >= MAXPROFILEINDEX))
+                    {
+                        CON_CRITICALERRPRINTF("Invalid profile index %d!\n", p_index);
+                        abort_after_error();
+                    }
+                    uint64_t elapsed = endTime - last_profile_timings[p_index];
+                    profile_lastelapsed[p_index] = elapsed;
+                    profile_sums[p_index] += elapsed;
+                    profile_squaresums[p_index] += elapsed * elapsed;
+                    profile_measurecount[p_index]++;
+                }
+                dispatch();
+
+            vInstruction(CON_PROFILENANORESET):
+                {
+                    insptr++;
+                    int p_index = *insptr++;
+                    if (EDUKE32_PREDICT_FALSE(p_index < 0 || p_index >= MAXPROFILEINDEX))
+                    {
+                        CON_CRITICALERRPRINTF("Invalid profile index %d!\n", p_index);
+                        abort_after_error();
+                    }
+                    last_profile_timings[p_index] = 0ull;
+                    profile_lastelapsed[p_index] = 0ull;
+                    profile_sums[p_index] = 0ull;
+                    profile_squaresums[p_index] = 0ull;
+                    profile_measurecount[p_index] = 0;
+                }
+                dispatch();
+
+            vInstruction(CON_PROFILENANOLOG):
+                {
+                    insptr++;
+                    int p_index = *insptr++;
+                    if (EDUKE32_PREDICT_FALSE(p_index < 0 || p_index >= MAXPROFILEINDEX))
+                    {
+                        CON_CRITICALERRPRINTF("Invalid profile index %d!\n", p_index);
+                        abort_after_error();
+                    }
+                    if (profile_measurecount[p_index] == 0ull)
+                        initprintf(OSDTEXT_RED "CON PROFILE: L=%d, idx=%d, No timings recorded!\n", VM_DECODE_LINE_NUMBER(g_tw), p_index);
+                    else
+                    {
+                        uint64_t mean = profile_sums[p_index] / profile_measurecount[p_index];
+                        uint64_t stddev = (profile_measurecount[p_index] > 1) ? ksqrt((profile_squaresums[p_index] / profile_measurecount[p_index]) - (mean * mean)) : 0;
+                        initprintf(OSDTEXT_GREEN "CON PROFILE: L=%d, idx=%d, N=%llu, elapsed=%lluns (mean: %llu +/- %llu ns)\n",
+                                    VM_DECODE_LINE_NUMBER(g_tw), p_index, profile_measurecount[p_index], profile_lastelapsed[p_index], mean, stddev);
+                    }
+                }
                 dispatch();
 
             vmErrorCase: // you're not supposed to be here
