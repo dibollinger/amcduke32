@@ -161,7 +161,7 @@ static FORCE_INLINE int32_t Menu_CursorShade(void)
 static void Menu_DrawCursorCommon(int32_t x, int32_t y, int32_t z, int32_t picnum, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
 {
 #ifdef AMC_BUILD
-    z = (z * 2) / 5; // downscale cursor icon
+    z /= 3 ; // downscale cursor icon
 #endif
     rotatesprite_(x, y, z, 0, picnum, Menu_CursorShade(), 0, 2|8, 0, 0, 0, ydim_upper, xdim-1, ydim_lower);
 }
@@ -242,31 +242,32 @@ MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 
 #endif
 
 
-static MenuMenuFormat_t MMF_Top_Main =             { {  MENU_MARGIN_CENTER<<16, 55<<16, }, -(170<<16) };
+
+static MenuMenuFormat_t MMF_Top_Main =             { {  MENU_MARGIN_CENTER<<16, 60<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_Episode =          { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustom =    { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustomSub = { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_NewGameCustomL3 =  { {  MENU_MARGIN_CENTER<<16, 48<<16, }, -(190<<16) };
 
 #ifdef AMC_BUILD
-static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_AMCSK<<16, 58<<16, }, -(190<<16) };
+static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_AMCSK<<16, 60<<16, }, -(190<<16) };
 #else
 static MenuMenuFormat_t MMF_Top_Skill =            { {  MENU_MARGIN_CENTER<<16, 58<<16, }, -(190<<16) };
 #endif
 
-static MenuMenuFormat_t MMF_Top_Options =          { {  MENU_MARGIN_CENTER<<16, 38<<16, }, -(190<<16) };
+static MenuMenuFormat_t MMF_Top_Options =          { {  MENU_MARGIN_CENTER<<16, 52<<16, }, -(190<<16) };
 static MenuMenuFormat_t MMF_Top_Joystick_Network = { {  MENU_MARGIN_CENTER<<16, 70<<16, }, -(190<<16) };
-static MenuMenuFormat_t MMF_BigOptions =           { {    MENU_MARGIN_WIDE<<16, 38<<16, }, -(190<<16) };
+static MenuMenuFormat_t MMF_BigOptions =           { {    MENU_MARGIN_WIDE<<16, 45<<16, }, -(190<<16) };
 #ifdef USE_OPENGL
-static MenuMenuFormat_t MMF_BigOptionsScrolling =  { {    MENU_MARGIN_WIDE<<16, 38<<16, },  (187<<16) };
+static MenuMenuFormat_t MMF_BigOptionsScrolling =  { {    MENU_MARGIN_WIDE<<16, 45<<16, },  (187<<16) };
 #endif
-static MenuMenuFormat_t MMF_SmallOptions =         { {    MENU_MARGIN_WIDE<<16, 37<<16, },    170<<16 };
+static MenuMenuFormat_t MMF_SmallOptions =         { {    MENU_MARGIN_WIDE<<16, 60<<16, },    170<<16 };
 static MenuMenuFormat_t MMF_Macros =               { {                  26<<16, 40<<16, },    160<<16 };
 static MenuMenuFormat_t MMF_SmallOptionsNarrow  =  { { MENU_MARGIN_REGULAR<<16, 38<<16, }, -(190<<16) };
-static MenuMenuFormat_t MMF_KeyboardSetupFuncs =   { {                  50<<16, 34<<16, },    183<<16 };
-static MenuMenuFormat_t MMF_MouseJoySetupBtns =    { {                  76<<16, 34<<16, },    183<<16 };
+static MenuMenuFormat_t MMF_KeyboardSetupFuncs =   { {                  50<<16, 42<<16, },    183<<16 };
+static MenuMenuFormat_t MMF_MouseJoySetupBtns =    { {                  76<<16, 42<<16, },    183<<16 };
 static MenuMenuFormat_t MMF_FuncList =             { {                 100<<16, 51<<16, },    152<<16 };
-static MenuMenuFormat_t MMF_ColorCorrect =         { {    MENU_MARGIN_WIDE<<16, 86<<16, },    190<<16 };
+static MenuMenuFormat_t MMF_ColorCorrect =         { {    MENU_MARGIN_WIDE<<16, 62<<16, },    190<<16 };
 static MenuMenuFormat_t MMF_BigSliders =           { {    MENU_MARGIN_WIDE<<16, 37<<16, },    190<<16 };
 static MenuMenuFormat_t MMF_LoadSave =             { {                 200<<16, 49<<16, },    180<<16 };
 static MenuMenuFormat_t MMF_NetSetup =             { {                  36<<16, 38<<16, },    190<<16 };
@@ -274,25 +275,25 @@ static MenuMenuFormat_t MMF_FileSelectLeft =       { {                  40<<16, 
 static MenuMenuFormat_t MMF_FileSelectRight =      { {                 164<<16, 45<<16, },    162<<16 };
 
 static MenuEntryFormat_t MEF_Null =             {     0,      0,          0 };
-static MenuEntryFormat_t MEF_MainMenu =         { 4<<16,      0,          0 };
+static MenuEntryFormat_t MEF_MainMenu =         { 7<<16,      0,          0 };
 static MenuEntryFormat_t MEF_OptionsMenu =      { 7<<16,      0,          0 };
 static MenuEntryFormat_t MEF_LeftMenu =         { 7<<16,      0,    120<<16 };
 static MenuEntryFormat_t MEF_CenterMenu =       { 7<<16,      0,          0 };
-static MenuEntryFormat_t MEF_BigOptions_Apply = { 4<<16, 16<<16, -(260<<16) };
-static MenuEntryFormat_t MEF_BigOptionsRt =     { 4<<16,      0, -(260<<16) };
-static MenuEntryFormat_t MEF_BigOptionsRtSections = { 3<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_BigOptions_Apply = { 5<<16, 16<<16, -(260<<16) };
+static MenuEntryFormat_t MEF_BigOptionsRt =     { 5<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_BigOptionsRtSections = { 4<<16,      0, -(260<<16) };
 #if !defined EDUKE32_STANDALONE && !defined EDUKE32_ANDROID_MENU
-static MenuEntryFormat_t MEF_SmallOptions =     { 1<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_SmallOptions =     { 3<<16,      0, -(260<<16) };
 #endif
-static MenuEntryFormat_t MEF_BigCheats =        { 3<<16,      0, -(260<<16) };
-static MenuEntryFormat_t MEF_Cheats =           { 2<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_BigCheats =        { 4<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_Cheats =           { 3<<16,      0, -(260<<16) };
 static MenuEntryFormat_t MEF_PlayerNarrow =     { 1<<16,      0,     90<<16 };
 static MenuEntryFormat_t MEF_Macros =           { 2<<16,     -1,    268<<16 };
-static MenuEntryFormat_t MEF_VideoSetup =       { 4<<16,      0,    168<<16 };
-static MenuEntryFormat_t MEF_VideoSetup_Apply = { 4<<16, 16<<16,    168<<16 };
-static MenuEntryFormat_t MEF_KBFuncList =       { 3<<16,      0, -(225<<16) };
-static MenuEntryFormat_t MEF_FuncList =         { 3<<16,      0, -(170<<16) };
-static MenuEntryFormat_t MEF_BigSliders =       { 2<<16,      0, -(260<<16) };
+static MenuEntryFormat_t MEF_VideoSetup =       { 5<<16,      0,    168<<16 };
+static MenuEntryFormat_t MEF_VideoSetup_Apply = { 5<<16, 16<<16,    168<<16 };
+static MenuEntryFormat_t MEF_KBFuncList =       { 4<<16,      0, -(225<<16) };
+static MenuEntryFormat_t MEF_FuncList =         { 4<<16,      0, -(170<<16) };
+static MenuEntryFormat_t MEF_BigSliders =       { 4<<16,      0, -(260<<16) };
 static MenuEntryFormat_t MEF_LoadSave =         { 2<<16,     -1,     78<<16 };
 static MenuEntryFormat_t MEF_NetSetup =         { 4<<16,      0,    112<<16 };
 static MenuEntryFormat_t MEF_NetSetup_Confirm = { 4<<16, 16<<16,    112<<16 };
@@ -459,6 +460,9 @@ static MenuEntry_t *MEL_SKILL[MAXSKILLS];
 #ifdef EDUKE32_RETAIL_MENU
 static MenuLink_t MEO_GAMESETUP_SAVESETUP = { MENU_SAVESETUP, MA_Advance, };
 static MenuEntry_t ME_GAMESETUP_SAVESETUP = MAKE_MENUENTRY( "Save setup", &MF_Redfont, &MEF_BigOptionsRt, &MEO_GAMESETUP_SAVESETUP, Link );
+#elif defined AMC_BUILD
+static MenuLink_t MEO_GAMESETUP_SAVESETUP = { MENU_SAVESETUP, MA_Advance, };
+static MenuEntry_t ME_GAMESETUP_SAVESETUP = MAKE_MENUENTRY( "Save setup", &MF_Redfont, &MEF_CenterMenu, &MEO_GAMESETUP_SAVESETUP, Link );
 #endif
 
 #if defined STARTUP_SETUP_WINDOW && !defined EDUKE32_RETAIL_MENU
@@ -535,7 +539,7 @@ static MenuEntry_t *MEL_GAMESETUP[] = {
 };
 #endif
 
-#ifndef EDUKE32_RETAIL_MENU
+#if !defined EDUKE32_RETAIL_MENU && !defined AMC_BUILD
 MAKE_MENU_TOP_ENTRYLINK( "Game Setup", MEF_OptionsMenu, OPTIONS_GAMESETUP, MENU_GAMESETUP );
 #endif
 MAKE_MENU_TOP_ENTRYLINK( "Sound Setup", MEF_OptionsMenu, OPTIONS_SOUNDSETUP, MENU_SOUND );
@@ -787,22 +791,24 @@ static MenuEntry_t ME_CheatCodes[] = {
 };
 
 static MenuEntry_t *MEL_OPTIONS[] = {
-#ifndef EDUKE32_RETAIL_MENU
+#if !defined EDUKE32_RETAIL_MENU && !defined AMC_BUILD
     &ME_OPTIONS_GAMESETUP,
 #endif
     &ME_OPTIONS_DISPLAYSETUP,
     &ME_OPTIONS_SOUNDSETUP,
 #ifndef EDUKE32_ANDROID_MENU
-#ifndef EDUKE32_RETAIL_MENU
+#if !defined EDUKE32_RETAIL_MENU && !defined AMC_BUILD
     &ME_OPTIONS_PLAYERSETUP,
 #endif
     &ME_OPTIONS_CONTROLS,
 #else
     &ME_OPTIONS_TOUCHSETUP,
 #endif
-#ifdef EDUKE32_RETAIL_MENU
+#if defined EDUKE32_RETAIL_MENU
     &ME_GAMESETUP_SAVESETUP,
     &ME_OPTIONS_CHEATS
+#elif defined AMC_BUILD
+        &ME_GAMESETUP_SAVESETUP
 #endif
 };
 
@@ -2881,7 +2887,11 @@ static void Menu_PreDrawBackground(MenuID_t cm, const vec2_t origin)
     case MENU_SAVE:
         if (FURY)
             break;
+#ifdef AMC_BUILD
+        break;
+#else
         fallthrough__;
+#endif
     case MENU_CREDITS4:
     case MENU_CREDITS5:
         Menu_DrawBackground(origin);
@@ -2987,6 +2997,7 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
         if (FURY)
             break;
 
+#ifndef AMC_BUILD
         // center panel
         rotatesprite_fs(origin.x + (120<<16), origin.y + (32<<16), 16384, 0, 3290, 0, 0, 2|8|16);
         int32_t const statusTile = sbartile();
@@ -2997,6 +3008,7 @@ static void Menu_PreDraw(MenuID_t cm, MenuEntry_t* entry, const vec2_t origin)
 
         // right panel
         rotatesprite_fs(origin.x + (200<<16), origin.y + (32<<16), 16384, 0, LOADSCREEN, 0, 0, 2|8|16);
+#endif
         break;
     }
 #endif
