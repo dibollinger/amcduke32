@@ -893,21 +893,24 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
     if (pOther->sound_pitch)
         pitch += pOther->sound_pitch;
 
-    if (explosionp)
+    if ((snd->flags & SF_NOUWPITCHSHIFT) == 0)
     {
-        if (pOther->cursectnum > -1 && sector[pOther->cursectnum].lotag == ST_2_UNDERWATER)
-            pitch -= 1024;
-    }
-    else
-    {
+        if (explosionp)
+        {
+            if (pOther->cursectnum > -1 && sector[pOther->cursectnum].lotag == ST_2_UNDERWATER)
+                pitch -= 1024;
+        }
+        else
+        {
 #if 0
-        if (sndist > 32767 && PN(spriteNum) != MUSICANDSFX && (snd->mode & (SF_LOOP|SF_MSFX)) == 0)
-            return -1;
+            if (sndist > 32767 && PN(spriteNum) != MUSICANDSFX && (snd->mode & (SF_LOOP|SF_MSFX)) == 0)
+                return -1;
 #endif
 
-        if (pOther->cursectnum > -1 && sector[pOther->cursectnum].lotag == ST_2_UNDERWATER
-            && (snd->flags & SF_TALK) == 0)
-            pitch = -768;
+            if (pOther->cursectnum > -1 && sector[pOther->cursectnum].lotag == ST_2_UNDERWATER
+                && (snd->flags & SF_TALK) == 0)
+                pitch = -768;
+        }
     }
 
     if (snd->playing && PN(spriteNum) != MUSICANDSFX)
