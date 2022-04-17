@@ -23,6 +23,7 @@ static void *g_vm_data;
 // MAXARTFILES_BASE <= . < MAXARTFILES_TOTAL: tile is in a map-specific ART file
 EDUKE32_STATIC_ASSERT(MAXARTFILES_TOTAL <= 256);
 
+hashtable_t h_mapartpaths = {MAXMAPARTDEFS, NULL};
 static int32_t tilefileoffs[MAXTILES];
 
 // Backup tilefilenum[] and tilefileoffs[]. These get allocated only when
@@ -41,6 +42,7 @@ static int32_t g_vm_size = 0;
 
 static char artfilename[20];
 static char mapartfilename[BMAX_PATH];  // map-specific ART file name
+static const char* mapartfilepaths[MAXARTPERMAP]; // multiple, non-indexed mapart filename
 static int32_t mapartfnXXofs;  // byte offset to 'XX' (the number part) in the above
 static int32_t artfilnum, artfilplc;
 static buildvfs_kfd artfil;
@@ -53,6 +55,7 @@ static int32_t artReadIndexedFile(int32_t tilefilei);
 
 static inline void artClearMapArtFilename(void)
 {
+    Bmemset(mapartfilepaths, 0, MAXARTPERMAP * sizeof(char*));
     Bmemset(mapartfilename, 0, sizeof(mapartfilename));
     mapartfnXXofs = 0;
 }
@@ -145,23 +148,54 @@ void artSetupMapArt(const char *filename)
 {
     artClearMapArt();
 
-    if (Bstrlen(filename) + 7 >= sizeof(mapartfilename))
-        return;
-
-    Bstrcpy(mapartfilename, filename);
-    append_ext_UNSAFE(mapartfilename, "_XX.art");
-    mapartfnXXofs = Bstrlen(mapartfilename) - 6;
-
-    // Check for first per-map ART file: if that one doesn't exist, don't load any.
-    buildvfs_kfd fil = kopen4loadfrommod(artGetIndexedFileName(MAXARTFILES_BASE), 0);
-
-    if (fil == buildvfs_kfd_invalid)
+    // first check hash table
+    intptr_t mapartarrayptr = -1;
+    if (h_mapartpaths.items)
     {
-        artClearMapArtFilename();
-        return;
+        int startidx = 0;
+        while (filename[startidx] == '/')
+            startidx++;
+
+        mapartarrayptr = hash_find(&h_mapartpaths, &filename[startidx]);
+        if (mapartarrayptr != -1)
+        {
+            int artidx = 0;
+            char ** mapartarray = (char**) mapartarrayptr;
+            while (artidx < MAXARTPERMAP)
+            {
+                buildvfs_kfd fil = kopen4loadfrommod(mapartarray[artidx], 0);
+                if (fil == buildvfs_kfd_invalid)
+                    break;
+
+                mapartfilepaths[artidx] = mapartarray[artidx];
+                kclose(fil);
+                artidx++;
+            }
+
+            if (artidx == 0) mapartarrayptr = -1;
+        }
     }
 
-    kclose(fil);
+    if (mapartarrayptr == -1)
+    {
+        if (Bstrlen(filename) + 7 >= sizeof(mapartfilename))
+            return;
+
+        Bstrcpy(mapartfilename, filename);
+        append_ext_UNSAFE(mapartfilename, "_XX.art");
+        mapartfnXXofs = Bstrlen(mapartfilename) - 6;
+
+        // Check for first per-map ART file: if that one doesn't exist, don't load any.
+        buildvfs_kfd fil = kopen4loadfrommod(artGetIndexedFileName(MAXARTFILES_BASE), 0);
+
+        if (fil == buildvfs_kfd_invalid)
+        {
+            artClearMapArtFilename();
+            return;
+        }
+
+        kclose(fil);
+    }
 
     // Allocate backup arrays.
     ALLOC_MAPART_ARRAY(tilefilenum, g_bakTileFileNum);
@@ -486,12 +520,14 @@ static const char *artGetIndexedFileName(int32_t tilefilei)
 {
     if (tilefilei >= MAXARTFILES_BASE)
     {
-        int32_t o = mapartfnXXofs;
         tilefilei -= MAXARTFILES_BASE;
 
+        if (mapartfilepaths[tilefilei])
+            return mapartfilepaths[tilefilei];
+
+        int32_t o = mapartfnXXofs;
         mapartfilename[o+1] = '0' + tilefilei%10;
         mapartfilename[o+0] = '0' + (tilefilei/10)%10;
-
         return mapartfilename;
     }
     else

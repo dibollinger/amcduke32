@@ -9164,6 +9164,15 @@ int32_t enginePostInit(void)
 //
 // uninitengine
 //
+
+static void freeMapArtStrings(const char *, intptr_t key)
+{
+    char** mapartarray = (char**) key;
+    for (int i = 0; i < MAXARTPERMAP; i++)
+        Xfree(mapartarray[i]);
+    Xfree(mapartarray);
+}
+
 void engineUnInit(void)
 {
     communityapiShutdown();
@@ -9219,6 +9228,9 @@ void engineUnInit(void)
     DO_FREE_AND_NULL(multipsky);
     DO_FREE_AND_NULL(multipskytile);
     pskynummultis = 0;
+
+    hash_loop(&h_mapartpaths, freeMapArtStrings);
+    hash_free(&h_mapartpaths);
 
     DO_FREE_AND_NULL(g_defNamePtr);
 

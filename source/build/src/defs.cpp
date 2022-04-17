@@ -379,6 +379,7 @@ static int32_t defsparser(scriptfile *script)
         { "tilefromtexture", T_TILEFROMTEXTURE  },
         { "artfile",         T_ARTFILE          },
         { "mapinfo",         T_MAPINFO          },
+        { "mapart",          T_MAPART           },
         { "echo",            T_ECHO             },
         { "globalflags",     T_GLOBALFLAGS      },
         { "copytile",        T_COPYTILE         },
@@ -2696,6 +2697,70 @@ static int32_t defsparser(scriptfile *script)
                 }
                 else usermaphacks[previous_usermaphacks].mapart = NULL;
             }
+        }
+        break;
+
+        case T_MAPART:
+        {
+            char *strtemp = NULL, *artpath = NULL, *mapartend;
+            if (EDUKE32_PREDICT_FALSE(scriptfile_getstring(script, &strtemp)))
+                break;
+
+            if (EDUKE32_PREDICT_FALSE(scriptfile_getbraces(script, &mapartend)))
+                break;
+
+            char mappath[BMAX_PATH];
+            Bstrncpy(mappath, strtemp, BMAX_PATH);
+            Bcorrectfilename(mappath, 0);
+
+            intptr_t prevArtPtr = -1;
+            if (h_mapartpaths.items) prevArtPtr = hash_find(&h_mapartpaths, mappath);
+
+            if (prevArtPtr != -1)
+            {
+                LOG_F(WARNING, "Overriding existing mapart definition for map: %s", mappath);
+                hash_delete(&h_mapartpaths, mappath);
+
+                char** prevArt = (char**)prevArtPtr;
+                for (int i = 0; i < MAXARTPERMAP; i++)
+                    Xfree(prevArt[i]);
+                Xfree(prevArt);
+            }
+
+            char** mapartpaths = (char**) Xcalloc(MAXARTPERMAP, sizeof(char*));
+            int num_mapartfiles = 0;
+
+            while (script->textptr < mapartend)
+            {
+                if (scriptfile_getstring(script, &artpath))
+                {
+                    LOG_F(ERROR, "not a string");
+                    continue;
+                }
+
+                if (num_mapartfiles >= MAXARTPERMAP)
+                {
+                    LOG_F(ERROR, "Too many mapart files defined for map: %s", mappath);
+                    break;
+                }
+
+                int startidx = 0;
+                while (artpath[startidx] == '/') startidx++;
+                mapartpaths[num_mapartfiles] = Xstrdup(&artpath[startidx]);
+
+                Bcorrectfilename(mapartpaths[num_mapartfiles], 0);
+                num_mapartfiles++;
+            }
+
+            if (num_mapartfiles == 0)
+            {
+                Xfree(mapartpaths);
+                break;
+            }
+
+            if (!h_mapartpaths.items)
+                hash_init(&h_mapartpaths);
+            hash_add(&h_mapartpaths, mappath, (intptr_t) mapartpaths, 0);
         }
         break;
 

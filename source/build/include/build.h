@@ -23,6 +23,7 @@
 #include "compat.h"
 #include "glad/glad.h"
 #include "glbuild.h"
+#include "hash.h"
 #include "palette.h"
 #include "pragmas.h"
 #include "random.h"
@@ -1237,6 +1238,9 @@ int32_t engineLoadClipMaps(void);
 #endif
 int32_t   saveboard(const char *filename, const vec3_t *dapos, int16_t daang, int16_t dacursectnum);
 
+#define MAXMAPARTDEFS 1024
+extern hashtable_t h_mapartpaths;
+
 void    tileSetupDummy(int32_t tile);
 void    tileSetData(int32_t tile, int32_t tsiz, char const *buffer);
 void    tileDelete(int32_t tile);
@@ -1672,8 +1676,6 @@ int32_t engineLoadBoardV5V6(const char *filename, char fromwhere, vec3_t *dapos,
 #ifdef __cplusplus
 }
 #endif
-
-#include "hash.h"
 
 #ifdef POLYMER
 # include "polymer.h"

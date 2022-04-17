@@ -14,6 +14,7 @@
 #define MAXPERMS 512
 #define MAXARTFILES_BASE 200
 #define MAXARTFILES_TOTAL 220
+#define MAXARTPERMAP (MAXARTFILES_TOTAL - MAXARTFILES_BASE)
 #define MAXCLIPDIST 1024
 
 // Uncomment to clear the screen before each top-level draw (classic only).
