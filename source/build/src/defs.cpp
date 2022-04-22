@@ -2710,7 +2710,12 @@ static int32_t defsparser(scriptfile *script)
                 break;
 
             char mappath[BMAX_PATH];
-            Bstrncpy(mappath, strtemp, BMAX_PATH);
+            char* resolved_ptr = Brealpath(strtemp, mappath);
+            if (resolved_ptr == NULL)
+            {
+                LOG_F(ERROR, "mapart: could not find map file: %s", strtemp);
+                break;
+            }
             Bcorrectfilename(mappath, 0);
 
             intptr_t prevArtPtr = -1;
@@ -2718,7 +2723,7 @@ static int32_t defsparser(scriptfile *script)
 
             if (prevArtPtr != -1)
             {
-                LOG_F(WARNING, "Overriding existing mapart definition for map: %s", mappath);
+                LOG_F(WARNING, "mapart: overriding existing mapart definition for map: %s", mappath);
                 hash_delete(&h_mapartpaths, mappath);
 
                 char** prevArt = (char**)prevArtPtr;
@@ -2734,13 +2739,13 @@ static int32_t defsparser(scriptfile *script)
             {
                 if (scriptfile_getstring(script, &artpath))
                 {
-                    LOG_F(ERROR, "not a string");
+                    LOG_F(ERROR, "mapart: art file path is not a string");
                     continue;
                 }
 
                 if (num_mapartfiles >= MAXARTPERMAP)
                 {
-                    LOG_F(ERROR, "Too many mapart files defined for map: %s", mappath);
+                    LOG_F(ERROR, "mapart: too many mapart files defined for map: %s", mappath);
                     break;
                 }
 

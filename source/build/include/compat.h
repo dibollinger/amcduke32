@@ -574,6 +574,7 @@ typedef FILE BFILE;
 #define Bvfprintf vfprintf
 #define Bgetenv getenv
 #define Butime utime
+#define Brealpath realpath
 
 
 ////////// Standard library wrappers //////////

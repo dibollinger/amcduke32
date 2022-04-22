@@ -156,23 +156,29 @@ void artSetupMapArt(const char *filename)
         while (filename[startidx] == '/')
             startidx++;
 
-        mapartarrayptr = hash_find(&h_mapartpaths, &filename[startidx]);
-        if (mapartarrayptr != -1)
+        char realmappath[BMAX_PATH];
+        char* realpath_ptr = Brealpath(&filename[startidx], realmappath);
+        if (realpath_ptr != NULL)
         {
-            int artidx = 0;
-            char ** mapartarray = (char**) mapartarrayptr;
-            while (artidx < MAXARTPERMAP)
+            Bcorrectfilename(realmappath, 0);
+            mapartarrayptr = hash_find(&h_mapartpaths, realmappath);
+            if (mapartarrayptr != -1)
             {
-                buildvfs_kfd fil = kopen4loadfrommod(mapartarray[artidx], 0);
-                if (fil == buildvfs_kfd_invalid)
-                    break;
+                int artidx = 0;
+                char ** mapartarray = (char**) mapartarrayptr;
+                while (artidx < MAXARTPERMAP)
+                {
+                    buildvfs_kfd fil = kopen4loadfrommod(mapartarray[artidx], 0);
+                    if (fil == buildvfs_kfd_invalid)
+                        break;
 
-                mapartfilepaths[artidx] = mapartarray[artidx];
-                kclose(fil);
-                artidx++;
+                    mapartfilepaths[artidx] = mapartarray[artidx];
+                    kclose(fil);
+                    artidx++;
+                }
+
+                if (artidx == 0) mapartarrayptr = -1;
             }
-
-            if (artidx == 0) mapartarrayptr = -1;
         }
     }
 
