@@ -37,6 +37,10 @@ extern "C" {
 // config file name
 #define SETUPFILENAME APPBASENAME ".cfg"
 
+#ifdef AMC_BUILD
+#define BACKUP_SETUPFILENAME "amctc.cfg"
+#endif
+
 // KEEPINSYNC mact/include/_control.h, build/src/sdlayer.cpp
 #define MAXJOYBUTTONS 32
 #define MAXJOYBUTTONSANDHATS (MAXJOYBUTTONS+4)

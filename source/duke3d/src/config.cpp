@@ -716,6 +716,17 @@ int CONFIG_ReadSetup(void)
                 ud.config.scripthandle = SCRIPT_Load(SETUPFILENAME);
         }
 #endif
+#ifdef BACKUP_SETUPFILENAME
+        else if (buildvfs_exists(BACKUP_SETUPFILENAME))
+        {
+            int const i = wm_ynbox("Import Configuration Settings",
+                                   "Configuration file %s not found. "
+                                   "Import configuration data from %s?",
+                                   g_setupFileName, BACKUP_SETUPFILENAME);
+            if (i)
+                ud.config.scripthandle = SCRIPT_Load(BACKUP_SETUPFILENAME);
+        }
+#endif
     }
 
     pathsearchmode = 0;
