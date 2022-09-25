@@ -63,10 +63,10 @@ BEGIN
         BEGIN
             VALUE "FileDescription", "AMCDuke32"
             VALUE "FileVersion", VERSTR
-            VALUE "InternalName", "EDuke32_AMC"
+            VALUE "InternalName", "AMCDuke32"
             VALUE "LegalCopyright", "Copyright © EDuke32 contributors. All rights reserved."
             VALUE "LegalTrademarks", "Duke Nukem® is a Registered Trademark of Balls of Steel, LLC."
-            VALUE "OriginalFilename", "amctc.exe"
+            VALUE "OriginalFilename", "amcsquad.exe"
             VALUE "ProductName", "AMCDuke32"
             VALUE "ProductVersion", VERSTR
         END

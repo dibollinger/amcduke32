@@ -4,11 +4,11 @@
 
 ### Global Profiles
 
-AMCTC ?= 1
+AMCSQUAD ?= 1
 
-### AMC TC Profile
-ifeq ($(AMCTC),1)
-    APPBASENAME := amctc
+### AMC Squad Profile
+ifeq ($(AMCSQUAD),1)
+    APPBASENAME := amcsquad
     APPNAME := AMCDuke32
     NETCODE := 0
     POLYMER := 0

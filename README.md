@@ -38,8 +38,8 @@
 
 ## About
 
-AMCDuke32 is a fork of the eduke32 engine, created to serve as a base for the AMC TC.
-eduke32 is based on the Duke Nukem 3D source, which was created on top of the Build engine
+AMCDuke32 is a fork of the eduke32 engine, created to serve as a base for the game "AMC Squad".
+EDuke32 is based on the Duke Nukem 3D source, which was created on top of the Build engine
 by Ken Silverman, released under the Build license.
 
 Its primary purpose is to raise engine limits and alter hardcoded game behaviour, to allow
@@ -103,11 +103,11 @@ __Compiling__
 
 To compile, simply run the command `make` in the base folder (with parameter `-j#` to speed up compilation
 with multiple threads). If successful, this should produce the following binaries in the base folder:
-* `amctc`
+* `amcsquad`
 * `mapster32`
 
 The binaries do not support game autodetection. Instead, you should copy the binaries into the folder that
-contains the AMC Squad data, i.e. the folder where the `amctc.grpinfo` file is located.
+contains the AMC Squad data, i.e. the folder where the `amcsquad.grpinfo` file is located.
 
 __Additional build instructions can be found here:__
 

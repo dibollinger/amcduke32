@@ -828,7 +828,7 @@ endif
 ifneq (0,$(POLYMER))
     COMPILERFLAGS += -DPOLYMER
 endif
-ifneq (0,$(AMCTC))
+ifneq (0,$(AMCSQUAD))
     COMPILERFLAGS += -DAMC_BUILD
 endif
 
