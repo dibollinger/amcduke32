@@ -186,12 +186,9 @@ int32_t S_DefineSound(int sndidx, const char * filename, const char * definednam
     snd.ps = clamp(minpitch, INT16_MIN, INT16_MAX);
     snd.pe = clamp(maxpitch, INT16_MIN, INT16_MAX);
     snd.pr = priority & 0xFF;
-    snd.m = type & ~SF_ONEINST_INTERNAL;
+    snd.m = type;
     snd.vo = clamp(distance, INT16_MIN, INT16_MAX);
     snd.volume = volume * fix16_one;
-
-    if (snd.m & SF_LOOP)
-        snd.m |= SF_ONEINST_INTERNAL;
 
     return 0;
 }
@@ -311,9 +308,11 @@ int32_t S_PlaySound3D(int32_t const num, int32_t i, const vec3_t *pos)
 
     if (snd.m & SF_LOOP)
     {
+#if 0
+        // prevent multiple looping sounds of same type from playing at the same time
         if (snd.num > 0)
             return -1;
-
+#endif
         voice = FX_Play(snd.ptr, snd.soundsiz, 0, -1,
                         pitch, sndist>>6, sndist>>6, 0, snd.pr, snd.volume, num);
     }

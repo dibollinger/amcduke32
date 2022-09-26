@@ -30,7 +30,6 @@ enum {
     SF_TALK = 4,
     SF_ADULT = 8,
     SF_GLOBAL = 16,
-    SF_ONEINST_INTERNAL = 32,
 
     SF_DTAG = 128,
 };

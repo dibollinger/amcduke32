@@ -599,13 +599,11 @@ int32_t S_DefineSound(int sndidx, const char *name, int minpitch, int maxpitch, 
     snd->minpitch   = clamp(minpitch, INT16_MIN, INT16_MAX);
     snd->maxpitch   = clamp(maxpitch, INT16_MIN, INT16_MAX);
     snd->priority   = priority & 0xFF;
-    snd->flags       = type & ~SF_ONEINST_INTERNAL;
+    snd->flags      = type;
     snd->distOffset = clamp(distance, INT16_MIN, INT16_MAX);
     snd->volume     = volume * fix16_one;
     snd->voices     = &nullvoice;
 
-    if (snd->flags & SF_LOOP)
-        snd->flags |= SF_ONEINST_INTERNAL;
 
     return 0;
 }
@@ -917,9 +915,12 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
 
     int const repeatp = (snd->flags & SF_LOOP);
 
-    if ((snd->flags & (SF_LOOP|SF_ONEINST_INTERNAL)) == (SF_LOOP|SF_ONEINST_INTERNAL) && snd->playing)
-        return -1;
-    
+    // this replaces the previous SF_ONEINST_INTERNAL flag
+    // do not overlap looping sounds of same type if it originates from a hardcoded effector/activator sprite
+    if (snd->playing && (snd->flags & SF_LOOP) && (PN(spriteNum) == SECTOREFFECTOR || PN(spriteNum) == ACTIVATOR
+                                        || PN(spriteNum) == ACTIVATORLOCKED || PN(spriteNum) == MASTERSWITCH))
+            return -1;
+
 #ifdef CACHING_DOESNT_SUCK
     if (++g_soundlocks[sndNum] < CACHE1D_LOCKED)
         g_soundlocks[sndNum] = CACHE1D_LOCKED;
