@@ -510,39 +510,43 @@ void S_Update(void)
 
 void S_Callback(intptr_t num)
 {
-    int32_t i,j,k;
-
-    k = g_sounds[num].num;
-
-    if (k > 0)
+    int32_t& sndcnt = g_sounds[num].num;
+    if (sndcnt > 0)
     {
-        if ((g_sounds[num].m & SF_GLOBAL) == 0)
-            for (j=0; j<k; j++)
+        // if it's a global sound, simply decrement by one
+        if (g_sounds[num].m & SF_GLOBAL)
+            sndcnt--;
+        else
+        {
+            // cleanup all actor sounds in one go
+            extern uint8_t g_ambiencePlaying[(MAXSPRITES+7)>>3];
+            for (int idx = 0; idx < sndcnt;)
             {
-                i = g_sounds[num].SoundOwner[j].ow;
-                if (i < 0)
-                    continue;
-
-                if (sprite[i].picnum == MUSICANDSFX && sector[sprite[i].sectnum].lotag < 3 && sprite[i].lotag < 999)
+                int32_t spriteNum = g_sounds[num].SoundOwner[idx].ow;
+                if (spriteNum < 0 || spriteNum >= MAXSPRITES || !bitmap_test(g_ambiencePlaying, spriteNum))
                 {
-                    extern uint8_t g_ambiencePlaying[(MAXSPRITES+7)>>3];
-
-                    g_ambiencePlaying[i>>3] &= ~pow2char[i&7];
-
-                    if (j < k-1)
+                    if (idx != --sndcnt)
                     {
-                        g_sounds[num].SoundOwner[j].voice = g_sounds[num].SoundOwner[k-1].voice;
-                        g_sounds[num].SoundOwner[j].ow     = g_sounds[num].SoundOwner[k-1].ow;
+                        g_sounds[num].SoundOwner[idx].voice = g_sounds[num].SoundOwner[sndcnt].voice;
+                        g_sounds[num].SoundOwner[idx].ow = g_sounds[num].SoundOwner[sndcnt].ow;
                     }
-                    break;
+                    g_sounds[num].SoundOwner[sndcnt].ow = -1;
                 }
+                else idx++;
             }
-
-        g_sounds[num].num--;
-        g_sounds[num].SoundOwner[k-1].ow = -1;
+        }
     }
 
-    g_sounds[num].lock--;
+    // sanity check, restore k to 0 if something went wrong
+    if (sndcnt < 0)
+    {
+        LOG_F(WARNING, "Negative number of active sounds %d for soundnum %ld detected! This shouldn't be happening!", sndcnt, num);
+        sndcnt = 0;
+    }
+
+    // only release sound lock if none are playing
+    if (sndcnt == 0)
+        g_sounds[num].lock--;
 }
 
 void S_ClearSoundLocks(void)

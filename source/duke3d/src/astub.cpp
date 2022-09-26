@@ -1806,6 +1806,8 @@ static int32_t sort_sounds(int32_t how)
     return 0;
 }
 
+uint8_t g_ambiencePlaying[(MAXSPRITES+7)>>3];
+
 static void SoundDisplay(void)
 {
     if (g_numsounds <= 0) return;
@@ -1983,6 +1985,7 @@ static void SoundDisplay(void)
 
         overridepm16y = -1;
 
+        Bmemset(g_ambiencePlaying, 0, (MAXSPRITES+7)>>3);
         FX_StopAllSounds();
         S_ClearSoundLocks();
 
@@ -1993,8 +1996,6 @@ static void SoundDisplay(void)
 
 int32_t AmbienceToggle = 1;
 int32_t ParentalLock = 0;
-
-uint8_t g_ambiencePlaying[(MAXSPRITES+7)>>3];
 
 #define testbit(bitarray, i) (bitarray[(i)>>3] & pow2char[(i)&7])
 #define setbit(bitarray, i) bitarray[(i)>>3] |= pow2char[(i)&7]
@@ -2039,6 +2040,7 @@ static void M32_MoveFX(void)
                                 if (s->picnum == MUSICANDSFX && j != i && sprite[j].lotag < 999 &&
                                         testbit(g_ambiencePlaying, j) && dist(&sprite[j],&pos) > x)
                                 {
+                                    clearbit(g_ambiencePlaying, j);
                                     S_StopEnvSound(sprite[j].lotag,j);
                                     break;
                                 }
@@ -2739,6 +2741,7 @@ static int32_t editorGetTile(int32_t idInitialTile)
     int32_t noTilesMarked=1;
     int32_t mark_lastk = -1;
 
+    Bmemset(g_ambiencePlaying, 0, (MAXSPRITES+7)>>3);
     FX_StopAllSounds();
     S_ClearSoundLocks();
 
@@ -4628,6 +4631,7 @@ static void Keys3d(void)
         message("Ambience sounds: %s",AmbienceToggle?"enabled":"disabled");
         if (!AmbienceToggle)
         {
+            Bmemset(g_ambiencePlaying, 0, (MAXSPRITES+7)>>3);
             FX_StopAllSounds();
             S_ClearSoundLocks();
         }
@@ -11067,6 +11071,7 @@ void ExtCheckKeys(void)
             corruptchecktimer = (int32_t) totalclock + 120*autocorruptcheck;
         }
 
+        Bmemset(g_ambiencePlaying, 0, (MAXSPRITES+7)>>3);
         FX_StopAllSounds();
         S_ClearSoundLocks();
     }
