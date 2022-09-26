@@ -185,7 +185,10 @@ int32_t showheightindicators=1;
 int32_t circlewall=-1;
 
 static void classicScanSector(int16_t startsectnum);
+
+#ifdef ENGINE_CLEAR_SCREEN
 static void draw_rainbow_background(void);
+#endif
 
 int16_t editstatus = 0;
 static fix16_t global100horiz;  // (-100..300)-scale horiz (the one passed to drawrooms)
@@ -1239,6 +1242,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
 
 #endif  // defined YAX_ENABLE
 
+#ifdef ENGINE_CLEAR_SCREEN
 // must have writable frame buffer, i.e. done begindrawing()
 static void draw_rainbow_background(void)
 {
@@ -1259,6 +1263,7 @@ static void draw_rainbow_background(void)
         dst += bytesperline;
     }
 }
+#endif
 
 //
 // setslope

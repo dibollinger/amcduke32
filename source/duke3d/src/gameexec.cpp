@@ -6753,7 +6753,7 @@ badindex:
                     {
                         uint64_t mean = profile_sums[p_index] / profile_measurecount[p_index];
                         uint64_t stddev = (profile_measurecount[p_index] > 1) ? ksqrt((profile_squaresums[p_index] / profile_measurecount[p_index]) - (mean * mean)) : 0;
-                        initprintf(OSDTEXT_GREEN "CON PROFILE: L=%d, idx=%d, N=%llu, elapsed=%lluns (mean: %llu +/- %llu ns)\n",
+                        initprintf(OSDTEXT_GREEN "CON PROFILE: L=%d, idx=%d, N=%lu, elapsed= %lu ns (mean: %lu +/- %lu ns)\n",
                                     VM_DECODE_LINE_NUMBER(g_tw), p_index, profile_measurecount[p_index], profile_lastelapsed[p_index], mean, stddev);
                     }
                 }
