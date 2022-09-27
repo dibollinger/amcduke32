@@ -2080,8 +2080,7 @@ static void C_Include(const char *confile)
     Xfree(mptr);
 }
 
-#ifdef _WIN32
-static void check_filename_case(const char *fn)
+static int check_file_exists(const char *fn)
 {
         static char buf[BMAX_PATH];
 
@@ -2094,11 +2093,12 @@ static void check_filename_case(const char *fn)
             buildvfs_kfd fp;
             if ((fp = kopen4loadfrommod(fn, g_loadFromGroupOnly)) != buildvfs_kfd_invalid)
                 kclose(fp);
+            else
+                return -1;
         }
+
+        return 0;
 }
-#else
-static void check_filename_case(const char *fn) { UNREFERENCED_PARAMETER(fn); }
-#endif
 
 void G_DoGameStartup(const int32_t *params)
 {
@@ -2176,7 +2176,8 @@ void C_DefineMusic(int volumeNum, int levelNum, const char *fileName)
 
     Xfree(pMapInfo->musicfn);
     pMapInfo->musicfn = dup_filename(fileName);
-    check_filename_case(pMapInfo->musicfn);
+    if (check_file_exists(pMapInfo->musicfn))
+        LOG_F(WARNING, "%s:%d: unable to find music file: \"%s\"", g_scriptFileName, g_lineNumber, pMapInfo->musicfn);
 }
 
 void C_DefineVolumeFlags(int32_t vol, int32_t flags)
@@ -5981,7 +5982,8 @@ repeatcase:
             }
             filename[i] = '\0';
 
-            check_filename_case(filename);
+            if (check_file_exists(filename))
+                LOG_F(WARNING, "%s:%d: unable to find sound file: \"%s\"", g_scriptFileName, g_lineNumber, filename);
 
             C_GetNextValue(LABEL_DEFINE);
             int minpitch = g_scriptPtr[-1];
