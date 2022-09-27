@@ -72,10 +72,12 @@ static struct
 #endif
     GtkWidget *inputdevlabel;
     GtkWidget *inputdevcombo;
+#ifndef AMC_BUILD
     GtkWidget *custommodlabel;
     GtkWidget *custommodcombo;
-    GtkWidget *emptyhlayout;
     GtkWidget *autoloadcheck;
+#endif
+    GtkWidget *emptyhlayout;
     GtkWidget *alwaysshowcheck;
     GtkWidget *configtab;
     GtkWidget *gamevlayout;
@@ -172,6 +174,7 @@ static void on_inputdevcombo_changed(GtkComboBox *combobox, gpointer user_data)
     }
 }
 
+#ifndef AMC_BUILD
 static void on_custommodcombo_changed(GtkComboBox *combobox, gpointer user_data)
 {
     GtkTreeIter iter;
@@ -191,12 +194,15 @@ static void on_custommodcombo_changed(GtkComboBox *combobox, gpointer user_data)
         else settings.gamedir = value;
     }
 }
+#endif
 
+#ifndef AMC_BUILD
 static void on_autoloadcheck_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
     UNREFERENCED_PARAMETER(user_data);
     settings.shared.noautoload = !gtk_toggle_button_get_active(togglebutton);
 }
+#endif
 
 static void on_alwaysshowcheck_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
@@ -266,6 +272,7 @@ static void SetPage(int32_t n)
                           (gpointer)&n);
 }
 
+#ifndef AMC_BUILD
 static unsigned char GetModsDirNames(GtkListStore *list)
 {
     char *homedir;
@@ -304,6 +311,7 @@ static unsigned char GetModsDirNames(GtkListStore *list)
 
     return iternumb;
 }
+#endif
 
 static void PopulateForm(unsigned char pgs)
 {
@@ -351,11 +359,15 @@ static void PopulateForm(unsigned char pgs)
 
     if ((pgs == ALL) || (pgs == POPULATE_CONFIG))
     {
-        GtkListStore *devlist, *modsdir;
-        GtkTreeIter iter;
+        GtkListStore *devlist;
+#ifndef AMC_BUILD
+        GtkListStore *modsdir;
         GtkTreePath *path;
         char *value;
-        unsigned char i, r = 0;
+        unsigned char r = 0;
+#endif
+        GtkTreeIter iter;
+        unsigned char i;
         const char *availabledev[] =
         {
             "Keyboard only",
@@ -387,6 +399,7 @@ static void PopulateForm(unsigned char pgs)
             break;
         }
 
+#ifndef AMC_BUILD
         // populate custom mod combo
         modsdir = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(stwidgets.custommodcombo)));
         gtk_list_store_clear(modsdir);
@@ -417,12 +430,14 @@ static void PopulateForm(unsigned char pgs)
             }
         }
 
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(stwidgets.autoloadcheck), !settings.shared.noautoload);
+#endif
+
         // populate check buttons
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(stwidgets.fullscreencheck), settings.shared.fullscreen);
 #ifdef POLYMER
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(stwidgets.polymercheck), settings.polymer);
 #endif
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(stwidgets.autoloadcheck), !settings.shared.noautoload);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(stwidgets.alwaysshowcheck), settings.shared.forcesetup);
     }
 
@@ -568,6 +583,7 @@ static GtkWidget *create_window(void)
     gtk_table_attach(GTK_TABLE(stwidgets.configtlayout), stwidgets.inputdevcombo, 1,2, 1,2,
         (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 4, 0);
 
+#ifndef AMC_BUILD
     // Custom mod LabelText
     stwidgets.custommodlabel = gtk_label_new_with_mnemonic("Custom _game:");
     gtk_misc_set_alignment(GTK_MISC(stwidgets.custommodlabel), 0.3, 0);
@@ -588,14 +604,15 @@ static GtkWidget *create_window(void)
     gtk_table_attach(GTK_TABLE(stwidgets.configtlayout), stwidgets.custommodcombo, 1,2, 2,3,
         (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 4, 7);
 
+    // Autoload checkbox
+    stwidgets.autoloadcheck = gtk_check_button_new_with_mnemonic("_Enable \"autoload\" folder");
+    gtk_table_attach(GTK_TABLE(stwidgets.configtlayout), stwidgets.autoloadcheck, 0,3, 4,5, GTK_FILL, (GtkAttachOptions)0, 2, 2);
+#endif
+
     // Empty horizontal layout
     stwidgets.emptyhlayout = gtk_hbox_new(TRUE, 0);
     gtk_table_attach(GTK_TABLE(stwidgets.configtlayout), stwidgets.emptyhlayout, 0,3, 3,4, (GtkAttachOptions)0,
         (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 4, 0);
-
-    // Autoload checkbox
-    stwidgets.autoloadcheck = gtk_check_button_new_with_mnemonic("_Enable \"autoload\" folder");
-    gtk_table_attach(GTK_TABLE(stwidgets.configtlayout), stwidgets.autoloadcheck, 0,3, 4,5, GTK_FILL, (GtkAttachOptions)0, 2, 2);
 
     // Always show config checkbox
     stwidgets.alwaysshowcheck = gtk_check_button_new_with_mnemonic("_Always show this window at startup");
@@ -728,12 +745,14 @@ static GtkWidget *create_window(void)
     g_signal_connect((gpointer) stwidgets.inputdevcombo, "changed",
                      G_CALLBACK(on_inputdevcombo_changed),
                      NULL);
+#ifndef AMC_BUILD
     g_signal_connect((gpointer) stwidgets.custommodcombo, "changed",
                      G_CALLBACK(on_custommodcombo_changed),
                      NULL);
     g_signal_connect((gpointer) stwidgets.autoloadcheck, "toggled",
                      G_CALLBACK(on_autoloadcheck_toggled),
                      NULL);
+#endif
     g_signal_connect((gpointer) stwidgets.alwaysshowcheck, "toggled",
                      G_CALLBACK(on_alwaysshowcheck_toggled),
                      NULL);
@@ -754,7 +773,9 @@ static GtkWidget *create_window(void)
     // Associate labels with their controls
     gtk_label_set_mnemonic_widget(GTK_LABEL(stwidgets.vmode3dlabel), stwidgets.vmode3dcombo);
     gtk_label_set_mnemonic_widget(GTK_LABEL(stwidgets.inputdevlabel), stwidgets.inputdevcombo);
+#ifndef AMC_BUILD
     gtk_label_set_mnemonic_widget(GTK_LABEL(stwidgets.custommodlabel), stwidgets.custommodcombo);
+#endif
     gtk_label_set_mnemonic_widget(GTK_LABEL(stwidgets.gamelabel), stwidgets.gamelist);
 
     return stwidgets.startwin;

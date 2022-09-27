@@ -497,9 +497,7 @@ duke3d_rsrc := $(duke3d_root)/rsrc
 duke3d_obj := $(obj)/$(duke3d)
 
 ifneq (,$(APPBASENAME))
-    ifeq ($(PLATFORM),WINDOWS)
-        duke3d_rsrc := $(duke3d_root)/rsrc/$(APPBASENAME)
-    endif
+    duke3d_rsrc := $(duke3d_root)/rsrc/$(APPBASENAME)
     duke3d_obj := $(obj)/$(APPBASENAME)
 endif
 
