@@ -1,4 +1,4 @@
-# AMCDuke32 - Fork of EDuke32 for The AMC Squad
+# AMCDuke32 - Fork of EDuke32 for "The AMC Squad"
 
 * [About](#About)
 * [The AMC Squad](#the-amc-squad)
@@ -38,9 +38,9 @@
 
 ## About
 
-AMCDuke32 is a fork of the eduke32 engine, created to serve as a base for the game "AMC Squad".
-EDuke32 is based on the Duke Nukem 3D source, which was created on top of the Build engine
-by Ken Silverman, released under the Build license.
+AMCDuke32 is a fork of the eduke32 engine, created for the game "AMC Squad".
+EDuke32 is based on the Duke Nukem 3D source, which was built on the Build
+engine by Ken Silverman, released under the Build license.
 
 Its primary purpose is to raise engine limits and alter hardcoded game behaviour, to allow
 for greater flexibility in the development of the game. It also adds a small set of CON script
@@ -50,26 +50,36 @@ generally kept sparse to make merging with mainline eduke32 as smooth as possibl
 Note that The AMC Squad makes extensive use of eduke32 modding features, and hence will not be
 made compatible with BuildGDX or Raze.
 
-The original eduke32 source port was created by Richard "TerminX" Gobeille, and can be found at: https://voidpoint.io/terminx/eduke32
+The original eduke32 source port was created by Richard "TerminX" Gobeille, and can be found at:
+
+https://voidpoint.io/terminx/eduke32
 
 ## The AMC Squad
 
-"The AMC Squad" is a free standalone FPS built on the Duke 3D engine, and is loosely based on the world established by
-Duke Nukem 3D, Blood, Shadow Warrior, and other FPS classics. It currently features three episodes, with a story
-that involves a multitude of characters, the so-called AMC Squad, who attempt to defend Earth against a large
-variety of threats, including extra-terrestrial and supernatural foes.
+"The AMC Squad" is a free, story-driven first-person shooter built on the Build engine. It currently features 
+four episodes, each episode spanning 10+ hours of gameplay. The story centers around the titular AMC Squad, 
+a paramilitary group which is established after the EDF's number one agent disappeared without a trace.
+
+The group attempts to defend Earth against threats of extraordinary nature, but soon realize that they
+may have bitten off more than they can chew.
 
 The gameplay is mixture of classic FPS gameplay with a variety of modern features. The levels are arranged in a
 mission-based structure, which takes the player across a large variety of locations and themes.
 
-The game is free and standalone, and can be downloaded at: https://www.moddb.com/games/the-amc-tc
+The game is free and standalone, and can be downloaded at:
+
+https://www.moddb.com/games/the-amc-tc
+
+https://amcsquad.itch.io/game
 
 ## Installation
 
 Windows builds for the latest engine revisions can be found in the releases page, along with old versions.
-The latest engine revision will also be packaged together with the download itself.
 
-For Linux and MacOS, we recommend compiling the binary from source, using the instructions given below.
+The latest engine revision will also be packaged together with the download of the game itself.
+
+For Linux, we recommend compiling the binary from source, using the instructions given below. Mac support is untested.
+
 
 ### Building from Source
 
@@ -117,7 +127,7 @@ __Additional build instructions can be found here:__
 
 ## Feature Differences
 
-In this section we list the major changes to the modding API, including new CON and DEF script commands, and how to use them.
+This section lists the major changes to the modding API, including new CON and DEF script commands, and how to use them.
 
 ### __CON Commands__
 
@@ -418,7 +428,7 @@ i.e. it occurs before the actor has taken damage and its health was updated.
 
 #### __EVENT_POSTACTORDAMAGE__
 
-This event is called when an actor runs A_IncurDamage(), just after decreasing sprite[].extra, resetting htextra to -1 and updating htowner.
+This event is called when an actor runs `A_IncurDamage()`, just after decreasing sprite[].extra, resetting htextra to -1 and updating htowner.
 
 i.e. it occurs after the actor has taken damage and its health was updated.
 
