@@ -3999,6 +3999,8 @@ ACTOR_STATIC void G_MoveTransports(void)
                                 if (!pPlayer->jetpack_on || TEST_SYNC_KEY(thisPlayer.input.bits, SK_JUMP)
                                     || TEST_SYNC_KEY(thisPlayer.input.bits, SK_CROUCH))
                                 {
+                                    auto posdiff = pPlayer->opos - pPlayer->pos;
+
                                     pPlayer->pos.x += sprite[OW(spriteNum)].x - SX(spriteNum);
                                     pPlayer->pos.y += sprite[OW(spriteNum)].y - SY(spriteNum);
                                     pPlayer->pos.z = (pPlayer->jetpack_on && (TEST_SYNC_KEY(thisPlayer.input.bits, SK_JUMP)
@@ -4007,7 +4009,7 @@ ACTOR_STATIC void G_MoveTransports(void)
                                                      : sprite[OW(spriteNum)].z + 6144;
 
                                     actor[pPlayer->i].bpos = pPlayer->pos;
-                                    pPlayer->opos          = pPlayer->pos;
+                                    pPlayer->opos          = pPlayer->pos + posdiff;
                                     pPlayer->bobpos        = pPlayer->pos.xy;
 
                                     changespritesect(sectSprite, sprite[OW(spriteNum)].sectnum);
