@@ -4695,11 +4695,18 @@ static void Menu_Verify(int32_t input)
 
             fallthrough__;
         case 0:
+#ifdef AMC_BUILD
+            g_player[myconnectindex].ps->gm = MODE_DEMO;
+            if (ud.recstat == 1)
+                G_CloseDemoWrite();
+            artClearMapArt();
+#else
             if (sprite[g_player[myconnectindex].ps->i].extra <= 0)
             {
                 if (G_EnterLevel(MODE_GAME)) G_BackToMenu();
                 return;
             }
+#endif
 
             Menu_Change(MENU_CLOSE);
             break;

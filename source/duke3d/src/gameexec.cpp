@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 //-------------------------------------------------------------------------
 
+#ifdef AMC_BUILD
+#include "demo.h"
+#endif
+
 #include "anim.h"
 #include "cmdline.h"
 #include "colmatch.h"
@@ -1166,7 +1170,14 @@ static int32_t VM_ResetPlayer(int const playerNum, int32_t vmFlags, int32_t cons
         else
         {
             QuickLoadFailure:
+#ifdef AMC_BUILD
+            g_player[playerNum].ps->gm = MODE_DEMO;
+            if (ud.recstat == 1)
+                G_CloseDemoWrite();
+            artClearMapArt();
+#else
             g_player[playerNum].ps->gm = MODE_RESTART;
+#endif
         }
         vmFlags |= VM_NOEXECUTE;
     }
