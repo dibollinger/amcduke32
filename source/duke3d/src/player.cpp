@@ -4867,7 +4867,7 @@ static void P_DoJetpack(int const playerNum, int const playerBits, int const pla
         pPlayer->pos.z = actor[pPlayer->i].ceilingz + (18 << 8);
 }
 
-static void P_Dead(int const playerNum, int const sectorLotag, int const floorZ, int const ceilZ)
+static void P_Dead(int const playerNum, int const sectorLotag, int const floorZ, int ceilZ)
 {
     auto const pPlayer = g_player[playerNum].ps;
     auto const pSprite = &sprite[pPlayer->i];
@@ -4907,11 +4907,15 @@ static void P_Dead(int const playerNum, int const sectorLotag, int const floorZ,
 
     pushmove(&pPlayer->pos, &pPlayer->cursectnum, 128L, (4L<<8), (20L<<8), CLIPMASK0);
 
+#ifdef AMC_BUILD
+    UNREFERENCED_PARAMETER(ceilZ);
+#else
     if (floorZ > ceilZ + ZOFFSET2 && pSprite->pal != 1)
     {
         pPlayer->orotscrnang = pPlayer->rotscrnang;
         pPlayer->rotscrnang = (pPlayer->dead_flag + ((floorZ + pPlayer->pos.z) >> 7)) & 2047;
     }
+#endif
 
     pPlayer->on_warping_sector = 0;
 }
