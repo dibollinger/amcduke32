@@ -31,7 +31,7 @@ jobs:
       with:
         push: false
         outputs: type=local,dest=bin
-        platforms: linux/amd64,linux/arm64,linux/armv7
+        platforms: linux/amd64,linux/arm64
 
     - name: Publish amd64 executables
       uses: actions/upload-artifact@v3
@@ -44,12 +44,6 @@ jobs:
       with:
         name: amcduke32_linux_arm64.zip
         path: bin/linux_arm64/*
-
-    - name: Publish armv7 executables
-      uses: actions/upload-artifact@v3
-      with:
-        name: amcduke32_linux_armv7.zip
-        path: bin/linux_armv7/*
 
     # TODO: automatically create a GitHub release when a tag is created
     # TODO: see about building Windows executables too
