@@ -23,4 +23,4 @@ RUN apt-get update \
   
 FROM scratch AS distrib
 
-COPY from=builder /amcduke32/amcsquad /amcduke32/mapster32 /
+COPY --from=builder /amcduke32/amcsquad /amcduke32/mapster32 /
