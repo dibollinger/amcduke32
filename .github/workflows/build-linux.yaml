@@ -1,9 +1,12 @@
 name: Build amcduke32
 
 on:
+  # Allow manual runs
   workflow_dispatch:
+  # Run on any push to `master`
   push:
     branches: [ master ]
+  # Definitely run on any PR
   pull_request:
     branches: [ master ]
 
@@ -24,8 +27,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: false
-        outputs:
-        - type=local,dest=bin
+        outputs: type=local,dest=bin
         platforms: linux/amd64,linux/arm64
         
     - name: Publish build artifacts
@@ -33,3 +35,6 @@ jobs:
       with:
         name: amcduke32
         path: bin
+
+    # TODO: automatically create a GitHub release when a tag is created
+    # TODO: see about building Windows executables too
