@@ -1,11 +1,13 @@
-FROM ubuntu:22.04 AS builder
-
+FROM ubuntu:22.04 AS buildenv
+ARG BUILDOPTS
+ENV BUILDOPTS=${BUILDOPTS}
 WORKDIR /amcduke32
 COPY . /amcduke32/
 
 RUN apt-get update \
-  && apt-get install -y \
+  && apt-get install --no-install-recommends -y \
     build-essential \
+    git \
     nasm \
     libgl1-mesa-dev \
     libglu1-mesa-dev \
@@ -19,8 +21,7 @@ RUN apt-get update \
     libvpx-dev \
     libgtk2.0-dev \
     freepats \
-  && make
-  
+  && make ${BUILDOPTS}
+   
 FROM scratch AS distrib
-
 COPY --from=builder /amcduke32/amcsquad /amcduke32/mapster32 /
