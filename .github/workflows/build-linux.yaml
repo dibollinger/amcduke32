@@ -1,25 +1,28 @@
-name: Build amcduke32
+name: Build Linux
 
 on:
   # Allow manual runs
   workflow_dispatch:
   # Run on any push to `master`
   push:
-    branches: [ master ]
+    branches:
+    - master
   # Definitely run on any PR
   pull_request:
-    branches: [ master ]
+    branches:
+    - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       name: Check out repository
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
@@ -28,13 +31,25 @@ jobs:
       with:
         push: false
         outputs: type=local,dest=bin
-        platforms: linux/amd64,linux/arm64
-        
-    - name: Publish build artifacts
+        platforms: linux/amd64,linux/arm64,linux/armv7
+
+    - name: Publish amd64 executables
       uses: actions/upload-artifact@v3
       with:
-        name: amcduke32
-        path: bin
+        name: amcduke32_linux_amd64.zip
+        path: bin/linux_amd64/*
+
+    - name: Publish arm64 executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: amcduke32_linux_arm64.zip
+        path: bin/linux_arm64/*
+
+    - name: Publish armv7 executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: amcduke32_linux_armv7.zip
+        path: bin/linux_armv7/*
 
     # TODO: automatically create a GitHub release when a tag is created
     # TODO: see about building Windows executables too
