@@ -4,7 +4,7 @@ WORKDIR /amcduke32
 COPY . /amcduke32/
 
 RUN apt-get update \
-  && apt-get install \
+  && apt-get install -y \
     build-essential \
     nasm \
     libgl1-mesa-dev \
