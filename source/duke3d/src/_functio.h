@@ -296,7 +296,7 @@ const char keydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
    "8", "",
    "9", "",
    "0", "",
-   "Enter", "Q",
+   "Enter", "",
    "[", "",
    "]", "",
    "H", "",
@@ -316,7 +316,7 @@ const char keydefaults[NUMGAMEFUNCTIONS*2][MAXGAMEFUNCLEN] =
    "", "",
    "", "",
    "B", "",
-   "F", "",           // Melee
+   "Q", "F",           // Melee
    "'", "",
    ";", "",
    "`", "",
