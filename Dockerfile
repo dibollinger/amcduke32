@@ -21,7 +21,13 @@ RUN apt-get update \
     libvpx-dev \
     libgtk2.0-dev \
     freepats \
+  && make RELEASE=0 ${BUILDOPTS} \
+  && mv amcsquad amcsquad.debug \
+  && mv mapster32 mapster32.debug \
+  && make clean \
   && make ${BUILDOPTS}
-   
+
 FROM scratch AS distrib
 COPY --from=builder /amcduke32/amcsquad /amcduke32/mapster32 /
+COPY --from=builder /amcduke32/amcsquad.debug /amcduke32/mapster32.debug /
+COPY --from=builder /amcduke32/package/common/* /

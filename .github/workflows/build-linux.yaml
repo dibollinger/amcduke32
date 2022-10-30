@@ -26,24 +26,64 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
+    - name: Set Github SHA Output
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
     - name: Build and push
       uses: docker/build-push-action@v3
       with:
         push: false
         outputs: type=local,dest=bin
         platforms: linux/amd64,linux/arm64
+        build-args:
+          BUILDOPTS=-j4
 
-    - name: Publish amd64 executables
+    - name: Publish amd64 release executables
       uses: actions/upload-artifact@v3
       with:
-        name: amcduke32_linux_amd64.zip
-        path: bin/linux_amd64/*
+        name: amcduke32_${{steps.vars.outputs.sha_short}}_linux_amd64
+        path: |
+          bin/linux_amd64/amcsquad
+          bin/linux_amd64/mapster32
+          bin/linux_amd64/buildlic.txt
+          bin/linux_amd64/gpl-2.0.txt
+          bin/linux_amd64/gamecontrollerdb.txt
 
-    - name: Publish arm64 executables
+    - name: Publish amd64 debug executables
       uses: actions/upload-artifact@v3
       with:
-        name: amcduke32_linux_arm64.zip
-        path: bin/linux_arm64/*
+        name: amcduke32_${{steps.vars.outputs.sha_short}}_linux_amd64_debug
+        path: |
+          bin/linux_amd64/amcsquad.debug
+          bin/linux_amd64/mapster32.debug
+          bin/linux_amd64/buildlic.txt
+          bin/linux_amd64/gpl-2.0.txt
+          bin/linux_amd64/gamecontrollerdb.txt
+
+    - name: Publish arm64 release executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: amcduke32_${{steps.vars.outputs.sha_short}}_linux_arm64
+        path: |
+          bin/linux_arm64/amcsquad
+          bin/linux_arm64/mapster32
+          bin/linux_arm64/buildlic.txt
+          bin/linux_arm64/gpl-2.0.txt
+          bin/linux_arm64/gamecontrollerdb.txt
+
+    - name: Publish arm64 debug executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: amcduke32_${{steps.vars.outputs.sha_short}}_linux_arm64_debug
+        path: |
+          bin/linux_arm64/amcsquad.debug
+          bin/linux_arm64/mapster32.debug
+          bin/linux_arm64/buildlic.txt
+          bin/linux_arm64/gpl-2.0.txt
+          bin/linux_arm64/gamecontrollerdb.txt
 
     # TODO: automatically create a GitHub release when a tag is created
     # TODO: see about building Windows executables too
+
+
