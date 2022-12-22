@@ -2979,20 +2979,6 @@ static int32_t editorGetTile(int32_t idInitialTile)
                 tileNum = OnGotoTile(tileNum);
         }
 
-        if (oldtile != tileNum && (unsigned)tileNum > (unsigned)nXTiles)
-        {
-            while (iTopLeftTile + nDisplayedTiles - tileNum - 1 < nXTiles)
-                iTopLeftTile += nXTiles;
-
-            while (tileNum < iTopLeftTile + nXTiles)
-                iTopLeftTile -= nXTiles;
-        }
-
-        if (tileNum < nXTiles)
-            iTopLeftTile = 0;
-        else if (tileNum >= MAXUSERTILES - nXTiles)
-            iTopLeftTile = MAXUSERTILES - nDisplayedTiles;
-
         // 'S' KEYPRESS: search for named tile
         if (PRESSED_KEYSC(S))
         {
@@ -3029,6 +3015,21 @@ static int32_t editorGetTile(int32_t idInitialTile)
 
             g_mousePos.x = g_mousePos.y = g_mouseBits = 0;
         }
+
+        // See if we need to adjust for a change of tile selection.
+        if (oldtile != tileNum && (unsigned)tileNum > (unsigned)nXTiles)
+        {
+            while (iTopLeftTile + nDisplayedTiles - tileNum - 1 < nXTiles)
+                iTopLeftTile += nXTiles;
+
+            while (tileNum < iTopLeftTile + nXTiles)
+                iTopLeftTile -= nXTiles;
+        }
+
+        if (tileNum < nXTiles)
+            iTopLeftTile = 0;
+        else if (tileNum >= MAXUSERTILES - nXTiles)
+            iTopLeftTile = MAXUSERTILES - nDisplayedTiles;
 
         // SPACE keypress: mark/unmark selected tile
         if (PRESSED_KEYSC(SPACE))
