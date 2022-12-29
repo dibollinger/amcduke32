@@ -10012,11 +10012,11 @@ static vec2_t GetCenterPoint(tspriteptr_t tspr) {
     case CSTAT_SPRITE_ALIGNMENT_WALL:
         return get_wallspr_center(tspr);
     case CSTAT_SPRITE_ALIGNMENT_FLOOR:
-        return get_floorspr_center(tspr);
+        return get_floorspr_center(tspr, false);
+    case CSTAT_SPRITE_ALIGNMENT_SLOPE:
+        return get_floorspr_center(tspr, true);
     case CSTAT_SPRITE_ALIGNMENT_FACING:
         // TODO: implement?
-    case CSTAT_SPRITE_ALIGNMENT_SLOPE:
-        // TODO: implement.
         return tspr->xy;
     }
 
@@ -10025,7 +10025,7 @@ static vec2_t GetCenterPoint(tspriteptr_t tspr) {
 
 static int32_t GetCornerPoints(tspriteptr_t tspr, int32_t (&xx)[4], int32_t (&yy)[4])
 {
-    bool const isOnFloor = (tspr->cstat & 48) == 32;
+    bool const isOnFloor = (tspr->cstat & 32) != 0;
 
     if (isOnFloor)
     {
