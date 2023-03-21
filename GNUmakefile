@@ -56,7 +56,7 @@ define getdeps
 $(call expanddeps,$1_$2 $(common_$2_deps) engine)
 endef
 define getfiltered
-$(filter-out $(strip $($1_excl)), $(subst $($1_src)/, ,$(wildcard $($1_src)/*.c $($1_src)/*.cpp)))
+$(filter-out $(strip $($1_excl)), $(subst $($1_src)/, ,$(wildcard $($1_src)/$2)))
 endef
 
 ##### External Library Definitions
@@ -71,7 +71,7 @@ libxmplite_inc := $(libxmplite_root)/include
 libxmplite_obj := $(obj)/$(libxmplite)
 
 libxmplite_excl :=
-libxmplite_objs := $(call getfiltered,libxmplite)
+libxmplite_objs := $(call getfiltered,libxmplite,*.c)
 
 libxmplite_cflags := -DHAVE_ROUND -DLIBXMP_CORE_PLAYER -DLIBXMP_NO_PROWIZARD -DLIBXMP_NO_DEPACKERS -DBUILDING_STATIC -I$(libxmplite_inc)/libxmp-lite -Wno-unused-parameter -Wno-sign-compare
 
@@ -94,7 +94,7 @@ else
 endif
 
 ifneq (0,$(USE_PHYSFS))
-    physfs_objs := $(call getfiltered,physfs)
+    physfs_objs := $(call getfiltered,physfs,*.c)
 else
     physfs_objs :=
 endif
@@ -122,7 +122,7 @@ ifneq ($(RENDERTYPE),WIN)
 endif
 
 ifneq (0,$(USE_OPENGL))
-    glad_objs := $(call getfiltered,glad)
+    glad_objs := $(call getfiltered,glad,*.c)
 else
     glad_objs :=
 endif
@@ -148,7 +148,7 @@ ifneq ($(PLATFORM),APPLE)
     mimalloc_excl += alloc-override-osx.c
 endif
     
-mimalloc_objs := $(call getfiltered,mimalloc)
+mimalloc_objs := $(call getfiltered,mimalloc,*.c)
 
 mimalloc_cflags := -D_WIN32_WINNT=0x0600 -DMI_USE_RTLGENRANDOM -DMI_SHOW_ERRORS -fexceptions -Wno-cast-qual -Wno-class-memaccess -Wno-unknown-pragmas -Wno-array-bounds -Wno-null-dereference
 
@@ -163,7 +163,7 @@ imgui_inc := $(imgui_root)/include
 imgui_obj := $(obj)/$(imgui)
 
 imgui_excl :=
-imgui_objs := $(call getfiltered,imgui)
+imgui_objs := $(call getfiltered,imgui,*.cpp)
 
 imgui_cflags := -I$(imgui_inc) -Wno-cast-qual -Wno-cast-function-type -Wno-null-dereference -Wno-stringop-overflow
 
@@ -183,7 +183,7 @@ ifneq ($(PLATFORM),WINDOWS)
     voidwrap_excl += dllmain.cpp
 endif
 
-voidwrap_objs := $(call getfiltered,voidwrap)
+voidwrap_objs := $(call getfiltered,voidwrap,*.cpp)
 
 ifeq ($(IMPLICIT_ARCH),x86_64)
     ifeq ($(PLATFORM),WINDOWS)
@@ -312,7 +312,8 @@ ifeq ($(USE_LIBVPX),0)
 endif
 
 engine_objs := \
-    $(call getfiltered,engine) \
+    $(call getfiltered,engine,*.c) \
+    $(call getfiltered,engine,*.cpp) \
     polymost1Frag.glsl \
     polymost1Vert.glsl \
 
@@ -346,7 +347,7 @@ mact_inc := $(mact_root)/include
 mact_obj := $(obj)/$(mact)
 
 mact_excl :=
-mact_objs := $(call getfiltered,mact)
+mact_objs := $(call getfiltered,mact,*.cpp)
 
 mact_cflags :=
 
@@ -374,7 +375,7 @@ ifneq ($(RENDERTYPE),SDL)
     audiolib_excl += driver_sdl.cpp
 endif
 
-audiolib_objs := $(call getfiltered,audiolib)
+audiolib_objs := $(call getfiltered,audiolib,*.cpp)
 
 audiolib_cflags :=
 
@@ -539,7 +540,7 @@ duke3d_excl := \
     $(duke3d_common_editor_objs) \
     $(duke3d_editor_objs) \
         
-duke3d_game_objs := $(call getfiltered,duke3d) \
+duke3d_game_objs := $(call getfiltered,duke3d,*.cpp) \
     common.cpp \
     grpscan.cpp \
 
@@ -630,7 +631,7 @@ sw_excl := \
     startwin.game.cpp \
     $(sw_editor_objs) \
         
-sw_game_objs := $(call getfiltered,sw) \
+sw_game_objs := $(call getfiltered,sw,*.cpp) \
     colormap.cpp \
     common.cpp \
     grpscan.cpp \
