@@ -1612,9 +1612,9 @@ int32_t registerosdcommands(void)
 
         { "cl_showcoords", "DEBUG: coordinate display", (void *)&ud.coords, CVAR_INT, 0,
 #ifdef USE_OPENGL
-          2
+          3
 #else
-          1
+          2
 #endif
         },
 
