@@ -1247,8 +1247,8 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
 
 #endif  // defined YAX_ENABLE
 
-#ifdef ENGINE_CLEAR_SCREEN
 // must have writable frame buffer, i.e. done begindrawing()
+#ifdef ENGINE_CLEAR_SCREEN
 static void draw_rainbow_background(void)
 {
     int32_t y, i;
