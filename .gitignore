@@ -78,7 +78,6 @@ texturecache
 /platform/Windows/ARM64/
 *.exp
 *.lib
-perl.exe.stackdump
 
 xcuserdata/
 project.xcworkspace/
@@ -87,8 +86,3 @@ project.xcworkspace/
 .DS_Store
 ._*
 /source/voidwrap/sdk/
-
-
-/amcsquad
-/user_profiles_disabled
-/DUKE3D.GRP
