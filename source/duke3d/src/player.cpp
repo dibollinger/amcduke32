@@ -4997,7 +4997,7 @@ void P_ProcessInput(int playerNum)
     int sectorLotag       = sector[pPlayer->cursectnum].lotag;
     int getZRangeClipDist = pPlayer->clipdist - GETZRANGECLIPDISTOFFSET;
 
-    bool const sbwActive = ((TEST_SYNC_KEY(playerBits, SK_CROUCH) && sectorLotag != ST_2_UNDERWATER && (FURY || (pPlayer->on_ground && !pPlayer->jumping_toggle)))
+    bool const sbwActive = ((TEST_SYNC_KEY(playerBits, SK_CROUCH) && sectorLotag != ST_2_UNDERWATER && (pPlayer->on_ground && !pPlayer->jumping_toggle))
                               || (sectorLotag == ST_1_ABOVE_WATER && pPlayer->spritebridge != 1));
 
     int getZRangeOffset  = sbwActive ? pPlayer->autostep_sbw : pPlayer->autostep;
