@@ -7,10 +7,12 @@ on:
   push:
     branches:
     - master
+    - devel
   # Definitely run on any PR
   pull_request:
     branches:
     - master
+    - devel
 
 jobs:
   build:
