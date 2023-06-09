@@ -330,8 +330,8 @@ static void getclosestpointonwall_internal(vec2_t const p, int32_t const dawall,
 ////////// YAX //////////
 
 int32_t numgraysects = 0;
-uint8_t graysectbitmap[(MAXSECTORS+7)>>3];
-uint8_t graywallbitmap[(MAXWALLS+7)>>3];
+uint8_t graysectbitmap[bitmap_size(MAXSECTORS)];
+uint8_t graywallbitmap[bitmap_size(MAXWALLS)];
 int32_t autogray = 0, showinnergray = 1, showgraysectors = 1;
 
 //#define YAX_DEBUG_YMOSTS
@@ -438,7 +438,7 @@ static uint8_t yax_tsprfrombunch[1 + 2*YAX_MAXDRAWS][MAXSPRITESONSCREEN];
 static int16_t yax_updown[MAXSECTORS][2];
 
 // drawn sectors
-uint8_t yax_gotsector[(MAXSECTORS+7)>>3];  // engine internal
+uint8_t yax_gotsector[bitmap_size(MAXSECTORS)];  // engine internal
 
 # if !defined NEW_MAP_FORMAT
 // Game-time YAX data structures, V7-V9 map formats.
@@ -619,10 +619,10 @@ void yax_update(int32_t resetstat)
     {
         // make bunchnums consecutive
         uint8_t *const havebunch = (uint8_t *)tempbuf;
-        uint8_t *const bunchmap = havebunch + ((YAX_MAXBUNCHES+7)>>3);
+        uint8_t *const bunchmap = havebunch + bitmap_size(YAX_MAXBUNCHES);
         int32_t dasub = 0;
 
-        Bmemset(havebunch, 0, (YAX_MAXBUNCHES+7)>>3);
+        Bmemset(havebunch, 0, bitmap_size(YAX_MAXBUNCHES));
         for (i=0; i<numsectors; i++)
         {
             yax_getbunches(i, &cb, &fb);
@@ -758,7 +758,7 @@ static int16_t bunchsec[YAX_MAXBUNCHES], bunchdist[YAX_MAXBUNCHES];
 
 static int32_t ymostallocsize = 0;  // numyaxbunches*xdimen (no sizeof(int16_t) here!)
 static int16_t *yumost=NULL, *ydmost=NULL;  // used as if [numyaxbunches][xdimen]
-uint8_t haveymost[(YAX_MAXBUNCHES+7)>>3];
+uint8_t haveymost[bitmap_size(YAX_MAXBUNCHES)];
 
 static inline int32_t yax_walldist(int32_t w)
 {
@@ -939,7 +939,7 @@ void yax_preparedrawrooms(void)
 
     g_nodraw = 1;
     Bmemset(yax_spritesortcnt, 0, sizeof(yax_spritesortcnt));
-    Bmemset(haveymost, 0, (numyaxbunches+7)>>3);
+    Bmemset(haveymost, 0, bitmap_size(numyaxbunches));
 
     if (videoGetRenderMode() == REND_CLASSIC && ymostallocsize < xdimen*numyaxbunches)
     {
@@ -954,7 +954,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
 {
     MICROPROFILE_SCOPEI("Engine", EDUKE32_FUNCTION, MP_AUTO);
 
-    static uint8_t havebunch[(YAX_MAXBUNCHES+7)>>3];
+    static uint8_t havebunch[bitmap_size(YAX_MAXBUNCHES)];
 
     const fix16_t horiz = global100horiz;
 
@@ -965,7 +965,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
     int32_t bbeg, numhere;
 
     // original (1st-draw) and accumulated ('per-level') gotsector bitmaps
-    static uint8_t ogotsector[(MAXSECTORS+7)>>3], lgotsector[(MAXSECTORS+7)>>3];
+    static uint8_t ogotsector[bitmap_size(MAXSECTORS)], lgotsector[bitmap_size(MAXSECTORS)];
 #ifdef YAX_DEBUG
     uint64_t t;
 #endif
@@ -980,11 +980,11 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
 
     // if we're here, there was just a drawrooms() call with g_nodraw=1
 
-    Bmemcpy(ogotsector, gotsector, (numsectors+7)>>3);
+    Bmemcpy(ogotsector, gotsector, bitmap_size(numsectors));
 
     if (sectnum >= 0)
         yax_getbunches(sectnum, &ourbunch[0], &ourbunch[1]);
-    Bmemset(&havebunch, 0, (numyaxbunches+7)>>3);
+    Bmemset(&havebunch, 0, bitmap_size(numyaxbunches));
 
     // first scan all bunches above, then all below...
     for (cf=0; cf<2; cf++)
@@ -994,7 +994,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
         if (cf==1)
         {
             sectnum = osectnum;
-            Bmemcpy(gotsector, ogotsector, (numsectors+7)>>3);
+            Bmemcpy(gotsector, ogotsector, bitmap_size(numsectors));
         }
 
         for (lev=0; /*lev<YAX_MAXDRAWS*/; lev++)
@@ -1064,7 +1064,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
                         // +MAXSECTORS: force
                         renderDrawRoomsQ16(globalposx,globalposy,globalposz,qglobalang,horiz,k+MAXSECTORS);
                         if (numhere > 1)
-                            for (i=0; i<(numsectors+7)>>3; i++)
+                            for (i=0; i<bitmap_size(numsectors); i++)
                                 lgotsector[i] |= gotsector[i];
 
                         yaxdebug("l%d: faked (bn %2d) sec %4d,%3d dspr, ob=[%2d,%2d], sn=%4d, %.3f ms",
@@ -1081,7 +1081,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
                 }
 
                 if (numhere > 1 && lev != YAX_MAXDRAWS-1)
-                    Bmemcpy(gotsector, lgotsector, (numsectors+7)>>3);
+                    Bmemcpy(gotsector, lgotsector, bitmap_size(numsectors));
             }
 
             if (numhere==0 || lev==YAX_MAXDRAWS-1)
@@ -1163,7 +1163,7 @@ void yax_drawrooms(void (*SpriteAnimFunc)(int32_t,int32_t,int32_t,int32_t,int32_
                             yax_nomaskpass = 0;
                             break;  // no need to draw the same stuff twice
                         }
-                        Bmemcpy(yax_gotsector, gotsector, (numsectors+7)>>3);
+                        Bmemcpy(yax_gotsector, gotsector, bitmap_size(numsectors));
                     }
                 }
 
@@ -1838,7 +1838,7 @@ static void classicScanSector(int16_t startsectnum)
                     int32_t tempint = temp;
                     if (
 #ifdef YAX_ENABLE
-                        yax_globallev == YAX_MAXDRAWS && 
+                        yax_globallev == YAX_MAXDRAWS &&
 #endif
                         ((uint64_t)tempint+262144) < 524288)  // BXY_MAX?
                         if (mulscale5(tempint,tempint) <= (x2-x1)*(x2-x1)+(y2-y1)*(y2-y1))
@@ -1907,7 +1907,7 @@ skipitaddwall:
 
 void printscans(void)
 {
-    static uint8_t didscan[(MAXWALLSB+7)>>3];
+    static uint8_t didscan[bitmap_size(MAXWALLSB)];
 
     Bmemset(didscan, 0, sizeof(didscan));
 
@@ -10713,7 +10713,7 @@ static int enginePrepareLoadBoard(buildvfs_kfd fil, vec3_t *dapos, int16_t *daan
 
 static FORCE_INLINE size_t getreachabilitybitmapsegmentsize(void)
 {
-    return ((numsectors + 7) >> 3);
+    return bitmap_size(numsectors);
 }
 
 static FORCE_INLINE size_t getreachabilitybitmapsize(void)
@@ -12611,7 +12611,7 @@ int32_t cansee(int32_t x1, int32_t y1, int32_t z1, int16_t sect1, int32_t x2, in
     int32_t dacnt, danum;
     const int32_t x21 = x2-x1, y21 = y2-y1, z21 = z2-z1;
 
-    static uint8_t sectbitmap[(MAXSECTORS+7)>>3];
+    static uint8_t sectbitmap[bitmap_size(MAXSECTORS)];
 #ifdef YAX_ENABLE
     int16_t pendingsectnum;
     vec3_t pendingvec;
@@ -12907,7 +12907,7 @@ void dragpoint(int16_t pointhighlight, int32_t dax, int32_t day, uint8_t flags)
     uint8_t *const walbitmap = (uint8_t *)tempbuf;
 
     if ((flags&1)==0)
-        Bmemset(walbitmap, 0, (numwalls+7)>>3);
+        Bmemset(walbitmap, 0, bitmap_size(numwalls));
     yaxwalls[numyaxwalls++] = pointhighlight;
 
     for (i=0; i<numyaxwalls; i++)
@@ -13333,7 +13333,7 @@ void updatesectorneighbor(int32_t const x, int32_t const y, int16_t * const sect
             return;
 
         static int16_t sectlist[MAXSECTORS];
-        static uint8_t sectbitmap[(MAXSECTORS+7)>>3];
+        static uint8_t sectbitmap[bitmap_size(MAXSECTORS)];
         int16_t nsecs;
 
         bfirst_search_init(sectlist, sectbitmap, &nsecs, MAXSECTORS, initialsectnum);
@@ -13412,7 +13412,7 @@ restart:
             return;
 
         static int16_t sectlist[MAXSECTORS];
-        static uint8_t sectbitmap[(MAXSECTORS+7)>>3];
+        static uint8_t sectbitmap[bitmap_size(MAXSECTORS)];
         int16_t nsecs;
 
         bfirst_search_init(sectlist, sectbitmap, &nsecs, MAXSECTORS, correctedsectnum);

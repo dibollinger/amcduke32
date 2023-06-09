@@ -519,7 +519,7 @@ void S_Callback(intptr_t num)
         else
         {
             // cleanup all actor sounds in one go
-            extern uint8_t g_ambiencePlaying[(MAXSPRITES+7)>>3];
+            extern uint8_t g_ambiencePlaying[bitmap_size(MAXSPRITES)];
             for (int idx = 0; idx < sndcnt;)
             {
                 int32_t spriteNum = g_sounds[num].SoundOwner[idx].ow;

@@ -1143,9 +1143,11 @@ static FORCE_INLINE CONSTEXPR_CXX14 int nextPow2(int const value)
     return i;
 }
 
-////////// Bitfield manipulation //////////
-
 static CONSTEXPR const char pow2char[8] = {1,2,4,8,16,32,64,128u};
+
+////////// Bitmap data structure //////////
+
+#define bitmap_size(N) (((N) + 7) >> 3)
 
 #ifdef __cplusplus
 template <typename T>
@@ -1169,13 +1171,11 @@ static FORCE_INLINE CONSTEXPR bool bitmap_test(T const *const ptr, int const n)
     return (ptr[n>>3] & pow2char[n&7]) == pow2char[n&7];
 }
 
-////////// Utility functions //////////
-
 // breadth-first search helpers
 template <typename T>
 void bfirst_search_init(T *const list, uint8_t *const bitmap, T *const eltnumptr, int const maxelts, int const firstelt)
 {
-    Bmemset(bitmap, 0, (maxelts+7)>>3);
+    Bmemset(bitmap, 0, bitmap_size(maxelts));
 
     list[0] = firstelt;
     bitmap_set(bitmap, firstelt);
@@ -1192,6 +1192,8 @@ void bfirst_search_try(T *const list, uint8_t *const bitmap, T *const eltnumptr,
     }
 }
 #endif
+
+////////// Utility functions //////////
 
 #if RAND_MAX == 32767
 static FORCE_INLINE uint16_t system_15bit_rand(void) { return (uint16_t)rand(); }
