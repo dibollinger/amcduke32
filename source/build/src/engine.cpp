@@ -14776,15 +14776,16 @@ static void PolymerProcessModels(void)
 //
 int32_t videoSetRenderMode(int32_t renderer)
 {
-    UNREFERENCED_PARAMETER(renderer);
-
 #ifdef USE_OPENGL
     buildgl_resetStateAccounting();
 
     if (bpp == 8)
     {
-        buildgl_setDisabled(GL_BLEND);
-        buildgl_setDisabled(GL_ALPHA_TEST);
+        if (!nogl)
+        {
+            buildgl_setDisabled(GL_BLEND);
+            buildgl_setDisabled(GL_ALPHA_TEST);
+        }
         renderer = REND_CLASSIC;
     }
 # ifdef POLYMER
@@ -14805,7 +14806,8 @@ int32_t videoSetRenderMode(int32_t renderer)
         polymer_uninit();
     }
 # else
-    else renderer = REND_POLYMOST;
+    else
+        renderer = REND_POLYMOST;
 # endif
 
     // Fixes mirror glitches that occur when changing the renderer.
@@ -14822,6 +14824,8 @@ int32_t videoSetRenderMode(int32_t renderer)
     {
         polymost_init();
     }
+#else
+    UNREFERENCED_PARAMETER(renderer);
 #endif
 
     return 0;
