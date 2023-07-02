@@ -897,8 +897,8 @@ typedef struct
     int16_t with_weapon;
     const char *weapon_name;
     const char *ammo_name;
-    int16_t weapon_pickup;
-    int16_t ammo_pickup;
+    uint16_t weapon_pickup;
+    uint16_t ammo_pickup;
 } DAMAGE_DATA, *DAMAGE_DATAp;
 
 extern DAMAGE_DATA DamageData[];

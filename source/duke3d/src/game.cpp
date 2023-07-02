@@ -1356,7 +1356,7 @@ static int32_t G_InitActor(int32_t i, int32_t tilenum, int32_t set_movflag_uncon
     return 0;
 }
 
-int32_t A_InsertSprite(int16_t whatsect,int32_t s_x,int32_t s_y,int32_t s_z,int16_t s_pn,int8_t s_s,
+int32_t A_InsertSprite(int16_t whatsect,int32_t s_x,int32_t s_y,int32_t s_z, uint16_t s_pn,int8_t s_s,
                        uint8_t s_xr,uint8_t s_yr,int16_t s_a,int16_t s_ve,int16_t s_zv,int16_t s_ow,int16_t s_ss)
 {
 
@@ -4323,7 +4323,7 @@ PALONLY:
                 while (tilesiz[t->picnum].x == 0 && t->picnum > 0)
                     t->picnum -= l;       //Hack, for actors
 
-            if (actor[i].dispicnum >= 0)
+            if (actor[i].dispicnum < MAXTILES)
                 actor[i].dispicnum = t->picnum;
         }
 //        else if (display_mirror == 1)
@@ -4347,7 +4347,7 @@ skip:
         if (pSprite->statnum == STAT_DUMMYPLAYER || A_CheckEnemySprite(pSprite) || A_CheckSpriteFlags(t->owner,SFLAG_SHADOW) || (pSprite->picnum == APLAYER && pSprite->owner >= 0))
             if (t->statnum != TSPR_TEMP && pSprite->picnum != EXPLOSION2 && pSprite->picnum != HANGLIGHT && pSprite->picnum != DOMELITE && pSprite->picnum != HOTMEAT)
             {
-                if (actor[i].dispicnum < 0)
+                if (actor[i].dispicnum >= MAXTILES)
                 {
 #ifdef DEBUGGINGAIDS
                     // A negative actor[i].dispicnum used to mean 'no floor shadow please', but

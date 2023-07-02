@@ -184,7 +184,7 @@ extern int32_t globvis, globalvisibility;
 extern int32_t xyaspect;
 extern int32_t globalshade;
 extern int32_t globalclipdist;
-extern int16_t globalpicnum;
+extern uint16_t globalpicnum;
 
 extern int32_t globalorientation;
 
@@ -225,7 +225,7 @@ int32_t wallfront(int32_t l1, int32_t l2);
 
 void set_globalang(fix16_t const ang);
 
-int32_t animateoffs(int tilenum);
+int32_t animateoffs(uint16_t tilenum);
 
 static FORCE_INLINE int32_t bad_tspr(tspriteptr_t tspr)
 {

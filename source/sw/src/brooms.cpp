@@ -63,7 +63,7 @@ typedef struct
 {
     int32_t zval[ZMAX];
     int16_t sectnum[ZMAX];
-    int16_t pic[ZMAX];
+    uint16_t pic[ZMAX];
     int16_t slope[ZMAX];
     int16_t zcount;
 } SAVE, *SAVEp;

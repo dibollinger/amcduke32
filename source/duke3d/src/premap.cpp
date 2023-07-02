@@ -475,7 +475,7 @@ void G_CacheMapData(void)
     {
         tloadtile(wall[i].picnum, 0);
 
-        if (wall[i].overpicnum >= 0)
+        if (wall[i].overpicnum < MAXTILES)
             tloadtile(wall[i].overpicnum, 0);
     }
 
@@ -494,7 +494,7 @@ void G_CacheMapData(void)
     int cnt = 0;
     int cntDisplayed = -1;
     int pctDisplayed = -1;
-    int i = 0;
+    uint16_t i = 0;
 
     while (cnt < g_precacheCount)
     {
@@ -503,7 +503,7 @@ void G_CacheMapData(void)
             cnt++;
             
             if (waloff[i] == 0)
-                tileLoad((int16_t)i);
+                tileLoad(i);
 
             for (int j = 0; j < 2; j++)
             {

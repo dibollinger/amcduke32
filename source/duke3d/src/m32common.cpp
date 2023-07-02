@@ -1308,7 +1308,7 @@ end_wall_loop_checks:
         if (sprite[i].statnum<0 || sprite[i].statnum>MAXSTATUS)
             CORRUPTCHK_PRINT(4, CORRUPT_SPRITE|i, "SPRITE[%d].STATNUM=%d. Expect problems!", i, TrackerCast(sprite[i].statnum));
 
-        if (sprite[i].picnum<0 || sprite[i].picnum >= MAXTILES)
+        if (sprite[i].picnum >= MAXTILES)
             CORRUPTCHK_PRINT(0, CORRUPT_SPRITE|i, "SPRITE[%d].PICNUM=%d out of range.", i, TrackerCast(sprite[i].picnum));
 
         if (corruptcheck_game_duke3d)
@@ -1644,7 +1644,7 @@ void registerMenuFunction(const char *funcname, int32_t stateidx)
 
 // The processing function...
 
-static int32_t correct_picnum(int16_t *picnumptr)
+static int32_t correct_picnum(uint16_t *picnumptr)
 {
     int32_t picnum = *picnumptr;
 

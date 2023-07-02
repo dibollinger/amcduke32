@@ -1262,7 +1262,7 @@ int P_ActivateSwitch(int playerNum, int wallOrSprite, int switchType)
 
     vec3_t davector;
     int16_t lotag, hitag;
-    int16_t nSwitchPicnum;
+    uint16_t nSwitchPicnum;
     uint8_t nSwitchPal;
 
     if (switchType == SWITCH_SPRITE) // A wall sprite
@@ -1859,7 +1859,7 @@ void A_DamageWall(int spriteNum, int wallNum, const vec3_t &vPos, int weaponNum)
 
 void Sect_DamageFloor_Internal(int const spriteNum, int const sectNum)
 {
-    int16_t tileNum = sector[sectNum].floorpicnum;
+    uint16_t tileNum = sector[sectNum].floorpicnum;
     if (g_tile[tileNum].flags & SFLAG_DAMAGEEVENT)
     {
         if (VM_OnEventWithReturn(EVENT_DAMAGEFLOOR, spriteNum, -1, sectNum) < 0)
@@ -1885,7 +1885,7 @@ void Sect_DamageFloor(int const spriteNum, int const sectNum)
 
 void Sect_DamageCeiling_Internal(int const spriteNum, int const sectNum)
 {
-    int16_t tileNum = sector[sectNum].ceilingpicnum;
+    uint16_t tileNum = sector[sectNum].ceilingpicnum;
     if (g_tile[tileNum].flags & SFLAG_DAMAGEEVENT)
     {
         if (VM_OnEventWithReturn(EVENT_DAMAGECEILING, spriteNum, -1, sectNum) < 0)
@@ -1900,7 +1900,7 @@ void Sect_DamageCeiling_Internal(int const spriteNum, int const sectNum)
         return;
 
 #ifndef EDUKE32_STANDALONE
-    int16_t * const pPicnum = &sector[sectNum].ceilingpicnum;
+    uint16_t * const pPicnum = &sector[sectNum].ceilingpicnum;
 #endif
 
     if (returnValue == (1<<20))
@@ -3609,4 +3609,3 @@ void P_CheckSectors(int playerNum)
         }
     }
 }
-

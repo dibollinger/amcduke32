@@ -45,7 +45,7 @@ static int32_t addtileP(int32_t model,int32_t tile,int32_t pallet)
     if (tile2model[tile].pal==pallet)
         return tile;
 
-    while (tile2model[tile].nexttile!=-1)
+    while (tile2model[tile].nexttile < MAXTILES)
     {
         tile=tile2model[tile].nexttile;
         if (tile2model[tile].pal==pallet)
@@ -61,7 +61,7 @@ static int32_t addtileP(int32_t model,int32_t tile,int32_t pallet)
 int32_t Ptile2tile(int32_t tile,int32_t palette)
 {
     int t = tile;
-    while ((tile = tile2model[tile].nexttile) != -1)
+    while ((tile = tile2model[tile].nexttile) < MAXTILES)
         if (tile2model[tile].pal == palette)
         {
             t = tile;

@@ -134,13 +134,14 @@ typedef struct
     vec3_t   bpos;                        // 12b
     int32_t  floorz, ceilingz;            // 8b
     vec2_t   lastv;                       // 8b
-    int16_t  htpicnum, htang;             // 4b
+    uint16_t  htpicnum;                   // 2b
+    int16_t  htang;                       // 2b
     int16_t  htextra, htowner;            // 4b
     int16_t  movflag, tempang;            // 4b
     int16_t  timetosleep, stayput;        // 4b
     int8_t   floorzoffset, waterzoffset;  // 2b
     uint8_t  filler[2];                   // 3b
-    int16_t  dispicnum;                   // 2b NOTE: updated every frame, not in sync with game tics!
+    uint16_t  dispicnum;                  // 2b NOTE: updated every frame, not in sync with game tics!
     uint8_t  cgg, lasttransport;          // 2b
 } actor_t;
 

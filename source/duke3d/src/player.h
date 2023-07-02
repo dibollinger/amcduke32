@@ -160,7 +160,8 @@ typedef struct {
 
 typedef struct {
     int16_t got_access, last_extra, inv_amount[GET_MAX], curr_weapon, holoduke_on;
-    int16_t last_weapon, weapon_pos, kickback_pic;
+    int16_t last_weapon, weapon_pos;
+    uint16_t kickback_pic;
     int16_t ammo_amount[MAX_WEAPONS];
     uint16_t frag[MAXPLAYERS];
     uint16_t gotweapon;
@@ -362,7 +363,7 @@ typedef struct {
 extern input_t          inputfifo[MOVEFIFOSIZ][MAXPLAYERS];
 extern playerspawn_t    g_playerSpawnPoints[MAXPLAYERS];
 extern playerdata_t     *const g_player;
-extern int16_t          WeaponPickupSprites[MAX_WEAPONS];
+extern uint16_t         WeaponPickupSprites[MAX_WEAPONS];
 extern hudweapon_t      hudweap;
 extern int32_t          g_levelTextTime;
 extern int32_t          g_myAimMode;

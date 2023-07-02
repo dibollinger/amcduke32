@@ -8852,7 +8852,7 @@ EDUKE32_STATIC_ASSERT((int)RS_YFLIP == (int)HUDFLAG_FLIPPED);
 //dastat&128  1:draw all pages (permanent)
 //cx1,...     clip window (actual screen coords)
 
-void polymost_dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+void polymost_dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
     int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend, int32_t uniqid)
 {
     float d, cosang, sinang, cosang2, sinang2;
@@ -9085,7 +9085,7 @@ void polymost_dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, 
     gstang = ogstang;
 }
 
-void polymost_dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+void polymost_dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                              int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend,
                              int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2, int32_t uniqid)
 {
