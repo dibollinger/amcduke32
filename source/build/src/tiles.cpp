@@ -644,7 +644,7 @@ int32_t artLoadFiles(const char *filename, int32_t askedsize)
     Bmemset(picanm, 0, sizeof(picanm));
 
     for (auto &rot : rottile)
-        rot = { -1, -1 };
+        rot = { MAXTILES, MAXTILES };
 
     //    artsize = 0;
 
@@ -670,9 +670,9 @@ int32_t artLoadFiles(const char *filename, int32_t askedsize)
 //
 // loadtile
 //
-static void tilePostLoad(int16_t tilenume);
+static void tilePostLoad(uint16_t tilenume);
 
-bool tileLoad(int16_t tileNum)
+bool tileLoad(uint16_t tileNum)
 {
     if ((unsigned) tileNum >= (unsigned) MAXTILES) return 0;
     int const dasiz = tilesiz[tileNum].x*tilesiz[tileNum].y;
@@ -706,7 +706,7 @@ bool tileLoad(int16_t tileNum)
     return (waloff[tileNum] != 0 && tilesiz[tileNum].x > 0 && tilesiz[tileNum].y > 0);
 }
 
-void tileMaybeRotate(int16_t tilenume)
+void tileMaybeRotate(uint16_t tilenume)
 {
     auto &rot = rottile[tilenume];
     auto &siz = tilesiz[rot.owner];
@@ -727,11 +727,11 @@ void tileMaybeRotate(int16_t tilenume)
     tileSetSize(tilenume, siz.y, siz.x);
 }
 
-void tileLoadData(int16_t tilenume, int32_t dasiz, char *buffer)
+void tileLoadData(uint16_t tilenume, int32_t dasiz, char *buffer)
 {
-    int const owner = rottile[tilenume].owner;
+    uint16_t const owner = rottile[tilenume].owner;
 
-    if (owner != -1)
+    if (owner < MAXTILES)
     {
         if (!waloff[owner])
             tileLoad(owner);
@@ -789,7 +789,7 @@ void tileLoadData(int16_t tilenume, int32_t dasiz, char *buffer)
     artfilplc = tilefileoffs[tilenume]+dasiz;
 }
 
-static void tilePostLoad(int16_t tilenume)
+static void tilePostLoad(uint16_t tilenume)
 {
 #if !defined DEBUG_TILESIZY_512 && !defined DEBUG_TILEOFFSETS
     UNREFERENCED_PARAMETER(tilenume);
@@ -823,7 +823,7 @@ static void tilePostLoad(int16_t tilenume)
 #endif
 }
 
-int32_t tileGetCRC32(int16_t tileNum)
+int32_t tileGetCRC32(uint16_t tileNum)
 {
     if ((unsigned)tileNum >= (unsigned)MAXTILES)
         return 0;
@@ -841,7 +841,7 @@ int32_t tileGetCRC32(int16_t tileNum)
     return crc;
 }
 
-vec2_16_t tileGetSize(int16_t tileNum)
+vec2_16_t tileGetSize(uint16_t tileNum)
 {
     if ((unsigned)tileNum >= (unsigned)MAXTILES)
         return vec2_16_t{};
@@ -877,7 +877,7 @@ void artConvertRGB(palette_t * const pic, uint8_t const * const buf, int32_t con
 //
 // allocatepermanenttile
 //
-intptr_t tileCreate(int16_t tilenume, int32_t xsiz, int32_t ysiz)
+intptr_t tileCreate(uint16_t tilenume, int32_t xsiz, int32_t ysiz)
 {
     if (xsiz <= 0 || ysiz <= 0 || (unsigned) tilenume >= MAXTILES)
         return 0;

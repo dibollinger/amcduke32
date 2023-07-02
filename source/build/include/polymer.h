@@ -193,7 +193,7 @@ typedef struct      s_prprogrambit {
 
 typedef struct      s_prbucket {
     // index
-    int16_t         tilenum;
+    uint16_t        tilenum;
     char            pal;
 
     _prmaterial     material;
@@ -266,15 +266,17 @@ typedef struct      s_prsector {
     // build sector data
     int32_t         ceilingz, floorz;
     uint16_t        ceilingstat, floorstat;
-    int16_t         ceilingpicnum, ceilingheinum;
+    uint16_t        ceilingpicnum;
+    int16_t         ceilingheinum;
     int8_t          ceilingshade;
     uint8_t         ceilingpal, ceilingxpanning, ceilingypanning;
-    int16_t         floorpicnum, floorheinum;
+    uint16_t        floorpicnum;
+    int16_t         floorheinum;
     int8_t          floorshade;
     uint8_t         floorpal, floorxpanning, floorypanning;
     uint8_t         visibility;
 
-    int16_t         floorpicnum_anim, ceilingpicnum_anim;
+    uint16_t         floorpicnum_anim, ceilingpicnum_anim;
 
     struct          {
         unsigned int    empty       : 1;
@@ -297,16 +299,17 @@ typedef struct      s_prwall {
 
     // build wall data
     uint16_t        cstat;
-    int16_t         picnum, overpicnum;
+    uint16_t        picnum, overpicnum;
     int8_t          shade;
     uint8_t         pal, xrepeat, yrepeat, xpanning, ypanning;
 
     // nextwall data
-    int16_t         nwallpicnum, nwallcstat;
+    uint16_t        nwallpicnum;
+    int16_t         nwallcstat;
     int8_t          nwallxpanning, nwallypanning;
     int8_t          nwallshade;
 
-    int16_t         picnum_anim, overpicnum_anim;
+    uint16_t        picnum_anim, overpicnum_anim;
 
     char            underover;
     uint32_t        invalidid;
@@ -356,7 +359,7 @@ void    polymer_fillpolygon(int32_t npoints);
 void    polymer_drawrooms(int32_t daposx, int32_t daposy, int32_t daposz, fix16_t daang, int32_t dahoriz, int16_t dacursectnum);
 void    polymer_drawmasks(void);
 void    polymer_editorpick(void);
-void    polymer_inb4rotatesprite(int16_t tilenum, char pal, int8_t shade, int32_t method);
+void    polymer_inb4rotatesprite(uint16_t tilenum, char pal, int8_t shade, int32_t method);
 void    polymer_postrotatesprite(void);
 void    polymer_drawmaskwall(int32_t damaskwallcnt);
 void    polymer_drawsprite(int32_t snum);
@@ -395,7 +398,7 @@ static FORCE_INLINE int     polymer_useartmapping(void) { return pr_artmapping &
 // CORE
 static void         polymer_displayrooms(int16_t sectnum);
 static void         polymer_emptybuckets(void);
-static _prbucket*   polymer_findbucket(int16_t tilenum, char pal);
+static _prbucket*   polymer_findbucket(uint16_t tilenum, char pal);
 static void         polymer_bucketplane(_prplane* plane);
 static void         polymer_drawplane(_prplane* plane);
 static inline void  polymer_inb4mirror(_prvert* buffer, const GLfloat* plane);
@@ -419,18 +422,18 @@ static inline int32_t polymer_planeinfrustum(_prplane const &plane, const float*
 static inline void  polymer_scansprites(int16_t sectnum, tspriteptr_t tsprite, int32_t* spritesortcnt);
 static void         polymer_updatesprite(int32_t snum);
 // SKIES
-static void         polymer_getsky(int16_t picnum, uint8_t pal, int8_t shade);
-static void         polymer_drawsky(int16_t tilenum, char palnum, int8_t shade);
+static void         polymer_getsky(uint16_t picnum, uint8_t pal, int8_t shade);
+static void         polymer_drawsky(uint16_t tilenum, char palnum, int8_t shade);
 static void         polymer_initartsky(void);
-static void         polymer_drawartsky(int16_t tilenum, char palnum, int8_t shade);
+static void         polymer_drawartsky(uint16_t tilenum, char palnum, int8_t shade);
 static void         polymer_drawartskyquad(int32_t p1, int32_t p2, GLfloat height);
-static void         polymer_drawskybox(int16_t tilenum, char palnum, int8_t shade);
+static void         polymer_drawskybox(uint16_t tilenum, char palnum, int8_t shade);
 // MDSPRITES
 static void         polymer_drawmdsprite(tspriteptr_t tspr);
 static void         polymer_loadmodelvbos(md3model_t* m);
 // MATERIALS
 static void         polymer_getscratchmaterial(_prmaterial* material);
-static _prbucket*   polymer_getbuildmaterial(_prmaterial* material, int16_t tilenum, char pal, int8_t shade, int8_t vis, int32_t cmeth);
+static _prbucket*   polymer_getbuildmaterial(_prmaterial* material, uint16_t tilenum, char pal, int8_t shade, int8_t vis, int32_t cmeth);
 static int32_t      polymer_bindmaterial(const _prmaterial *material, const int16_t* lights, int lightcount);
 static void         polymer_unbindmaterial(int32_t programbits);
 static _prprograminfo *polymer_compileprogram(int32_t programbits);

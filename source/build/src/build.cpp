@@ -89,8 +89,8 @@ char game_executable[BMAX_PATH] = {0};
 int32_t zlock = 0x7fffffff, zmode = 0, kensplayerheight = 32;
 int16_t defaultspritecstat = 0;
 
-int16_t localartfreq[MAXTILES];
-int16_t localartlookup[MAXTILES], localartlookupnum;
+uint16_t localartfreq[MAXTILES];
+uint16_t localartlookup[MAXTILES], localartlookupnum;
 
 char tempbuf[4096];
 
@@ -153,7 +153,7 @@ static int32_t fillist[640];
 static vec2_t tempxyar[MAXWALLS];
 
 static int32_t mousx, mousy;
-int16_t prefixtiles[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+uint16_t prefixtiles[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 uint8_t hlsectorbitmap[bitmap_size(MAXSECTORS)];  // show2dsector is already taken...
 static int32_t minhlsectorfloorz, numhlsecwalls;
 int32_t searchlock = 0;

@@ -57,8 +57,10 @@ static int32_t numclipmaps;
 static int32_t numclipsects;  // number in sectq[]
 static int16_t *sectoidx;
 static int16_t *sectq;  // [numsectors]
-static int16_t pictoidx[MAXTILES];  // maps tile num to clipinfo[] index
-static int16_t *tempictoidx;
+
+// intentionally using 32 bits for these because of loops
+static int32_t pictoidx[MAXTILES];  // maps tile num to clipinfo[] index
+static int32_t *tempictoidx;
 
 static usectortype *loadsector;
 static uwalltype *loadwall, *loadwallinv;
@@ -221,10 +223,11 @@ int32_t engineLoadClipMaps(void)
 
     {
         int16_t ns, outersect;
-        int32_t pn, scnt, x, y, z, maxdist;
+        uint16_t pn;
+        int32_t scnt, x, y, z, maxdist;
 
         sectq = (int16_t *) Xmalloc(numsectors*sizeof(sectq[0]));
-        tempictoidx = (int16_t *) Xmalloc(MAXTILES*sizeof(tempictoidx[0]));
+        tempictoidx = (int32_t *) Xmalloc(MAXTILES*sizeof(tempictoidx[0]));
 
         for (i=0; i<MAXTILES; i++)
             tempictoidx[i]=-1;
@@ -235,7 +238,7 @@ int32_t engineLoadClipMaps(void)
             pn = sprite[i].picnum;
             k = sprite[i].sectnum;
             //    -v-  note the <=                         ignore sprites in outer sectors
-            if (pn<=0 || pn>=MAXTILES || k<0 || k>=numsectors || (sectoidx[k]&CM_OUTER))
+            if (pn>=MAXTILES || k<0 || k>=numsectors || (sectoidx[k]&CM_OUTER))
                 continue;
 
             if (numclipmaps >= CM_MAX)
@@ -245,7 +248,7 @@ int32_t engineLoadClipMaps(void)
             }
 
             // chain
-            if (pictoidx[pn]>=0)
+            if (pictoidx[pn] < MAXTILES)
             {
                 if (sectoidx[k]&CM_SOME)
                 {
@@ -2898,4 +2901,3 @@ restart_grand:
 
     return 0;
 }
-

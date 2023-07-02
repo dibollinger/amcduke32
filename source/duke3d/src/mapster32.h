@@ -119,9 +119,9 @@ static int32_t tile_groups = 0;
 // alphabet definitions struct for the sprite text renderer
 typedef struct
 {
-    int16_t pic[NUMPRINTABLES];  // maps printable ASCII chars to tilenums
-    int8_t xofs[NUMPRINTABLES];  // additional offset
-    int8_t yofs[NUMPRINTABLES];
+    uint16_t pic[NUMPRINTABLES]; // maps printable ASCII chars to tilenums
+    int8_t  xofs[NUMPRINTABLES]; // additional offset
+    int8_t  yofs[NUMPRINTABLES];
 } alphabet_t;
 
 static alphabet_t alphabets[MAX_ALPHABETS];
@@ -134,8 +134,8 @@ static int32_t numalphabets = 0;
 #define FIRST_EXTENDED_TILE 6144
 #define SECOND_EXTENDED_TILE 9216
 
-extern int16_t localartfreq[MAXTILES];
-extern int16_t localartlookup[MAXTILES], localartlookupnum;
+extern uint16_t localartfreq[MAXTILES];
+extern uint16_t localartlookup[MAXTILES], localartlookupnum;
 extern int32_t lockclock;
 
 static int32_t gs_spriteTagValue[3][7];

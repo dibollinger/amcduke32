@@ -455,7 +455,10 @@ New struct members added by the fork.
 
 ### __Misc Changes__
 
-* `MAXTILES` increased from 30720 to 32512.
+* `MAXTILES` increased from 30720 to 44800
+  * Previously was increased to 32512 with AMC 3.5 up to 4.0
+  * The editor now alters the mapversion if there's a sprite with a tile above this value.
+  * This is intended to prevent loading maps with the wrong editor version, which could delete sprites from the map.
 * `MAXGAMEVARS` increased from 2048 to 4096 (also doubles `MAXGAMEARRAYS`).
   * Doubled from 1024 to 2048 in the editor.
 * Mapster32: The key combination `[' + Y]` enables a pink tile selection background, to improve visibility of tiles in the selector.

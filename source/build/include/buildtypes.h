@@ -43,10 +43,12 @@ typedef struct
     StructTracker(Sector, int16_t) wallptr, wallnum;
     StructTracker(Sector, int32_t) ceilingz, floorz;
     StructTracker(Sector, uint16_t) ceilingstat, floorstat;
-    StructTracker(Sector, int16_t) ceilingpicnum, ceilingheinum;
+    StructTracker(Sector, uint16_t) ceilingpicnum;
+    StructTracker(Sector, int16_t) ceilingheinum;
     StructTracker(Sector, int8_t) ceilingshade;
     StructTracker(Sector, uint8_t) ceilingpal, /*CM_FLOORZ:*/ ceilingxpanning, ceilingypanning;
-    StructTracker(Sector, int16_t) floorpicnum, floorheinum;
+    StructTracker(Sector, uint16_t) floorpicnum;
+    StructTracker(Sector, int16_t) floorheinum;
     StructTracker(Sector, int8_t) floorshade;
     StructTracker(Sector, uint8_t) floorpal, floorxpanning, floorypanning;
     StructTracker(Sector, uint8_t) /*CM_CEILINGZ:*/ visibility, fogpal;
@@ -80,7 +82,7 @@ typedef struct
     };
     StructTracker(Wall, int16_t) point2, nextwall, nextsector;
     StructTracker(Wall, uint16_t) cstat;
-    StructTracker(Wall, int16_t) picnum, overpicnum;
+    StructTracker(Wall, uint16_t) picnum, overpicnum;
     StructTracker(Wall, int8_t) shade;
     StructTracker(Wall, uint8_t) pal, xrepeat, yrepeat, xpanning, ypanning;
     StructTracker(Wall, int16_t) lotag, hitag;
@@ -174,7 +176,7 @@ typedef struct
         vec2_t xy;
     };
     StructTracker(Sprite, uint16_t) cstat;
-    StructTracker(Sprite, int16_t) picnum;
+    StructTracker(Sprite, uint16_t) picnum;
     StructTracker(Sprite, int8_t) shade;
     StructTracker(Sprite, uint8_t) pal, clipdist, blend;
     StructTracker(Sprite, uint8_t) xrepeat, yrepeat;
@@ -206,7 +208,7 @@ typedef struct
         vec2_t xy;
     };
     uint16_t cstat;
-    int16_t picnum;
+    uint16_t picnum;
     int8_t shade;
     uint8_t pal, clipdist, blend;
     uint8_t xrepeat, yrepeat;
@@ -234,13 +236,15 @@ typedef struct
 {
     StructTracker(Sector, int16_t) wallptr, wallnum;
 
-    StructTracker(Sector, int16_t) ceilingpicnum, ceilingheinum, ceilingbunch;
+    StructTracker(Sector, uint16_t) ceilingpicnum;
+    StructTracker(Sector, int16_t) ceilingheinum, ceilingbunch;
     StructTracker(Sector, uint16_t) ceilingstat;
     StructTracker(Sector, int32_t) ceilingz;
     StructTracker(Sector, int8_t) ceilingshade;
     StructTracker(Sector, uint8_t) ceilingpal, /*CM_FLOORZ:*/ ceilingxpanning, ceilingypanning;
 
-    StructTracker(Sector, int16_t) floorpicnum, floorheinum, floorbunch;
+    StructTracker(Sector, uint16_t) floorpicnum;
+    StructTracker(Sector, int16_t) floorheinum, floorbunch;
     StructTracker(Sector, uint16_t) floorstat;
     StructTracker(Sector, int32_t) floorz;
     StructTracker(Sector, int8_t) floorshade;
@@ -264,7 +268,7 @@ typedef struct
     StructTracker(Wall, int16_t) point2, nextwall, nextsector;
     StructTracker(Wall, int16_t) upwall, dnwall;
     StructTracker(Wall, uint16_t) cstat;
-    StructTracker(Wall, int16_t) picnum, overpicnum;
+    StructTracker(Wall, uint16_t) picnum, overpicnum;
     StructTracker(Wall, int8_t) shade;
     StructTracker(Wall, uint8_t) pal, xrepeat, yrepeat, xpanning, ypanning;
     StructTracker(Wall, int16_t) lotag, hitag;

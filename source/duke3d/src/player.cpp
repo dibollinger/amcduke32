@@ -392,7 +392,7 @@ static void Proj_MaybeSpawn(int spriteNum, int projecTile, const hitdata_t *hitD
 {
     // atwith < 0 is for hard-coded projectiles
     projectile_t *const pProj      = Proj_GetProjectile(projecTile);
-    int                 spawnTile  = projecTile < 0 ? -projecTile : pProj->spawns;
+    int spawnTile  = projecTile < 0 ? -projecTile : pProj->spawns;
 
     if (spawnTile >= 0)
     {
@@ -925,8 +925,7 @@ static int A_ShootCustom(int const spriteNum, int const projecTile, int shootAng
         {
             otherSprite = Proj_InsertShotspark(&hitData, spriteNum, projecTile, 10, shootAng, Proj_GetDamage(pProj));
 
-            if (P_PostFireHitscan(playerNum, otherSprite, &hitData, spriteNum, projecTile, zvel, projecTile, pProj->decal,
-                                  projecTile, 1 + 2) < 0)
+            if (P_PostFireHitscan(playerNum, otherSprite, &hitData, spriteNum, projecTile, zvel, projecTile, pProj->decal, projecTile, 1 + 2) < 0)
                 return -1;
         }
         else
@@ -3654,7 +3653,7 @@ access_incs:
     return 0;
 }
 
-int16_t WeaponPickupSprites[MAX_WEAPONS] = { KNEE__, FIRSTGUNSPRITE__, SHOTGUNSPRITE__,
+uint16_t WeaponPickupSprites[MAX_WEAPONS] = { KNEE__, FIRSTGUNSPRITE__, SHOTGUNSPRITE__,
         CHAINGUNSPRITE__, RPGSPRITE__, HEAVYHBOMB__, SHRINKERSPRITE__, DEVISTATORSPRITE__,
         TRIPBOMBSPRITE__, FREEZESPRITE__, HEAVYHBOMB__, SHRINKERSPRITE__, FLAMETHROWERSPRITE__
                                            };
@@ -4327,7 +4326,7 @@ static void P_ProcessWeapon(int playerNum)
                                 (hitData.wall >= 0 && sector[hitData.sect].lotag > 2))
                                 break;
 
-                            if (hitData.wall >= 0 && wall[hitData.wall].overpicnum >= 0)
+                            if (hitData.wall >= 0 && wall[hitData.wall].overpicnum < MAXTILES)
                                 if (wall[hitData.wall].overpicnum == BIGFORCE)
                                     break;
 

@@ -2367,7 +2367,7 @@ int32_t AskIfSure(const char *text)
 
 static FORCE_INLINE bool IsValidTile(int const idTile)
 {
-    return (unsigned)idTile < MAXUSERTILES && tilesiz[idTile].x && tilesiz[idTile].y && rottile[idTile].owner == -1;
+    return (unsigned)idTile < MAXUSERTILES && tilesiz[idTile].x && tilesiz[idTile].y && rottile[idTile].owner >= MAXTILES;
 }
 
 static int32_t SelectAllTiles(int32_t iCurrentTile)
@@ -3566,7 +3566,7 @@ restart:
             const char *pRawPixels = GetTilePixels(idTile);
 
             // don't draw rotated tiles generated near MAXTILES
-            if (EDUKE32_PREDICT_FALSE(rottile[idTile].owner != -1))
+            if (EDUKE32_PREDICT_FALSE(rottile[idTile].owner < MAXTILES))
                 pRawPixels = NULL;
 
             if (pRawPixels != NULL)
@@ -3904,7 +3904,7 @@ static void TextEntryMode(int16_t startspr)
         return;
     }
 
-    int16_t basetile = t = sprite[startspr].picnum;
+    uint16_t basetile = t = sprite[startspr].picnum;
     alphidx = -1;
     for (i=0; i<numalphabets; i++)
     {
@@ -4022,7 +4022,7 @@ ENDFOR1:
             setsprite(cursor,&vect);
         }
 
-        if (ch>=33 && ch<=126 && alphabets[alphidx].pic[ch-33] >= 0)
+        if (ch>=33 && ch<=126 && alphabets[alphidx].pic[ch-33] < MAXTILES)
         {
             int16_t sect;
 
@@ -5817,14 +5817,14 @@ static void Keys3d(void)
     {
         if (ASSERT_AIMING)
         {
-            int16_t *const picnumptr = AIMING_AT_WALL_OR_MASK ? &AIMED_SELOVR_PICNUM : &AIMED_CF_SEL(picnum);
+            uint16_t *const picnumptr = AIMING_AT_WALL_OR_MASK ? &AIMED_SELOVR_PICNUM : &AIMED_CF_SEL(picnum);
             const int32_t aiming_at_sprite = AIMING_AT_SPRITE;
             const int32_t opicnum = *picnumptr, osearchwall = searchwall;
 
             static const char *Typestr_tmp[5] = { "Wall", "Sector ceiling", "Sector floor", "Sprite", "Masked wall" };
 
             Bsprintf(tempbuf, "%s picnum: ", Typestr_tmp[searchstat]);
-            getnumberptr256(tempbuf, picnumptr, sizeof(int16_t), MAXUSERTILES-1, 0+2, NULL);
+            getnumberptr256(tempbuf, picnumptr, sizeof(uint16_t), MAXUSERTILES-1, 0+2, NULL);
 
             Bassert((unsigned)*picnumptr < MAXUSERTILES);
             if (!tileLoad(*picnumptr))
@@ -11173,7 +11173,11 @@ static void handlemed(int32_t dohex, const char *disp_membername, const char *ed
     }
     else if (thesizeof==sizeof(int16_t))
     {
-        val = *(int16_t *)themember;
+        if (sign)
+            val = *(int16_t*)themember;
+        else
+            val = *(uint16_t*)themember;
+
         // Bug fix : Do not sign extend when dealing with hex values
         if (dohex)
             val &= 0xFFFF;
@@ -11221,8 +11225,13 @@ static void handlemed(int32_t dohex, const char *disp_membername, const char *ed
                 else
                     *(uint8_t *)themember = (uint8_t)val;
             }
-            else if (thesizeof==sizeof(int16_t))
-                *(int16_t *)themember = (int16_t)val;
+            else if (thesizeof == sizeof(int16_t))
+            {
+                if (sign)
+                    *(int16_t*)themember = (int16_t)val;
+                else
+                    *(uint16_t*)themember = (uint16_t)val;
+            }
             else //if (thesizeof==sizeof(int32_t))
                 *(int32_t *)themember = val;
         }

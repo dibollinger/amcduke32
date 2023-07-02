@@ -26,7 +26,8 @@ typedef struct      s_prlight {
     int16_t         angle, faderadius, radius, sector;
     uint8_t         color[3], priority;
     int8_t          minshade, maxshade;
-    int16_t         tilenum, owner;
+    uint16_t        tilenum;
+    int16_t         owner;
     struct          {
         unsigned int    emitshadow  : 1;
         unsigned int    negative    : 1;

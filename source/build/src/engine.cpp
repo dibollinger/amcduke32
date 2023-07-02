@@ -832,7 +832,7 @@ void yax_tweakpicnums(int32_t bunchnum, int32_t cf, int32_t restore)
     // and after polymer_drawmasks() with restore==1
 
     int32_t i, dastat;
-    static int16_t opicnum[2][MAXSECTORS];
+    static uint16_t opicnum[2][MAXSECTORS];
 #ifdef DEBUGGINGAIDS
     static uint8_t expect_restore[2][YAX_MAXBUNCHES];
 
@@ -1528,7 +1528,8 @@ int32_t halfxdim16, midydim16;
 typedef struct
 {
     int32_t sx, sy, z;
-    int16_t a, picnum;
+    int16_t a;
+    uint16_t picnum;
     int8_t dashade;
     char dapalnum, dastat;
     uint8_t daalpha, dablend;
@@ -1753,15 +1754,15 @@ static int get_screen_coords(const vec2_t &p1, const vec2_t &p2,
 }
 
 
-static inline int findUnusedTile(void)
+static inline uint16_t findUnusedTile(void)
 {
     static int lastUnusedTile = MAXUSERTILES-1;
 
     for (; lastUnusedTile >= 0; --lastUnusedTile)
         if ((tilesiz[lastUnusedTile].x|tilesiz[lastUnusedTile].y) == 0)
-            return lastUnusedTile;
+            return (uint16_t) lastUnusedTile;
 
-    return -1;
+    return MAXTILES;
 }
 
 //
@@ -2455,7 +2456,7 @@ static void prepwall(int32_t z, uwallptr_t wal)
 //
 // animateoffs (internal)
 //
-int32_t animateoffs(int const tilenum)
+int32_t animateoffs(uint16_t const tilenum)
 {
     int const animnum = picanm[tilenum].num;
 
@@ -7741,7 +7742,7 @@ void dorotspr_handle_bit2(int32_t *sxptr, int32_t *syptr, int32_t *z, int32_t da
 // dorotatesprite (internal)
 //
 //JBF 20031206: Thanks to Ken's hunting, s/(rx1|ry1|rx2|ry2)/n\1/ in this function
-static void dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static void dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                            int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend,
                            int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2,
                            int32_t uniqid)
@@ -7777,7 +7778,8 @@ static void dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t
         static struct sm
         {
             vec4_t lerp, goal;
-            int16_t picnum, flags;
+            uint16_t picnum;
+            int16_t flags;
             ClockTicks clock;
         } smooth[MAXUNIQHUDID];
 #pragma pack(pop)
@@ -9425,10 +9427,10 @@ int32_t renderDrawRoomsQ16(int32_t daposx, int32_t daposy, int32_t daposz,
             auto &w    = wall[i];
             auto &tile = rottile[w.picnum+animateoffs(w.picnum)];
 
-            if (tile.newtile == -1 && tile.owner == -1)
+            if (tile.newtile >= MAXTILES && tile.owner >= MAXTILES)
             {
                 tile.newtile = findUnusedTile();
-                Bassert(tile.newtile != -1);
+                Bassert(tile.newtile < MAXTILES);
 
                 rottile[tile.newtile].owner = w.picnum+animateoffs(w.picnum);
 
@@ -13636,7 +13638,7 @@ void renderFlushPerms(void)
 //
 // rotatesprite
 //
-void rotatesprite_(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+void rotatesprite_(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                    int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend,
                    int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2)
 {
@@ -13806,7 +13808,7 @@ void videoClearScreen(int32_t dacol)
 //
 // setviewtotile
 //
-void renderSetTarget(int16_t tilenume, int32_t xsiz, int32_t ysiz)
+void renderSetTarget(uint16_t tilenume, int32_t xsiz, int32_t ysiz)
 {
     if (setviewcnt >= MAXSETVIEW-1)
         return;
@@ -13882,7 +13884,7 @@ void renderRestoreTarget(void)
 //
 // squarerotatetile
 //
-void squarerotatetile(int16_t tilenume)
+void squarerotatetile(uint16_t tilenume)
 {
     int const siz = tilesiz[tilenume].x;
 
@@ -14856,7 +14858,7 @@ void renderSetRollAngle(int32_t rolla)
 //         bit 7: ignored (67% translucence, using clamping)
 //       clamping is for sprites, repeating is for walls
 //
-void tileInvalidate(int16_t tilenume, int32_t pal, int32_t how)
+void tileInvalidate(uint16_t tilenume, int32_t pal, int32_t how)
 {
 #if !defined USE_OPENGL
     UNREFERENCED_PARAMETER(tilenume);

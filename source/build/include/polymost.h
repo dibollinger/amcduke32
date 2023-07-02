@@ -33,7 +33,7 @@ void uploadbasepalette(int32_t basepalnum);
 void uploadpalswap(int32_t palookupnum);
 void polymost_drawsprite(int32_t snum);
 void polymost_drawmaskwall(int32_t damaskwallcnt);
-void polymost_dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+void polymost_dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                              int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend, int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2, int32_t uniqid);
 void polymost_fillpolygon(int32_t npoints);
 void polymost_initosdfuncs(void);
@@ -306,7 +306,7 @@ typedef struct pthtyp_t
     uint32_t        glpic;
     vec2f_t         scale;
     vec2_t          siz;
-    int16_t         picnum;
+    uint16_t         picnum;
 
     uint16_t        flags; // see pthtyp_flags
     polytintflags_t effects;

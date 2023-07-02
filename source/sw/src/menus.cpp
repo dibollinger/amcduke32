@@ -4179,7 +4179,7 @@ MNU_DrawItemIcon(MenuItem *item)
     int x = item->x, y = item->y;
     int scale = MZ;
 
-    int16_t cursorpic = tilesiz[pic_yinyang].x == 0 && tilesiz[pic_shuriken1].x != 0 ? pic_shuriken1 : pic_yinyang;
+    uint16_t cursorpic = tilesiz[pic_yinyang].x == 0 && tilesiz[pic_shuriken1].x != 0 ? pic_shuriken1 : pic_yinyang;
 
     if (item->text)
     {

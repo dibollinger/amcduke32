@@ -4,7 +4,7 @@
 struct sectortypev5
 {
     uint16_t wallptr, wallnum;
-    int16_t ceilingpicnum, floorpicnum;
+    uint16_t ceilingpicnum, floorpicnum;
     int16_t ceilingheinum, floorheinum;
     int32_t ceilingz, floorz;
     int8_t ceilingshade, floorshade;
@@ -20,7 +20,7 @@ struct walltypev5
 {
     int32_t x, y;
     int16_t point2;
-    int16_t picnum, overpicnum;
+    uint16_t picnum, overpicnum;
     int8_t shade;
     int16_t cstat;
     char xrepeat, yrepeat, xpanning, ypanning;
@@ -35,7 +35,8 @@ struct spritetypev5
     char cstat;
     int8_t shade;
     char xrepeat, yrepeat;
-    int16_t picnum, ang, xvel, yvel, zvel, owner;
+    uint16_t picnum;
+    int16_t ang, xvel, yvel, zvel, owner;
     int16_t sectnum, statnum;
     int16_t lotag, hitag;
     int16_t extra;
@@ -43,7 +44,7 @@ struct spritetypev5
 struct sectortypev6
 {
     uint16_t wallptr, wallnum;
-    int16_t ceilingpicnum, floorpicnum;
+    uint16_t ceilingpicnum, floorpicnum;
     int16_t ceilingheinum, floorheinum;
     int32_t ceilingz, floorz;
     int8_t ceilingshade, floorshade;
@@ -58,7 +59,7 @@ struct walltypev6
 {
     int32_t x, y;
     int16_t point2, nextsector, nextwall;
-    int16_t picnum, overpicnum;
+    uint16_t picnum, overpicnum;
     int8_t shade;
     char pal;
     int16_t cstat;
@@ -73,7 +74,8 @@ struct spritetypev6
     char pal, clipdist;
     char xrepeat, yrepeat;
     int8_t xoffset, yoffset;
-    int16_t picnum, ang, xvel, yvel, zvel, owner;
+    uint16_t picnum;
+    int16_t ang, xvel, yvel, zvel, owner;
     int16_t sectnum, statnum;
     int16_t lotag, hitag, extra;
 };

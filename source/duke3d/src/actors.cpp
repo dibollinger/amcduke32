@@ -1299,7 +1299,7 @@ int A_IncurDamage(int const spriteNum)
     auto const pActor  = &actor[spriteNum];
 
     // dmg->picnum check: safety, since it might have been set to <0 from CON.
-    if (pActor->htextra < 0 || pSprite->extra < 0 || pActor->htpicnum < 0)
+    if (pActor->htextra < 0 || pSprite->extra < 0 || pActor->htpicnum >= MAXTILES)
     {
         pActor->htextra = -1;
         return -1;
@@ -2370,7 +2370,7 @@ ACTOR_STATIC void G_MoveStandables(void)
 
                 int const dmgTile = A_IncurDamage(spriteNum);
 
-                if (dmgTile < 0)
+                if (dmgTile < 0 || dmgTile >= MAXTILES)
                     goto crack_default;
                 if ((g_tile[dmgTile].flags & SFLAG_PROJECTILE) && (g_tile[dmgTile].proj->workslike & PROJECTILE_RPG) && (g_tile[dmgTile].proj->workslike & PROJECTILE_RADIUS_PICNUM_EX))
                     goto radius_picnum_ex;

@@ -533,14 +533,14 @@ static int32_t G_GetMorale(int32_t p_i, int32_t snum)
     return Gv_GetVarByLabel("PLR_MORALE", -1, p_i, snum);
 }
 
-static inline void rotatesprite_althud(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum, int8_t dashade, char dapalnum, int32_t dastat)
+static inline void rotatesprite_althud(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum, int8_t dashade, char dapalnum, int32_t dastat)
 {
     if (videoGetRenderMode() >= REND_POLYMOST && althud_shadows)
         rotatesprite_(sbarx(sx+1), sbary(sy+1), z, a, picnum, 127, 4, dastat + POLYMOSTTRANS2, 0, 0, 0, 0, xdim - 1, ydim - 1);
     rotatesprite_(sbarx(sx), sbary(sy), z, a, picnum, dashade, dapalnum, dastat, 0, 0, 0, 0, xdim - 1, ydim - 1);
 }
 
-static inline void rotatesprite_althudr(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum, int8_t dashade, char dapalnum, int32_t dastat)
+static inline void rotatesprite_althudr(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum, int8_t dashade, char dapalnum, int32_t dastat)
 {
     if (videoGetRenderMode() >= REND_POLYMOST && althud_shadows)
         rotatesprite_(sbarxr(sx - 1), sbary(sy + 1), z, a, picnum, 127, 4, dastat + POLYMOSTTRANS2, 0, 0, 0, 0, xdim - 1, ydim - 1);
@@ -1061,7 +1061,7 @@ void G_DrawBackground(void)
     // not drawn, leading to "HOM".
     if ((dapicnum >= 0 && tilesiz[dapicnum].x == 0) || (dapicnum >= 0 && tilesiz[dapicnum].y == 0) ||
         (windowxy1.x-1 <= 0 && windowxy2.x >= xdim-1 && windowxy1.y-1 <= 0 && windowxy2.y >= ydim-1) ||
-        dapicnum < 0)
+        dapicnum < 0 || dapicnum >= MAXTILES)
     {
         pus = pub = NUMPAGES;
         return;

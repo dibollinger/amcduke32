@@ -75,7 +75,7 @@ static FORCE_INLINE void Menu_StopTextInput()
 #endif
 }
 
-static FORCE_INLINE void rotatesprite_ybounds(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum, int8_t dashade, char dapalnum, int32_t dastat, int32_t ydim_upper, int32_t ydim_lower)
+static FORCE_INLINE void rotatesprite_ybounds(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum, int8_t dashade, char dapalnum, int32_t dastat, int32_t ydim_upper, int32_t ydim_lower)
 {
     rotatesprite_(sx, sy, z, a, picnum, dashade, dapalnum, dastat, 0, 0, 0, ydim_upper, xdim-1, ydim_lower);
 }
@@ -223,23 +223,23 @@ char s_CustomSettings[64] = "";
 //                                      tilenum             shade_deselected    shade_disabled      pal                 pal_selected        pal_deselected      pal_disabled
 #ifdef AMC_BUILD
 MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             128<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
-                                        -1,                 10,                 0,                  0,                  0,                  0,                  1,
+                                        MAXTILES,                 10,                 0,                  0,                  0,                  0,                  1,
                                         0,                  0,                  1 };
 MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        49152,              10<<16,             128<<16,            32768,              0,
-                                        -1,                 10,                 0,                  0,                  10,                 10,                 16,
+                                        MAXTILES,                 10,                 0,                  0,                  10,                 10,                 16,
                                         0,                  0,                  16 };
 MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             128<<16,            32768,              0,
-                                        -1,                 10,                 0,                  0,                  2,                  2,                  0,
+                                        MAXTILES,                 10,                 0,                  0,                  2,                  2,                  0,
                                         0,                  0,                  16 };
 #else
 MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             110<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
-                                         -1,                 10,                 0,                  0,                  0,                  0,                  1,
+                                         MAXTILES,                 10,                 0,                  0,                  0,                  0,                  1,
                                          0,                  0,                  1 };
 MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        65536,              10<<16,             110<<16,            32768,              0,
-                                         -1,                 10,                 0,                  0,                  10,                 10,                 16,
+                                         MAXTILES,                 10,                 0,                  0,                  10,                 10,                 16,
                                          0,                  0,                  16 };
 MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             110<<16,            32768,              0,
-                                         -1,                 10,                 0,                  0,                  2,                  2,                  0,
+                                         MAXTILES,                 10,                 0,                  0,                  2,                  2,                  0,
                                          0,                  0,                  16 };
 #endif
 

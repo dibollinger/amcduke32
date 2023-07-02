@@ -95,7 +95,7 @@ enum rendmode_t {
 #define MAPVERSION_FLAG_AMC4_0 0x1000
 #define EDUKE32_MAXTILES 30720
 
-#define MAXTILES 32512 // Increased from 30720
+#define MAXTILES 44800 // Increased from 30720
 #define MAXUSERTILES (MAXTILES-256)  // reserve 256 tiles at the end
 
 #define MAXVOXELS 1024
@@ -984,7 +984,7 @@ typedef struct {
     uint8_t tileflags; // tile-specific flags, such as true non-power-of-2 drawing.
 } picanm_t;
 EXTERN picanm_t picanm[MAXTILES];
-typedef struct { int16_t newtile; int16_t owner; } rottile_t;
+typedef struct { uint16_t newtile; uint16_t owner; } rottile_t; // owner refers to another picnum -> also needs to be unsigned
 EXTERN rottile_t rottile[MAXTILES];
 EXTERN intptr_t waloff[MAXTILES];  // stores pointers to cache  -- SA
 
@@ -1077,7 +1077,7 @@ EXTERN uint16_t h_xsize[MAXTILES], h_ysize[MAXTILES];
 EXTERN int8_t h_xoffs[MAXTILES], h_yoffs[MAXTILES];
 
 EXTERN char *globalpalwritten;
-EXTERN int16_t globalpicnum;
+EXTERN uint16_t globalpicnum;
 
 enum {
     GLOBAL_NO_GL_TILESHADES = 1<<0,
@@ -1260,19 +1260,19 @@ void    artPreloadFile(buildvfs_kfd fil, artheader_t * const local);
 int32_t artLoadFiles(const char *filename, int32_t askedsize);
 void    artClearMapArt(void);
 void    artSetupMapArt(const char *filename);
-bool    tileLoad(int16_t tilenume);
-void    tileLoadData(int16_t tilenume, int32_t dasiz, char *buffer);
+bool    tileLoad(uint16_t tilenume);
+void    tileLoadData(uint16_t tilenume, int32_t dasiz, char *buffer);
 intptr_t tileLoadScaled(int const picnum, vec2_16_t* upscale = nullptr);
-int32_t tileGetCRC32(int16_t tileNum);
-vec2_16_t tileGetSize(int16_t tileNum);
+int32_t tileGetCRC32(uint16_t tileNum);
+vec2_16_t tileGetSize(uint16_t tileNum);
 void    artConvertRGB(palette_t *pic, uint8_t const *buf, int32_t bufsizx, int32_t sizx, int32_t sizy);
 void    tileUpdatePicSiz(int32_t picnum);
 
 int32_t   qloadkvx(int32_t voxindex, const char *filename);
 void vox_undefine(int32_t const);
-intptr_t   tileCreate(int16_t tilenume, int32_t xsiz, int32_t ysiz);
+intptr_t   tileCreate(uint16_t tilenume, int32_t xsiz, int32_t ysiz);
 void   tileCopySection(int32_t tilenume1, int32_t sx1, int32_t sy1, int32_t xsiz, int32_t ysiz, int32_t tilenume2, int32_t sx2, int32_t sy2);
-void   squarerotatetile(int16_t tilenume);
+void   squarerotatetile(uint16_t tilenume);
 
 int32_t   videoSetGameMode(char davidoption, int32_t daupscaledxdim, int32_t daupscaledydim, int32_t dabpp, int32_t daupscalefactor);
 void   videoNextPage(void);
@@ -1284,7 +1284,7 @@ void   renderFlushPerms(void);
 void plotlines2d(const int32_t *xx, const int32_t *yy, int32_t numpoints, int col) ATTRIBUTE((nonnull(1,2)));
 
 void   plotpixel(int32_t x, int32_t y, char col);
-void   renderSetTarget(int16_t tilenume, int32_t xsiz, int32_t ysiz);
+void   renderSetTarget(uint16_t tilenume, int32_t xsiz, int32_t ysiz);
 void   renderRestoreTarget(void);
 void   renderPrepareMirror(int32_t dax, int32_t day, int32_t daz, fix16_t daang, fix16_t dahoriz, int16_t dawall,
                            int32_t *tposx, int32_t *tposy, fix16_t *tang);
@@ -1301,7 +1301,7 @@ void   renderDrawMasks(void);
 void   videoClearViewableArea(int32_t dacol);
 void   videoClearScreen(int32_t dacol);
 void   renderDrawMapView(int32_t dax, int32_t day, int32_t zoome, int16_t ang);
-void   rotatesprite_(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+void   rotatesprite_(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                      int8_t dashade, char dapalnum, int32_t dastat, uint8_t daalpha, uint8_t dablend,
                      int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2);
 void   renderDrawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, char col);
@@ -1322,20 +1322,20 @@ static FORCE_INLINE uint16_t getcrc16(void const* buffer, int bufleng, int crc =
 
 
 ////////// specialized rotatesprite wrappers for (very) often used cases //////////
-static FORCE_INLINE void rotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static FORCE_INLINE void rotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                                 int8_t dashade, char dapalnum, int32_t dastat,
                                 int32_t cx1, int32_t cy1, int32_t cx2, int32_t cy2)
 {
     rotatesprite_(sx, sy, z, a, picnum, dashade, dapalnum, dastat, 0, 0, cx1, cy1, cx2, cy2);
 }
 // Don't clip at all, i.e. the whole screen real estate is available:
-static FORCE_INLINE void rotatesprite_fs(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static FORCE_INLINE void rotatesprite_fs(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                                    int8_t dashade, char dapalnum, int32_t dastat)
 {
     rotatesprite_(sx, sy, z, a, picnum, dashade, dapalnum, dastat, 0, 0, 0,0,xdim-1,ydim-1);
 }
 
-static FORCE_INLINE void rotatesprite_fs_id(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static FORCE_INLINE void rotatesprite_fs_id(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                                    int8_t dashade, char dapalnum, int32_t dastat, int16_t uniqid)
 {
     int restore = guniqhudid;
@@ -1344,13 +1344,13 @@ static FORCE_INLINE void rotatesprite_fs_id(int32_t sx, int32_t sy, int32_t z, i
     guniqhudid = restore;
 }
 
-static FORCE_INLINE void rotatesprite_fs_alpha(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static FORCE_INLINE void rotatesprite_fs_alpha(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                                   int8_t dashade, char dapalnum, int32_t dastat, uint8_t alpha)
 {
     rotatesprite_(sx, sy, z, a, picnum, dashade, dapalnum, dastat, alpha, 0, 0, 0, xdim-1, ydim-1);
 }
 
-static FORCE_INLINE void rotatesprite_win(int32_t sx, int32_t sy, int32_t z, int16_t a, int16_t picnum,
+static FORCE_INLINE void rotatesprite_win(int32_t sx, int32_t sy, int32_t z, int16_t a, uint16_t picnum,
                                     int8_t dashade, char dapalnum, int32_t dastat)
 {
     rotatesprite_(sx, sy, z, a, picnum, dashade, dapalnum, dastat, 0, 0, windowxy1.x,windowxy1.y,windowxy2.x,windowxy2.y);
@@ -1568,7 +1568,7 @@ void    renderSetRollAngle(int32_t rolla);
 //         bit 6: 33% translucence, using clamping
 //         bit 7: 67% translucence, using clamping
 //       clamping is for sprites, repeating is for walls
-void tileInvalidate(int16_t tilenume, int32_t pal, int32_t how);
+void tileInvalidate(uint16_t tilenume, int32_t pal, int32_t how);
 
 void polymostSet2dView(void);   // sets up GL for 2D drawing
 
@@ -1634,7 +1634,7 @@ typedef struct
     // maps build tiles to particular animation frames of a model
     int16_t     modelid;
     int16_t     framenum;   // calculate the number from the name when declaring
-    int16_t     nexttile;
+    uint16_t     nexttile;
     uint16_t    smoothduration;
     hudtyp      *hudmem[2];
     int8_t      skinnum;
