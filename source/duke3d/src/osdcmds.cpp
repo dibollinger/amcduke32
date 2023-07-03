@@ -520,7 +520,7 @@ static int osdcmd_vidmode(osdcmdptr_t parm)
 
 static int osdcmd_spawn(osdcmdptr_t parm)
 {
-    int32_t picnum = 0;
+    uint16_t picnum = 0;
     uint16_t cstat=0;
     char pal=0;
     int16_t ang=0;

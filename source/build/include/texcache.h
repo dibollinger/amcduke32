@@ -65,7 +65,7 @@ extern void texcache_syncmemcache(void);
 extern void texcache_init(void);
 int texcache_loadoffsets(void);
 int texcache_readdata(void *outBuf, int32_t len);
-extern pthtyp *texcache_fetch(int32_t dapicnum, int32_t dapalnum, int32_t dashade, int32_t dameth);
+extern pthtyp *texcache_fetch(uint16_t dapicnum, int32_t dapalnum, int32_t dashade, int32_t dameth);
 extern int32_t texcache_loadskin(const texcacheheader *head, int32_t *doalloc, GLuint *glpic, vec2_t *siz);
 extern int32_t texcache_loadtile(const texcacheheader *head, int32_t *doalloc, pthtyp *pth);
 extern char const * texcache_calcid(char *outbuf, const char *filename, int32_t len, int32_t dameth, char effect);

@@ -243,13 +243,13 @@ void artSetupMapArt(const char *filename)
 // ART loading
 //
 
-void tileSetupDummy(int32_t const tile)
+void tileSetupDummy(uint16_t const tile)
 {
     bitmap_set(faketile, tile);
     DO_FREE_AND_NULL(faketiledata[tile]);
 }
 
-static void tileSetDataSafe(int32_t const tile, int32_t tsiz, char const * const buffer)
+static void tileSetDataSafe(uint16_t const tile, int32_t tsiz, char const * const buffer)
 {
     int const compressed_tsiz = LZ4_compressBound(tsiz);
     char * newtile = (char *) Xmalloc(compressed_tsiz);
@@ -267,7 +267,7 @@ static void tileSetDataSafe(int32_t const tile, int32_t tsiz, char const * const
     }
 }
 
-void tileSetData(int32_t const tile, int32_t tsiz, char const * const buffer)
+void tileSetData(uint16_t const tile, int32_t tsiz, char const * const buffer)
 {
     int const compressed_tsiz = LZ4_compressBound(tsiz);
     faketiledata[tile] = (char *) Xrealloc(faketiledata[tile], compressed_tsiz);
@@ -286,7 +286,7 @@ void tileSetData(int32_t const tile, int32_t tsiz, char const * const buffer)
     }
 }
 
-static void tileSoftDelete(int32_t const tile)
+static void tileSoftDelete(uint16_t const tile)
 {
     tilesiz[tile].x = 0;
     tilesiz[tile].y = 0;
@@ -301,7 +301,7 @@ static void tileSoftDelete(int32_t const tile)
     Bmemset(&picanm[tile], 0, sizeof(picanm_t));
 }
 
-void tileDelete(int32_t const tile)
+void tileDelete(uint16_t const tile)
 {
     tileSoftDelete(tile);
 
@@ -317,7 +317,7 @@ void tileDelete(int32_t const tile)
 #endif
 }
 
-void tileUpdatePicSiz(int32_t picnum)
+void tileUpdatePicSiz(uint16_t picnum)
 {
     int j = 15;
 
@@ -331,7 +331,7 @@ void tileUpdatePicSiz(int32_t picnum)
     picsiz[picnum] |= j<<4;
 }
 
-void tileSetSize(int32_t picnum, int16_t dasizx, int16_t dasizy)
+void tileSetSize(uint16_t picnum, int16_t dasizx, int16_t dasizy)
 {
     tilesiz[picnum].x = dasizx;
     tilesiz[picnum].y = dasizy;
@@ -422,7 +422,7 @@ int32_t artCheckUnitFileHeader(uint8_t const * const buf, int32_t length)
     return 0;
 }
 
-void tileConvertAnimFormat(int32_t const picnum, uint32_t const picanmdisk)
+void tileConvertAnimFormat(uint16_t const picnum, uint32_t const picanmdisk)
 {
     EDUKE32_STATIC_ASSERT(PICANM_ANIMTYPE_MASK == 192);
 
@@ -896,8 +896,8 @@ intptr_t tileCreate(uint16_t tilenume, int32_t xsiz, int32_t ysiz)
 //
 // copytilepiece
 //
-void tileCopySection(int32_t tilenume1, int32_t sx1, int32_t sy1, int32_t xsiz, int32_t ysiz,
-    int32_t tilenume2, int32_t sx2, int32_t sy2)
+void tileCopySection(uint16_t tilenume1, int32_t sx1, int32_t sy1, int32_t xsiz, int32_t ysiz,
+    uint16_t tilenume2, int32_t sx2, int32_t sy2)
 {
     char *ptr1, *ptr2, dat;
     int32_t xsiz1, ysiz1, xsiz2, ysiz2, i, j, x1, y1, x2, y2;

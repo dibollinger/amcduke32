@@ -6686,7 +6686,7 @@ void C_Compile(const char *fileName)
     }
 #endif
 
-    for (int i=0; i<MAXTILES; i++)
+    for (uint16_t i=0; i<MAXTILES; i++)
     {
         int const index = C_GetLabelIndex(i, LABEL_ANY);
 

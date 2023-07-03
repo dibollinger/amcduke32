@@ -155,12 +155,12 @@ enum loguru_verbosities_game
 #include "sounds.h"
 #include "text.h"
 
-static inline int32_t G_TileHasActor(int const tileNum)
+static inline int32_t G_TileHasActor(uint16_t const tileNum)
 {
     return g_tile[tileNum].execPtr!=NULL;
 }
 
-static inline int32_t G_DefaultActorHealthForTile(int const tileNum)
+static inline int32_t G_DefaultActorHealthForTile(uint16_t const tileNum)
 {
     return G_TileHasActor(tileNum) ? g_tile[tileNum].execPtr[0] : 0;
 }

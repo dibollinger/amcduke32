@@ -1051,7 +1051,7 @@ static void editorDraw2dWall(int32_t i, int32_t posxe, int32_t posye, int32_t po
 
 int32_t editorGet2dSpriteColor(int32_t spr)
 {
-    int const picnum  = sprite[spr].picnum;
+    uint16_t const picnum  = sprite[spr].picnum;
     int       pal     = sprite[spr].pal;
     int const tilecol = tilecols[picnum];
 

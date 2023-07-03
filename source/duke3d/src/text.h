@@ -80,13 +80,13 @@ extern int32_t textsc(int32_t sc);
 #define gametext_center_shade(y, t, s) gametext_(160<<16, (y)<<16, (t), (s), MF_Bluefont.pal, 0, 0, TEXT_XCENTER)
 #define gametext_center_shade_pal(y, t, s, p) gametext_(160<<16, (y)<<16, (t), (s), (p), 0, 0, TEXT_XCENTER)
 
-extern void G_PrintGameText(int32_t tile, int32_t x, int32_t y, const char *t,
+extern void G_PrintGameText(uint16_t tile, int32_t x, int32_t y, const char *t,
                             int32_t s, int32_t p, int32_t o,
                             int32_t x1, int32_t y1, int32_t x2, int32_t y2,
                             int32_t z, int32_t a);
 
-extern int32_t G_GetStringTileASCII(TileFontPtr_t tilefontPtr, int32_t font, char c, int32_t f);
-extern void G_SetScreenTextEmpty(vec2_t & empty, int32_t font, int32_t f);
+extern uint16_t G_GetStringTileASCII(TileFontPtr_t tilefontPtr, int32_t font, char c, int32_t f);
+extern void G_SetScreenTextEmpty(vec2_t & empty, uint16_t font, int32_t f);
 
 uint32_t G_ScreenTextFromString(ScreenTextGlyph_t * text, char const * str, char const * const end, TileFontPtr_t tilefontPtr, int32_t font, int32_t flags);
 
@@ -113,7 +113,7 @@ static inline ScreenTextGlyph_t * G_ScreenTextGetBuf(size_t textbufcount)
     return g_screentextbuf;
 }
 
-static inline vec2_t G_ScreenTextSize(const int32_t font,
+static inline vec2_t G_ScreenTextSize(const uint16_t font,
     int32_t x, int32_t y, const int32_t zoom, const int32_t blockangle,
     const char * str, const int32_t o,
     int32_t xspace, int32_t yline, int32_t xbetween, int32_t ybetween,
@@ -156,7 +156,7 @@ static inline vec2_t G_ScreenTextSize(const int32_t font,
     return screentextGetSize(data);
 }
 
-static inline vec2_t G_ScreenText(const int32_t font,
+static inline vec2_t G_ScreenText(const uint16_t font,
     int32_t x, int32_t y, const int32_t zoom, const int32_t blockangle, const int32_t charangle,
     const char * str, const int32_t shade, uint32_t pal, int32_t o, int32_t alpha,
     int32_t xspace, int32_t yline, int32_t xbetween, int32_t ybetween, const int32_t f,
@@ -203,7 +203,7 @@ static inline vec2_t G_ScreenText(const int32_t font,
     return screentextRender(data);
 }
 
-static inline vec2_t G_ScreenTextShadow(int32_t sx, int32_t sy, int32_t sp, const int32_t font,
+static inline vec2_t G_ScreenTextShadow(int32_t sx, int32_t sy, int32_t sp, const uint16_t font,
     int32_t x, int32_t y, const int32_t zoom, const int32_t blockangle, const int32_t charangle,
     const char * str, const int32_t shade, uint32_t pal, int32_t o, const int32_t alpha,
     int32_t xspace, int32_t yline, int32_t xbetween, int32_t ybetween, const int32_t f,

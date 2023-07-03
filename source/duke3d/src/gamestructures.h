@@ -45,10 +45,10 @@ int32_t __fastcall VM_GetSector(int const sectNum, int32_t labelNum);
 void    __fastcall VM_SetSector(int const sectNum, int const labelNum, int32_t newValue);
 int32_t __fastcall VM_GetSprite(int const spriteNum, int32_t labelNum, int const lParm2);
 void    __fastcall VM_SetSprite(int const spriteNum, int const labelNum, int const lParm2, int32_t const newValue);
-int32_t __fastcall VM_GetProjectile(int const tileNum, int32_t labelNum);
-void    __fastcall VM_SetProjectile(int const tileNum, int const labelNum, int32_t const newValue);
-int32_t __fastcall VM_GetTileData(int const tileNum, int32_t labelNum);
-void    __fastcall VM_SetTileData(int const tileNum, int const labelNum, int32_t const newValue);
+int32_t __fastcall VM_GetProjectile(uint16_t const tileNum, int32_t labelNum);
+void    __fastcall VM_SetProjectile(uint16_t const tileNum, int const labelNum, int32_t const newValue);
+int32_t __fastcall VM_GetTileData(uint16_t const tileNum, int32_t labelNum);
+void    __fastcall VM_SetTileData(uint16_t const tileNum, int const labelNum, int32_t const newValue);
 int32_t __fastcall VM_GetPalData(int const palNum, int32_t labelNum);
 
  typedef struct

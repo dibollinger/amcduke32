@@ -149,12 +149,12 @@ static void Proj_DoWaterTracers(vec3_t startPos, vec3_t const *endPos, int n, in
     }
 }
 
-static inline projectile_t *Proj_GetProjectile(int tile)
+static inline projectile_t *Proj_GetProjectile(uint16_t tile)
 {
     return ((unsigned)tile < MAXTILES && g_tile[tile].proj) ? g_tile[tile].proj : &DefaultProjectile;
 }
 
-static void A_HitscanProjTrail(const vec3_t *startPos, const vec3_t *endPos, int projAng, int tileNum, int16_t sectNum)
+static void A_HitscanProjTrail(const vec3_t *startPos, const vec3_t *endPos, int projAng, uint16_t tileNum, int16_t sectNum)
 {
     const projectile_t *const pProj = Proj_GetProjectile(tileNum);
 
@@ -209,7 +209,7 @@ int32_t A_GetHitscanRange(int spriteNum)
     return (FindDistance2D(hitData.x - SX(spriteNum), hitData.y - SY(spriteNum)));
 }
 
-static int A_FindTargetSprite(const spritetype *pSprite, int projAng, int projecTile)
+static int A_FindTargetSprite(const spritetype *pSprite, int projAng, uint16_t projecTile)
 {
     static int const aimstats[] = {
         STAT_PLAYER, STAT_DUMMYPLAYER, STAT_ACTOR, STAT_ZOMBIEACTOR
@@ -335,7 +335,7 @@ static void A_SetHitData(int spriteNum, const hitdata_t *hitData)
 }
 
 #ifndef EDUKE32_STANDALONE
-static int CheckShootSwitchTile(int tileNum)
+static int CheckShootSwitchTile(uint16_t tileNum)
 {
     if (FURY)
         return 0;
@@ -354,7 +354,7 @@ static int32_t safeldist(int32_t spriteNum, const void *pSprite)
 // flags:
 //  1: do sprite center adjustment (cen-=(8<<8)) for GREENSLIME or ROTATEGUN
 //  2: do auto getangle only if not RECON (if clear, do unconditionally)
-static int GetAutoAimAng(int spriteNum, int playerNum, int projecTile, int zAdjust, int aimFlags,
+static int GetAutoAimAng(int spriteNum, int playerNum, uint16_t projecTile, int zAdjust, int aimFlags,
                                const vec3_t *startPos, int projVel, int32_t *pZvel, int *pAng)
 {
     int returnSprite = -1;
@@ -388,31 +388,40 @@ static int GetAutoAimAng(int spriteNum, int playerNum, int projecTile, int zAdju
     return returnSprite;
 }
 
-static void Proj_MaybeSpawn(int spriteNum, int projecTile, const hitdata_t *hitData)
+static void Proj_DirectSpawn(int spriteNum, uint16_t projecTile, const hitdata_t *hitData)
 {
-    // atwith < 0 is for hard-coded projectiles
-    projectile_t *const pProj      = Proj_GetProjectile(projecTile);
-    int spawnTile  = projecTile < 0 ? -projecTile : pProj->spawns;
+    int spawned = A_Spawn(spriteNum, projecTile);
+    A_SetHitData(spawned, hitData);
+}
 
-    if (spawnTile >= 0)
+static void Proj_IndirectSpawn(int spriteNum, uint16_t projecTile, const hitdata_t *hitData)
+{
+    projectile_t *const pProj = Proj_GetProjectile(projecTile);
+
+    if (pProj->spawns >= 0)
     {
-        int spawned = A_Spawn(spriteNum, spawnTile);
+        int spawned = A_Spawn(spriteNum, pProj->spawns);
 
-        if (projecTile >= 0)
-        {
-            if (pProj->sxrepeat > 4)
-                sprite[spawned].xrepeat = pProj->sxrepeat;
+        if (pProj->sxrepeat > 4)
+            sprite[spawned].xrepeat = pProj->sxrepeat;
 
-            if (pProj->syrepeat > 4)
-                sprite[spawned].yrepeat = pProj->syrepeat;
-        }
+        if (pProj->syrepeat > 4)
+            sprite[spawned].yrepeat = pProj->syrepeat;
 
         A_SetHitData(spawned, hitData);
     }
 }
 
+static void Proj_Spawn(int spriteNum, uint16_t projecTile, const hitdata_t *hitData, bool directSpawn)
+{
+    if (directSpawn)
+        Proj_DirectSpawn(spriteNum, projecTile, hitData);
+    else
+        Proj_IndirectSpawn(spriteNum, projecTile, hitData);
+}
+
 // <extra>: damage that this shotspark does
-static int Proj_InsertShotspark(const hitdata_t *hitData, int spriteNum, int projecTile, int sparkSize, int sparkAng, int damage)
+static int Proj_InsertShotspark(const hitdata_t *hitData, int spriteNum, uint16_t projecTile, int sparkSize, int sparkAng, int damage)
 {
     int returnSprite = A_InsertSprite(hitData->sect, hitData->x, hitData->y, hitData->z, SHOTSPARK1, -15,
                                      sparkSize, sparkSize, sparkAng, 0, 0, spriteNum, 4);
@@ -459,7 +468,7 @@ static int A_GetShootZvel(int defaultZvel)
 }
 
 // Prepare hitscan weapon fired from player p.
-static void P_PreFireHitscan(int spriteNum, int playerNum, int projecTile, vec3_t *srcVect, int32_t *zvel, int *shootAng,
+static void P_PreFireHitscan(int spriteNum, int playerNum, uint16_t projecTile, vec3_t *srcVect, int32_t *zvel, int *shootAng,
                              int accurateAim, int doSpread)
 {
     int angRange  = 32;
@@ -546,7 +555,7 @@ static int Proj_DoHitscan(int spriteNum, int32_t const cstatmask, const vec3_t *
     return (hitData->sect < 0);
 }
 
-static void Proj_DoRandDecalSize(int const spriteNum, int const projecTile)
+static void Proj_DoRandDecalSize(int const spriteNum, uint16_t const projecTile)
 {
     const projectile_t *const proj    = Proj_GetProjectile(projecTile);
     auto const         pSprite = &sprite[spriteNum];
@@ -627,7 +636,7 @@ static void P_DoWeaponRumble(int playerNum)
 }
 
 // Finish shooting hitscan weapon from player <p>. <k> is the inserted SHOTSPARK1.
-// * <spawnObject> is passed to Proj_MaybeSpawn()
+// * <spawnObject> is passed to Proj_Spawn()
 // * <decalTile> and <wallDamage> are for wall impact
 // * <wallDamage> is passed to A_DamageWall()
 // * <decalFlags> is for decals upon wall impact:
@@ -637,8 +646,8 @@ static void P_DoWeaponRumble(int playerNum)
 // TODO: maybe split into 3 cases (hit neither wall nor sprite, hit sprite, hit wall)?
 
 static int P_PostFireHitscan(int playerNum, int const spriteNum, hitdata_t *const hitData, int const STANDALONE_UNUSED(spriteOwner),
-                             int const projecTile, int const zvel, int const spawnTile, int const decalTile, int const wallDamage,
-                             int const decalFlags)
+                             uint16_t const projecTile, int const zvel, uint16_t const spawnTile, uint16_t const decalTile, int const wallDamage,
+                             int const decalFlags, bool directSpawn)
 {
 #ifdef EDUKE32_STANDALONE
     UNREFERENCED_PARAMETER(playerNum);
@@ -653,7 +662,7 @@ static int P_PostFireHitscan(int playerNum, int const spriteNum, hitdata_t *cons
             return -1;
         }
 
-        Proj_MaybeSpawn(spriteNum, spawnTile, hitData);
+        Proj_Spawn(spriteNum, spawnTile, hitData, directSpawn);
     }
     else if (hitData->sprite >= 0)
     {
@@ -675,7 +684,7 @@ static int P_PostFireHitscan(int playerNum, int const spriteNum, hitdata_t *cons
         else
 #endif
         {
-            Proj_MaybeSpawn(spriteNum, spawnTile, hitData);
+            Proj_Spawn(spriteNum, spawnTile, hitData, directSpawn);
         }
 #ifndef EDUKE32_STANDALONE
         if (!FURY && playerNum >= 0 && CheckShootSwitchTile(sprite[hitData->sprite].picnum))
@@ -689,7 +698,7 @@ static int P_PostFireHitscan(int playerNum, int const spriteNum, hitdata_t *cons
     {
         auto const hitWall = (uwallptr_t)&wall[hitData->wall];
 
-        Proj_MaybeSpawn(spriteNum, spawnTile, hitData);
+        Proj_Spawn(spriteNum, spawnTile, hitData, directSpawn);
 
         if (CheckDoorTile(hitWall->picnum) == 1)
             goto SKIPBULLETHOLE;
@@ -718,7 +727,7 @@ static int P_PostFireHitscan(int playerNum, int const spriteNum, hitdata_t *cons
                 if (sprite[decalSprite].picnum == decalTile && dist(&sprite[decalSprite], &sprite[spriteNum]) < (12 + (krand() & 7)))
                     goto SKIPBULLETHOLE;
 
-            if (decalTile >= 0)
+            if (decalTile < MAXTILES)
             {
                 decalSprite = A_Spawn(spriteNum, decalTile);
 
@@ -759,8 +768,8 @@ SKIPBULLETHOLE:
 }
 
 // Finish shooting hitscan weapon from actor (sprite <i>).
-static int A_PostFireHitscan(const hitdata_t *hitData, int const spriteNum, int const projecTile, int const zvel, int const shootAng,
-                             int const extra, int const spawnTile, int const wallDamage)
+static int A_PostFireHitscan(const hitdata_t *hitData, int const spriteNum, uint16_t const projecTile, int const zvel, int const shootAng,
+                             int const extra, uint16_t const spawnTile, int const wallDamage, bool directSpawn)
 {
     int const returnSprite = Proj_InsertShotspark(hitData, spriteNum, projecTile, 24, shootAng, extra);
 
@@ -769,14 +778,14 @@ static int A_PostFireHitscan(const hitdata_t *hitData, int const spriteNum, int 
         A_DamageObject(hitData->sprite, returnSprite);
 
         if (sprite[hitData->sprite].picnum != APLAYER)
-            Proj_MaybeSpawn(returnSprite, spawnTile, hitData);
+            Proj_Spawn(returnSprite, spawnTile, hitData, directSpawn);
         else
             sprite[returnSprite].xrepeat = sprite[returnSprite].yrepeat = 0;
     }
     else if (hitData->wall >= 0)
     {
         A_DamageWall(returnSprite, hitData->wall, hitData->xyz, wallDamage);
-        Proj_MaybeSpawn(returnSprite, spawnTile, hitData);
+        Proj_Spawn(returnSprite, spawnTile, hitData, directSpawn);
     }
     else
     {
@@ -785,7 +794,7 @@ static int A_PostFireHitscan(const hitdata_t *hitData, int const spriteNum, int 
             sprite[returnSprite].xrepeat = 0;
             sprite[returnSprite].yrepeat = 0;
         }
-        else Proj_MaybeSpawn(returnSprite, spawnTile, hitData);
+        else Proj_Spawn(returnSprite, spawnTile, hitData, directSpawn);
     }
 
     return returnSprite;
@@ -811,7 +820,7 @@ static int Proj_CheckBlood(vec3_t const *const srcVect, hitdata_t const *const h
 }
 
 static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int const playerNum, int const projecTile, int const shootAng,
-                            const projectile_t *const proj, int const inserttile, int const randomDamage, int const spawnTile,
+                            const projectile_t *const proj, uint16_t const inserttile, int const randomDamage, uint16_t const spawnTile,
                             int const soundNum)
 {
     auto const pPlayer = playerNum >= 0 ? g_player[playerNum].ps : NULL;
@@ -831,7 +840,7 @@ static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int c
 
     if (playerNum >= 0)
     {
-        if (spawnTile >= 0)
+        if (spawnTile < MAXTILES)
         {
             int k = A_Spawn(kneeSprite, spawnTile);
             sprite[k].z -= ZOFFSET3;
@@ -870,7 +879,7 @@ static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int c
 
 #define MinibossScale(i, s) (((s)*sprite[i].yrepeat)/80)
 
-static int A_ShootCustom(int const spriteNum, int const projecTile, int shootAng, vec3_t * const startPos)
+static int A_ShootCustom(int const spriteNum, uint16_t const projecTile, int shootAng, vec3_t * const startPos)
 {
     /* Custom projectiles */
     hitdata_t           hitData;
@@ -925,13 +934,12 @@ static int A_ShootCustom(int const spriteNum, int const projecTile, int shootAng
         {
             otherSprite = Proj_InsertShotspark(&hitData, spriteNum, projecTile, 10, shootAng, Proj_GetDamage(pProj));
 
-            if (P_PostFireHitscan(playerNum, otherSprite, &hitData, spriteNum, projecTile, zvel, projecTile, pProj->decal, projecTile, 1 + 2) < 0)
+            if (P_PostFireHitscan(playerNum, otherSprite, &hitData, spriteNum, projecTile, zvel, projecTile, pProj->decal, projecTile, 1 + 2, false) < 0)
                 return -1;
         }
         else
         {
-            otherSprite =
-            A_PostFireHitscan(&hitData, spriteNum, projecTile, zvel, shootAng, Proj_GetDamage(pProj), projecTile, projecTile);
+            otherSprite = A_PostFireHitscan(&hitData, spriteNum, projecTile, zvel, shootAng, Proj_GetDamage(pProj), projecTile, projecTile, false);
         }
 
         if ((krand() & 255) < 4 && pProj->isound >= 0)
@@ -1102,7 +1110,7 @@ static int A_ShootCustom(int const spriteNum, int const projecTile, int shootAng
 }
 
 #ifndef EDUKE32_STANDALONE
-static int32_t A_ShootHardcoded(int spriteNum, int projecTile, int shootAng, vec3_t startPos,
+static int32_t A_ShootHardcoded(int spriteNum, uint16_t projecTile, int shootAng, vec3_t startPos,
                                 spritetype *pSprite, int const playerNum, DukePlayer_t * const pPlayer)
 {
     hitdata_t hitData;
@@ -1202,13 +1210,12 @@ static int32_t A_ShootHardcoded(int spriteNum, int projecTile, int shootAng, vec
             {
                 spawnedSprite = Proj_InsertShotspark(&hitData, spriteNum, projecTile, 10, shootAng, G_DefaultActorHealthForTile(projecTile) + (krand() % 6));
 
-                if (P_PostFireHitscan(playerNum, spawnedSprite, &hitData, spriteNum, projecTile, Zvel, -SMALLSMOKE, BULLETHOLE, SHOTSPARK1, 0) < 0)
+                if (P_PostFireHitscan(playerNum, spawnedSprite, &hitData, spriteNum, projecTile, Zvel, SMALLSMOKE, BULLETHOLE, SHOTSPARK1, 0, true) < 0)
                     return -1;
             }
             else
             {
-                spawnedSprite = A_PostFireHitscan(&hitData, spriteNum, projecTile, Zvel, shootAng, G_DefaultActorHealthForTile(projecTile), -SMALLSMOKE,
-                    SHOTSPARK1);
+                spawnedSprite = A_PostFireHitscan(&hitData, spriteNum, projecTile, Zvel, shootAng, G_DefaultActorHealthForTile(projecTile), SMALLSMOKE, SHOTSPARK1, true);
             }
 
             if ((krand() & 255) < 4)
@@ -1669,9 +1676,9 @@ static int32_t A_ShootHardcoded(int spriteNum, int projecTile, int shootAng, vec
 }
 #endif
 
-int A_ShootWithZvel(int const spriteNum, int const projecTile, int const forceZvel)
+int A_ShootWithZvel(int const spriteNum, uint16_t const projecTile, int const forceZvel)
 {
-    Bassert(projecTile >= 0);
+    Bassert(projecTile < MAXTILES);
 
     auto const pSprite   = &sprite[spriteNum];
     int const  playerNum = (pSprite->picnum == APLAYER) ? P_GetP(pSprite) : -1;
@@ -1848,7 +1855,7 @@ static int P_DisplayFist(int const fistShade)
 
 static int32_t g_dts_yadd;
 
-static void G_DrawTileScaled(int drawX, int drawY, int tileNum, int drawShade, int drawBits, int drawPal, int uniqueID = 0)
+static void G_DrawTileScaled(int drawX, int drawY, uint16_t tileNum, int drawShade, int drawBits, int drawPal, int uniqueID = 0)
 {
     int32_t wx[2] = { windowxy1.x, windowxy2.x };
     int32_t wy[2] = { windowxy1.y, windowxy2.y };
@@ -1911,7 +1918,7 @@ static void G_DrawTileScaled(int drawX, int drawY, int tileNum, int drawShade, i
 }
 
 #ifndef EDUKE32_STANDALONE
-static void G_DrawWeaponTile(int weaponX, int weaponY, int weaponTile, int weaponShade, int weaponBits, int weaponPal, int uniqueID = 0)
+static void G_DrawWeaponTile(int weaponX, int weaponY, uint16_t weaponTile, int weaponShade, int weaponBits, int weaponPal, int uniqueID = 0)
 {
     static int shadef = 0;
     static int palf = 0;
@@ -1951,7 +1958,7 @@ static void G_DrawWeaponTile(int weaponX, int weaponY, int weaponTile, int weapo
 }
 #endif
 
-static inline void G_DrawWeaponTileUnfaded(int weaponX, int weaponY, int weaponTile, int weaponShade, int weaponBits, int p, int uniqueID = 0)
+static inline void G_DrawWeaponTileUnfaded(int weaponX, int weaponY, uint16_t weaponTile, int weaponShade, int weaponBits, int p, int uniqueID = 0)
 {
     G_DrawTileScaled(weaponX, weaponY, weaponTile, weaponShade, weaponBits, p, uniqueID); // skip G_DrawWeaponTile
 }

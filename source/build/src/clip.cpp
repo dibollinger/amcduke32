@@ -622,7 +622,7 @@ int32_t clipsprite_try(uspriteptr_t const spr, int32_t xmin, int32_t ymin, int32
     while (i>=0 && (spr->cstat&32) != (clipmapinfo.sector[sectq[clipinfo[i].qbeg]].CM_CSTAT&32))
         i = clipinfo[i].next;
 
-    if (i>=0)
+    if (i>=0 && i < MAXTILES)
     {
         int32_t maxcorrection = clipinfo[i].maxdist;
         const int32_t k = sectq[clipinfo[i].qbeg];
@@ -1523,7 +1523,7 @@ int32_t clipmove(vec3_t * const pos, int16_t * const sectnum, int32_t xvect, int
                 }
                 if (heinum == 0)
                     continue;
-                const int32_t tilenum = spr->picnum;
+                const uint16_t tilenum = spr->picnum;
                 const int32_t cosang = sintable[(spr->ang+512)&2047];
                 const int32_t sinang = sintable[spr->ang&2047];
                 vec2_t const span = { tilesiz[tilenum].x, tilesiz[tilenum].y};
@@ -2738,7 +2738,7 @@ restart_grand:
             case CSTAT_SPRITE_ALIGNMENT_WALL:
             {
                 int32_t ucoefup16;
-                int32_t tilenum = spr->picnum;
+                uint16_t tilenum = spr->picnum;
 
                 get_wallspr_points(spr, &x1, &x2, &y1, &y2);
 

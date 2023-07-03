@@ -416,15 +416,16 @@ int  A_CheckSwitchTile(int spriteNum);
 int A_IncurDamage(int spriteNum);
 void A_AddToDeleteQueue(int spriteNum);
 void A_DeleteSprite(int spriteNum);
-void A_DoGuts(int spriteNum, int tileNum, int spawnCnt);
-void A_DoGutsDir(int spriteNum, int tileNum, int spawnCnt);
+void A_DoGuts(int spriteNum, uint16_t tileNum, int spawnCnt);
+
+void A_DoGutsDir(int spriteNum, uint16_t tileNum, int spawnCnt);
 int A_GetClipdist(int spriteNum);
 void A_MoveCyclers(void);
 void A_MoveDummyPlayers(void);
 void A_MoveSector(int spriteNum);
 void A_PlayAlertSound(int spriteNum);
 void A_RadiusDamage(int spriteNum, int blastRadius, int dmg1, int dmg2, int dmg3, int dmg4);
-void A_SpawnMultiple(int spriteNum, int tileNum, int spawnCnt);
+void A_SpawnMultiple(int spriteNum, uint16_t tileNum, int spawnCnt);
 
 int  G_SetInterpolation(int32_t *posptr);
 void G_DeleteAllLights(void);
@@ -452,7 +453,7 @@ static FORCE_INLINE void   Sect_SetInterpolation(int sectnum) { Sect_ToggleInter
 #endif
 
 extern int32_t A_MoveSpriteClipdist(int32_t spritenum, vec3_t const &change, uint32_t cliptype, int32_t clipdist);
-ACTOR_INLINE_HEADER int A_CheckEnemyTile(int tileNum);
+ACTOR_INLINE_HEADER int A_CheckEnemyTile(uint16_t tileNum);
 ACTOR_INLINE_HEADER int A_SetSprite(int spriteNum, uint32_t cliptype);
 ACTOR_INLINE_HEADER int32_t A_MoveSprite(int spriteNum, vec3_t const &change, uint32_t cliptype);
 
@@ -469,7 +470,7 @@ EXTERN_INLINE_HEADER int A_CheckEnemySprite(void const * s);
 
 # if !KRANDDEBUG || (KRANDDEBUG && defined actors_c_)
 
-ACTOR_INLINE int A_CheckEnemyTile(int const tileNum)
+ACTOR_INLINE int A_CheckEnemyTile(uint16_t const tileNum)
 {
     return ((g_tile[tileNum].flags & (SFLAG_HARDCODED_BADGUY | SFLAG_BADGUY)) != 0);
 }

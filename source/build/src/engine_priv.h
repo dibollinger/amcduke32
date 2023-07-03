@@ -320,7 +320,7 @@ skipit:
 
 #else	// __GNUC__ && __i386__
 
-static FORCE_INLINE void setgotpic(int32_t tilenume)
+static FORCE_INLINE void setgotpic(uint16_t tilenume)
 {
     if (walock[tilenume] < CACHE1D_LOCKED) walock[tilenume] = CACHE1D_UNLOCKED;
     bitmap_set(gotpic, tilenume);
@@ -330,7 +330,7 @@ static FORCE_INLINE void setgotpic(int32_t tilenume)
 
 // Get properties of parallaxed sky to draw.
 // Returns: pointer to tile offset array. Sets-by-pointer the other three.
-static FORCE_INLINE const int8_t *getpsky(int32_t picnum, int32_t *dapyscale, int32_t *dapskybits, int32_t *dapyoffs, int32_t *daptileyscale)
+static FORCE_INLINE const int8_t *getpsky(uint16_t picnum, int32_t *dapyscale, int32_t *dapskybits, int32_t *dapyoffs, int32_t *daptileyscale)
 {
     psky_t const * const psky = &multipsky[getpskyidx(picnum)];
 
@@ -375,7 +375,7 @@ struct wallsprite_dims
 
 static inline wallsprite_dims get_wallspr_dims(uspriteptr_t spr)
 {
-    const int32_t tilenum = spr->picnum, ang = spr->ang;
+    const uint16_t tilenum = spr->picnum, ang = spr->ang;
     const int32_t xrepeat = spr->xrepeat;
     int32_t xoff = picanm[tilenum].xofs + spr->xoffset;
 
@@ -427,7 +427,7 @@ struct floorsprite_dims
 
 static inline floorsprite_dims get_floorspr_dims(uspriteptr_t spr, bool sloped)
 {
-    const int32_t tilenum = spr->picnum;
+    const uint16_t tilenum = spr->picnum;
     const int32_t cosang = sintable[(spr->ang+512)&2047];
     const int32_t sinang = sintable[spr->ang&2047];
 

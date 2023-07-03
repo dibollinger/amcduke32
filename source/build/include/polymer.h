@@ -380,7 +380,7 @@ static inline void polymer_invalidatesprite(int32_t i)
 }
 
 extern GLuint       prartmaps[MAXTILES];
-static inline void polymer_invalidateartmap(int32_t tilenum)
+static inline void polymer_invalidateartmap(uint16_t tilenum)
 {
     if (prartmaps[tilenum])
     {
@@ -390,7 +390,7 @@ static inline void polymer_invalidateartmap(int32_t tilenum)
 }
 
 // Compare with eligible_for_tileshades()
-static FORCE_INLINE int32_t polymer_eligible_for_artmap(int32_t tilenum, const pthtyp *pth) { return ((!pth || !pth->hicr) && tilenum < MAXUSERTILES); }
+static FORCE_INLINE int32_t polymer_eligible_for_artmap(uint16_t tilenum, const pthtyp *pth) { return ((!pth || !pth->hicr) && tilenum < MAXUSERTILES); }
 static FORCE_INLINE int     polymer_useartmapping(void) { return pr_artmapping && gltexfiltermode == 0; }
 
 # ifdef POLYMER_C

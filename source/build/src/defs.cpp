@@ -178,7 +178,7 @@ static int32_t check_tile_range(const char *defcmd, int32_t *tilebeg, int32_t *t
     return 0;
 }
 
-static int32_t check_tile(const char *defcmd, int32_t tile, const scriptfile *script,
+static int32_t check_tile(const char *defcmd, uint16_t tile, const scriptfile *script,
                           const char *cmdtokptr)
 {
     if (EDUKE32_PREDICT_FALSE((unsigned)tile >= MAXUSERTILES))
@@ -190,7 +190,7 @@ static int32_t check_tile(const char *defcmd, int32_t tile, const scriptfile *sc
     return 0;
 }
 
-static void tile_from_truecolpic(int32_t tile, const palette_t *picptr, int32_t alphacut)
+static void tile_from_truecolpic(uint16_t tile, const palette_t *picptr, int32_t alphacut)
 {
     vec2_16_t const siz = tilesiz[tile];
     int32_t i, j, tsiz = siz.x * siz.y;
@@ -213,7 +213,7 @@ static void tile_from_truecolpic(int32_t tile, const palette_t *picptr, int32_t 
     tileSetData(tile, tsiz, faketilebuffer);
 }
 
-static int32_t Defs_LoadTileIntoBuffer(int32_t const tile)
+static int32_t Defs_LoadTileIntoBuffer(uint16_t const tile)
 {
     vec2_16_t const siz = tilesiz[tile];
     int32_t const tsiz = siz.x * siz.y;
@@ -234,7 +234,7 @@ static void Defs_ApplyPaletteToTileBuffer(int32_t const tsiz, int32_t const pal)
         faketilebuffer[i] = palookup[pal][faketilebuffer[i]];
 }
 
-static int32_t Defs_ImportTileFromTexture(char const * const fn, int32_t const tile, int32_t const alphacut, int32_t istexture)
+static int32_t Defs_ImportTileFromTexture(char const * const fn, uint16_t const tile, int32_t const alphacut, int32_t istexture)
 {
     if (check_file_exist(fn))
         return -1;

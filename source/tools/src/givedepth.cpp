@@ -33,7 +33,7 @@ fail:
 int main(int argc, char **argv)
 {
     char const * palfile = "palette.dat", * voxfile = "output.vox";
-    int tilenum;
+    uint16_t tilenum;
     int depth;
     FILE *artfh, *voxfh, *palfh;
     int tilesz;

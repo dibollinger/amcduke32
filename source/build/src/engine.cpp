@@ -197,7 +197,7 @@ static fix16_t global100horiz;  // (-100..300)-scale horiz (the one passed to dr
 int32_t enginecompatibilitymode = ENGINE_EDUKE32;
 #endif
 
-classicht_t *tileLoadHigh(int dapicnum)
+classicht_t *tileLoadHigh(uint16_t dapicnum)
 {
 #ifdef WITHKPLIB
     auto tsiz = tilesiz[dapicnum];
@@ -1589,7 +1589,7 @@ static vec2_t bakwindowxy1[MAXSETVIEW], bakwindowxy2[MAXSETVIEW];
 #ifdef USE_OPENGL
 static int32_t bakrendmode;
 #endif
-static int32_t baktile;
+static uint16_t baktile;
 
 #ifdef APPNAME
 char apptitle[256] = APPNAME;
@@ -2033,7 +2033,7 @@ static WSHELPER_DECL void calc_vplcinc(uint32_t *vplc, int32_t *vinc, const int3
 # endif
 #endif
 
-intptr_t tileLoadScaled(int const picnum, vec2_16_t *upscale/* = nullptr*/)
+intptr_t tileLoadScaled(uint16_t const picnum, vec2_16_t *upscale/* = nullptr*/)
 {
     intptr_t bufplc;
 
@@ -2765,7 +2765,7 @@ static void calc_globalshifts(void)
 }
 
 static int32_t setup_globals_cf1(usectorptr_t sec, int32_t pal, int32_t zd,
-                                 int32_t picnum, int32_t shade, int32_t stat,
+                                 uint16_t picnum, int32_t shade, int32_t stat,
                                  int32_t xpanning, int32_t ypanning, int32_t x1)
 {
     int32_t i;
@@ -4343,7 +4343,7 @@ static void parascan(char dastat, int32_t bunch)
 
 
 // set orientation, panning, shade, pal; picnum
-static void setup_globals_wall1(uwallptr_t wal, int32_t dapicnum)
+static void setup_globals_wall1(uwallptr_t wal, uint16_t dapicnum)
 {
     globalorientation = wal->cstat;
 
@@ -5008,7 +5008,7 @@ typedef zint_t voxint_t;
 static void classicDrawVoxel(int32_t dasprx, int32_t daspry, int32_t dasprz, int32_t dasprang,
                              int32_t daxscale, int32_t dayscale, int32_t daindex,
                              int8_t dashade, char dapal, const int32_t *daumost, const int32_t *dadmost,
-                             const int8_t cstat, const int32_t clipcf, int32_t floorz, int32_t ceilingz)
+                             const int16_t cstat, const int32_t clipcf, int32_t floorz, int32_t ceilingz)
 {
     int32_t i, j, k, x, y, mip;
 
@@ -5354,7 +5354,7 @@ static void classicDrawVoxel(int32_t dasprx, int32_t daspry, int32_t dasprz, int
 
 
 static void setup_globals_sprite1(tspriteptr_t tspr, usectorptr_t sec,
-                                     int32_t yspan, int32_t yoff, int32_t tilenum,
+                                     int32_t yspan, int32_t yoff, uint16_t tilenum,
                                      int32_t cstat, int32_t *z1ptr, int32_t *z2ptr,
                                      vec2_16_t upscale)
 {
@@ -5470,7 +5470,8 @@ static void classicDrawSprite(int32_t snum)
 
     auto const sec = (usectorptr_t)&sector[sectnum];
 
-    int32_t cstat=tspr->cstat, tilenum;
+    int32_t cstat=tspr->cstat;
+    uint16_t tilenum;
 
     if ((cstat&48) != 48)
         tileUpdatePicnum(&tspr->picnum, spritenum+32768);
@@ -8957,7 +8958,7 @@ int32_t rayintersect(int32_t x1, int32_t y1, int32_t z1, int32_t vx, int32_t vy,
 // multi-pskies
 //
 
-psky_t * tileSetupSky(int32_t const tilenum)
+psky_t * tileSetupSky(uint16_t const tilenum)
 {
     for (bssize_t i = 0; i < pskynummultis; i++)
         if (multipskytile[i] == tilenum)
@@ -8965,7 +8966,7 @@ psky_t * tileSetupSky(int32_t const tilenum)
 
     int32_t const newPskyID = pskynummultis++;
     multipsky = (psky_t *)Xrealloc(multipsky, pskynummultis * sizeof(psky_t));
-    multipskytile = (int32_t *)Xrealloc(multipskytile, pskynummultis * sizeof(int32_t));
+    multipskytile = (uint16_t *)Xrealloc(multipskytile, pskynummultis * sizeof(uint16_t));
 
     psky_t * const newPsky = &multipsky[newPskyID];
     Bmemset(newPsky, 0, sizeof(psky_t));
@@ -12225,7 +12226,7 @@ int32_t qloadkvx(int32_t voxindex, const char *filename)
     return 0;
 }
 
-void vox_undefine(int32_t const tile)
+void vox_undefine(uint16_t const tile)
 {
     ssize_t voxindex = tiletovox[tile];
     if (voxindex < 0)

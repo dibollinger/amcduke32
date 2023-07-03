@@ -20,12 +20,12 @@
 //#include "pragmas.h"
 //#include "vfs.h"
 
-static int32_t curextra=MAXTILES;
+static uint16_t curextra=MAXTILES;
 
 #define MIN_CACHETIME_PRINT 10
 
 
-static int32_t addtileP(int32_t model,int32_t tile,int32_t pallet)
+static uint16_t addtileP(int32_t model,uint16_t tile,int32_t pallet)
 {
     // tile >= 0 && tile < MAXTILES
 
@@ -58,9 +58,9 @@ static int32_t addtileP(int32_t model,int32_t tile,int32_t pallet)
     return curextra++;
 }
 
-int32_t Ptile2tile(int32_t tile,int32_t palette)
+uint16_t Ptile2tile(uint16_t tile,int32_t palette)
 {
-    int t = tile;
+    uint16_t t = tile;
     while ((tile = tile2model[tile].nexttile) < MAXTILES)
         if (tile2model[tile].pal == palette)
         {
@@ -313,7 +313,7 @@ static int32_t framename2index(mdmodel_t *vm, const char *nam)
     return i;
 }
 
-int32_t md_defineframe(int32_t modelid, const char *framename, int32_t tilenume, int32_t skinnum, float smoothduration, int32_t pal)
+int32_t md_defineframe(int32_t modelid, const char *framename, uint16_t tilenume, int32_t skinnum, float smoothduration, int32_t pal)
 {
     md2model_t *m;
     int32_t i;
@@ -544,7 +544,7 @@ int32_t md_definehud(int32_t modelid, int32_t tilex, vec3f_t add, int32_t angadd
     return 0;
 }
 
-int32_t md_undefinetile(int32_t tile)
+int32_t md_undefinetile(uint16_t tile)
 {
     if (!mdinited) return 0;
     if ((unsigned)tile >= (unsigned)MAXTILES) return -1;
@@ -849,7 +849,7 @@ void updateanimation(md2model_t *m, tspriteptr_t tspr, uint8_t lpal)
         return;
     }
 
-    int32_t const tile = Ptile2tile(tspr->picnum,lpal);
+    uint16_t const tile = Ptile2tile(tspr->picnum,lpal);
     m->cframe = m->nframe = tile2model[tile].framenum;
 
 #ifdef DEBUGGINGAIDS

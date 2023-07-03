@@ -875,9 +875,9 @@ EXTERN int32_t g_pskyidx;
 EXTERN int32_t pskynummultis;
 EXTERN psky_t * multipsky;
 // Mapping of multi-sky index to base sky tile number:
-EXTERN int32_t * multipskytile;
+EXTERN uint16_t * multipskytile;
 
-static FORCE_INLINE int32_t getpskyidx(int32_t picnum)
+static FORCE_INLINE int32_t getpskyidx(uint16_t picnum)
 {
     int32_t j;
 
@@ -888,7 +888,7 @@ static FORCE_INLINE int32_t getpskyidx(int32_t picnum)
     return j;
 }
 
-EXTERN psky_t * tileSetupSky(int32_t tilenum);
+EXTERN psky_t * tileSetupSky(uint16_t tilenum);
 
 EXTERN char parallaxtype;
 EXTERN int32_t parallaxyoffs_override, parallaxyscale_override;
@@ -1247,14 +1247,14 @@ int32_t   saveboard(const char *filename, const vec3_t *dapos, int16_t daang, in
 #define MAXMAPARTDEFS 1024
 extern hashtable_t h_mapartpaths;
 
-void    tileSetupDummy(int32_t tile);
-void    tileSetData(int32_t tile, int32_t tsiz, char const *buffer);
-void    tileDelete(int32_t tile);
-void    tileSetSize(int32_t picnum, int16_t dasizx, int16_t dasizy);
+void    tileSetupDummy(uint16_t tile);
+void    tileSetData(uint16_t tile, int32_t tsiz, char const *buffer);
+void    tileDelete(uint16_t tile);
+void    tileSetSize(uint16_t picnum, int16_t dasizx, int16_t dasizy);
 int32_t artReadHeader(buildvfs_kfd fil, char const *fn, artheader_t *local);
 int32_t artReadHeaderFromBuffer(uint8_t const *buf, artheader_t *local);
 int32_t artCheckUnitFileHeader(uint8_t const *buf, int32_t length);
-void    tileConvertAnimFormat(int32_t picnum, uint32_t const picanmdisk);
+void    tileConvertAnimFormat(uint16_t picnum, uint32_t const picanmdisk);
 void    artReadManifest(buildvfs_kfd fil, artheader_t * const local);
 void    artPreloadFile(buildvfs_kfd fil, artheader_t * const local);
 int32_t artLoadFiles(const char *filename, int32_t askedsize);
@@ -1262,16 +1262,16 @@ void    artClearMapArt(void);
 void    artSetupMapArt(const char *filename);
 bool    tileLoad(uint16_t tilenume);
 void    tileLoadData(uint16_t tilenume, int32_t dasiz, char *buffer);
-intptr_t tileLoadScaled(int const picnum, vec2_16_t* upscale = nullptr);
+intptr_t tileLoadScaled(uint16_t const picnum, vec2_16_t* upscale = nullptr);
 int32_t tileGetCRC32(uint16_t tileNum);
 vec2_16_t tileGetSize(uint16_t tileNum);
 void    artConvertRGB(palette_t *pic, uint8_t const *buf, int32_t bufsizx, int32_t sizx, int32_t sizy);
-void    tileUpdatePicSiz(int32_t picnum);
+void    tileUpdatePicSiz(uint16_t picnum);
 
 int32_t   qloadkvx(int32_t voxindex, const char *filename);
-void vox_undefine(int32_t const);
+void vox_undefine(uint16_t const);
 intptr_t   tileCreate(uint16_t tilenume, int32_t xsiz, int32_t ysiz);
-void   tileCopySection(int32_t tilenume1, int32_t sx1, int32_t sy1, int32_t xsiz, int32_t ysiz, int32_t tilenume2, int32_t sx2, int32_t sy2);
+void   tileCopySection(uint16_t tilenume1, int32_t sx1, int32_t sy1, int32_t xsiz, int32_t ysiz, uint16_t tilenume2, int32_t sx2, int32_t sy2);
 void   squarerotatetile(uint16_t tilenume);
 
 int32_t   videoSetGameMode(char davidoption, int32_t daupscaledxdim, int32_t daupscaledydim, int32_t dabpp, int32_t daupscalefactor);
@@ -1572,10 +1572,10 @@ void tileInvalidate(uint16_t tilenume, int32_t pal, int32_t how);
 
 void polymostSet2dView(void);   // sets up GL for 2D drawing
 
-int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, int32_t wallnum, int32_t dimen, int32_t tilezoom,
+int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, uint16_t tilenum, int32_t dimen, int32_t tilezoom,
                                 int32_t usehitile, uint8_t *loadedhitile);
 void polymost_glreset(void);
-void polymost_precache(int32_t dapicnum, int32_t dapalnum, int32_t datype);
+void polymost_precache(uint16_t dapicnum, int32_t dapalnum, int32_t datype);
 
 enum cutsceneflags {
     CUTSCENE_FORCEFILTER = 1,
@@ -1606,10 +1606,10 @@ extern int32_t mdtims, omdtims;
 extern int32_t glrendmode;
 #endif
 
-int32_t Ptile2tile(int32_t tile, int32_t palette) ATTRIBUTE((pure));
+uint16_t Ptile2tile(uint16_t tile, int32_t palette) ATTRIBUTE((pure));
 int32_t md_loadmodel(const char *fn);
 int32_t md_setmisc(int32_t modelid, float scale, int32_t shadeoff, float zadd, float yoffset, int32_t flags);
-// int32_t md_tilehasmodel(int32_t tilenume, int32_t pal);
+// int32_t md_tilehasmodel(uint16_t tilenume, int32_t pal);
 
 extern const char *G_DefaultDefFile(void);
 extern const char *G_DefFile(void);
@@ -1641,18 +1641,18 @@ typedef struct
     char        pal;
 } tile2model_t;
 
-# define EXTRATILES (MAXTILES/8)
+#define EXTRATILES 3840
 
 EXTERN int32_t mdinited;
 EXTERN tile2model_t tile2model[MAXTILES+EXTRATILES];
 
-static FORCE_INLINE int32_t md_tilehasmodel(int32_t const tilenume, int32_t const pal)
+static FORCE_INLINE int32_t md_tilehasmodel(uint16_t const tilenume, int32_t const pal)
 {
     return mdinited ? tile2model[Ptile2tile(tilenume,pal)].modelid : -1;
 }
 #endif  // defined USE_OPENGL
 
-static FORCE_INLINE int tilehasmodelorvoxel(int const tilenume, int pal)
+static FORCE_INLINE int tilehasmodelorvoxel(uint16_t const tilenume, int pal)
 {
     UNREFERENCED_PARAMETER(pal);
     return
@@ -1662,7 +1662,7 @@ static FORCE_INLINE int tilehasmodelorvoxel(int const tilenume, int pal)
     (videoGetRenderMode() <= REND_POLYMOST && usevoxels && tiletovox[tilenume] != -1);
 }
 
-int32_t md_defineframe(int32_t modelid, const char *framename, int32_t tilenume,
+int32_t md_defineframe(int32_t modelid, const char *framename, uint16_t tilenume,
                        int32_t skinnum, float smoothduration, int32_t pal);
 int32_t md_defineanimation(int32_t modelid, const char *framestart, const char *frameend,
                            int32_t fps, int32_t flags);
@@ -1670,7 +1670,7 @@ int32_t md_defineskin(int32_t modelid, const char *skinfn, int32_t palnum, int32
                       int32_t surfnum, float param, float specpower, float specfactor, int32_t flags);
 int32_t md_definehud (int32_t modelid, int32_t tilex, vec3f_t add,
                       int32_t angadd, int32_t flags, int32_t fov);
-int32_t md_undefinetile(int32_t tile);
+int32_t md_undefinetile(uint16_t tile);
 int32_t md_undefinemodel(int32_t modelid);
 
 int32_t loaddefinitionsfile(const char *fn);

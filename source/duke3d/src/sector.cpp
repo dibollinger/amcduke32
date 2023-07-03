@@ -145,7 +145,7 @@ int G_CheckActivatorMotion(int lotag)
     return 0;
 }
 
-int CheckDoorTile(int tileNum)
+int CheckDoorTile(uint16_t tileNum)
 {
 #ifndef EDUKE32_STANDALONE
     switch (tileGetMapping(tileNum))
@@ -374,7 +374,7 @@ int SetAnimation(int sectNum, int32_t *animPtr, int goalVal, int animVel)
     return animNum;
 }
 
-static void G_SetupCamTile(int spriteNum, int tileNum, int smoothRatio)
+static void G_SetupCamTile(int spriteNum, uint16_t tileNum, int smoothRatio)
 {
     int const playerNum = screenpeek;
 
@@ -1547,7 +1547,7 @@ void G_ActivateBySector(int sectNum, int spriteNum)
         G_OperateSectors(sectNum, spriteNum);
 }
 
-static void G_BreakWall(int tileNum, int spriteNum, int wallNum)
+static void G_BreakWall(uint16_t tileNum, int spriteNum, int wallNum)
 {
     wall[wallNum].picnum = tileNum;
 #ifndef EDUKE32_STANDALONE

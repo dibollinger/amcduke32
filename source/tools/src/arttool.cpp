@@ -895,7 +895,7 @@ public:
 };
 class InfoOp : public Operation {
 private:
-    int tilenum_;
+    uint16_t tilenum_;
 
     void outputInfo(ARTFile& art, int tile)
     {
@@ -1017,7 +1017,7 @@ class AddTileOp : public Operation {
 private:
     int xofs_, yofs_;
     int animframes_, animtype_, animspeed_;
-    int tilenum_;
+    uint16_t tilenum_;
     Bstring filename_;
 public:
     AddTileOp()
@@ -1135,7 +1135,7 @@ public:
 
 class RmTileOp : public Operation {
 private:
-    int tilenum_;
+    uint16_t tilenum_;
 public:
     RmTileOp() : tilenum_(-1) { }
 
@@ -1182,7 +1182,7 @@ public:
 
 class ExportTileOp : public Operation {
 private:
-    int tilenum_;
+    uint16_t tilenum_;
 public:
     ExportTileOp() : tilenum_(-1) { }
 
@@ -1250,7 +1250,7 @@ class TilePropOp : public Operation {
 private:
     int xofs_, yofs_;
     int animframes_, animtype_, animspeed_;
-    int tilenum_;
+    uint16_t tilenum_;
 
     int settings_;
 

@@ -1313,7 +1313,7 @@ end_wall_loop_checks:
 
         if (corruptcheck_game_duke3d)
         {
-            const int32_t tilenum = sprite[i].picnum;
+            const uint16_t tilenum = sprite[i].picnum;
 
             if (tilenum >= 1 && tilenum <= 9 && (sprite[i].cstat&48))
             {
@@ -1646,7 +1646,7 @@ void registerMenuFunction(const char *funcname, int32_t stateidx)
 
 static int32_t correct_picnum(uint16_t *picnumptr)
 {
-    int32_t picnum = *picnumptr;
+    uint16_t picnum = *picnumptr;
 
     if ((unsigned)picnum >= MAXTILES || tilesiz[picnum].x <= 0)
     {
