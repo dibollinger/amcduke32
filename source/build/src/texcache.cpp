@@ -46,7 +46,7 @@ static const char *texcache_errors[TEXCACHEERRORS] = {
     "glGetTexLevelParameteriv failed",
 };
 
-static pthtyp *texcache_tryart(int32_t const dapicnum, int32_t const dapalnum, int32_t const dashade, int32_t dameth)
+static pthtyp *texcache_tryart(uint16_t const dapicnum, int32_t const dapalnum, int32_t const dashade, int32_t dameth)
 {
     const int32_t j = dapicnum&(GLTEXCACHEADSIZ-1);
     pthtyp *pth;
@@ -95,7 +95,7 @@ static pthtyp *texcache_tryart(int32_t const dapicnum, int32_t const dapalnum, i
     return pth;
 }
 
-pthtyp *texcache_fetchmulti(pthtyp *pth, hicreplctyp *si, int32_t dapicnum, int32_t dameth)
+pthtyp *texcache_fetchmulti(pthtyp *pth, hicreplctyp *si, uint16_t dapicnum, int32_t dameth)
 {
     const int32_t j = dapicnum&(GLTEXCACHEADSIZ-1);
     int32_t i;
@@ -128,7 +128,7 @@ pthtyp *texcache_fetchmulti(pthtyp *pth, hicreplctyp *si, int32_t dapicnum, int3
 }
 
 // <dashade>: ignored if not in Polymost+r_usetileshades
-pthtyp *texcache_fetch(int32_t dapicnum, int32_t dapalnum, int32_t dashade, int32_t dameth)
+pthtyp *texcache_fetch(uint16_t dapicnum, int32_t dapalnum, int32_t dashade, int32_t dameth)
 {
     const int32_t j = dapicnum & (GLTEXCACHEADSIZ - 1);
     int indexed = 0;

@@ -1892,7 +1892,7 @@ static void         polymer_displayrooms(const int16_t dacursectnum)
 
                 if ((wall[sec->wallptr + i].cstat & 48) == 16)
                 {
-                    int pic = wall[sec->wallptr + i].overpicnum;
+                    uint16_t pic = wall[sec->wallptr + i].overpicnum;
 
                     if (tilesiz[pic].x > 0 && tilesiz[pic].y > 0)
                         localmaskwall[localmaskwallcnt++] = sec->wallptr + i;

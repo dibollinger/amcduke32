@@ -728,7 +728,7 @@ memberlabel_t const ProjectileLabels[]=
     { "userdata",   PROJ_USERDATA,    0, 0, -1 },
 };
 
-int32_t __fastcall VM_GetProjectile(int const tileNum, int32_t labelNum)
+int32_t __fastcall VM_GetProjectile(uint16_t const tileNum, int32_t labelNum)
 {
     if (EDUKE32_PREDICT_FALSE((unsigned)tileNum >= MAXTILES || g_tile[tileNum].proj == NULL))
     {
@@ -777,7 +777,7 @@ int32_t __fastcall VM_GetProjectile(int const tileNum, int32_t labelNum)
     return labelNum;
 }
 
-void __fastcall VM_SetProjectile(int const tileNum, int const labelNum, int32_t const newValue)
+void __fastcall VM_SetProjectile(uint16_t const tileNum, int const labelNum, int32_t const newValue)
 {
     if (EDUKE32_PREDICT_FALSE((unsigned) tileNum >= MAXTILES || g_tile[tileNum].proj == NULL))
     {
@@ -1611,7 +1611,7 @@ memberlabel_t const TileDataLabels[]=
     { "gameflags",  TILEDATA_GAMEFLAGS,  0, 0, -1 },
 };
 
-int32_t __fastcall VM_GetTileData(int const tileNum, int32_t labelNum)
+int32_t __fastcall VM_GetTileData(uint16_t const tileNum, int32_t labelNum)
 {
     if (EDUKE32_PREDICT_FALSE((unsigned)tileNum >= MAXTILES))
     {
@@ -1641,7 +1641,7 @@ int32_t __fastcall VM_GetTileData(int const tileNum, int32_t labelNum)
     return labelNum;
 }
 
-void __fastcall VM_SetTileData(int const tileNum, int const labelNum, int32_t newValue)
+void __fastcall VM_SetTileData(uint16_t const tileNum, int const labelNum, int32_t newValue)
 {
     if (EDUKE32_PREDICT_FALSE((unsigned)tileNum >= MAXTILES))
     {
@@ -1730,4 +1730,3 @@ void VM_InitHashTables(void)
     STRUCT_HASH_SETUP(h_wall,       WallLabels);
 }
 #undef STRUCT_HASH_SETUP
-

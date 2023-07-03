@@ -6850,14 +6850,14 @@ void A_Execute(int const spriteNum, int const playerNum, int const playerDist)
     = { spriteNum, playerNum, playerDist, 0, &sprite[spriteNum], &actor[spriteNum].t_data[0], g_player[playerNum].ps, &actor[spriteNum] };
     vm = tempvm;
 
-    int const picnum = vm.pSprite->picnum;
+    uint16_t const picnum = vm.pSprite->picnum;
 
     MICROPROFILE_SCOPE_TOKEN(g_actorTokens[picnum]);
 
     if (g_tileLabels[picnum])
         ERROR_CONTEXT("actor", &g_tileLabels[picnum][0]);
     else
-        ERROR_CONTEXT("actor", picnum);
+        ERROR_CONTEXT("actor", (int) picnum);
 
     ERROR_CONTEXT("spritenum", spriteNum);
 
@@ -7249,7 +7249,7 @@ void G_RestoreMapState(void)
 }
 
 // MYOS* CON commands.
-void VM_DrawTileGeneric(int32_t x, int32_t y, int32_t zoom, int32_t tilenum, int32_t shade, int32_t orientation, int32_t p)
+void VM_DrawTileGeneric(int32_t x, int32_t y, int32_t zoom, uint16_t tilenum, int32_t shade, int32_t orientation, int32_t p)
 {
     orientation &= (ROTATESPRITE_MAX-1);
 
@@ -7264,7 +7264,7 @@ void VM_DrawTileGeneric(int32_t x, int32_t y, int32_t zoom, int32_t tilenum, int
     rotatesprite_win(x, y, zoom, rotAngle, tilenum, shade, p, 2|orientation);
 }
 
-void VM_DrawTile(int32_t x, int32_t y, int32_t tilenum, int32_t shade, int32_t orientation)
+void VM_DrawTile(int32_t x, int32_t y, uint16_t tilenum, int32_t shade, int32_t orientation)
 {
     auto const pPlayer = g_player[screenpeek].ps;
     int32_t    tilePal = pPlayer->cursectnum >= 0 ? sector[pPlayer->cursectnum].floorpal : 0;
@@ -7272,7 +7272,7 @@ void VM_DrawTile(int32_t x, int32_t y, int32_t tilenum, int32_t shade, int32_t o
     VM_DrawTileGeneric(x, y, 65536, tilenum, shade, orientation, tilePal);
 }
 
-void VM_DrawTileSmall(int32_t x, int32_t y, int32_t tilenum, int32_t shade, int32_t orientation)
+void VM_DrawTileSmall(int32_t x, int32_t y, uint16_t tilenum, int32_t shade, int32_t orientation)
 {
     auto const pPlayer = g_player[screenpeek].ps;
     int32_t    tilePal = pPlayer->cursectnum >= 0 ? sector[pPlayer->cursectnum].floorpal : 0;

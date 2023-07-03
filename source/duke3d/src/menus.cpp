@@ -158,7 +158,7 @@ static FORCE_INLINE int32_t Menu_CursorShade(void)
 {
     return VM_OnEventWithReturn(EVENT_MENUCURSORSHADE, -1, myconnectindex, 4-(sintable[(timer120()<<4)&2047]>>11));
 }
-static void Menu_DrawCursorCommon(int32_t x, int32_t y, int32_t z, int32_t picnum, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
+static void Menu_DrawCursorCommon(int32_t x, int32_t y, int32_t z, uint16_t picnum, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
 {
 #ifdef AMC_BUILD
     z /= 3 ; // downscale cursor icon
@@ -175,7 +175,7 @@ static void Menu_DrawCursorRight(int32_t x, int32_t y, int32_t z)
     if (FURY) return;
     Menu_DrawCursorCommon(x, y, z, VM_OnEventWithReturn(EVENT_MENUCURSORRIGHT, -1, myconnectindex, SPINNINGNUKEICON+6-((6+(timer120()>>3))%7)));
 }
-static void Menu_DrawCursorTextTile(int32_t x, int32_t y, int32_t h, int32_t picnum, vec2_16_t const & siz, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
+static void Menu_DrawCursorTextTile(int32_t x, int32_t y, int32_t h, uint16_t picnum, vec2_16_t const & siz, int32_t ydim_upper = 0, int32_t ydim_lower = ydim-1)
 {
     vec2_t const adjsiz = { (siz.x>>1)<<16, siz.y<<16 };
     Menu_DrawCursorCommon(x + scale(adjsiz.x, h, adjsiz.y), y, divscale16(h, adjsiz.y), picnum, ydim_upper, ydim_lower);

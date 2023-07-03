@@ -831,7 +831,7 @@ void A_AddToDeleteQueue(int spriteNum)
     g_spriteDeleteQueuePos = (g_spriteDeleteQueuePos+1)%g_deleteQueueSize;
 }
 
-void A_SpawnMultiple(int spriteNum, int tileNum, int spawnCnt)
+void A_SpawnMultiple(int spriteNum, uint16_t tileNum, int spawnCnt)
 {
     auto const pSprite = &sprite[spriteNum];
 
@@ -845,7 +845,7 @@ void A_SpawnMultiple(int spriteNum, int tileNum, int spawnCnt)
 }
 
 #ifndef EDUKE32_STANDALONE
-void A_DoGuts(int spriteNum, int tileNum, int spawnCnt)
+void A_DoGuts(int spriteNum, uint16_t tileNum, int spawnCnt)
 {
     auto const pSprite = (uspriteptr_t)&sprite[spriteNum];
     vec2_t     repeat  = { 32, 32 };
@@ -878,7 +878,7 @@ void A_DoGuts(int spriteNum, int tileNum, int spawnCnt)
     }
 }
 
-void A_DoGutsDir(int spriteNum, int tileNum, int spawnCnt)
+void A_DoGutsDir(int spriteNum, uint16_t tileNum, int spawnCnt)
 {
     auto const s      = (uspriteptr_t)&sprite[spriteNum];
     vec2_t     repeat = { 32, 32 };
@@ -3905,7 +3905,7 @@ static void P_FinishWaterChange(int const playerNum, DukePlayer_t * const pPlaye
 // octabrains would be transported by SE7 (both water and normal) only if dead.
 static int A_CheckNonTeleporting(int const spriteNum)
 {
-    int const tileNum = sprite[spriteNum].picnum;
+    uint16_t const tileNum = sprite[spriteNum].picnum;
     return !!(A_CheckSpriteFlags(spriteNum, SFLAG_NOTELEPORT) || tileNum == SHARK || tileNum == COMMANDER || tileNum == OCTABRAIN
               || (tileNum >= GREENSLIME && tileNum <= GREENSLIME + 7));
 }
@@ -4962,8 +4962,7 @@ ACTOR_STATIC void G_MoveActors(void)
                     {
                         for (bssize_t x = 0; x < 8; ++x)
                         {
-                            int const j
-                            = A_InsertSprite(sectNum, pSprite->x, pSprite->y, pSprite->z - ZOFFSET3, SCRAP3 + (krand() & 3), -8, 48, 48,
+                            int const j = A_InsertSprite(sectNum, pSprite->x, pSprite->y, pSprite->z - ZOFFSET3, SCRAP3 + (krand() & 3), -8, 48, 48,
                                              krand() & 2047, (krand() & 63) + 64, -(krand() & 4095) - (pSprite->zvel >> 2), spriteNum, 5);
                             sprite[j].pal = 6;
                         }

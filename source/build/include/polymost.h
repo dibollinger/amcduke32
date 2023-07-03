@@ -82,7 +82,7 @@ enum {
     INVALIDATE_ART_NON_INDEXED
 };
 
-void gltexinvalidate(int32_t dapicnum, int32_t dapalnum, int32_t dameth);
+void gltexinvalidate(uint16_t dapicnum, int32_t dapalnum, int32_t dameth);
 void gltexinvalidatetype(int32_t type);
 int32_t polymost_printtext256(int32_t xpos, int32_t ypos, int16_t col, int16_t backcol, const char *name, char fontsize);
 
@@ -134,7 +134,7 @@ enum tileshademodes
 };
 
 // Compare with polymer_eligible_for_artmap()
-static FORCE_INLINE int32_t eligible_for_tileshades(int32_t const picnum, int32_t const pal)
+static FORCE_INLINE int32_t eligible_for_tileshades(uint16_t const picnum, int32_t const pal)
 {
     return !usehightile || !hicfindsubst(picnum, pal, hictinting[pal].f & HICTINT_ALWAYSUSEART);
 }
@@ -326,8 +326,8 @@ EDUKE32_STATIC_ASSERT(TO_PTH_NOTRANSFIX(DAMETH_MASKPROPS) == 0);
 #define TO_PTH_INDEXED(dameth) ((dameth)&DAMETH_INDEXED)
 EDUKE32_STATIC_ASSERT(TO_PTH_INDEXED(DAMETH_INDEXED) == PTH_INDEXED);
 
-extern void gloadtile_art(int32_t,int32_t,int32_t,int32_t,int32_t,pthtyp *,int32_t);
-extern int32_t gloadtile_hi(int32_t,int32_t,int32_t,hicreplctyp *,int32_t,pthtyp *,int32_t,polytintflags_t);
+extern void gloadtile_art(uint16_t,int32_t,int32_t,int32_t,int32_t,pthtyp *,int32_t);
+extern int32_t gloadtile_hi(uint16_t,int32_t,int32_t,hicreplctyp *,int32_t,pthtyp *,int32_t,polytintflags_t);
 extern coltype *gloadtruecolortile_mdloadskin_shared(char* fn, int32_t picfillen, vec2_t * tsiz, vec2_t * siz, char * onebitalpha, polytintflags_t effect, int32_t dapalnum, char* al);
 extern int32_t drawingskybox;
 extern int32_t hicprecaching;

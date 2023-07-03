@@ -122,7 +122,7 @@ void A_DamageWall_Internal(int spr, int dawallnum, const vec3_t &pos, int weapon
 void A_DamageWall(int spr,int dawallnum,const vec3_t &pos,int weaponNum);
 int __fastcall A_FindPlayer(spritetype const *pSprite,int32_t *dist);
 void G_AlignWarpElevators(void);
-int CheckDoorTile(int tileNum);
+int CheckDoorTile(uint16_t tileNum);
 void G_AnimateCamSprite(int smoothRatio);
 void G_AnimateWalls(void);
 int G_ActivateWarpElevators(int s,int warpDir);
@@ -148,9 +148,9 @@ int SetAnimation(int sectNum,int32_t *animPtr,int goalVal,int animVel);
 #define FORCEFIELD_CSTAT (64+16+4+1)
 
 // Returns W_FORCEFIELD if wall has a forcefield overpicnum, its overpicnum else.
-static FORCE_INLINE int G_GetForcefieldPicnum(int const wallNum)
+static FORCE_INLINE uint16_t G_GetForcefieldPicnum(int const wallNum)
 {
-    int const tileNum = wall[wallNum].overpicnum;
+    uint16_t const tileNum = wall[wallNum].overpicnum;
     return tileNum == W_FORCEFIELD + 1 ? W_FORCEFIELD : tileNum;
 }
 

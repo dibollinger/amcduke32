@@ -336,7 +336,8 @@ void G_DrawTXDigiNumZ(int32_t starttile, int32_t x, int32_t y, int32_t n, int32_
 
 static void G_DrawAltDigiNum(int32_t x, int32_t y, int32_t n, char s, int32_t cs)
 {
-    int32_t i, j = 0, k, p, c;
+    int32_t i, j = 0, k, c;
+    uint16_t p;
     char b[12];
     int32_t rev = (x < 0);
     int32_t shd = (y < 0);
@@ -645,7 +646,7 @@ void G_DrawStatusBar(int32_t snum)
                 G_DrawAltDigiNum(105, -(hudoffset-22), lAmount, -16, 10+16+256);
             }
 
-            if (ammo_sprites[p->curr_weapon] >= 0)
+            if (ammo_sprites[p->curr_weapon] >= 0 && ammo_sprites[p->curr_weapon] < MAXTILES)
             {
                 i = (tilesiz[ammo_sprites[p->curr_weapon]].y >= 50) ? 16384 : 32768;
                 rotatesprite_althudr(57, hudoffset-15, sbarsc(i), 0, ammo_sprites[p->curr_weapon], 0, 0, 10+512);
@@ -667,7 +668,7 @@ void G_DrawStatusBar(int32_t snum)
 
                 i = ((unsigned) p->inven_icon < ICON_MAX) ? item_icons[p->inven_icon] : -1;
 
-                if (i >= 0)
+                if (i >= 0 && i < MAXTILES)
                     rotatesprite_althud(231-o, hudoffset-21-2, sb16, 0, i, 0, 0, orient);
 
                 if (videoGetRenderMode() >= REND_POLYMOST && althud_shadows)
@@ -756,7 +757,7 @@ void G_DrawStatusBar(int32_t snum)
                 //                orient |= permbit;
 
                 i = ((unsigned) p->inven_icon < ICON_MAX) ? item_icons[p->inven_icon] : -1;
-                if (i >= 0)
+                if (i >= 0 && i < MAXTILES)
                     rotatesprite_fs(sbarx(231-o), yofssh+sbary(200-21), sb16, 0, i, 0, 0, orient);
 
                 // scale by status bar size
@@ -1055,13 +1056,12 @@ void G_DrawBackground(void)
         return;
     }
 
-    int32_t const dapicnum = VM_OnEventWithReturn(EVENT_DISPLAYBORDER, g_player[screenpeek].ps->i, screenpeek, BIGHOLE);
+    uint16_t const dapicnum = VM_OnEventWithReturn(EVENT_DISPLAYBORDER, g_player[screenpeek].ps->i, screenpeek, BIGHOLE);
 
     // XXX: if dapicnum is not available, this might leave the menu background
     // not drawn, leading to "HOM".
-    if ((dapicnum >= 0 && tilesiz[dapicnum].x == 0) || (dapicnum >= 0 && tilesiz[dapicnum].y == 0) ||
-        (windowxy1.x-1 <= 0 && windowxy2.x >= xdim-1 && windowxy1.y-1 <= 0 && windowxy2.y >= ydim-1) ||
-        dapicnum < 0 || dapicnum >= MAXTILES)
+    if ((dapicnum < MAXTILES && tilesiz[dapicnum].x == 0) || (dapicnum < MAXTILES && tilesiz[dapicnum].y == 0) ||
+        (windowxy1.x-1 <= 0 && windowxy2.x >= xdim-1 && windowxy1.y-1 <= 0 && windowxy2.y >= ydim-1) || dapicnum >= MAXTILES)
     {
         pus = pub = NUMPAGES;
         return;

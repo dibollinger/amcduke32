@@ -1339,7 +1339,7 @@ void G_DumpDebugInfo(void)
 
 // if <set_movflag_uncond> is true, set the moveflag unconditionally,
 // else only if it equals 0.
-static int32_t G_InitActor(int32_t i, int32_t tilenum, int32_t set_movflag_uncond)
+static int32_t G_InitActor(int32_t i, uint16_t tilenum, int32_t set_movflag_uncond)
 {
     if (g_tile[tilenum].execPtr)
     {
@@ -1457,7 +1457,7 @@ static void Yax_SetBunchInterpolation(int32_t sectnum, int32_t cf)
 //
 // 1. spriteNum>=0: Spawn from parent sprite <spriteNum> with picnum <tileNum>
 // 2. spriteNum<0: Spawn from already *existing* sprite <tileNum>
-int A_Spawn(int spriteNum, int tileNum)
+int A_Spawn(int spriteNum, uint16_t tileNum)
 {
     int         newSprite;
     spritetype *pSprite;
@@ -3628,7 +3628,7 @@ static int getofs_viewtype_mirrored(uint16_t & cstat, int angDiff)
 
 // XXX: this fucking sucks and needs to be replaced with a SFLAG
 #ifndef EDUKE32_STANDALONE
-static int G_CheckAdultTile(int tileNum)
+static int G_CheckAdultTile(uint16_t tileNum)
 {
     switch (tileGetMapping(tileNum))
     {
@@ -3975,7 +3975,7 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
             if (T2(i) < 0 || T2(i) >= MAX_ACTIVE_VIEWSCREENS)
                 break;
 
-            int const viewscrTile = g_activeVscrTile[T2(i)];
+            uint16_t const viewscrTile = g_activeVscrTile[T2(i)];
             int const viewscrShift = G_GetViewscreenSizeShift(t);
 
             if (actor[OW(i)].t_data[0] == 1)
@@ -3985,7 +3985,7 @@ void G_DoSpriteAnimations(int32_t ourx, int32_t oury, int32_t ourz, int32_t oura
                 t->xrepeat += 10;
                 t->yrepeat += 9;
             }
-            else if (viewscrTile > 0 && display_mirror != 3 && waloff[viewscrTile])
+            else if (viewscrTile < MAXTILES && display_mirror != 3 && waloff[viewscrTile])
             {
                 // this exposes a sprite sorting issue which needs to be debugged further...
 #if 0
@@ -4320,7 +4320,7 @@ PALONLY:
             Bassert((unsigned)t->picnum < MAXTILES);
 
             if (viewtype > 0)
-                while (tilesiz[t->picnum].x == 0 && t->picnum > 0)
+                while (tilesiz[t->picnum].x == 0 && t->picnum > 0 && t->picnum < MAXTILES)
                     t->picnum -= l;       //Hack, for actors
 
             if (actor[i].dispicnum < MAXTILES)

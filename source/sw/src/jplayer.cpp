@@ -344,7 +344,7 @@ void BOT_ChooseWeapon(PLAYERp p, USERp u, SW_PACKET *syn)
         }
 }
 
-int getspritescore(/*int snum, */int dapicnum)
+int getspritescore(/*int snum, */uint16_t dapicnum)
 {
 
     switch (dapicnum)
@@ -896,4 +896,3 @@ void computergetinput(int snum, SW_PACKET *syn)
         }
     */
 }
-

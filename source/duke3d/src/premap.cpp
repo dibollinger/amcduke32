@@ -36,7 +36,7 @@ static int32_t g_precacheCount;
 
 static int32_t NET_75_CHECK = 0;
 
-static void flag_precache(int32_t tile, int32_t type)
+static void flag_precache(uint16_t tile, int32_t type)
 {    
     if (!bitmap_test(gotpic, tile))
         g_precacheCount++;
@@ -45,9 +45,9 @@ static void flag_precache(int32_t tile, int32_t type)
     bitmap_set(precachehightile[type], tile);
 }
 
-static void tloadtile(int tilenume, int type)
+static void tloadtile(uint16_t tilenume, int type)
 {
-    int firstTile, lastTile;
+    uint16_t firstTile, lastTile;
 
     if ((picanm[tilenume].sf & PICANM_ANIMTYPE_MASK) == PICANM_ANIMTYPE_BACK)
     {
@@ -68,10 +68,10 @@ static void cacheTilesForSprite(int spriteNum)
 {
     if (ud.monsters_off && A_CheckEnemySprite(&sprite[spriteNum])) return;
 
-    int const picnum = sprite[spriteNum].picnum == RESPAWN ? sprite[spriteNum].hitag : sprite[spriteNum].picnum;
+    uint16_t const picnum = sprite[spriteNum].picnum == RESPAWN ? sprite[spriteNum].hitag : sprite[spriteNum].picnum;
     int extraTiles = 1;
 
-    for (int j = picnum; j <= g_tile[picnum].cacherange; j++)
+    for (uint16_t j = picnum; j <= g_tile[picnum].cacherange; j++)
         tloadtile(j, 1);
 
 #ifndef EDUKE32_STANDALONE
@@ -181,7 +181,7 @@ static void cacheTilesForSprite(int spriteNum)
     case GROWSPRITEICON__:
     case SHRINKERSPRITE__:
     {
-        int32_t const tile = WT_WIDE(SHRINKER);
+        uint16_t const tile = WT_WIDE(SHRINKER);
         for (int j=tile-2; j<=tile+1; j++) tloadtile(j,1);
         for (int j=SHRINKER+2; j<=SHRINKER+5; j++) tloadtile(j,1);
         break;
@@ -418,7 +418,7 @@ static void G_DoLoadScreen(const char *statustext, int percent)
     }
 }
 
-static void cacheExtraTextureMaps(int tileNum, int type)
+static void cacheExtraTextureMaps(uint16_t tileNum, int type)
 {    
 #ifdef USE_OPENGL
     for (int i = 0; i < MAXPALOOKUPS-RESERVEDPALS-1; i++)

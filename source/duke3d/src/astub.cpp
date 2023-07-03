@@ -447,7 +447,7 @@ static uint64_t taglab_nolink_SEs = (1ull<<10)|(1ull<<27)|(1ull<<28)|(1ull<<29)|
 // it will also 'say yes' if a particular tag is zero.
 int32_t taglab_linktags(int32_t spritep, int32_t num)
 {
-    int32_t picnum;
+    uint16_t picnum;
     int32_t l, link = 0;
 
     if (spritep)
@@ -633,7 +633,7 @@ static int32_t getTileGroup(const char *groupName)
     return -1;
 }
 
-static int32_t tileInGroup(int32_t group, int32_t tilenum)
+static int32_t tileInGroup(int32_t group, uint16_t tilenum)
 {
     // @todo Make a bitmap instead of doing this slow search..
     int32_t temp;
@@ -2388,8 +2388,8 @@ static int32_t SelectAllTiles(int32_t iCurrentTile)
     return iCurrentTile;
 }
 
-static int32_t OnGotoTile(int32_t tileNum);
-static int32_t OnSelectTile(int32_t tileNum);
+static int32_t OnGotoTile(uint16_t tileNum);
+static int32_t OnSelectTile(uint16_t tileNum);
 static int32_t OnSaveTileGroup();
 static int32_t loadtilegroups(const char *fn);
 static int32_t s_Zoom = INITIAL_ZOOM;
@@ -2465,7 +2465,7 @@ static void editorCalculateTileViewerDimensions(int32_t *nXTiles, int32_t *nYTil
 }
 
 
-static int32_t editorTilePickerBasicKeys(int32_t tileNum, int32_t nXTiles, int32_t iTopLeftTile, int32_t nDisplayedTiles)
+static int32_t editorTilePickerBasicKeys(uint16_t tileNum, int32_t nXTiles, int32_t iTopLeftTile, int32_t nDisplayedTiles)
 {
     if (PRESSED_KEYSC(LEFT))
     {
@@ -2728,7 +2728,7 @@ static int32_t editorGetTile(int32_t idInitialTile)
 
     int32_t const idInitialPal = globalpal;
 
-    int32_t tileNum   = editorCalculateTileUsage(idInitialTile);
+    uint16_t tileNum   = editorCalculateTileUsage(idInitialTile);
     int32_t iLastTile = tileNum, idSelectedTile = tileNum;
 
     int32_t nXTiles = 0, nYTiles = 0, nDisplayedTiles = 0;
@@ -3261,7 +3261,7 @@ static int32_t OnSaveTileGroup(void)
     return 0;
 }
 
-static int32_t OnGotoTile(int32_t tileNum)
+static int32_t OnGotoTile(uint16_t tileNum)
 {
     //Automatically press 'V'
     SelectAllTiles(tileNum);
@@ -3289,7 +3289,7 @@ static int32_t LoadTileSet(const int32_t idCurrentTile, const int32_t *pIds, con
     return iNewTile;
 }
 
-static int32_t OnSelectTile(int32_t tileNum)
+static int32_t OnSelectTile(uint16_t tileNum)
 {
     if (tile_groups <= 0)
     {
@@ -3359,7 +3359,7 @@ static int32_t OnSelectTile(int32_t tileNum)
     return tileNum;
 }
 
-static const char *GetTilePixels(int32_t idTile)
+static const char *GetTilePixels(uint16_t idTile)
 {
     char *pPixelData = 0;
 
@@ -3417,7 +3417,7 @@ static void classic_drawtilescreen(int32_t x, int32_t y, int32_t idTile, int32_t
 
 static void tilescreen_drawbox(int32_t iTopLeft, int32_t iSelected, int32_t nXTiles,
                                int32_t TileDim, int32_t offset,
-                               int32_t tileNum, int32_t idTile)
+                               uint16_t tileNum, int32_t idTile)
 {
     int32_t marked = (IsValidTile(idTile) && bitmap_test(tilemarked, idTile));
 
@@ -3544,9 +3544,9 @@ restart:
     {
         for (int32_t XTile = 0; XTile < nXTiles; XTile++)
         {
-            int32_t const tileNum = iTopLeft + XTile + (YTile * nXTiles);
+            uint16_t const tileNum = iTopLeft + XTile + (YTile * nXTiles);
 
-            if (tileNum < 0 || tileNum >= localartlookupnum)
+            if (tileNum >= localartlookupnum)
                 continue;
 #ifdef USE_OPENGL
             bool usehitile = (runi || !lazyselector);
@@ -3575,8 +3575,7 @@ restart:
                 y = YTile * TileDim + offset;
 
 #ifdef USE_OPENGL
-                if (polymost_drawtilescreen(x, y, idTile, TileDim, s_TileZoom,
-                                            usehitile, loadedhitile))
+                if (polymost_drawtilescreen(x, y, idTile, TileDim, s_TileZoom, usehitile, loadedhitile))
 #endif
                     classic_drawtilescreen(x, y, idTile, TileDim, pRawPixels);
             }
@@ -3676,7 +3675,7 @@ static void tileinfo_doprint(int32_t x, int32_t y, char *buf, const char *label,
 // flags: 1:draw asterisk for lotag
 //        2:draw asterisk for extra
 //        4:print bottom-swapped wall members colored
-static void drawtileinfo(const char *title,int32_t x,int32_t y,int32_t picnum,int32_t shade,int32_t pal,int32_t cstat,
+static void drawtileinfo(const char *title,int32_t x,int32_t y,uint16_t picnum,int32_t shade,int32_t pal,int32_t cstat,
                          int32_t lotag,int32_t hitag,int32_t extra, int32_t blend, int32_t statnum, uint32_t flags)
 {
     char buf[64];
@@ -6504,7 +6503,7 @@ static void Keys3d(void)
             const vec2_t vecw2r90 = { -vecw2.y, vecw2.x };  // v, rotated 90 deg CW
 
             const int32_t bits = CEILINGFLOOR(tempsectornum, stat)&(64+32+16+8+4);
-            const int32_t tile = CEILINGFLOOR(tempsectornum, picnum);
+            const uint16_t tile = CEILINGFLOOR(tempsectornum, picnum);
 
             if ((CEILINGFLOOR(tempsectornum, stat)&64) == 0)
             {
@@ -9872,7 +9871,7 @@ static int32_t loadtilegroups(const char *fn)
             // Apply the colors to all tiles in the group...
             for (j = s_TileGroups[i].nIds-1; j >= 0 ; j--)
             {
-                int const tilenum = s_TileGroups[i].pIds[j];
+                uint16_t const tilenum = s_TileGroups[i].pIds[j];
 
                 // ... but for each tile, only if no color has been specified
                 // for it previously.
@@ -10398,7 +10397,7 @@ void ExtPreCheckKeys(void) // just before drawrooms
             if (bitmap_test(graysectbitmap, pSprite->sectnum)) continue;
 
             int daang = 0, flags = 0, shade = 0, frames = 0;
-            int picnum = pSprite->picnum;
+            uint16_t picnum = pSprite->picnum;
             int32_t xp1, yp1;
 
             if ((sprite[i].cstat & 48) != 0 || sprite[i].statnum == MAXSTATUS) continue;

@@ -55,17 +55,17 @@ typedef struct texcachepic_t
     int border, depth;
 } texcachepicture;
 
-hicreplctyp * hicfindsubst(int picnum, int palnum, int nozero = 0);
-hicreplctyp * hicfindskybox(int picnum, int palnum, int nozero = 0);
+hicreplctyp * hicfindsubst(uint16_t picnum, int palnum, int nozero = 0);
+hicreplctyp * hicfindskybox(uint16_t picnum, int palnum, int nozero = 0);
 void hictinting_applypixcolor(coltype* tcol, uint8_t pal, bool no_rb_swap);
 
 void hicinit(void);
 void hicsetpalettetint(int32_t palnum, char r, char g, char b, char sr, char sg, char sb, polytintflags_t effect);
 // flags bitset: 1 = don't compress
-int32_t hicsetsubsttex(int32_t picnum, int32_t palnum, const char *filen, float alphacut,
+int32_t hicsetsubsttex(uint16_t picnum, int32_t palnum, const char *filen, float alphacut,
                        float xscale, float yscale, float specpower, float specfactor, char flags);
-int32_t hicsetskybox(int32_t picnum, int32_t palnum, char *faces[6], int32_t flags);
-int32_t hicclearsubst(int32_t picnum, int32_t palnum);
+int32_t hicsetskybox(uint16_t picnum, int32_t palnum, char *faces[6], int32_t flags);
+int32_t hicclearsubst(uint16_t picnum, int32_t palnum);
 
 static inline int have_basepal_tint(void)
 {

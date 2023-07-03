@@ -158,7 +158,7 @@ static int32_t G_GetStringTileLegacy(int32_t font, char c, int32_t f)
         return c - '!' + font; // uses ASCII order
 }
 
-int32_t G_GetStringTileASCII(TileFontPtr_t tilefontPtr, int32_t font, char c, int32_t f)
+uint16_t G_GetStringTileASCII(TileFontPtr_t tilefontPtr, int32_t font, char c, int32_t f)
 {
     if (tilefontPtr.opaque != nullptr)
         return tilefontLookup(tilefontPtr, tilefontGetChr32FromASCII(c));
@@ -260,7 +260,7 @@ uint32_t G_ScreenTextFromString(ScreenTextGlyph_t * const textbuf, char const * 
     return text - textbuf;
 }
 
-void G_SetScreenTextEmpty(vec2_t & empty, int32_t font, int32_t f)
+void G_SetScreenTextEmpty(vec2_t & empty, uint16_t font, int32_t f)
 {
     TileFontPtr_t tilefontPtr = tilefontFind(font);
 
@@ -269,7 +269,7 @@ void G_SetScreenTextEmpty(vec2_t & empty, int32_t font, int32_t f)
         char space = '.'; // this is subject to change as an implementation detail
         if (f & TEXT_TILESPACE)
             space = '\x7F'; // tile after '~'
-        uint32_t const tile = G_GetStringTileASCII(tilefontPtr, font, space, f);
+        uint16_t const tile = G_GetStringTileASCII(tilefontPtr, font, space, f);
         Bassert(tile < MAXTILES);
 
         empty.x += tilesiz[tile].x << 16;
@@ -280,14 +280,14 @@ void G_SetScreenTextEmpty(vec2_t & empty, int32_t font, int32_t f)
         char line = 'A'; // this is subject to change as an implementation detail
         if (f & TEXT_TILELINE)
             line = '\x7F'; // tile after '~'
-        uint32_t const tile = G_GetStringTileASCII(tilefontPtr, font, line, f);
+        uint16_t const tile = G_GetStringTileASCII(tilefontPtr, font, line, f);
         Bassert(tile < MAXTILES);
 
         empty.y += tilesiz[tile].y << 16;
     }
 }
 
-void G_PrintGameText(int32_t tile, int32_t x, int32_t y, const char *t,
+void G_PrintGameText(uint16_t tile, int32_t x, int32_t y, const char *t,
                      int32_t s, int32_t p, int32_t o,
                      int32_t x1, int32_t y1, int32_t x2, int32_t y2,
                      int32_t z, int32_t a)

@@ -375,8 +375,8 @@ extern uint64_t         g_lastInputTicks;
 
 #define SHOOT_HARDCODED_ZVEL INT32_MIN
 
-int A_ShootWithZvel(int spriteNum, int projecTile, int forceZvel);
-static inline int A_Shoot(int spriteNum, int projecTile)
+int A_ShootWithZvel(int spriteNum, uint16_t projecTile, int forceZvel);
+static inline int A_Shoot(int spriteNum, uint16_t projecTile)
 {
     return A_ShootWithZvel(spriteNum, projecTile, SHOOT_HARDCODED_ZVEL);
 }

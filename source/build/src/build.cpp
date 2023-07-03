@@ -1011,7 +1011,7 @@ void spriteoncfz(int32_t i, int32_t *czptr, int32_t *fzptr)
     {
         int32_t const heinum = spriteGetSlope(i);
         int32_t const ratio = divscale12(heinum, ksqrt(heinum*heinum+16777216));
-        int32_t const tilenum = sprite[i].picnum;
+        uint16_t const tilenum = sprite[i].picnum;
         int32_t const yspan = tilesiz[tilenum].y;
         int32_t const yoff = (sprite[i].cstat&CSTAT_SPRITE_YFLIP)
                            ? -picanm[tilenum].yofs : picanm[tilenum].yofs;
@@ -11034,7 +11034,7 @@ static int32_t GetWallBaseZ(int32_t wallnum)
 
 ////////// AUTOMATIC WALL ALIGNMENT //////////
 
-static void AlignWalls_(int32_t tilenum, int32_t z0, int32_t z1, int32_t doxpanning,
+static void AlignWalls_(uint16_t tilenum, int32_t z0, int32_t z1, int32_t doxpanning,
                         int32_t w0_pan, int32_t w0_rep, int32_t w1_pan, int32_t w1_rep)
 {
     if (tilesiz[tilenum].x==0 || tilesiz[tilenum].y==0)
@@ -11120,7 +11120,7 @@ int32_t AutoAlignWalls(int32_t w0, uint32_t flags, int32_t nrecurs)
         cstat0 = wall[w0b].cstat & ALIGN_WALLS_CSTAT_MASK;  // top/bottom orientation; x/y-flip
     }
 
-    int const tilenum = wall[w0b].picnum;
+    uint16_t const tilenum = wall[w0b].picnum;
     int const rotated = wall[w0b].cstat & CSTAT_WALL_ROTATE_90;
 
     //loop through walls at this vertex in point2 order

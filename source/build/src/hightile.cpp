@@ -20,7 +20,7 @@ int32_t usehightile=1;
 //
 // find the index into hicreplc[] which contains the replacement tile particulars
 //
-hicreplctyp *hicfindsubst(int picnum, int palnum, int nozero)
+hicreplctyp *hicfindsubst(uint16_t picnum, int palnum, int nozero)
 {
     if (!hicreplc[picnum] || !hicinitcounter) return nullptr;
 
@@ -45,7 +45,7 @@ hicreplctyp *hicfindsubst(int picnum, int palnum, int nozero)
 // this is separate because it's not worth passing an extra parameter which is "0" in 99.9999% of cases
 // to the regular hicfindsubst() function
 //
-hicreplctyp *hicfindskybox(int picnum, int palnum, int nozero)
+hicreplctyp *hicfindskybox(uint16_t picnum, int palnum, int nozero)
 {
     if (!hicreplc[picnum] || !hicinitcounter) return nullptr;
 
@@ -140,7 +140,7 @@ void hicsetpalettetint(int32_t palnum, char r, char g, char b, char sr, char sg,
 // hicsetsubsttex(picnum,pal,filen,alphacut)
 //   Specifies a replacement graphic file for an ART tile.
 //
-int32_t hicsetsubsttex(int32_t picnum, int32_t palnum, const char *filen, float alphacut, float xscale, float yscale, float specpower, float specfactor, char flags)
+int32_t hicsetsubsttex(uint16_t picnum, int32_t palnum, const char *filen, float alphacut, float xscale, float yscale, float specpower, float specfactor, char flags)
 {
     hicreplctyp *hr, *hrn;
 
@@ -199,7 +199,7 @@ int32_t hicsetsubsttex(int32_t picnum, int32_t palnum, const char *filen, float 
 // hicsetskybox(picnum,pal,faces[6])
 //   Specifies a graphic files making up a skybox.
 //
-int32_t hicsetskybox( int32_t picnum, int32_t palnum, char *faces[6], int32_t flags )
+int32_t hicsetskybox( uint16_t picnum, int32_t palnum, char *faces[6], int32_t flags )
 {
     hicreplctyp *hr, *hrn;
     int32_t j;
@@ -253,7 +253,7 @@ int32_t hicsetskybox( int32_t picnum, int32_t palnum, char *faces[6], int32_t fl
 // hicclearsubst(picnum,pal)
 //   Clears a replacement for an ART tile, including skybox faces.
 //
-int32_t hicclearsubst(int32_t picnum, int32_t palnum)
+int32_t hicclearsubst(uint16_t picnum, int32_t palnum)
 {
     hicreplctyp *hr, *hrn = NULL;
 

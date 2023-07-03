@@ -257,7 +257,7 @@ int32_t hicprecaching = 0;
 hitdata_t polymost_hitdata;
 
 #if 0
-static inline int32_t gltexmayhavealpha(int32_t dapicnum, int32_t dapalnum)
+static inline int32_t gltexmayhavealpha(uint16_t dapicnum, int32_t dapalnum)
 {
     const int32_t j = (dapicnum&(GLTEXCACHEADSIZ-1));
     pthtyp *pth;
@@ -270,7 +270,7 @@ static inline int32_t gltexmayhavealpha(int32_t dapicnum, int32_t dapalnum)
 }
 #endif
 
-void gltexinvalidate(int32_t dapicnum, int32_t dapalnum, int32_t dameth)
+void gltexinvalidate(uint16_t dapicnum, int32_t dapalnum, int32_t dameth)
 {
     const int32_t pic = (dapicnum&(GLTEXCACHEADSIZ-1));
 
@@ -971,7 +971,7 @@ void polymost_glinit()
     {
         // add a blank texture for tileUID 0
         tilepacker_addTile(0, 2, 2);
-        for (int picnum = 0; picnum < MAXTILES; ++picnum)
+        for (uint16_t picnum = 0; picnum < MAXTILES; ++picnum)
         {
             tilepacker_addTile(picnum+1, (uint32_t) tilesiz[picnum].y, (uint32_t) tilesiz[picnum].x);
         }
@@ -1962,7 +1962,7 @@ void uploadpalswap(int32_t palookupnum)
 
 #if 0
 // TODO: make configurable
-static int32_t tile_is_sky(int32_t tilenum)
+static int32_t tile_is_sky(uint16_t tilenum)
 {
     return return (tilenum >= 78 /*CLOUDYOCEAN*/ && tilenum <= 99 /*REDSKY2*/);
 }
@@ -1996,7 +1996,7 @@ static void polymost_setuptexture(const int32_t dameth, int filter)
     }
 }
 
-static void gloadtile_art_indexed(int32_t dapic, int32_t dameth, pthtyp *pth, int32_t doalloc)
+static void gloadtile_art_indexed(uint16_t dapic, int32_t dameth, pthtyp *pth, int32_t doalloc)
 {
     vec2_16_t const & tsizart = tilesiz[dapic];
     vec2_t siz = { tsizart.x, tsizart.y };
@@ -2069,7 +2069,7 @@ static void gloadtile_art_indexed(int32_t dapic, int32_t dameth, pthtyp *pth, in
     pth->siz = siz;
 }
 
-void gloadtile_art(int32_t dapic, int32_t dapal, int32_t tintpalnum, int32_t dashade, int32_t dameth, pthtyp *pth, int32_t doalloc)
+void gloadtile_art(uint16_t dapic, int32_t dapal, int32_t tintpalnum, int32_t dashade, int32_t dameth, pthtyp *pth, int32_t doalloc)
 {
     if (dameth & DAMETH_INDEXED)
     {
@@ -2465,7 +2465,7 @@ coltype *gloadtruecolortile_mdloadskin_shared(char *fn, int32_t picfillen, vec2_
     return pic;
 }
 
-int32_t gloadtile_hi(int32_t dapic, int32_t dapalnum, int32_t facen, hicreplctyp* hicr,
+int32_t gloadtile_hi(uint16_t dapic, int32_t dapalnum, int32_t facen, hicreplctyp* hicr,
                             int32_t dameth, pthtyp *pth, int32_t doalloc, polytintflags_t effect)
 {
     if (!hicr) return -1;
@@ -5174,7 +5174,7 @@ static void polymost_flatskyrender(vec2f_t const* const dpxy, int32_t const n, i
 
     polymost_setClamp((npot || xpanning != 0) ? 0 : 2);
 
-    int picnumbak = globalpicnum;
+    uint16_t picnumbak = globalpicnum;
     int32_t const ogclipdist = globalclipdist;
     globalclipdist = 0;
     ti = globalpicnum;
@@ -8858,7 +8858,7 @@ void polymost_dorotatespritemodel(int32_t sx, int32_t sy, int32_t z, int16_t a, 
     float d, cosang, sinang, cosang2, sinang2;
     float m[4][4];
 
-    const int32_t tilenum = Ptile2tile(picnum, dapalnum);
+    const uint16_t tilenum = Ptile2tile(picnum, dapalnum);
 
     if (tile2model[tilenum].modelid == -1 || tile2model[tilenum].framenum == -1)
         return;
@@ -9107,7 +9107,7 @@ void polymost_dorotatesprite(int32_t sx, int32_t sy, int32_t z, int16_t a, uint1
     polymost_setClamp(1+2);
     polymost_setVisibility(globvis2);
 
-    int32_t const ogpicnum = globalpicnum;
+    uint16_t const ogpicnum = globalpicnum;
     globalpicnum = picnum;
     int32_t const  ogshade = globalshade;
     globalshade = dashade;
@@ -9593,7 +9593,7 @@ void polymost_fillpolygon(int32_t npoints)
     }
 }
 
-int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, int32_t wallnum, int32_t dimen, int32_t tilezoom,
+int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, uint16_t tilenum, int32_t dimen, int32_t tilezoom,
                                 int32_t usehitile, uint8_t *loadedhitile)
 {
     float xdime, ydime, xdimepad, ydimepad, scx, scy, ratio = 1.f;
@@ -9603,21 +9603,21 @@ int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, int32_t wallnum, i
     if (videoGetRenderMode() < REND_POLYMOST || !in3dmode())
         return -1;
 
-    buildgl_outputDebugMessage(3, "polymost_drawtilescreen(tilex:%d, tiley:%d, wallnum:%d, dimen:%d, tilezoom:%d, usehitile:%d, loadedhitile:%p)",
-                                  tilex, tiley, wallnum, dimen, tilezoom, usehitile, loadedhitile);
+    buildgl_outputDebugMessage(3, "polymost_drawtilescreen(tilex:%d, tiley:%d, tilenum:%d, dimen:%d, tilezoom:%d, usehitile:%d, loadedhitile:%p)",
+                                  tilex, tiley, tilenum, dimen, tilezoom, usehitile, loadedhitile);
 
     if (!glinfo.texnpot)
     {
-        i = (1<<(picsiz[wallnum]&15)); if (i < tilesiz[wallnum].x) i += i; xdimepad = (float)i;
-        i = (1<<(picsiz[wallnum]>>4)); if (i < tilesiz[wallnum].y) i += i; ydimepad = (float)i;
+        i = (1<<(picsiz[tilenum]&15)); if (i < tilesiz[tilenum].x) i += i; xdimepad = (float)i;
+        i = (1<<(picsiz[tilenum]>>4)); if (i < tilesiz[tilenum].y) i += i; ydimepad = (float)i;
     }
     else
     {
-        xdimepad = (float)tilesiz[wallnum].x;
-        ydimepad = (float)tilesiz[wallnum].y;
+        xdimepad = (float)tilesiz[tilenum].x;
+        ydimepad = (float)tilesiz[tilenum].y;
     }
-    xdime = (float)tilesiz[wallnum].x; xdimepad = xdime/xdimepad;
-    ydime = (float)tilesiz[wallnum].y; ydimepad = ydime/ydimepad;
+    xdime = (float)tilesiz[tilenum].x; xdimepad = xdime/xdimepad;
+    ydime = (float)tilesiz[tilenum].y; ydimepad = ydime/ydimepad;
 
     if ((xdime <= dimen) && (ydime <= dimen))
     {
@@ -9636,9 +9636,9 @@ int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, int32_t wallnum, i
 
     int32_t const ousehightile = usehightile;
     usehightile = usehitile && usehightile;
-    pth = texcache_fetch(wallnum, 0, 0, DAMETH_CLAMPED | (videoGetRenderMode() == REND_POLYMOST && polymost_useindexedtextures() ? DAMETH_INDEXED : 0));
+    pth = texcache_fetch(tilenum, 0, 0, DAMETH_CLAMPED | (videoGetRenderMode() == REND_POLYMOST && polymost_useindexedtextures() ? DAMETH_INDEXED : 0));
     if (usehightile)
-        bitmap_set(loadedhitile, wallnum);
+        bitmap_set(loadedhitile, tilenum);
     usehightile = ousehightile;
 
     if (pth)
@@ -10077,7 +10077,7 @@ void polymost_initosdfuncs(void)
         OSD_RegisterCvar(&cvars_polymost[i], (cvars_polymost[i].flags & CVAR_FUNCPTR) ? osdcmd_cvar_set_polymost : osdcmd_cvar_set);
 }
 
-void polymost_precache(int32_t dapicnum, int32_t dapalnum, int32_t datype)
+void polymost_precache(uint16_t dapicnum, int32_t dapalnum, int32_t datype)
 {
     // dapicnum and dapalnum are like you'd expect
     // datype is 0 for a wall/floor/ceiling and 1 for a sprite
@@ -10108,12 +10108,12 @@ void polymost_precache(int32_t dapicnum, int32_t dapalnum, int32_t datype)
 
 #include "compat.h"
 
-int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, int32_t wallnum, int32_t dimen,
+int32_t polymost_drawtilescreen(int32_t tilex, int32_t tiley, uint16_t tilenum, int32_t dimen,
                                 int32_t usehitile, uint8_t *loadedhitile)
 {
     UNREFERENCED_PARAMETER(tilex);
     UNREFERENCED_PARAMETER(tiley);
-    UNREFERENCED_PARAMETER(wallnum);
+    UNREFERENCED_PARAMETER(tilenum);
     UNREFERENCED_PARAMETER(dimen);
     UNREFERENCED_PARAMETER(usehitile);
     UNREFERENCED_PARAMETER(loadedhitile);
