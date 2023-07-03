@@ -1039,7 +1039,7 @@ void S_StopEnvSound(int soundNum, int spriteNum)
         
         for (j=0; j < MAXSOUNDINSTANCES; ++j)
         {
-            if (bitmap_test(&g_sounds[soundNum]->playing, j) == 0)
+            if (!bitmap_test(&g_sounds[soundNum]->playing, j))
                 continue;
 
             auto &voice = g_sounds[soundNum]->voices[j];
@@ -1090,7 +1090,7 @@ void S_ChangeSoundPitch(int soundNum, int spriteNum, int pitchoffset)
 
     for (int j=0; j < MAXSOUNDINSTANCES; ++j)
     {
-        if (bitmap_test(&g_sounds[soundNum]->playing, j) == 0)
+        if (!bitmap_test(&g_sounds[soundNum]->playing, j))
             continue;
 
         auto &voice = g_sounds[soundNum]->voices[j];
@@ -1154,7 +1154,7 @@ void S_Update(void)
         {
             auto &voice = g_sounds[sndnum]->voices[j];
 
-            if (bitmap_test(&g_sounds[sndnum]->playing, j) == 0)
+            if (!bitmap_test(&g_sounds[sndnum]->playing, j))
                 continue;
             
             // this is incremented here as a way to track how long the sound has been playing for ownerless sounds
