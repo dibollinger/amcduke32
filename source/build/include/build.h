@@ -547,7 +547,7 @@ typedef struct {
         uint64_t ptrfill;
 #endif
     };
-    
+
     float    alpha;
     uint16_t flags;
 
