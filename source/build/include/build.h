@@ -93,9 +93,11 @@ enum rendmode_t {
 #define MAXWALLSB ((MAXWALLS>>2)+(MAXWALLS>>3))
 
 #define MAPVERSION_FLAG_AMC4_0 0x1000
+#define MAPVERSION_FLAG_AMC5_0 0x2000
 #define EDUKE32_MAXTILES 30720
+#define AMC4_0_MAXTILES 32512
 
-#define MAXTILES 44800 // Increased from 30720
+#define MAXTILES 44800 // Up to TILES174.ART
 #define MAXUSERTILES (MAXTILES-256)  // reserve 256 tiles at the end
 
 #define MAXVOXELS 1024
