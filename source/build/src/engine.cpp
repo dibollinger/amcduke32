@@ -10843,9 +10843,8 @@ static void check_sprite(int32_t i)
     }
     else if ((unsigned)sprite[i].picnum >= MAXTILES)
     {
-        LOG_F(ERROR, "Error in map file: sprite #%d (%d,%d) with illegal picnum (%d) was REMOVED.",
-                   i, TrackerCast(sprite[i].x), TrackerCast(sprite[i].y), TrackerCast(sprite[i].sectnum));
-        remove_sprite(i);
+        LOG_F(ERROR, "Error in map file: sprite #%d (%d,%d) with illegal picnum (%d).",
+                   i, TrackerCast(sprite[i].x), TrackerCast(sprite[i].y), TrackerCast(sprite[i].picnum));
     }
     else if ((unsigned)sprite[i].sectnum >= (unsigned)numsectors)
     {
@@ -10864,6 +10863,15 @@ static void check_sprite(int32_t i)
             LOG_F(ERROR, "Error in map file: sprite #%d (%d,%d) with illegal sector (%d) REMOVED.",
                        i, TrackerCast(sprite[i].x), TrackerCast(sprite[i].y), osectnum);
     }
+}
+
+// AMC-specific: These flags ensure that the map cannot be loaded with an incompatible build.
+static int32_t amc_strip_mapversion_flags(int32_t version)
+{
+    if (version & MAPVERSION_FLAG_AMC4_0)
+        LOG_F(INFO, "Map uses AMCDuke32 v3.5 format (%d > MAXTILES >= %d).", MAXTILES, EDUKE32_MAXTILES);
+
+    return version & ~MAPVERSION_FLAG_AMC4_0;
 }
 
 #ifdef NEW_MAP_FORMAT
@@ -10914,6 +10922,10 @@ int32_t engineLoadBoard(const char *filename, char flags, vec3_t *dapos, int16_t
         {
             // Not map-text. We expect a little-endian version int now.
             mapversion = B_LITTLE32(mapversion);
+
+            // Remove any mapversion flags before processing further.
+            mapversion = amc_strip_mapversion_flags(mapversion);
+
 #ifdef YAX_ENABLE
             ok |= (mapversion==9);
 #endif
@@ -11419,13 +11431,25 @@ static int32_t get_mapversion(void)
     return 7;
 }
 
+
+static int32_t find_max_sprite_picnum(void)
+{
+    int j, maxpicnum = 0;
+    for (j=0; j<MAXSPRITES; j++) 
+    {
+        if (sprite[j].statnum != MAXSTATUS && sprite[j].picnum > maxpicnum)
+            maxpicnum = sprite[j].picnum;
+    }
+    return maxpicnum;
+}
+
 //
 // saveboard
 //
 int32_t saveboard(const char *filename, const vec3_t *dapos, int16_t daang, int16_t dacursectnum)
 {
     int16_t numsprites, ts;
-    int32_t i, j, tl;
+    int32_t i, j, tl, maxpicnum;
 
     // First, some checking.
     for (j=0; j<MAXSPRITES; j++)
@@ -11477,7 +11501,14 @@ int32_t saveboard(const char *filename, const vec3_t *dapos, int16_t daang, int1
         return -1;
     }
 
+    // if highest tilenum is greater than MAXTILES of prior versions, flag stored mapversion
+    maxpicnum = find_max_sprite_picnum();
+    if (maxpicnum >= EDUKE32_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC4_0;
+
     tl = B_LITTLE32(mapversion);    buildvfs_write(fil,&tl,4);
+
+    // restore proper mapversion
+    mapversion = amc_strip_mapversion_flags(mapversion);
 
     tl = B_LITTLE32(dapos->x);      buildvfs_write(fil,&tl,4);
     tl = B_LITTLE32(dapos->y);      buildvfs_write(fil,&tl,4);
@@ -14765,4 +14796,3 @@ void tileInvalidate(int16_t tilenume, int32_t pal, int32_t how)
 /*
  * vim:ts=8:
  */
-

@@ -1300,11 +1300,8 @@ end_wall_loop_checks:
         if (sprite[i].statnum<0 || sprite[i].statnum>MAXSTATUS)
             CORRUPTCHK_PRINT(4, CORRUPT_SPRITE|i, "SPRITE[%d].STATNUM=%d. Expect problems!", i, TrackerCast(sprite[i].statnum));
 
-        if (sprite[i].picnum<0 || sprite[i].picnum>=MAXTILES)
-        {
-            sprite[i].picnum = 0;
-            CORRUPTCHK_PRINT(0, CORRUPT_SPRITE|i, "SPRITE[%d].PICNUM=%d out of range, resetting to 0", i, TrackerCast(sprite[i].picnum));
-        }
+        if (sprite[i].picnum<0 || sprite[i].picnum >= MAXTILES)
+            CORRUPTCHK_PRINT(0, CORRUPT_SPRITE|i, "SPRITE[%d].PICNUM=%d out of range.", i, TrackerCast(sprite[i].picnum));
 
         if (corruptcheck_game_duke3d)
         {
