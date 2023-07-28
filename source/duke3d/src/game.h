@@ -423,8 +423,8 @@ void P_SetGamePalette(DukePlayer_t *player, uint32_t palid, int32_t set);
 // 2048+(32+16)+8+4
 #define SPAWN_PROTECT_CSTAT_MASK (CSTAT_SPRITE_NOSHADE|CSTAT_SPRITE_ALIGNMENT_SLAB|CSTAT_SPRITE_XFLIP|CSTAT_SPRITE_YFLIP);
 
-void fadepal(uint8_t r, uint8_t g, uint8_t b,uint8_t start,uint8_t end,uint8_t step);
-//void fadepaltile(int32_t r,int32_t g,int32_t b,int32_t start,int32_t end,int32_t step,uint16_t tile);
+void fadepal(int32_t r,int32_t g,int32_t b,int32_t start,int32_t end,int32_t step);
+//void fadepaltile(int32_t r,int32_t g,int32_t b,int32_t start,int32_t end,int32_t step,int32_t tile);
 void G_InitTimer(int32_t ticspersec);
 
 static inline int G_GetTeamPalette(int team)
