@@ -98,7 +98,7 @@ void VM_ScriptInfo(intptr_t const * const ptr, int const range)
                 p_end   = min<intptr_t const *>(ptr + (range >> 1) + (range >> 2), apScript + g_scriptSize);
             pScript < p_end;
             ++pScript)
-    {        
+    {
         auto &v = *pScript;
         int const lineNum = VM_DECODE_LINE_NUMBER(v);
         int const vmInst  = VM_DECODE_INST(v);
@@ -490,7 +490,7 @@ void VM_GetZRange(int const spriteNum, int32_t* const ceilhit, int32_t* const fl
 
     pSprite->cstat = 0;
     pSprite->z -= AC_FZOFFSET(spriteNum);
-    
+
     getzrange(&pSprite->xyz, pSprite->sectnum, &pActor->ceilingz, ceilhit, &pActor->floorz, florhit, wallDist, CLIPMASK0);
 
     pSprite->z += AC_FZOFFSET(spriteNum);
@@ -1466,7 +1466,7 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 #endif
         int32_t tw = *insptr;
         g_tw = tw;
-        
+
         int const decoded = VM_DECODE_INST(tw);
 #if 0 && defined CON_USE_COMPUTED_GOTO
         // this is broken without CON_USE_COMPUTED_GOTO because it never goes out of scope
@@ -1869,6 +1869,18 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 insptr += 2;
                 dispatch();
 
+            vInstruction(CON_WHILEVARE_GLOBAL):
+            {
+                auto const savedinsptr = &insptr[2];
+                do
+                {
+                    insptr = savedinsptr;
+                    tw = (aGameVars[insptr[-1]].global == *insptr);
+                    branch(tw);
+                } while (tw && (vm.flags & VM_RETURN) == 0);
+                dispatch();
+            }
+
             vInstruction(CON_WHILEVARN_GLOBAL):
             {
                 auto const savedinsptr = &insptr[2];
@@ -1890,6 +1902,20 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (aGameVars[insptr[-1]].global < *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & VM_RETURN) == 0);
+                dispatch();
+            }
+
+            vInstruction(CON_WHILEVARE_ACTOR):
+            {
+                auto const savedinsptr = &insptr[2];
+                auto &v = aGameVars[savedinsptr[-1]].pValues[vm.spriteNum & (MAXSPRITES-1)];
+                do
+                {
+                    insptr = savedinsptr;
+                    tw = (v == *insptr);
+                    branch(tw);
+                } while (tw && (vm.flags & VM_RETURN) == 0);
+
                 dispatch();
             }
 
@@ -1915,6 +1941,20 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 {
                     insptr = savedinsptr;
                     tw = (v < *insptr);
+                    branch(tw);
+                } while (tw && (vm.flags & VM_RETURN) == 0);
+
+                dispatch();
+            }
+
+            vInstruction(CON_WHILEVARE_PLAYER):
+            {
+                auto const savedinsptr = &insptr[2];
+                auto &v = aGameVars[savedinsptr[-1]].pValues[vm.playerNum & (MAXPLAYERS-1)];
+                do
+                {
+                    insptr = savedinsptr;
+                    tw = (v == *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & VM_RETURN) == 0);
 
@@ -2281,6 +2321,31 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 insptr--;
                 branch(tw);
                 dispatch();
+
+            vInstruction(CON_WHILEVARE):
+            {
+                auto const savedinsptr = &insptr[2];
+                do
+                {
+                    insptr = savedinsptr;
+                    branch((tw = (Gv_GetVar(insptr[-1]) == *insptr)));
+                } while (tw && (vm.flags & VM_RETURN) == 0);
+                dispatch();
+            }
+
+            vInstruction(CON_WHILEVARVARE):
+            {
+                auto const savedinsptr = &insptr[2];
+                do
+                {
+                    insptr = savedinsptr;
+                    tw = Gv_GetVar(insptr[-1]);
+                    tw = (tw == Gv_GetVar(*insptr++));
+                    insptr--;
+                    branch(tw);
+                } while (tw && (vm.flags & VM_RETURN) == 0);
+                dispatch();
+            }
 
             vInstruction(CON_WHILEVARN):
             {
@@ -3946,7 +4011,7 @@ badindex:
                         return false;
                     };
 
-                    auto getjoyname = [&](void) 
+                    auto getjoyname = [&](void)
                     {
                         char const *joyname = CONFIG_GetGameFuncOnJoystick(gameFunc);
                         if (joyname != nullptr && joyname[0] != '\0')
@@ -3979,7 +4044,7 @@ badindex:
                         int32_t outputQuote, inputQuote, quotePos, quoteLength;
                     } v;
                     Gv_FillWithVars(v);
-                    
+
                     VM_ABORT_IF(bad_quote(v.outputQuote) | bad_quote(v.inputQuote),
                               "invalid quote %d", (unsigned)v.outputQuote < MAXQUOTES && apStrings[v.outputQuote] ? v.inputQuote : v.outputQuote);
                     VM_ABORT_IF((unsigned)v.quotePos >= MAXQUOTELEN, "invalid position %d", v.quotePos);
@@ -4814,7 +4879,7 @@ badindex:
                         int32_t secondSector;
                     } v;
                     Gv_FillWithVars(v);
-                    
+
                     int32_t returnvar = *insptr++;
                     int32_t wallmask = Gv_GetVar(*insptr++);
 
@@ -5951,7 +6016,7 @@ badindex:
                 {
                     tw = *insptr++;
                     int const arrayIndex = Gv_GetVar(*insptr++);
-                    VM_ABORT_IF(((unsigned)tw >= (unsigned)g_gameArrayCount) | ((unsigned)arrayIndex >= (unsigned)aGameArrays[tw & (MAXGAMEARRAYS-1)].size), 
+                    VM_ABORT_IF(((unsigned)tw >= (unsigned)g_gameArrayCount) | ((unsigned)arrayIndex >= (unsigned)aGameArrays[tw & (MAXGAMEARRAYS-1)].size),
                               "invalid array %d or index %d", tw, arrayIndex);
 
                     SetArray(tw, arrayIndex, Gv_GetVar(*insptr++));
@@ -6632,7 +6697,7 @@ badindex:
                 insptr++;
                 tw = Gv_GetVar(*insptr++);
 
-                VM_ABORT_IF(bad_quote(tw), "invalid quote %d", (int)tw);               
+                VM_ABORT_IF(bad_quote(tw), "invalid quote %d", (int)tw);
                 VLOG_F(LOG_VM, "%s", apStrings[tw]);
                 dispatch();
 
@@ -6821,7 +6886,7 @@ void VM_UpdateAnim(int const spriteNum, int32_t * const pData)
 {
     size_t const actionofs = AC_ACTION_ID(pData);
     auto const   actionptr = &apScript[actionofs];
-    
+
     if ((actionofs == 0) | (actionofs + (ACTION_PARAM_COUNT-1) >= (unsigned) g_scriptSize))
         return;
 
