@@ -390,7 +390,7 @@ static int GetAutoAimAng(int spriteNum, int playerNum, uint16_t projecTile, int 
 
 static void Proj_DirectSpawn(int spriteNum, uint16_t projecTile, const hitdata_t *hitData)
 {
-    if (projecTile >= 0)
+    if (projecTile < MAXTILES)
     {
         int spawned = A_Spawn(spriteNum, projecTile);
         A_SetHitData(spawned, hitData);
