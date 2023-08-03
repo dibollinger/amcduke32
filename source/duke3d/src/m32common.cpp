@@ -1881,7 +1881,7 @@ void m32_showmouse()
 
     int const lores = !!(xdim <= 640);
     int col = batmanandthrobbin();
-    int i; 
+    int i;
 
     for (i = 1; i <= (7 >> lores); i++)
     {

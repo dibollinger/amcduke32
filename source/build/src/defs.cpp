@@ -1967,7 +1967,7 @@ static int32_t defsparser(scriptfile *script)
 #endif
                     break;
                 }
-                
+
                 case T_NOTRANS:
                     voxflags[lastvoxid] |= VF_NOTRANS;
                     break;

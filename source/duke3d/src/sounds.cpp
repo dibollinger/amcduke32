@@ -90,7 +90,7 @@ void S_SoundStartup(void)
         LOG_F(ERROR, "Failed initializing sound subsystem: %s", FX_ErrorString(status));
         return;
     }
-    
+
     freeSlotReadIndex = freeSlotWriteIndex = localQueueIndex = 0;
 #ifndef NDEBUG
     freeSlotPendingCnt = 0;
@@ -494,7 +494,7 @@ void S_Cleanup(void)
         auto &snd   = g_sounds[num];
         auto &voice = snd->voices[voiceindex];
         int const spriteNum = voice.owner;
-        
+
         DVLOG_IF_F(LOG_DEBUG, !bitmap_test(&snd->playing, voiceindex), "Sound %d index %d is not playing", num, voiceindex);
         bitmap_clear(&snd->playing, voiceindex);
 
@@ -652,7 +652,7 @@ static inline int S_GetPitch(int num)
 }
 
 static void S_AllocVoiceInfo(sound_t *snd)
-{   
+{
     snd->voices = (voiceinfo_t*) Xcalloc(MAXSOUNDINSTANCES, sizeof(voiceinfo_t));
     for (int i=0; i<MAXSOUNDINSTANCES; ++i)
         snd->voices[i] = nullvoice;
@@ -661,27 +661,27 @@ static void S_AllocVoiceInfo(sound_t *snd)
 static int S_GetSlot(int soundNum)
 {
     auto &snd = g_sounds[soundNum];
-    
+
     if (snd->voices == &nullvoice)
         S_AllocVoiceInfo(snd);
 
     int slot = 0, dist = 0, position = 0;
     int bestslot = MAXSOUNDINSTANCES;
-    
+
     if (snd->playing == 0)
         goto done;
-    
+
     do
     {
         if (!bitmap_test(&snd->playing, slot))
             goto done;
     }
     while (++slot < MAXSOUNDINSTANCES);
-    
+
     S_Cleanup();
 
     slot = 0;
-    
+
     if (snd->playing != 0xff)
     {
         do
@@ -692,7 +692,7 @@ static int S_GetSlot(int soundNum)
         while (++slot < MAXSOUNDINSTANCES);
         slot = 0;
     }
-    
+
     do
     {
         auto &voice = snd->voices[slot];
@@ -712,10 +712,10 @@ static int S_GetSlot(int soundNum)
         }
     }
     while (++slot < MAXSOUNDINSTANCES);
-    
+
     if (bestslot == MAXSOUNDINSTANCES)
         return MAXSOUNDINSTANCES;
-    
+
     slot = bestslot;
     FX_StopSound(snd->voices[slot].handle, false);
 
@@ -864,13 +864,13 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
         int slot = 0;
         while (slot < MAXSOUNDINSTANCES && snd->voices[slot].handle != voice)
             slot++;
-        
+
         if (EDUKE32_PREDICT_FALSE(slot >= MAXSOUNDINSTANCES))
         {
             LOG_F(WARNING, "S_PlaySound3D: slot >= MAXSOUNDINSTANCES!");
             return -1;
-        }        
-            
+        }
+
         snd->voices[slot].owner = spriteNum;
 
         return voice;
@@ -938,7 +938,7 @@ error:
         g_soundlocks[sndNum]--;
 #endif
         return -1;
-    }        
+    }
 
     S_FillVoiceInfo(&snd->voices[sndSlot], spriteNum, -1, sndist >> 6);
 
@@ -995,7 +995,7 @@ error:
 #endif
         return -1;
     }
-        
+
     if (snd->flags & SF_TALK)
         g_dukeTalk = true;
 
@@ -1032,11 +1032,11 @@ void S_StopEnvSound(int soundNum, int spriteNum)
 
     int j;
 
-    do 
+    do
     {
         if (g_sounds[soundNum]->playing == 0)
             return;
-        
+
         for (j=0; j < MAXSOUNDINSTANCES; ++j)
         {
             if (!bitmap_test(&g_sounds[soundNum]->playing, j))
@@ -1156,7 +1156,7 @@ void S_Update(void)
 
             if (!bitmap_test(&g_sounds[sndnum]->playing, j))
                 continue;
-            
+
             // this is incremented here as a way to track how long the sound has been playing for ownerless sounds
             if ((unsigned)(spriteNum = voice.owner) >= MAXSPRITES)
             {
@@ -1187,7 +1187,7 @@ void S_Callback(intptr_t num)
     if ((unsigned)num < (MAXSOUNDS * MAXSOUNDINSTANCES))
     {
         int const voiceindex = num & (MAXSOUNDINSTANCES-1);
-        int const anum = (num - voiceindex) / MAXSOUNDINSTANCES;    
+        int const anum = (num - voiceindex) / MAXSOUNDINSTANCES;
 
         if (!bitmap_test(&g_sounds[anum]->playing, voiceindex))
         {
@@ -1249,7 +1249,7 @@ int A_CheckAnySoundPlaying(int spriteNum)
 
         if ((snd == &nullsound) | (snd->playing == 0))
             continue;
-        
+
         for (int j = 0; j < MAXSOUNDINSTANCES; ++j)
             if (bitmap_test(&snd->playing, j) && snd->voices[j].owner == spriteNum)
                 return 1;
