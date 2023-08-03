@@ -349,7 +349,7 @@ memberlabel_t const TsprLabels[] =
     LABEL(sprite, extra,    "tsprextra",    ACTOR_EXTRA),
 };
 
-memberlabel_t const PlayerLabels[] = 
+memberlabel_t const PlayerLabels[] =
 {
     MEMBER(g_player[0].ps, zoom,                        PLAYER_ZOOM),
     {                                "loogiex",         PLAYER_LOOGIEX, LABEL_HASPARM2, (int16_t)MAX_LOOGIES, -1 },
