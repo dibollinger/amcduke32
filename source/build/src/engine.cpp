@@ -1788,9 +1788,8 @@ static inline uint16_t findUnusedTile(void)
     static int lastUnusedTile = MAXUSERTILES-1;
 
     for (; lastUnusedTile >= 0; --lastUnusedTile)
-        if ((tilesiz[lastUnusedTile].x|tilesiz[lastUnusedTile].y) == 0)
+        if ((tilesiz[lastUnusedTile].x|tilesiz[lastUnusedTile].y) == 0 && !waloff[lastUnusedTile])
             return (uint16_t) lastUnusedTile;
-
     return MAXTILES;
 }
 
@@ -9462,25 +9461,25 @@ int32_t renderDrawRoomsQ16(int32_t daposx, int32_t daposy, int32_t daposz,
 
     for (int i = 0; i < numwalls; ++i)
     {
-        if (wall[i].cstat & CSTAT_WALL_ROTATE_90)
+        if ((wall[i].cstat & CSTAT_WALL_ROTATE_90) != CSTAT_WALL_ROTATE_90)
+            continue;
+
+        auto &w    = wall[i];
+        auto &tile = rottile[w.picnum+animateoffs(w.picnum)];
+
+        if (tile.newtile >= MAXTILES)
         {
-            auto &w    = wall[i];
-            auto &tile = rottile[w.picnum+animateoffs(w.picnum)];
+            tile.newtile = findUnusedTile();
+            Bassert(tile.newtile < MAXTILES);
 
-            if (tile.newtile >= MAXTILES && tile.owner >= MAXTILES)
-            {
-                tile.newtile = findUnusedTile();
-                Bassert(tile.newtile < MAXTILES);
+            rottile[tile.newtile].owner = w.picnum+animateoffs(w.picnum);
 
-                rottile[tile.newtile].owner = w.picnum+animateoffs(w.picnum);
-
-                auto &siz  = tilesiz[w.picnum+animateoffs(w.picnum)];
-                tileSetSize(tile.newtile, siz.x, siz.y);
-
-                tileLoad(tile.newtile);
-                // Bassert(waloff[tile.newtile]);
-            }
+            auto &siz  = tilesiz[w.picnum+animateoffs(w.picnum)];
+            tileSetSize(tile.newtile, siz.y, siz.x);
         }
+
+        if (tile.newtile < MAXTILES && !waloff[tile.newtile])
+            tileLoad(tile.newtile);
     }
 
 #ifdef USE_OPENGL
