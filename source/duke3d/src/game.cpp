@@ -751,7 +751,7 @@ static void G_ReadGLFrame(void)
 
     // Save OpenGL screenshot with Duke3D palette
     // NOTE: maybe need to move this to the engine...
-    
+
     static char lock;
     static palette_t *frame;
 
@@ -6493,6 +6493,7 @@ static void G_Startup(void)
     if (numplayers > 1)
         VLOG_F(LOG_NET, "Multiplayer initialized.");
 
+    LOG_F(INFO, "Initializing ART files...");
     if (artLoadFiles("tiles000.art",MAXCACHE1DSIZE) < 0)
         G_GameExit("Failed loading art.");
 
@@ -6701,7 +6702,7 @@ static void drawframe_entry(mco_coro *co)
         for (auto &gv : aGameVars)
         {
             if ((gv.flags & (GAMEVAR_USER_MASK|GAMEVAR_PTR_MASK)) == 0)
-            {            
+            {
                 MICROPROFILE_COUNTER_SET(gv.szLabel, gv.global);
             }
         }
@@ -7039,6 +7040,7 @@ int app_main(int argc, char const* const* argv)
         Xfree(m);
     g_defModules.clear();
 
+    LOG_F(INFO, "Precaching sound files...");
     cacheAllSounds();
 
     if (enginePostInit())
@@ -7314,7 +7316,7 @@ MAIN_LOOP_RESTART:
 
         if (((g_netClient || g_netServer) || (myplayer.gm & (MODE_MENU|MODE_DEMO)) == 0) && (int32_t)(totalclock - ototalclock) >= TICSPERFRAME)
         {
-            do 
+            do
             {
                 if (g_networkMode != NET_DEDICATED_SERVER && (myplayer.gm & (MODE_MENU | MODE_DEMO)) == 0)
                 {
