@@ -13102,23 +13102,6 @@ int32_t lastwall(int16_t point)
 
 ////////// UPDATESECTOR* FAMILY OF FUNCTIONS //////////
 
-/* Different "is inside" predicates.
- * NOTE: The redundant bound checks are expected to be optimized away in the
- * inlined code. */
-
-static FORCE_INLINE CONSTEXPR int inside_exclude_p(int32_t const x, int32_t const y, int const sectnum, const uint8_t *excludesectbitmap)
-{
-    return (sectnum>=0 && !bitmap_test(excludesectbitmap, sectnum) && inside_p(x, y, sectnum));
-}
-
-/* NOTE: no bound check */
-static inline int inside_z_p(int32_t const x, int32_t const y, int32_t const z, int const sectnum)
-{
-    int32_t cz, fz;
-    getzsofslope(sectnum, x, y, &cz, &fz);
-    return (z >= cz && z <= fz && inside_p(x, y, sectnum));
-}
-
 int32_t getwalldist(vec2_t const in, int const wallnum)
 {
     vec2_t closest;
