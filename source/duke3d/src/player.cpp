@@ -4270,6 +4270,7 @@ static void P_ProcessWeapon(int playerNum)
 
     bool const doFire    = (playerBits & BIT(SK_FIRE) && (*weaponFrame) == 0);
     bool const doAltFire = g_player[playerNum].input.extbits & BIT(EK_ALT_FIRE);
+    bool startFiring     = false;
 
     if (doAltFire)
     {
@@ -4308,7 +4309,7 @@ static void P_ProcessWeapon(int playerNum)
                         pPlayer->hbomb_hold_delay = 0;
                         if (pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
                         {
-                            (*weaponFrame) = 1;
+                            startFiring = true;
                             if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                                 A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
                         }
@@ -4316,7 +4317,7 @@ static void P_ProcessWeapon(int playerNum)
 
                     case HANDREMOTE_WEAPON:
                         pPlayer->hbomb_hold_delay = 0;
-                        (*weaponFrame)            = 1;
+                        startFiring               = true;
                         if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                             A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
                         break;
@@ -4364,7 +4365,7 @@ static void P_ProcessWeapon(int playerNum)
                                     {
                                         pPlayer->pos.z = pPlayer->opos.z;
                                         pPlayer->vel.z = 0;
-                                        (*weaponFrame) = 1;
+                                        startFiring    = true;
                                         if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                                         {
                                             A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
@@ -4383,7 +4384,7 @@ static void P_ProcessWeapon(int playerNum)
                     case RPG_WEAPON:
                         if (pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
                         {
-                            (*weaponFrame) = 1;
+                            startFiring = true;
                             if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                                 A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
                         }
@@ -4392,7 +4393,7 @@ static void P_ProcessWeapon(int playerNum)
                     case FLAMETHROWER_WEAPON:
                         if (pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
                         {
-                            (*weaponFrame) = 1;
+                            startFiring = true;
                             if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0 && sector[pPlayer->cursectnum].lotag != ST_2_UNDERWATER)
                                 A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
                         }
@@ -4401,7 +4402,7 @@ static void P_ProcessWeapon(int playerNum)
                     case DEVISTATOR_WEAPON:
                         if (pPlayer->ammo_amount[pPlayer->curr_weapon] > 0)
                         {
-                            (*weaponFrame)            = 1;
+                            startFiring               = true;
                             pPlayer->hbomb_hold_delay = !pPlayer->hbomb_hold_delay;
                             if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                                 A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
@@ -4411,7 +4412,7 @@ static void P_ProcessWeapon(int playerNum)
                     case KNEE_WEAPON:
                         if (dukeAllowQuickKick() || pPlayer->quick_kick == 0)
                         {
-                            (*weaponFrame) = 1;
+                            startFiring = true;
                             if (PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound) > 0)
                                 A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, InitialSound), pPlayer->i);
                         }
@@ -4420,7 +4421,8 @@ static void P_ProcessWeapon(int playerNum)
             }
         }
     }
-    else if (*weaponFrame)
+
+    if (startFiring || *weaponFrame)
     {
         if (PWEAPON(playerNum, pPlayer->curr_weapon, WorksLike) == HANDBOMB_WEAPON)
         {
@@ -4567,7 +4569,8 @@ static void P_ProcessWeapon(int playerNum)
                 if (PWEAPON(playerNum, pPlayer->curr_weapon, Sound2Sound) > 0)
                     A_PlaySound(PWEAPON(playerNum, pPlayer->curr_weapon, Sound2Sound),pPlayer->i);
 
-            if (*weaponFrame == PWEAPON(playerNum, pPlayer->curr_weapon, SpawnTime))
+            if ((*weaponFrame == PWEAPON(playerNum, pPlayer->curr_weapon, SpawnTime))
+                && !(startFiring && (PWEAPON(playerNum, pPlayer->curr_weapon, Flags) & (WEAPON_FIREEVERYTHIRD | WEAPON_FIREEVERYOTHER))))
                 P_DoWeaponSpawn(playerNum);
 
             if ((*weaponFrame) >= PWEAPON(playerNum, pPlayer->curr_weapon, TotalTime))
@@ -4627,7 +4630,9 @@ static void P_ProcessWeapon(int playerNum)
                     }
                 }
             }
-            else if (*weaponFrame >= PWEAPON(playerNum, pPlayer->curr_weapon, FireDelay)
+
+            if (*weaponFrame >= PWEAPON(playerNum, pPlayer->curr_weapon, FireDelay)
+                     && ((*weaponFrame) < PWEAPON(playerNum, pPlayer->curr_weapon, TotalTime))
                      && ((PWEAPON(playerNum, pPlayer->curr_weapon, WorksLike) == KNEE_WEAPON) || pPlayer->ammo_amount[pPlayer->curr_weapon] > 0))
             {
                 if (PWEAPON(playerNum, pPlayer->curr_weapon, Flags) & WEAPON_AUTOMATIC)
