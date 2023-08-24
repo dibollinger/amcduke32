@@ -569,6 +569,7 @@ static tokenmap_t const vm_keywords[] =
     { "switch",                 CON_SWITCH },
     { "swaparrays",             CON_SWAPARRAYS },
     { "swaptrackslot",          CON_SWAPTRACKSLOT },
+    { "terminate",              CON_TERMINATE },
     { "time",                   CON_TIME },
     { "tip",                    CON_TIP },
     { "tossweapon",             CON_TOSSWEAPON },
@@ -6270,6 +6271,7 @@ repeatcase:
             g_scriptPtr--;
             continue;
 
+        case CON_TERMINATE:
         case CON_FALL:
         case CON_GETLASTPAL:
         case CON_GETTEXTURECEILING:
