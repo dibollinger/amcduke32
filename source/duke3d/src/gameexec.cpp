@@ -1882,7 +1882,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (aGameVars[insptr[-1]].global == *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -1894,7 +1895,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (aGameVars[insptr[-1]].global != *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -1906,7 +1908,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (aGameVars[insptr[-1]].global < *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -1919,7 +1922,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v == *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -1933,7 +1937,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v != *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -1947,7 +1952,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v < *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -1961,7 +1967,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v == *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -1975,7 +1982,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v != *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -1989,7 +1997,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     tw = (v < *insptr);
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
 
                 dispatch();
             }
@@ -2334,7 +2343,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 {
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) == *insptr)));
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2348,7 +2358,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (tw == Gv_GetVar(*insptr++));
                     insptr--;
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2359,7 +2370,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 {
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) != *insptr)));
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2373,7 +2385,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (tw != Gv_GetVar(*insptr++));
                     insptr--;
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2384,7 +2397,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                 {
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) < *insptr)));
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2398,7 +2412,8 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (tw < Gv_GetVar(*insptr++));
                     insptr--;
                     branch(tw);
-                } while (tw && (vm.flags & VM_RETURN) == 0);
+                } while (tw && (vm.flags & (VM_RETURN|VM_EXIT)) == 0);
+                vm.flags &= ~VM_EXIT;
                 dispatch();
             }
 
@@ -2832,6 +2847,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
             vInstruction(CON_ENDEVENT):
                 return;
 
+            vInstruction(CON_EXIT):
+                vm.flags |= VM_EXIT;
+                return;
+
             vInstruction(CON_JUMP):  // this is used for event chaining
                 insptr++;
                 tw = Gv_GetVar(*insptr++);
@@ -2901,19 +2920,26 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     auto const pEnd  = insptr + *insptr;
                     auto const pNext = ++insptr;
 
+                    struct controlflow {
+                        uint8_t doBreak;
+                        uint8_t doReturn;
+                    };
+
                     auto execute = [&](int const index) {
                         Gv_SetVar(returnVar, index);
                         insptr = pNext;
                         VM_Execute();
-                        return !!(vm.flags & VM_RETURN);
+
+                        controlflow const ret = {!!(vm.flags & VM_EXIT), !!(vm.flags & VM_RETURN)};
+                        vm.flags &= ~VM_EXIT;
+                        return ret;
                     };
 
                     auto spriteexecute = [&](int const index) {
                         {
                             MICROPROFILE_SCOPE_TOKEN(g_statnumTokens[sprite[index].statnum]);
-                            execute(index);
+                            return execute(index);
                         }
-                        return !!(vm.flags & VM_RETURN);
                     };
 
                     switch (iterType)
@@ -2924,7 +2950,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                                 if (sprite[jj].statnum == MAXSTATUS)
                                     continue;
 
-                                if (spriteexecute(jj))
+                                auto const flags = spriteexecute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
                             }
                             break;
@@ -2934,7 +2963,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                             {
                                 for (native_t kk, SPRITES_OF_STAT_SAFE(statNum, jj, kk))
                                 {
-                                    if (spriteexecute(jj))
+                                    auto const flags = spriteexecute(jj);
+                                    if (flags.doBreak)
+                                        goto breakfor;
+                                    if (flags.doReturn)
                                         return;
                                 }
                             }
@@ -2945,7 +2977,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                             {
                                 for (native_t kk, SPRITES_OF_SECT_SAFE(sectNum, jj, kk))
                                 {
-                                    if (spriteexecute(jj))
+                                    auto const flags = spriteexecute(jj);
+                                    if (flags.doBreak)
+                                        goto breakfor;
+                                    if (flags.doReturn)
                                         return;
                                 }
                             }
@@ -2953,14 +2988,24 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 
                         case ITER_ALLSECTORS:
                             for (native_t jj = 0; jj < numsectors; ++jj)
-                                if (execute(jj))
+                            {
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
+                            }
                             break;
 
                         case ITER_ALLWALLS:
                             for (native_t jj = 0; jj < numwalls; ++jj)
-                                if (execute(jj))
+                            {
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
+                            }
                             break;
 
                         case ITER_ACTIVELIGHTS:
@@ -2970,7 +3015,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                                 if (!prlights[jj].flags.active)
                                     continue;
 
-                                if (execute(jj))
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
                             }
 #endif
@@ -2978,8 +3026,13 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 
                         case ITER_DRAWNSPRITES:
                             for (native_t jj = 0; jj < spritesortcnt; jj++)
-                                if (execute(jj))
+                            {
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
+                            }
                             break;
 
                         case ITER_SPRITESOFSECTOR:
@@ -2988,7 +3041,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 
                             for (native_t kk, SPRITES_OF_SECT_SAFE(nIndex, jj, kk))
                             {
-                                if (spriteexecute(jj))
+                                auto const flags = spriteexecute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
                             }
                             break;
@@ -2999,7 +3055,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 
                             for (native_t kk, SPRITES_OF_STAT_SAFE(nIndex, jj, kk))
                             {
-                                if (spriteexecute(jj))
+                                auto const flags = spriteexecute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
                             }
                             break;
@@ -3009,8 +3068,13 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                                 goto badindex;
 
                             for (native_t jj = sector[nIndex].wallptr, endwall = jj + sector[nIndex].wallnum - 1; jj <= endwall; jj++)
-                                if (execute(jj))
+                            {
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
+                            }
                             break;
 
                         case ITER_LOOPOFWALL:
@@ -3020,7 +3084,10 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                                 int jj = nIndex;
                                 do
                                 {
-                                    if (execute(jj))
+                                    auto const flags = execute(jj);
+                                    if (flags.doBreak)
+                                        goto breakfor;
+                                    if (flags.doReturn)
                                         return;
 
                                     jj = wall[jj].point2;
@@ -3030,14 +3097,20 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
 
                         case ITER_RANGE:
                             for (native_t jj = 0; jj < nIndex; jj++)
-                                if (execute(jj))
+                            {
+                                auto const flags = execute(jj);
+                                if (flags.doBreak)
+                                    goto breakfor;
+                                if (flags.doReturn)
                                     return;
+                            }
                             break;
 badindex:
                             VLOG_F(LOG_VM, "%s:%d: for %s: index %d out of range!", VM_FILENAME(insptr), VM_DECODE_LINE_NUMBER(g_tw), iter_tokens[iterType].token, nIndex);
                             vm.flags |= VM_RETURN;
                             dispatch();
                     }
+breakfor:
                     insptr = pEnd;
                 }
                 dispatch();
