@@ -120,8 +120,18 @@ enum scripttoken_t
     T_LOCALIZATION, T_STRING,
     T_TILEFONT, T_CHARACTER,
     T_TRUENPOT,
-    T_STUB_INTEGER, T_STUB_INTEGER_STRING, T_STUB_BRACES, T_STUB_STRING_BRACES,
     T_NOTRANS,
+
+    // begin downstream
+    // end downstream
+
+    // stubs
+    T_STUB_INTEGER,
+    T_STUB_INTEGER_STRING,
+    T_STUB_BRACES,
+    T_STUB_STRING_BRACES,
+
+    T_END,
 };
 
 static int32_t lastmodelid = -1, lastvoxid = -1, modelskin = -1, lastmodelskin = -1, seenframe = 0;
@@ -394,6 +404,9 @@ static int32_t defsparser(scriptfile *script)
         { "shadefactor",     T_SHADEFACTOR      },
         { "localization",    T_LOCALIZATION     },
         { "tilefont",        T_TILEFONT         },
+
+        // begin downstream
+        // end downstream
 
         // stubs for game-side tokens
         { "globalgameflags", T_STUB_INTEGER     },
@@ -806,6 +819,8 @@ static int32_t defsparser(scriptfile *script)
             uint8_t have_crc32 = 0;
             uint8_t have_size = 0;
             uint8_t tile_flags = 0;
+            // begin downstream
+            // end downstream
 
             static const tokenlist tilefromtexturetokens[] =
             {
@@ -822,6 +837,8 @@ static int32_t defsparser(scriptfile *script)
                 { "ifcrc",           T_IFCRC },
                 { "ifmatch",         T_IFMATCH },
                 { "truenpot",        T_TRUENPOT },
+                // begin downstream
+                // end downstream
             };
 
             if (scriptfile_getsymbol(script,&tile)) break;
@@ -895,6 +912,8 @@ static int32_t defsparser(scriptfile *script)
                 case T_TEXTURE:
                     istexture = 1;
                     break;
+                // begin downstream
+                // end downstream
                 default:
                     break;
                 }
@@ -937,16 +956,21 @@ static int32_t defsparser(scriptfile *script)
 
             if (!fn)
             {
-                // tilefromtexture <tile> { texhitscan }  sets the bit but doesn't change tile data
+                int32_t havemodifier = 0;
+
                 picanm[tile].sf |= flags;
                 picanm[tile].tileflags |= tile_flags;
 
+                havemodifier |= havexoffset;
                 if (havexoffset)
                     picanm[tile].xofs = xoffset;
+                havemodifier |= haveyoffset;
                 if (haveyoffset)
                     picanm[tile].yofs = yoffset;
+                // begin downstream
+                // end downstream
 
-                if (EDUKE32_PREDICT_FALSE(flags == 0 && !havexoffset && !haveyoffset))
+                if (EDUKE32_PREDICT_FALSE(flags == 0 && !havemodifier))
                     LOG_F(ERROR, "%s:%d: tilefromtexture: filename missing",
                                script->filename, scriptfile_getlinum(script,texturetokptr));
                 break;
@@ -975,6 +999,9 @@ static int32_t defsparser(scriptfile *script)
                 picanm[tile].yofs = yoffset;
             else if (texstatus == 0)
                 picanm[tile].yofs = 0;
+
+            // begin downstream
+            // end downstream
         }
         break;
         case T_COPYTILE:
@@ -1374,6 +1401,9 @@ static int32_t defsparser(scriptfile *script)
 
             if (EDUKE32_PREDICT_FALSE(scriptfile_getstring(script,&fn)))
                 break; //voxel filename
+
+            // begin downstream
+            // end downstream
 
             if (EDUKE32_PREDICT_FALSE(nextvoxid == MAXVOXELS))
             {
@@ -1905,12 +1935,17 @@ static int32_t defsparser(scriptfile *script)
                 { "tile1",   T_TILE1   },
                 { "scale",   T_SCALE   },
                 { "notrans", T_NOTRANS },
+                // begin downstream
+                // end downstream
             };
 
             if (EDUKE32_PREDICT_FALSE(scriptfile_getstring(script,&fn)))
                 break; //voxel filename
 
             if (scriptfile_getbraces(script,&voxelend)) break;
+
+            // begin downstream
+            // end downstream
 
             if (EDUKE32_PREDICT_FALSE(nextvoxid == MAXVOXELS))
             {
@@ -1971,6 +2006,9 @@ static int32_t defsparser(scriptfile *script)
                 case T_NOTRANS:
                     voxflags[lastvoxid] |= VF_NOTRANS;
                     break;
+
+                // begin downstream
+                // end downstream
                 }
             }
             lastvoxid = -1;
@@ -3862,13 +3900,16 @@ static int32_t defsparser(scriptfile *script)
             break;
         }
 
+        // begin downstream
+        // end downstream
+
+        // stubs
         case T_STUB_INTEGER:
         {
             int32_t dummy;
             scriptfile_getnumber(script, &dummy);
             break;
         }
-
         case T_STUB_INTEGER_STRING:
         {
             int32_t dummy;
@@ -3881,7 +3922,6 @@ static int32_t defsparser(scriptfile *script)
 
             break;
         }
-
         case T_STUB_BRACES:
         {
             char * blockend;
@@ -3890,7 +3930,6 @@ static int32_t defsparser(scriptfile *script)
             script->textptr = blockend+1;
             break;
         }
-
         case T_STUB_STRING_BRACES:
         {
             char * blockend;
