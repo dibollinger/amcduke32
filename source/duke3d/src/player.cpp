@@ -5981,7 +5981,7 @@ int portableBackupSave(const char * path, const char * name, int volume, int lev
     sjson_context * ctx = sjson_create_context(0, 0, NULL);
     if (!ctx)
     {
-        buildprint("Could not create sjson_context\n");
+        LOG_F(ERROR, "Could not create sjson_context");
         return 1;
     }
 
@@ -6062,7 +6062,7 @@ int portableBackupSave(const char * path, const char * name, int volume, int lev
     char errmsg[256];
     if (!sjson_check(root, errmsg))
     {
-        buildprint(errmsg, "\n");
+        LOG_F(ERROR, "%s", errmsg);
         sjson_destroy_context(ctx);
         return 1;
     }
