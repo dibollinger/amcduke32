@@ -1637,7 +1637,7 @@ int32_t renderAddTsprite(int16_t z, int16_t sectnum)
         (*sortcnt)++;
 
         // now check whether the tsprite needs duplication into another level
-        if ((spr->cstat&48)==32)
+        if ((spr->cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FLOOR)
             return 0;
 
         int16_t cb, fb;
@@ -1795,8 +1795,8 @@ static void classicScanSector(int16_t startsectnum)
 
             vec2_t const s = { spr->x-globalposx, spr->y-globalposy };
 
-            if ((spr->cstat&48) || ((coord_t)s.x*cosglobalang+(coord_t)s.y*singlobalang > 0))
-                if ((spr->cstat&(64+48))!=(64+16) || dmulscale6(sintable[(spr->ang+512)&2047],-s.x, sintable[spr->ang&2047],-s.y) > 0)
+            if ((spr->cstat & CSTAT_SPRITE_ALIGNMENT) || ((coord_t)s.x*cosglobalang+(coord_t)s.y*singlobalang > 0))
+                if ((spr->cstat & (CSTAT_SPRITE_ONE_SIDED|CSTAT_SPRITE_ALIGNMENT)) != (CSTAT_SPRITE_ONE_SIDED|CSTAT_SPRITE_ALIGNMENT_WALL) || dmulscale6(sintable[(spr->ang+512)&2047],-s.x, sintable[spr->ang&2047],-s.y) > 0)
                     if (renderAddTsprite(i, sectnum))
                         break;
         }
@@ -5102,7 +5102,7 @@ static void classicDrawVoxel(int32_t dasprx, int32_t daspry, int32_t dasprz, int
     int32_t zoff = dazsiz<<14;
     if (!(cstat & 128))
         zoff += dazpivot<<7;
-    else if ((cstat&48) != 48)
+    else if ((cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_SLAB)
     {
         zoff += dazpivot<<7;
         zoff -= dazsiz<<14;
@@ -5473,7 +5473,7 @@ static void classicDrawSprite(int32_t snum)
     int32_t cstat=tspr->cstat;
     uint16_t tilenum;
 
-    if ((cstat&48) != 48)
+    if ((cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_SLAB)
         tileUpdatePicnum(&tspr->picnum, spritenum+32768);
 
     if (!(cstat&2) && alpha > 0.0f)
@@ -5501,15 +5501,15 @@ static void classicDrawSprite(int32_t snum)
 
     tilenum = tspr->picnum;
 
-    if ((cstat&48)==48)
+    if ((cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_SLAB)
         vtilenum = tilenum; // if the game wants voxels, it gets voxels
-    else if ((cstat & 48) != 32 && usevoxels && tiletovox[tilenum] != -1 && spritenum != -1 && !(spriteext[spritenum].flags&SPREXT_NOTMD))
+    else if ((cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_FLOOR && usevoxels && tiletovox[tilenum] != -1 && spritenum != -1 && !(spriteext[spritenum].flags&SPREXT_NOTMD))
     {
         vtilenum = tiletovox[tilenum];
-        cstat |= 48;
+        cstat |= CSTAT_SPRITE_ALIGNMENT_SLAB;
     }
 
-    if ((cstat&48) != 48)
+    if ((cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_SLAB)
     {
         if (spritenum < 0 || tilesiz[tilenum].x <= 0 || tilesiz[tilenum].y <= 0)
             return;
@@ -5533,7 +5533,7 @@ static void classicDrawSprite(int32_t snum)
         off.y += tspr->yoffset;
     }
 
-    if ((cstat&48) == 0)
+    if ((cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FACING)
     {
         int32_t startum, startdm;
         int32_t linum, linuminc;
@@ -5720,7 +5720,7 @@ draw_as_face_sprite:
         drawing_sprite = 0;
         globalht = nullptr;
     }
-    else if ((cstat&48) == 16)
+    else if ((cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_WALL)
     {
         const int32_t xspan = tilesiz[tilenum].x;
         const int32_t yspan = tilesiz[tilenum].y;
@@ -6014,7 +6014,7 @@ draw_as_face_sprite:
         drawing_sprite = 0;
         globalht = nullptr;
     }
-    else if ((cstat&48) == 32)
+    else if ((cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FLOOR)
     {
         if ((cstat&64) != 0)
             if ((globalposz > tspriteGetZOfSlope(tspr, globalposx, globalposy)) == ((cstat&8)==0))
@@ -6687,9 +6687,9 @@ next_most:
             globalispow2 = 1;
         }
     }
-    else if ((cstat&48) == 48)
+    else if ((cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_SLAB)
     {
-        const int32_t daxrepeat = ((sprite[spritenum].cstat&48)==16) ?
+        const int32_t daxrepeat = ((sprite[spritenum].cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_WALL) ?
             (tspr->xrepeat * 5) / 4 :
             tspr->xrepeat;
 
@@ -6702,7 +6702,7 @@ next_most:
             lwall[x] = startumost[x+windowxy1.x]-windowxy1.y;
             swall[x] = startdmost[x+windowxy1.x]-windowxy1.y;
         }
-        if ((tspr->cstat & 48) == 16)
+        if ((tspr->cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_WALL)
         {
             const int32_t xspan = tilesiz[tilenum].x;
             //const int32_t yspan = tilesiz[tilenum].y;
@@ -6955,10 +6955,10 @@ next_most:
         off.x = tspr->xoffset;
         off.y = /*picanm[sprite[tspr->owner].picnum].yofs +*/ tspr->yoffset;
         if (cstat & 4) off.x = -off.x;
-        if ((cstat & 8) && (tspr->cstat&48) != 0) off.y = -off.y;
+        if ((cstat & 8) && (tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_FACING) off.y = -off.y;
         tspr->z -= off.y * tspr->yrepeat << 2;
 
-        const float xfactor = (tspr->cstat&48) != 16 ? (256.f/320.f) : 1.f;
+        const float xfactor = (tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_WALL ? (256.f/320.f) : 1.f;
         const int32_t xv = (int32_t)(tspr->xrepeat*sintable[(tspr->ang+2560+1536)&2047]*xfactor);
         const int32_t yv = (int32_t)(tspr->xrepeat*sintable[(tspr->ang+2048+1536)&2047]*xfactor);
 
@@ -7031,11 +7031,12 @@ next_most:
         i = (int32_t)tspr->ang+1536;
         i += spriteext[spritenum].mdangoff;
 
+        const int32_t clipcf = (tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_SLAB;
         const int32_t ceilingz = (sec->ceilingstat&3) == 0 ? sec->ceilingz : INT32_MIN;
         const int32_t floorz = (sec->floorstat&3) == 0 ? sec->floorz : INT32_MAX;
 
         classicDrawVoxel(x,y,z,i,daxrepeat,(int32_t)tspr->yrepeat,vtilenum,
-            tspr->shade,tspr->pal,lwall,swall,tspr->cstat,(tspr->cstat&48)!=48,floorz,ceilingz);
+            tspr->shade,tspr->pal,lwall,swall,tspr->cstat,clipcf,floorz,ceilingz);
     }
 
     if (automapping == 1 && (unsigned)spritenum < MAXSPRITES)
@@ -9790,10 +9791,10 @@ static inline int comparetsprites(int const k, int const l)
 #ifdef USE_OPENGL
     if (videoGetRenderMode() == REND_POLYMOST)
     {
-        if ((kspr->cstat & 48) != (lspr->cstat & 48))
-            return (kspr->cstat & 48) - (lspr->cstat & 48);
+        if ((kspr->cstat & CSTAT_SPRITE_ALIGNMENT) != (lspr->cstat & CSTAT_SPRITE_ALIGNMENT))
+            return (kspr->cstat & CSTAT_SPRITE_ALIGNMENT) - (lspr->cstat & CSTAT_SPRITE_ALIGNMENT);
 
-        if ((kspr->cstat & 48) == 16 && kspr->ang != lspr->ang)
+        if ((kspr->cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_WALL && kspr->ang != lspr->ang)
             return kspr->ang - lspr->ang;
     }
 #endif
@@ -9803,7 +9804,7 @@ static inline int comparetsprites(int const k, int const l)
     if (kspr->x == lspr->x &&
         kspr->y == lspr->y &&
         kspr->z == lspr->z &&
-        (kspr->cstat & 48) == (lspr->cstat & 48) &&
+        (kspr->cstat & CSTAT_SPRITE_ALIGNMENT) == (lspr->cstat & CSTAT_SPRITE_ALIGNMENT) &&
         kspr->owner != lspr->owner)
         return kspr->owner - lspr->owner;
 
@@ -9855,7 +9856,7 @@ static void sortsprites(int const start, int const end)
                 auto const s = tspriteptr[k];
                 int32_t z = s->z;
 
-                if ((s->cstat & 48) != 32)
+                if ((s->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_FLOOR)
                 {
                     int32_t const yoff  = picanm[s->picnum].yofs + s->yoffset;
                     int32_t const yspan = (tilesiz[s->picnum].y * s->yrepeat << 2);
@@ -9921,13 +9922,13 @@ static void PolymostDrawMasks(int32_t numSprites)
         for (bssize_t i = numSprites - 1; i >= spritesortcnt; /* 'i' set at and of loop */)
         {
             int32_t const py = spritesxyz[i].y;
-            int32_t const pcstat = tspriteptr[i]->cstat & 48;
+            int32_t const pcstat = tspriteptr[i]->cstat & CSTAT_SPRITE_ALIGNMENT;
             int32_t const pangle = tspriteptr[i]->ang;
             int j = i - 1;
 
             if (!polymost_spriteIsModelOrVoxel(tspriteptr[i]))
             {
-                while (j >= spritesortcnt && py == spritesxyz[j].y && pcstat == (tspriteptr[j]->cstat & 48) && (pcstat != 16 || pangle == tspriteptr[j]->ang)
+                while (j >= spritesortcnt && py == spritesxyz[j].y && pcstat == (tspriteptr[j]->cstat & CSTAT_SPRITE_ALIGNMENT) && (pcstat != CSTAT_SPRITE_ALIGNMENT_WALL || pangle == tspriteptr[j]->ang)
                     && !polymost_spriteIsModelOrVoxel(tspriteptr[j]))
                 {
                     j--;
@@ -10053,12 +10054,12 @@ static int32_t GetCornerPoints(tspriteptr_t tspr, int32_t (&xx)[4], int32_t (&yy
 
         // Consider face sprites as wall sprites with camera ang.
         // XXX: factor 4/5 needed?
-        if ((tspr->cstat & 48) != 16)
+        if ((tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_WALL)
             tspr->ang = globalang;
 
         get_wallspr_points(tspr, &xx[0], &xx[1], &yy[0], &yy[1]);
 
-        if ((tspr->cstat & 48) != 16)
+        if ((tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_WALL)
             tspr->ang = oang;
     }
 
@@ -10118,7 +10119,7 @@ void renderDrawMasks(void)
 
             spritesxyz[i].x = scale(xp + yp, xdimen << 7, yp);
         }
-        else if ((tspriteptr[i]->cstat & 48) == 0)
+        else if ((tspriteptr[i]->cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FACING)
         {
 killsprite:
 #ifdef USE_OPENGL
@@ -10438,7 +10439,7 @@ void renderDrawMapView(int32_t dax, int32_t day, int32_t zoome, int16_t ang)
                 if (sprite[i].cstat & 32768)
                     continue;
 
-                if ((sprite[i].cstat & 48) >= 32)
+                if (sprite[i].cstat & CSTAT_SPRITE_ALIGNMENT_FLOOR)
                 {
                     if ((sprite[i].cstat & (64 + 8)) == (64 + 8))
                         continue;
@@ -10550,7 +10551,7 @@ void renderDrawMapView(int32_t dax, int32_t day, int32_t zoome, int16_t ang)
     for (s=sortnum-1; s>=0; s--)
     {
         auto const spr = (uspritetype * )&sprite[tsprite[s].owner];
-        if ((spr->cstat&48) >= 32)
+        if (spr->cstat & CSTAT_SPRITE_ALIGNMENT_FLOOR)
         {
             const int32_t xspan = tilesiz[spr->picnum].x;
             const int32_t yspan = tilesiz[spr->picnum].y;
@@ -10841,8 +10842,8 @@ static int32_t engineFinishLoadBoard(const vec3_t* dapos, int16_t* dacursectnum,
     {
         int32_t removeit = 0;
 
-        if ((sprite[i].cstat & 48) == 48 && (sprite[i].xoffset|sprite[i].yoffset) == 0)
-            sprite[i].cstat &= ~48;
+        if ((sprite[i].cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_SLOPE && (sprite[i].xoffset|sprite[i].yoffset) == 0)
+            sprite[i].cstat &= ~CSTAT_SPRITE_ALIGNMENT_SLOPE;
 
         if (sprite[i].statnum == MAXSTATUS)
         {

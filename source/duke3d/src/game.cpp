@@ -1499,7 +1499,7 @@ int A_Spawn(int spriteNum, uint16_t tileNum)
         practor[newSprite].lightId = -1;
 #endif
 
-        if ((s.cstat & 48)
+        if ((s.cstat & CSTAT_SPRITE_ALIGNMENT)
 #ifndef EDUKE32_STANDALONE
             && s.picnum != SPEAKER && s.picnum != LETTER && s.picnum != DUCK && s.picnum != TARGET && s.picnum != TRIPBOMB
 #endif
@@ -1509,7 +1509,7 @@ int A_Spawn(int spriteNum, uint16_t tileNum)
                 goto SPAWN_END;
 
 #ifndef EDUKE32_STANDALONE
-            if (A_CheckSwitchTile(newSprite) && (s.cstat & 16))
+            if (A_CheckSwitchTile(newSprite) && (s.cstat & CSTAT_SPRITE_ALIGNMENT_WALL))
             {
                 if (s.pal && s.picnum != ACCESSSWITCH && s.picnum != ACCESSSWITCH2)
                 {
@@ -3464,7 +3464,7 @@ int A_Spawn(int spriteNum, uint16_t tileNum)
             }
             else
             {
-                pSprite->cstat |= (pSprite->cstat & 48) ? 1 : 17;
+                pSprite->cstat |= (pSprite->cstat & CSTAT_SPRITE_ALIGNMENT) ? 1 : (1 | CSTAT_SPRITE_ALIGNMENT_WALL);
                 pSprite->extra = 1;
             }
 
