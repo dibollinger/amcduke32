@@ -1509,7 +1509,7 @@ int A_Spawn(int spriteNum, uint16_t tileNum)
                 goto SPAWN_END;
 
 #ifndef EDUKE32_STANDALONE
-            if (A_CheckSwitchTile(newSprite) && (s.cstat & CSTAT_SPRITE_ALIGNMENT_WALL))
+            if (A_CheckSwitchTile(newSprite) && (s.cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_WALL)
             {
                 if (s.pal && s.picnum != ACCESSSWITCH && s.picnum != ACCESSSWITCH2)
                 {
