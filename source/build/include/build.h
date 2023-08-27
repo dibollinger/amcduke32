@@ -595,7 +595,7 @@ enum
     TSPR_FLAGS_NO_SHADOW = 1u<<2u,
     TSPR_FLAGS_INVISIBLE_WITH_SHADOW = 1u<<3u,
     TSPR_FLAGS_SLAB = 1u<<4u,
-    TSPR_FLAGS_NO_GLOW = 1u<<5u, TSPR_FLAGS_SLOPE_SPRITE = 1u<<6u,
+    TSPR_FLAGS_NO_GLOW = 1u<<5u,
 };
 
 EXTERN int32_t guniqhudid;
@@ -728,13 +728,6 @@ static inline tspriteptr_t renderMakeTSpriteFromSprite(tspriteptr_t const tspr, 
     tspr->clipdist = 0;
     tspr->owner = spritenum;
 
-    if ((tspr->cstat & CSTAT_SPRITE_ALIGNMENT_MASK) == CSTAT_SPRITE_ALIGNMENT_SLOPE)
-    {
-        tspr->cstat &= ~CSTAT_SPRITE_ALIGNMENT_MASK;
-        tspr->cstat |= CSTAT_SPRITE_ALIGNMENT_FLOOR;
-        tspr->clipdist |= TSPR_FLAGS_SLOPE_SPRITE;
-    }
-
     return tspr;
 }
 
@@ -746,8 +739,8 @@ static inline tspriteptr_t renderAddTSpriteFromSprite(uint16_t const spritenum)
 static inline void spriteSetSlope(uint16_t const spritenum, int16_t const heinum)
 {
     auto const spr = &sprite[spritenum];
-    uint16_t const cstat = spr->cstat & CSTAT_SPRITE_ALIGNMENT_MASK;
-    if (cstat != CSTAT_SPRITE_ALIGNMENT_FLOOR && cstat != CSTAT_SPRITE_ALIGNMENT_SLOPE)
+    uint16_t const cstat = spr->cstat;
+    if (!(cstat & CSTAT_SPRITE_ALIGNMENT_FLOOR))
         return;
 
     spr->xoffset = heinum & 255;
@@ -1779,7 +1772,7 @@ extern int32_t rintersect(int32_t x1, int32_t y1, int32_t z1,
 
 static inline int16_t tspriteGetSlope(tspriteptr_t const tspr)
 {
-    if (!(tspr->clipdist & TSPR_FLAGS_SLOPE_SPRITE))
+    if ((tspr->cstat & CSTAT_SPRITE_ALIGNMENT) != CSTAT_SPRITE_ALIGNMENT_SLOPE)
         return 0;
     return uint8_t(tspr->xoffset) + (uint8_t(tspr->yoffset) << 8);
 }
