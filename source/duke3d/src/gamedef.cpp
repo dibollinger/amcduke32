@@ -1064,6 +1064,8 @@ const char *EventNames[MAXEVENTS] =
     "EVENT_POSTUPDATEANGLES",
     "EVENT_GETBONUSTILE",
     "EVENT_PREACTORDAMAGE",
+    "EVENT_PREWEAPONSHOOT",
+    "EVENT_POSTWEAPONSHOOT",
     "EVENT_POSTACTORDAMAGE",
     "EVENT_CSACTIVATELINK",
     "EVENT_CSPREMODIFYOPTION",
@@ -1977,7 +1979,7 @@ static bool C_CheckEmptyBranch(int tw, intptr_t lastScriptPtr)
     // ifrnd and the others actually do something when the condition is executed
     if ((Bstrncmp(VM_GetKeywordForID(tw), "if", 2) && tw != CON_ELSE) ||
             tw == CON_IFRND || tw == CON_IFHITWEAPON || tw == CON_IFCANSEE || tw == CON_IFCANSEETARGET ||
-            tw == CON_IFPDISTL || tw == CON_IFPDISTG || tw == CON_IFPDISTLVAR || tw == CON_IFPDISTGVAR || 
+            tw == CON_IFPDISTL || tw == CON_IFPDISTG || tw == CON_IFPDISTLVAR || tw == CON_IFPDISTGVAR ||
             tw == CON_IFGOTWEAPONCE)
     {
         g_skipBranch = false;
