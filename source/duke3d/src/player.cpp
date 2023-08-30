@@ -2064,8 +2064,8 @@ static void P_FireWeapon(int playerNum)
     //        OSD_Printf("doing %d %d %d\n",PWEAPON(snum, p->curr_weapon, Shoots),p->curr_weapon,snum);
     if (VM_OnEventWithReturn(EVENT_PREWEAPONSHOOT, pPlayer->i, playerNum, 0) == 0)
     {
-        A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
-        VM_OnEvent(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum);
+        auto const retVal = A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
+        VM_OnEventWithReturn(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum, retVal);
     }
 
     for (bssize_t burstFire = PWEAPON(playerNum, pPlayer->curr_weapon, ShotsPerBurst) - 1; burstFire > 0; --burstFire)
@@ -2088,8 +2088,8 @@ static void P_FireWeapon(int playerNum)
 
             if (VM_OnEventWithReturn(EVENT_PREWEAPONSHOOT, pPlayer->i, playerNum, 0) == 0)
             {
-                A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
-                VM_OnEvent(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum);
+                auto const retVal = A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
+                VM_OnEventWithReturn(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum, retVal);
             }
         }
     }
@@ -4268,8 +4268,8 @@ static void P_ProcessWeapon(int playerNum)
             {
                 if (VM_OnEventWithReturn(EVENT_PREWEAPONSHOOT, pPlayer->i, playerNum, 0) == 0)
                 {
-                    A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
-                    VM_OnEvent(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum);
+                    auto const retVal = A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
+                    VM_OnEventWithReturn(EVENT_POSTWEAPONSHOOT, pPlayer->i, playerNum, retVal);
                 }
             }
         }
