@@ -2,6 +2,7 @@
 
 #include "baselayer.h"
 #include "build.h"
+#include "engine_priv.h"
 #include "lz4.h"
 #include "hightile.h"
 #include "polymost.h"
@@ -76,8 +77,10 @@ static pthtyp *texcache_tryart(uint16_t const dapicnum, int32_t const dapalnum, 
             if (pth->flags & PTH_INVALIDATED)
             {
                 pth->flags &= ~PTH_INVALIDATED;
-                // this should use MAXARTFILES_BASE but I'm too lazy... -bdino
-                gloadtile_art(dapicnum, searchpalnum, tintpalnum, dashade, dameth, pth, tilefilenum[dapicnum] >= 200 ? 1 : 0);
+
+                // this fixes a problem where per-map art would not be refreshed properly in Polymost between maps, where both maps used mapart
+                int32_t ismapart = (tilefilenum[dapicnum] >= MAXARTFILES_BASE) ? 1 : 0;
+                gloadtile_art(dapicnum, searchpalnum, tintpalnum, dashade, dameth, pth, ismapart);
                 pth->palnum = dapalnum;
             }
 
