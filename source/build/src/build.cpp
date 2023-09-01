@@ -11304,7 +11304,6 @@ void test_map(int32_t mode)
 
             if (!CreateProcess(NULL,fullparam,NULL,NULL,0,0,NULL,NULL,&si,&pi))
                 message("Error launching the game!");
-//            else WaitForSingleObject(pi.hProcess,INFINITE);
         }
 #else
         Bstrcat(fullparam, " &");
@@ -11318,7 +11317,6 @@ void test_map(int32_t mode)
         else if (system(fullparam))
             message("Error launching the game!");
 #endif
-//        printmessage16("Game process exited");
 //        mouseInit();
         clearkeys();
 
