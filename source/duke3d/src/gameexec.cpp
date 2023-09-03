@@ -5300,6 +5300,7 @@ breakfor:
                     }
 
                     g_saveRequested = true;
+                    g_skipReturnToCenter = true;
 
                     dispatch();
                 }
