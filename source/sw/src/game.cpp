@@ -5829,7 +5829,6 @@ SHOWSPRITE:
 }
 
 extern int tilefileoffs[MAXTILES]; //offset into the
-extern uint8_t tilefilenum[MAXTILES]; //0-11
 
 #if 0
 loadtile(short tilenume)
