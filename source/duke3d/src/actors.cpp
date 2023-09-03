@@ -855,7 +855,11 @@ void A_DoGuts(int spriteNum, uint16_t tileNum, int spawnCnt)
         repeat.x = repeat.y = 8;
 
     int gutZ   = pSprite->z - ZOFFSET3;
+#ifdef YAX_ENABLE
     int floorz = yax_getflorzofslope(pSprite->sectnum, pSprite->xy);
+#else
+    int floorz = getflorzofslope(pSprite->sectnum, pSprite->x, pSprite->y);
+#endif
 
     if (gutZ > (floorz-ZOFFSET3))
         gutZ = floorz-ZOFFSET3;
@@ -5644,7 +5648,11 @@ ACTOR_STATIC void G_MoveMisc(void)  // STATNUM 5
             switchPic--;
 
         if ((pSprite->picnum == MONEY+1) || (pSprite->picnum == MAIL+1) || (pSprite->picnum == PAPER+1))
-            actor[spriteNum].floorz = pSprite->z = yax_getflorzofslope(pSprite->sectnum,pSprite->xy);
+#ifdef YAX_ENABLE
+            actor[spriteNum].floorz = pSprite->z = yax_getflorzofslope(pSprite->sectnum, pSprite->xy);
+#else
+            actor[spriteNum].floorz = pSprite->z = getflorzofslope(pSprite->sectnum, pSprite->x, pSprite->y);
+#endif
         else
 #endif
         {
@@ -5867,7 +5875,11 @@ ACTOR_STATIC void G_MoveMisc(void)  // STATNUM 5
                 if (pSprite->sectnum == -1)
                     DELETE_SPRITE_AND_CONTINUE(spriteNum);
 
+#ifdef YAX_ENABLE
                 int const floorZ = yax_getflorzofslope(pSprite->sectnum, pSprite->xy);
+#else
+                int const floorZ = getflorzofslope(pSprite->sectnum, pSprite->x, pSprite->y);
+#endif
 
                 if (pSprite->z > floorZ)
                 {
