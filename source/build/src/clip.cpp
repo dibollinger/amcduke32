@@ -1442,6 +1442,9 @@ void yax_clipmove_sprite(vec3_t * const pos, int32_t const initialSector, int32_
         {
             for (SECTORS_OF_BUNCH(yax_getbunch(yax_clipsectlist[yax_sectCurrent], trorDirection), abs(trorDirection-1), yax_sectnum))
             {
+                if ((unsigned)yax_sectnum >= (unsigned)numsectors)
+                    continue;
+
                 if (!bitmap_test(yax_clipsectmap, yax_sectnum) && yax_sectTotal < MAXCLIPSECTORS)
                 {
                     bitmap_set(yax_clipsectmap, yax_sectnum);
@@ -1539,6 +1542,8 @@ int32_t clipmove(vec3_t * const pos, int16_t * const sectnum, int32_t xvect, int
 #endif
 
         int const dasect = clipsectorlist[clipsectcnt++];
+        Bassert((unsigned)dasect < (unsigned)numsectors);
+
         //if (curspr)
         //    initprintf("sprite %d/%d: sect %d/%d (%d)\n", clipspritecnt,clipspritenum, clipsectcnt,clipsectnum,dasect);
 
@@ -2097,7 +2102,9 @@ restart_grand:
 #endif
         ////////// Walls //////////
 
-        auto const startsec = (usectorptr_t)&sector[clipsectorlist[clipsectcnt]];
+        int16_t dasect = clipsectorlist[clipsectcnt];
+        Bassert((unsigned)dasect < (unsigned)numsectors);
+        auto const startsec = (usectorptr_t)&sector[dasect];
         const int startwall = startsec->wallptr;
         const int endwall = startwall + startsec->wallnum;
 
@@ -2794,6 +2801,9 @@ static void hitscan_sprite(const vec3_t *sv, int16_t spriteClipSector, int32_t v
 
 static inline void hitscan_addclipsect(int const sectnum, int16_t* tempshortnum)
 {
+    if ((unsigned)sectnum >= (unsigned)numsectors)
+        return;
+
     if (!bitmap_test(clipsectormap, sectnum) && *tempshortnum < MAXCLIPSECTORS)
     {
         bitmap_set(clipsectormap, sectnum);
@@ -2868,6 +2878,7 @@ int32_t hitscan(const vec3_t *sv, int16_t sectnum, int32_t vx, int32_t vy, int32
         }
 #endif
         dasector = clipsectorlist[tempshortcnt];
+        Bassert((unsigned)dasector < (unsigned)numsectors);
         auto const sec = (usectorptr_t)&sector[dasector];
 
 #ifdef YAX_ENABLE
@@ -3031,11 +3042,14 @@ int32_t hitscan(const vec3_t *sv, int16_t sectnum, int32_t vx, int32_t vy, int32
 #endif
             }
 
-            int zz;
-            for (zz = tempshortnum - 1; zz >= 0; zz--)
-                if (clipsectorlist[zz] == nextsector) break;
-            if (zz < 0)
-                hitscan_addclipsect(nextsector, &tempshortnum);
+            if ((unsigned)nextsector < (unsigned)numsectors)
+            {
+                int zz;
+                for (zz = tempshortnum - 1; zz >= 0; zz--)
+                    if (clipsectorlist[zz] == nextsector) break;
+                if (zz < 0)
+                    hitscan_addclipsect(nextsector, &tempshortnum);
+            }
 
             if (clipmove_warned & 1)
                LOG_F(ERROR, "hitscan: tempshortnum >= MAXCLIPSECTORS at (%d,%d,%d)!", sv->x, sv->y, sv->z);
