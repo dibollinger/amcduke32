@@ -3827,23 +3827,23 @@ static void fgrouscan(int32_t dax1, int32_t dax2, int32_t sectnum, char dastat)
 
             globalx3 = globalx2*(1.f/1024.f);
             globaly3 = globaly2*(1.f/1024.f);
-            float bz = (y2*globalzd)*(1.f/65536.f) + globalzx*(1.f/64.f);
+            float bz = (y2*globalzd)*(1.f/65536.f) + globalzx*(1.f/64.f), bzr = 1.f/bz;
             uint8_t *p = (uint8_t*)(ylookup[y2]+x+frameoffset);
             intptr_t* A_C_RESTRICT slopalptr = (intptr_t*)nptr2;
             const char* const A_C_RESTRICT trans = paletteGetBlendTable(0);
             uint32_t u, v;
             int cnt = y2-y1+1;
 #define LINTERPSIZ 4
-            int u0 = Blrintf(1048576.f*globalx3/bz);
-            int v0 = Blrintf(1048576.f*globaly3/bz);
+            int u0 = Blrintf(1048576.f*globalx3*bzr);
+            int v0 = Blrintf(1048576.f*globaly3*bzr);
             switch (globalorientation&0x180)
             {
             case 0:
                 while (cnt > 0)
                 {
-                    bz += bzinc*(1<<LINTERPSIZ);
-                    int u1 = Blrintf(1048576.f*globalx3/bz);
-                    int v1 = Blrintf(1048576.f*globaly3/bz);
+                    bz += bzinc*(1<<LINTERPSIZ), bzr = 1.f/bz;
+                    int u1 = Blrintf(1048576.f*globalx3*bzr);
+                    int v1 = Blrintf(1048576.f*globaly3*bzr);
                     u1 = (u1-u0)>>LINTERPSIZ;
                     v1 = (v1-v0)>>LINTERPSIZ;
                     int cnt2 = min(cnt, 1<<LINTERPSIZ);
@@ -3863,9 +3863,9 @@ static void fgrouscan(int32_t dax1, int32_t dax2, int32_t sectnum, char dastat)
             case 128:
                 while (cnt > 0)
                 {
-                    bz += bzinc*(1<<LINTERPSIZ);
-                    int u1 = Blrintf(1048576.f*globalx3/bz);
-                    int v1 = Blrintf(1048576.f*globaly3/bz);
+                    bz += bzinc*(1<<LINTERPSIZ), bzr = 1.f/bz;
+                    int u1 = Blrintf(1048576.f*globalx3*bzr);
+                    int v1 = Blrintf(1048576.f*globaly3*bzr);
                     u1 = (u1-u0)>>LINTERPSIZ;
                     v1 = (v1-v0)>>LINTERPSIZ;
                     int cnt2 = min(cnt, 1<<LINTERPSIZ);
@@ -3887,9 +3887,9 @@ static void fgrouscan(int32_t dax1, int32_t dax2, int32_t sectnum, char dastat)
             case 256:
                 while (cnt > 0)
                 {
-                    bz += bzinc*(1<<LINTERPSIZ);
-                    int u1 = Blrintf(1048576.f*globalx3/bz);
-                    int v1 = Blrintf(1048576.f*globaly3/bz);
+                    bz += bzinc*(1<<LINTERPSIZ), bzr = 1.f/bz;
+                    int u1 = Blrintf(1048576.f*globalx3*bzr);
+                    int v1 = Blrintf(1048576.f*globaly3*bzr);
                     u1 = (u1-u0)>>LINTERPSIZ;
                     v1 = (v1-v0)>>LINTERPSIZ;
                     int cnt2 = min(cnt, 1<<LINTERPSIZ);
@@ -3914,9 +3914,9 @@ static void fgrouscan(int32_t dax1, int32_t dax2, int32_t sectnum, char dastat)
             case 384:
                 while (cnt > 0)
                 {
-                    bz += bzinc*(1<<LINTERPSIZ);
-                    int u1 = Blrintf(1048576.f*globalx3/bz);
-                    int v1 = Blrintf(1048576.f*globaly3/bz);
+                    bz += bzinc*(1<<LINTERPSIZ), bzr = 1.f/bz;
+                    int u1 = Blrintf(1048576.f*globalx3*bzr);
+                    int v1 = Blrintf(1048576.f*globaly3*bzr);
                     u1 = (u1-u0)>>LINTERPSIZ;
                     v1 = (v1-v0)>>LINTERPSIZ;
                     int cnt2 = min(cnt, 1<<LINTERPSIZ);
@@ -6847,12 +6847,12 @@ draw_as_face_sprite:
                     }
 
                     vec2f_t const sg_f3 = { sg_f2.x*(1.f/1024.f)*1048576.f, sg_f2.y*(1.f/1024.f)*1048576.f };
-                    float bz = (y2*sgzd)*(1.f/65536.f) + sgzx*(1.f/64.f);
+                    float bz = (y2*sgzd)*(1.f/65536.f) + sgzx*(1.f/64.f), bzr = 1.f/bz;
                     uint8_t *p = (uint8_t*)(ylookup[y2]+x+frameoffset);
                     intptr_t* A_C_RESTRICT slopalptr = (intptr_t*)nptr2;
                     int cnt = y2-y1+1;
-                    int u0 = Blrintf(sg_f3.x/bz);
-                    int v0 = Blrintf(sg_f3.y/bz);
+                    int u0 = Blrintf(sg_f3.x*bzr);
+                    int v0 = Blrintf(sg_f3.y*bzr);
                     if (ispow2)
                     {
                         if ((cstat&2)==0)
@@ -6863,16 +6863,16 @@ draw_as_face_sprite:
                                 int u1, v1;
                                 if (cnt >= (1<<LINTERPSIZ))
                                 {
-                                    bz += bzinc;
-                                    u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                    v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                    bz += bzinc, bzr = 1.f/bz;
+                                    u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                    v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                     cnt2 = 1<<LINTERPSIZ;
                                 }
                                 else
                                 {
-                                    bz += bzinc2 * cnt;
-                                    u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                    v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                    bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                    u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                    v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                     cnt2 = cnt;
                                 }
                                 for (; cnt2>0; cnt2--)
@@ -6901,16 +6901,16 @@ draw_as_face_sprite:
                                     int u1, v1;
                                     if (cnt >= (1<<LINTERPSIZ))
                                     {
-                                        bz += bzinc;
-                                        u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                        v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                        bz += bzinc, bzr = 1.f/bz;
+                                        u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                        v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                         cnt2 = 1<<LINTERPSIZ;
                                     }
                                     else
                                     {
-                                        bz += bzinc2 * cnt;
-                                        u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                        v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                        bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                        u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                        v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                         cnt2 = cnt;
                                     }
                                     for (; cnt2>0; cnt2--)
@@ -6939,16 +6939,16 @@ draw_as_face_sprite:
                                     int u1, v1;
                                     if (cnt >= (1<<LINTERPSIZ))
                                     {
-                                        bz += bzinc;
-                                        u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                        v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                        bz += bzinc, bzr = 1.f/bz;
+                                        u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                        v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                         cnt2 = 1<<LINTERPSIZ;
                                     }
                                     else
                                     {
-                                        bz += bzinc2 * cnt;
-                                        u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                        v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                        bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                        u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                        v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                         cnt2 = cnt;
                                     }
                                     for (; cnt2>0; cnt2--)
@@ -6981,16 +6981,16 @@ draw_as_face_sprite:
                                 int u1, v1;
                                 if (cnt >= (1<<LINTERPSIZ))
                                 {
-                                    bz += bzinc;
-                                    u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                    v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                    bz += bzinc, bzr = 1.f/bz;
+                                    u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                    v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                     cnt2 = 1<<LINTERPSIZ;
                                 }
                                 else
                                 {
-                                    bz += bzinc2 * cnt;
-                                    u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                    v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                    bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                    u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                    v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                     cnt2 = cnt;
                                 }
                                 for (; cnt2>0; cnt2--)
@@ -7019,16 +7019,16 @@ draw_as_face_sprite:
                                     int u1, v1;
                                     if (cnt >= (1<<LINTERPSIZ))
                                     {
-                                        bz += bzinc;
-                                        u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                        v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                        bz += bzinc, bzr = 1.f/bz;
+                                        u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                        v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                         cnt2 = 1<<LINTERPSIZ;
                                     }
                                     else
                                     {
-                                        bz += bzinc2 * cnt;
-                                        u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                        v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                        bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                        u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                        v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                         cnt2 = cnt;
                                     }
                                     for (; cnt2>0; cnt2--)
@@ -7057,16 +7057,16 @@ draw_as_face_sprite:
                                     int u1, v1;
                                     if (cnt >= (1<<LINTERPSIZ))
                                     {
-                                        bz += bzinc;
-                                        u1 = ((int)(sg_f3.x/bz)-u0)>>LINTERPSIZ;
-                                        v1 = ((int)(sg_f3.y/bz)-v0)>>LINTERPSIZ;
+                                        bz += bzinc, bzr = 1.f/bz;
+                                        u1 = ((int)(sg_f3.x*bzr)-u0)>>LINTERPSIZ;
+                                        v1 = ((int)(sg_f3.y*bzr)-v0)>>LINTERPSIZ;
                                         cnt2 = 1<<LINTERPSIZ;
                                     }
                                     else
                                     {
-                                        bz += bzinc2 * cnt;
-                                        u1 = ((int)(sg_f3.x/bz)-u0) / cnt;
-                                        v1 = ((int)(sg_f3.y/bz)-v0) / cnt;
+                                        bz += bzinc2 * cnt, bzr = 1.f/bz;
+                                        u1 = tabledivide32_branchfree_noinline((int)(sg_f3.x*bzr)-u0, cnt);
+                                        v1 = tabledivide32_branchfree_noinline((int)(sg_f3.y*bzr)-v0, cnt);
                                         cnt2 = cnt;
                                     }
                                     for (; cnt2>0; cnt2--)
