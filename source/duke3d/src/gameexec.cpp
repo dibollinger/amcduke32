@@ -1909,7 +1909,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (aGameVars[insptr[-1]].global == *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1922,7 +1926,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (aGameVars[insptr[-1]].global != *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1935,7 +1943,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (aGameVars[insptr[-1]].global < *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1949,8 +1961,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v == *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1964,8 +1979,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v != *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1979,8 +1997,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v < *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -1994,8 +2015,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v == *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2009,8 +2033,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v != *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2024,8 +2051,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     tw = (v < *insptr);
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
-
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2370,7 +2400,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) == *insptr)));
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2385,7 +2419,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr--;
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2397,7 +2435,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) != *insptr)));
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2412,7 +2454,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr--;
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2424,7 +2470,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr = savedinsptr;
                     branch((tw = (Gv_GetVar(insptr[-1]) < *insptr)));
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
@@ -2439,7 +2489,11 @@ GAMEEXEC_STATIC void VM_Execute(int vm_execution_depth /*= false*/)
                     insptr--;
                     branch(tw);
                 } while (tw && (vm.flags & (VM_RETURN|VM_TERMINATE|VM_EXIT)) == 0);
-                vm.flags &= ~VM_EXIT;
+                if (vm.flags & VM_EXIT)
+                {
+                    insptr = (intptr_t *) savedinsptr[1];
+                    vm.flags &= ~VM_EXIT;
+                }
                 dispatch();
             }
 
