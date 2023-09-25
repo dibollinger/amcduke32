@@ -3189,7 +3189,7 @@ void P_GetInput(int const playerNum)
     auto const pPlayer    = thisPlayer.ps;
     ControlInfo info;
 
-    if (g_cheatBufLen > 1 || (pPlayer->gm & (MODE_MENU|MODE_TYPE)) || (ud.pause_on && !KB_KeyPressed(sc_Pause)) || g_saveRequested)
+    if (g_cheatBufLen > 1 || (pPlayer->gm & (MODE_MENU|MODE_TYPE)) || (ud.pause_on && !KB_KeyPressed(sc_Pause)))
     {
         if (!(pPlayer->gm&MODE_MENU))
             CONTROL_GetInput(&info);
@@ -3197,7 +3197,7 @@ void P_GetInput(int const playerNum)
         thisPlayer.lastViewUpdate = 0;
         localInput = {};
         localInput.bits    = (((int32_t)g_gameQuit) << SK_GAMEQUIT);
-        localInput.extbits |= BIT(EK_CHAT_MODE);
+        localInput.extbits = BIT(EK_CHAT_MODE);
 
         return;
     }

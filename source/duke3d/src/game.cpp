@@ -6688,6 +6688,12 @@ static void drawframe_entry(mco_coro *co)
             OSD_DispatchQueued();
             P_GetInput(myconnectindex);
         }
+        else
+        {
+            localInput = {};
+            localInput.bits    = (((int32_t)g_gameQuit) << SK_GAMEQUIT);
+            localInput.extbits = BIT(EK_CHAT_MODE);
+        }
 
         int const smoothratio = calc_smoothratio(totalclock, ototalclock);
 
@@ -6739,7 +6745,7 @@ void dukeFillInputForTic(void)
         input.svel += pPlayer->fric.y;
     }
 
-    localInput ={};
+    localInput = {};
 }
 
 void dukeCreateFrameRoutine(void)
