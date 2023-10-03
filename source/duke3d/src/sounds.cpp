@@ -269,7 +269,7 @@ static int S_PlayMusic(const char *fn)
         return 1;
 
     buildvfs_kfd fp = S_OpenAudio(fn, 0, 1);
-    if (EDUKE32_PREDICT_FALSE(fp == buildvfs_kfd_invalid))
+    if (/*EDUKE32_PREDICT_FALSE*/(fp == buildvfs_kfd_invalid))
     {
         LOG_F(ERROR, "Unable to play %s: file not found.",fn);
         return 2;
@@ -277,7 +277,7 @@ static int S_PlayMusic(const char *fn)
 
     int32_t MusicLen = kfilelength(fp);
 
-    if (EDUKE32_PREDICT_FALSE(MusicLen < 4))
+    if (/*EDUKE32_PREDICT_FALSE*/(MusicLen < 4))
     {
         LOG_F(ERROR, "Unable to play %s: no data.",fn);
         kclose(fp);
@@ -287,7 +287,7 @@ static int S_PlayMusic(const char *fn)
     char * MyMusicPtr = (char *)Xaligned_alloc(16, MusicLen);
     int MyMusicSize = kread(fp, MyMusicPtr, MusicLen);
 
-    if (EDUKE32_PREDICT_FALSE(MyMusicSize != MusicLen))
+    if (/*EDUKE32_PREDICT_FALSE*/(MyMusicSize != MusicLen))
     {
         LOG_F(ERROR, "Unable to play %s: read %d of %d bytes expected.", fn, MyMusicSize, MusicLen);
         kclose(fp);
@@ -522,7 +522,7 @@ int32_t S_LoadSound(int num)
 
     buildvfs_kfd fp = S_OpenAudio(snd->filename, g_loadFromGroupOnly, 0);
 
-    if (EDUKE32_PREDICT_FALSE(fp == buildvfs_kfd_invalid))
+    if (/*EDUKE32_PREDICT_FALSE*/(fp == buildvfs_kfd_invalid))
     {
         DVLOG_F(LOG_DEBUG, "Unable to load sound #%d: file %s not found.", num, snd->filename);
         return 0;
@@ -574,7 +574,7 @@ static int32_t S_DefineAudioIfSupported(char** fn, const char* name)
 
 int32_t S_DefineSound(int sndidx, const char *name, int minpitch, int maxpitch, int priority, int type, int distance, float volume)
 {
-    if (EDUKE32_PREDICT_FALSE((unsigned)sndidx >= MAXSOUNDS))
+    if (/*EDUKE32_PREDICT_FALSE*/((unsigned)sndidx >= MAXSOUNDS))
         return -1;
 
     S_AllocIndexes(sndidx);
@@ -832,7 +832,7 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
         S_LoadSound(sndNum);
     }
 
-    if (EDUKE32_PREDICT_FALSE(!S_SoundIsValid(sndNum)))
+    if (/*EDUKE32_PREDICT_FALSE*/(!S_SoundIsValid(sndNum)))
     {
         LOG_F(WARNING, "Invalid sound #%d", sndNum);
         return -1;
@@ -869,7 +869,7 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
         while (slot < MAXSOUNDINSTANCES && snd->voices[slot].handle != voice)
             slot++;
 
-        if (EDUKE32_PREDICT_FALSE(slot >= MAXSOUNDINSTANCES))
+        if (/*EDUKE32_PREDICT_FALSE*/(slot >= MAXSOUNDINSTANCES))
         {
             LOG_F(WARNING, "S_PlaySound3D: slot >= MAXSOUNDINSTANCES!");
             return -1;
@@ -974,7 +974,7 @@ int S_PlaySound(int num)
         S_LoadSound(sndnum);
     }
 
-    if (EDUKE32_PREDICT_FALSE(!S_SoundIsValid(sndnum)))
+    if (/*EDUKE32_PREDICT_FALSE*/(!S_SoundIsValid(sndnum)))
     {
         LOG_F(WARNING, "Invalid sound #%d", sndnum);
         return -1;
@@ -1027,7 +1027,7 @@ int A_PlaySound(int soundNum, int spriteNum)
 
 void S_StopEnvSound(int soundNum, int spriteNum)
 {
-    if (EDUKE32_PREDICT_FALSE(!S_SoundIsValid(soundNum)))
+    if (/*EDUKE32_PREDICT_FALSE*/(!S_SoundIsValid(soundNum)))
     {
         LOG_F(WARNING, "Invalid sound #%d", soundNum);
         return;
@@ -1103,7 +1103,7 @@ void S_ChangeSoundPitch(int soundNum, int spriteNum, int pitchoffset)
         if ((spriteNum == -1 && voice.handle > FX_Ok) || (spriteNum != -1 && voice.owner == spriteNum))
         {
             Bassert(spriteNum == -1 || voice.handle > FX_Ok);
-            if (EDUKE32_PREDICT_FALSE(spriteNum >= 0 && voice.handle <= FX_Ok))
+            if (/*EDUKE32_PREDICT_FALSE*/(spriteNum >= 0 && voice.handle <= FX_Ok))
                 LOG_F(ERROR, "Invalid voice for sound #%d index #%d! (%d)", soundNum, j, voice.handle);
             else
                 FX_SetPitch(voice.handle, pitchoffset);
@@ -1224,7 +1224,7 @@ void S_ClearSoundLocks(void)
 
 int A_CheckSoundPlaying(int spriteNum, int soundNum)
 {
-    if (EDUKE32_PREDICT_FALSE((unsigned)soundNum > (unsigned)g_highestSoundIdx)) return 0;
+    if (/*EDUKE32_PREDICT_FALSE*/((unsigned)soundNum > (unsigned)g_highestSoundIdx)) return 0;
 
     auto &snd = g_sounds[soundNum];
 
@@ -1260,6 +1260,6 @@ int A_CheckAnySoundPlaying(int spriteNum)
 
 int S_CheckSoundPlaying(int soundNum)
 {
-    if (EDUKE32_PREDICT_FALSE((unsigned)soundNum > (unsigned)g_highestSoundIdx)) return false;
+    if (/*EDUKE32_PREDICT_FALSE*/((unsigned)soundNum > (unsigned)g_highestSoundIdx)) return false;
     return (g_sounds[soundNum]->playing != 0);
 }
