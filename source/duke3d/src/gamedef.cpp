@@ -6713,7 +6713,7 @@ void C_Compile(const char *fileName)
 
     if (kFile == buildvfs_kfd_invalid) // JBF: was 0
     {
-        if (g_loadFromGroupOnly == 1 || numgroupfiles == 0)
+        if (g_loadFromGroupOnly || (numgroupfiles == 0 && !kzfs.leng))
         {
 #if defined(AMC_BUILD)
             Bsprintf(tempbuf,"Required game data was not found.  This binary is only intended to be run in a valid AMC Squad install folder!\n\n"
@@ -6734,7 +6734,7 @@ void C_Compile(const char *fileName)
             G_GameExit(tempbuf);
         }
 
-        //g_loadFromGroupOnly = 1;
+        g_loadFromGroupOnly = 2;
         return; //Not there
     }
 
@@ -6791,8 +6791,26 @@ void C_Compile(const char *fileName)
 
         if (g_errorCnt)
         {
-            Bsprintf(buf, "Error compiling CON files.");
-            G_GameExit(buf);
+            if (g_loadFromGroupOnly || (numgroupfiles == 0 && !kzfs.leng))
+            {
+                Bsprintf(buf, "Found %d warning(s), %d error(s) in CON files.", g_warningCnt, g_errorCnt);
+                G_GameExit(buf);
+            }
+
+            wm_msgbox("Incompatible modifications detected", "Found %d warning(s), %d error(s) in CON files.\n\nStartup will continue with internal versions of all scripts.",
+                      g_warningCnt, g_errorCnt);
+
+            g_loadFromGroupOnly = 2;
+
+            DO_FREE_AND_NULL(apScript);
+            DO_FREE_AND_NULL(bitptr);
+            DO_FREE_AND_NULL(bitstate);
+            DO_FREE_AND_NULL(apScriptGameEventEnd);
+            DO_FREE_AND_NULL(apScriptStateEnd);
+
+            Gv_Clear();
+
+            return;
         }
     }
 
