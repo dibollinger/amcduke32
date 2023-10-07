@@ -4993,7 +4993,6 @@ static void P_ClampZ(DukePlayer_t* const pPlayer, int const sectorLotag, int32_t
         pPlayer->pos.z = floorZ - PMINHEIGHT;
 }
 
-
 #define GETZRANGECLIPDISTOFFSET 16
 
 void P_ProcessInput(int playerNum)
@@ -5094,7 +5093,8 @@ void P_ProcessInput(int playerNum)
     if ((lowZhit & 49152) == 16384 && sectorLotag == 1 && trueFloorDist > pPlayer->spritezoffset + ZOFFSET2)
         sectorLotag = 0;
 
-    if ((highZhit & 49152) == 49152)
+#ifndef EDUKE32_STANDALONE
+    if (!FURY && (highZhit & 49152) == 49152)
     {
         int const spriteNum = highZhit & (MAXSPRITES-1);
         int pHeightOffset = (FURY) ? PMINHEIGHT : 0;
@@ -5106,6 +5106,7 @@ void P_ProcessInput(int playerNum)
             ceilZ    = pPlayer->truecz;
         }
     }
+#endif
 
     actor[pPlayer->i].floorz   = floorZ;
     actor[pPlayer->i].ceilingz = ceilZ;
