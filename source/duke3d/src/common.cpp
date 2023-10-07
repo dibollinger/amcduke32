@@ -255,17 +255,8 @@ void G_ExtPreInit(int32_t argc,char const * const * argv)
     buildvfs_getcwd(g_rootDir,BMAX_PATH);
     strcat(g_rootDir,"/");
 #endif
-}
-
-void G_ExtInit(void)
-{
-#ifdef EDUKE32_OSX
-    char *appdir = Bgetappdir();
-    addsearchpath(appdir);
-    Xfree(appdir);
-#endif
-
     char cwd[BMAX_PATH];
+
 #ifdef USE_PHYSFS
     strncpy(cwd, PHYSFS_getBaseDir(), ARRAY_SIZE(cwd));
     cwd[ARRAY_SIZE(cwd)-1] = '\0';
@@ -273,26 +264,6 @@ void G_ExtInit(void)
     if (buildvfs_getcwd(cwd, ARRAY_SIZE(cwd)) && Bstrcmp(cwd, "/") != 0)
 #endif
         addsearchpath(cwd);
-
-    if (CommandPaths)
-    {
-        int32_t i;
-        struct strllist *s;
-        while (CommandPaths)
-        {
-            s = CommandPaths->next;
-            i = addsearchpath(CommandPaths->str);
-            if (i < 0)
-            {
-                LOG_F(ERROR, "Unable to add data directory %s: %s", CommandPaths->str,
-                           i==-1 ? "not a directory" : "no such directory");
-            }
-
-            Xfree(CommandPaths->str);
-            Xfree(CommandPaths);
-            CommandPaths = s;
-        }
-    }
 
 #if defined(AMC_BUILD) || (defined(_WIN32) && !defined(EDUKE32_STANDALONE))
     if (buildvfs_exists("user_profiles_enabled"))
@@ -323,6 +294,35 @@ void G_ExtInit(void)
             if (asperr == 0)
                 buildvfs_chdir(cwd);
             Xfree(homedir);
+        }
+    }
+}
+
+void G_ExtInit(void)
+{
+#ifdef EDUKE32_OSX
+    char *appdir = Bgetappdir();
+    addsearchpath(appdir);
+    Xfree(appdir);
+#endif
+
+    if (CommandPaths)
+    {
+        int32_t i;
+        struct strllist *s;
+        while (CommandPaths)
+        {
+            s = CommandPaths->next;
+            i = addsearchpath(CommandPaths->str);
+            if (i < 0)
+            {
+                LOG_F(ERROR, "Unable to add data directory %s: %s", CommandPaths->str,
+                           i==-1 ? "not a directory" : "no such directory");
+            }
+
+            Xfree(CommandPaths->str);
+            Xfree(CommandPaths);
+            CommandPaths = s;
         }
     }
 
