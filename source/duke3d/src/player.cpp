@@ -3172,6 +3172,9 @@ void P_UpdateAngles(int const playerNum, input_t &input)
     pPlayer->q16horiz    = fix16_clamp(pPlayer->q16horiz, F16(HORIZ_MIN), F16(HORIZ_MAX));
     pPlayer->q16horizoff = fix16_clamp(pPlayer->q16horizoff, F16(HORIZ_MIN), F16(HORIZ_MAX));
 
+    if (pPlayer->newowner == -1)
+        sprite[pPlayer->i].ang = fix16_to_int(pPlayer->q16ang);
+
     if (VM_HaveEvent(EVENT_POSTUPDATEANGLES))
     {
         input_t pInput = thisPlayer.input;
