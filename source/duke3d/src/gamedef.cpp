@@ -594,6 +594,7 @@ static tokenmap_t const vm_keywords[] =
     { "writearraytofile",       CON_WRITEARRAYTOFILE },
     { "xorvar",                 CON_XORVAR },
     { "xorvarvar",              CON_XORVARVAR },
+    { "yield",                  CON_YIELD },
     { "zshootvar",              CON_ZSHOOT },
     { "{",                      CON_LEFTBRACE },
     { "}",                      CON_RIGHTBRACE },
@@ -6217,6 +6218,7 @@ repeatcase:
                 g_checkingCase = false;
                 return 1;
             }
+        case CON_YIELD:
             continue;
 
         case CON_CONTINUE:
