@@ -90,7 +90,7 @@ enum rendmode_t {
 
 //define NEW_MAP_FORMAT
 
-#define MAXWALLSB ((MAXWALLS>>2)+(MAXWALLS>>3))
+#define MAXWALLSB (MAXWALLS>>1)
 
 #define MAPVERSION_FLAG_AMC4_0 0x1000
 #define MAPVERSION_FLAG_AMC5_0 0x2000
