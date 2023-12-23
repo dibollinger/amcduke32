@@ -969,7 +969,9 @@ void voxfree(voxmodel_t *m)
     if (!m)
         return;
 
+#ifdef USE_GLEXT
     voxvbofree(m);
+#endif
 
     DO_FREE_AND_NULL(m->mytex);
     DO_FREE_AND_NULL(m->vertex);
