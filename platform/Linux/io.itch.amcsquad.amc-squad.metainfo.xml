@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component>
-  <id type="desktop">io.itch.amcsquad.amcsquad</id>
-  <launchable type="desktop-id">io.itch.amcsquad.amcsquad</launchable>
+  <id type="desktop">io.itch.amcsquad.amc-squad</id>
+  <launchable type="desktop-id">io.itch.amcsquad.amc-squad</launchable>
   <name>The AMC Squad</name>
   <developer_name>AMC Team</developer_name>
   <summary>Epic story-driven FPS running on the Build Engine</summary>
