@@ -74,6 +74,11 @@
     <content_attribute id="violence-cartoon">intense</content_attribute>
     <content_attribute id="violence-fantasy">intense</content_attribute>
     <content_attribute id="violence-bloodshed">intense</content_attribute>
+    <content_attribute id="drugs-alcohol">moderate</content_attribute>
+    <content_attribute id="drugs-tobacco">moderate</content_attribute>
+    <content_attribute id="sex-nudity">moderate</content_attribute>
+    <content_attribute id="language-profanity">moderate</content_attribute>
+    <content_attribute id="language-humor">intense</content_attribute>
   </content_rating>
   <update_contact>https://www.moddb.com/games/the-amc-tc</update_contact>
 </component>
