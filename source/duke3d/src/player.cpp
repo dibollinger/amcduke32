@@ -30,7 +30,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "android.h"
 #endif
 
-int32_t lastvisinc;
 hudweapon_t hudweap;
 
 #ifdef SPLITSCREEN_MOD_HACKS
@@ -3006,7 +3005,6 @@ enddisplayweapon:;
 #define MAXHORIZVEL   256
 
 int32_t g_myAimMode, g_myAimStat, g_oldAimStat;
-int32_t mouseyaxismode = -1;
 uint64_t g_lastInputTicks;
 
 enum inputlock_t
@@ -4547,10 +4545,7 @@ static void P_ProcessWeapon(int playerNum)
                 if (PWEAPON(playerNum, pPlayer->curr_weapon, Shoots) != 0)
                 {
                     if (!(PWEAPON(playerNum, pPlayer->curr_weapon, Flags) & WEAPON_NOVISIBLE))
-                    {
-                        lastvisinc = (int32_t) totalclock+32;
                         pPlayer->visibility = 0;
-                    }
 
                     P_SetWeaponGamevars(playerNum, pPlayer);
                     A_Shoot(pPlayer->i, PWEAPON(playerNum, pPlayer->curr_weapon, Shoots));
