@@ -845,11 +845,14 @@ void P_ResetPlayer(int playerNum)
 
     pus = 1;
 
+// Don't remove the steroids item slot on a new level, as this item type is replaced with custom items that may have partial usage.
+#ifndef AMC_BUILD
     if (p.inv_amount[GET_STEROIDS] < 400)
     {
         p.inv_amount[GET_STEROIDS] = 0;
         p.inven_icon = ICON_NONE;
     }
+#endif
 
     p.kickback_pic = ((PWEAPON(playerNum, p.curr_weapon, WorksLike) == PISTOL_WEAPON)
                       && (PWEAPON(playerNum, p.curr_weapon, Reload) > PWEAPON(playerNum, p.curr_weapon, TotalTime)))

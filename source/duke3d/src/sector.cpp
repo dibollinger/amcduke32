@@ -2764,6 +2764,7 @@ void P_HandleSharedKeys(int playerNum)
 
         if (TEST_SYNC_KEY(playerBits, SK_STEROIDS))
         {
+            // Note: No AMC-specific changes here, because the event can be disabled through the return value
             if (VM_OnEvent(EVENT_USESTEROIDS,g_player[playerNum].ps->i,playerNum) == 0)
             {
                 if (pPlayer->inv_amount[GET_STEROIDS] == 400)

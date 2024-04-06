@@ -150,6 +150,7 @@ This section lists the major changes to the modding API, including new CON and D
 * Hardcoded anti-cheat measure removed from skill 4.
 * Change crosshair size slider to range from 10 to 100.
 * Make save settings menu and reset progress options available.
+* Disable hardcoded Duke3D Steroids effects, such as increased kick strength or speed boost. These effects now need to be defined in CON.
 * Various smaller changes that affect AMC specifically, in particular to hardcoded Duke3D functions and player clipping behavior.
 
 ### __CON Commands__

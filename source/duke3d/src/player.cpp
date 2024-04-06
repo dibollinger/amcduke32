@@ -824,7 +824,9 @@ static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int c
                             const projectile_t *const proj, uint16_t const inserttile, int const randomDamage, uint16_t const spawnTile,
                             int const soundNum)
 {
+#ifndef AMC_BUILD
     auto const pPlayer = playerNum >= 0 ? g_player[playerNum].ps : NULL;
+#endif
 
     int kneeSprite = A_InsertSprite(hitData->sect,hitData->x,hitData->y,hitData->z,
                                     inserttile,-15,0,0,shootAng,32,0,spriteNum,4);
@@ -852,8 +854,11 @@ static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int c
             A_PlaySound(soundNum, kneeSprite);
     }
 
+// Disable the kick damage increase while Steroids is "active".
+#ifndef AMC_BUILD
     if (pPlayer != NULL && pPlayer->inv_amount[GET_STEROIDS] > 0 && pPlayer->inv_amount[GET_STEROIDS] < 400)
         sprite[kneeSprite].extra += (pPlayer->max_player_health>>2);
+#endif
 
     int const dmg = clamp<int>(sprite[kneeSprite].extra, FF_WEAPON_DMG_MIN, FF_WEAPON_DMG_MAX);
 
@@ -3532,9 +3537,12 @@ static int32_t P_DoCounters(int playerNum)
         if (--pPlayer->inv_amount[GET_STEROIDS] == 0)
             P_SelectNextInvItem(pPlayer);
 
+// Disable the heartbeat sound when a Steroid item is counting down.
+#ifndef AMC_BUILD
         if (!(pPlayer->inv_amount[GET_STEROIDS] & 7))
             if (playerNum == screenpeek || GTFLAGS(GAMETYPE_COOPSOUND))
                 A_PlaySound(DUKE_HARTBEAT, pPlayer->i);
+#endif
     }
 
     if (pPlayer->heat_on && pPlayer->inv_amount[GET_HEATS] > 0)
@@ -5662,8 +5670,11 @@ void P_ProcessInput(int playerNum)
                     pPlayer->walking_snd_toggle--;
             }
 
+// Disable the Steroids speed increase for AMC.
+#ifndef AMC_BUILD
             if (pPlayer->jetpack_on == 0 && pPlayer->inv_amount[GET_STEROIDS] > 0 && pPlayer->inv_amount[GET_STEROIDS] < 400)
                 velocityModifier <<= 1;
+#endif
         }
 #endif
 
@@ -5675,6 +5686,7 @@ void P_ProcessInput(int playerNum)
         if (sectorLotag == ST_2_UNDERWATER)
             playerSpeedReduction = pPlayer->swimspeedmodifier;
         else if ( (pPlayer->on_ground && TEST_SYNC_KEY(playerBits, SK_CROUCH))
+// Disable the speed reduction while using the kick.
 #ifndef AMC_BUILD
                   || (*weaponFrame > 10 && PWEAPON(playerNum, pPlayer->curr_weapon, WorksLike) == KNEE_WEAPON)
 #endif
