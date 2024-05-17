@@ -6800,7 +6800,9 @@ void C_Compile(const char *fileName)
 
         if (g_errorCnt)
         {
+#ifndef AMC_BUILD
             if (g_loadFromGroupOnly || (numgroupfiles == 0 && !kzfs.leng))
+#endif
             {
 #ifndef EDUKE32_STANDALONE
 err:
