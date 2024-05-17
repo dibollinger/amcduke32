@@ -11074,9 +11074,9 @@ static void check_sprite(int32_t i)
 static int32_t amc_strip_mapversion_flags(int32_t version)
 {
     if (version & MAPVERSION_FLAG_AMC5_0)
-        LOG_F(INFO, "Map uses AMCDuke32 v5.0 format (%d > MAXTILES >= %d).", MAXTILES, AMC4_0_MAXTILES);
+        LOG_F(INFO, "Map uses AMC Squad v4.5 format (%d > MAXTILES >= %d).", MAXTILES, AMC4_0_MAXTILES);
     else if (version & MAPVERSION_FLAG_AMC4_0)
-        LOG_F(INFO, "Map uses AMCDuke32 v3.5 format (%d > MAXTILES >= %d).", AMC4_0_MAXTILES, EDUKE32_MAXTILES);
+        LOG_F(INFO, "Map uses AMC Squad v3.5 format (%d > MAXTILES >= %d).", AMC4_0_MAXTILES, EDUKE32_MAXTILES);
 
     return version & ~(MAPVERSION_FLAG_AMC5_0 | MAPVERSION_FLAG_AMC4_0);
 }

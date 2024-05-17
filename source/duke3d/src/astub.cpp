@@ -61,7 +61,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # undef stat
 #endif
 
-const char* AppProperName = "Mapster32 (AMCDuke32)";
+const char* AppProperName = "Mapster32 (AMC Squad)";
 const char* AppTechnicalName = "mapster32";
 
 #if defined(_WIN32)
@@ -7992,7 +7992,7 @@ static void G_ShowParameterHelp(void)
               "-usecwd\t\t\tRead game data and configuration file from working directory\n"
               "\n-?, -help, --help\t\tDisplay this help message and exit"
               ;
-    Bsprintf(tempbuf, "Mapster32 (AMCDuke32) %s", s_buildRev);
+    Bsprintf(tempbuf, "Mapster32 (AMC Squad) %s", s_buildRev);
     wm_msgbox(tempbuf, "%s", s);
 }
 
@@ -8410,7 +8410,7 @@ int32_t ExtPreInit(int32_t argc,char const * const * argv)
         g_useCwd = 1;
 
     OSD_SetVersion(AppProperName,0,2);
-    LOG_F(INFO, "Mapster32 (AMCDuke32) %s", s_buildRev);
+    LOG_F(INFO, "Mapster32 (AMC Squad) %s", s_buildRev);
     PrintBuildInfo();
 
     G_CheckCommandLine(argc,argv);
@@ -10128,7 +10128,7 @@ int32_t ExtInit(void)
     getmessageleng = 0;
     getmessagetimeoff = 0;
 
-    Bsprintf(apptitle, "Mapster32 (AMCDuke32) %s", s_buildRev);
+    Bsprintf(apptitle, "Mapster32 (AMC Squad) %s", s_buildRev);
     autosavetimer = (int32_t) totalclock+120*autosave;
 
     registerosdcommands();

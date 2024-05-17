@@ -61,13 +61,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "AMCDuke32"
+            VALUE "FileDescription", "AMC Squad"
             VALUE "FileVersion", VERSTR
             VALUE "InternalName", "AMCDuke32"
-            VALUE "LegalCopyright", "Copyright © EDuke32 contributors. All rights reserved."
-            VALUE "LegalTrademarks", "Duke Nukem® is a Registered Trademark of Balls of Steel, LLC."
+            VALUE "LegalCopyright", "Copyright © AMCDuke32 contributors. All rights reserved."
+            VALUE "LegalTrademarks", ""
             VALUE "OriginalFilename", "amcsquad.exe"
-            VALUE "ProductName", "AMCDuke32"
+            VALUE "ProductName", "AMC Squad"
             VALUE "ProductVersion", VERSTR
         END
     END
