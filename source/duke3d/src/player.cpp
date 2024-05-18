@@ -824,9 +824,7 @@ static void Proj_HandleKnee(hitdata_t *const hitData, int const spriteNum, int c
                             const projectile_t *const proj, uint16_t const inserttile, int const randomDamage, uint16_t const spawnTile,
                             int const soundNum)
 {
-#ifndef AMC_BUILD
     auto const pPlayer = playerNum >= 0 ? g_player[playerNum].ps : NULL;
-#endif
 
     int kneeSprite = A_InsertSprite(hitData->sect,hitData->x,hitData->y,hitData->z,
                                     inserttile,-15,0,0,shootAng,32,0,spriteNum,4);
