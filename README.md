@@ -5,6 +5,7 @@
 * [Installation](#installation)
    * [Building from Source](#building-from-source)
 * [Feature Differences](#feature-differences)
+   * [General Changes](#general-changes)
    * [CON Commands](#con-commands)
        * [definesoundv](#definesoundv)
        * [ifcfgvar](#ifcfgvar)
@@ -16,14 +17,12 @@
        * [profilenanoreset](#profilenanoreset)
        * [setmusicvolume](#setmusicvolume)
    * [DEF Commands](#def-commands)
-       * [keyconfig](#keyconfig)
        * [customsettings](#customsettings)
    * [Game Events](#game-events)
        * [EVENT_CSACTIVATELINK](#EVENT_CSACTIVATELINK)
        * [EVENT_CSPOSTMODIFYOPTION](#EVENT_CSPOSTMODIFYOPTION)
        * [EVENT_CSPREMODIFYOPTION](#EVENT_CSPREMODIFYOPTION)
        * [EVENT_CSPOPULATEMENU](#EVENT_CSPOPULATEMENU)
-       * [EVENT_PREACTORDAMAGE](#EVENT_PREACTORDAMAGE)
        * [EVENT_POSTACTORDAMAGE](#EVENT_POSTACTORDAMAGE)
    * [Struct Members](#struct-members)
        * [userquote_xoffset](#struct-members)
@@ -31,9 +30,6 @@
        * [voicetoggle](#struct-members)
        * [csarray](#struct-members)
        * [m_customsettings](#struct-members)
-   * [Misc Changes](#general-changes)
-       * [cl_keybindmode](#misc-changes)
-       * [PROJECTILE_RADIUS_PICNUM_EX](#misc-changes)
 * [Credits and Licenses](#credits-and-licenses)
 
 ## About
@@ -42,29 +38,29 @@ AMCDuke32 is a fork of the eduke32 engine, created for the game "AMC Squad".
 EDuke32 is based on the Duke Nukem 3D source, which was built on the Build
 engine by Ken Silverman, released under the Build license.
 
-Its primary purpose is to raise engine limits and alter hardcoded game behaviour, to allow
-for greater flexibility in the development of the game. It also adds a small set of CON script
-commands that enable modification of features not available in base eduke32. The changes are
-generally kept sparse to make merging with mainline eduke32 as smooth as possible.
+The main purpose of the fork is to raise engine limits and alter hardcoded game behaviour, 
+to allow for greater flexibility with developing AMC Squad. It also adds a number of CON script
+commands that enable modification of features not available in base eduke32.
 
-Note that The AMC Squad makes extensive use of eduke32 modding features, and hence will not be
-made compatible with BuildGDX or Raze.
+Note that, since AMC Squad makes extensive use of eduke32 modding features, much like Ion Fury
+and Ion Fury Aftershock, it will not be compatible with Raze.
 
-The original eduke32 source port was created by Richard "TerminX" Gobeille, and can be found at:
+The original eduke32 source port was created by Richard "TerminX" Gobeille. Its repository is
+hosted at:
 
 https://voidpoint.io/terminx/eduke32
 
 ## The AMC Squad
 
 "The AMC Squad" is a free, story-driven first-person shooter built on the Build engine. It currently features 
-four episodes, each episode spanning 10+ hours of gameplay. The story centers around the titular AMC Squad, 
+four episodes, each episode spanning 8+ hours of gameplay. The story centers around the titular AMC Squad, 
 a paramilitary group which is established after the EDF's number one agent disappeared without a trace.
 
 The group attempts to defend Earth against threats of extraordinary nature, but soon realize that they
-may have bitten off more than they can chew.
+may have inadvertently made things much worse...
 
-The gameplay is mixture of classic FPS gameplay with a variety of modern features. The levels are arranged in a
-mission-based structure, which takes the player across a large variety of locations and themes.
+The gameplay is mixture of classic FPS gameplay with a variety of modern features. The levels are arranged
+in a mission-based structure, which takes the player across a large variety of locations and themes.
 
 The game is free and standalone, and can be downloaded at:
 
@@ -74,11 +70,15 @@ https://amcsquad.itch.io/game
 
 ## Installation
 
-Windows builds for the latest engine revisions can be found in the releases page, along with old versions.
+Windows builds for the latest engine revisions can be found in the releases page, along with older versions for
+use with previous releases of the game. Note that you should always use the tagged release build for specific versions.
 
 The latest engine revision will also be packaged together with the download of the game itself.
 
-For Linux, we recommend compiling the binary from source, using the instructions given below. Mac support is untested.
+We provide binaries for Linux, compiled on Ubuntu 22.04. However, for optimal compatibility, we recommend compiling the
+binary from source, using the instructions given below.
+
+The engine can in principle be compiled for Mac, but the game is currently untested on this OS.
 
 
 ### Building from Source
@@ -116,8 +116,8 @@ with multiple threads). If successful, this should produce the following binarie
 * `amcsquad`
 * `mapster32`
 
-The binaries do not support game autodetection. Instead, you should copy the binaries into the folder that
-contains the AMC Squad data, i.e. the folder where the `amcsquad.grpinfo` file is located.
+The amcsquad binaries do not support game autodetection like eduke32. Instead, you should copy the binaries
+into the folder that contains the AMC Squad data, i.e. the folder where the `amcsquad.grpinfo` file is located.
 
 __Additional build instructions can be found here:__
 
@@ -128,6 +128,29 @@ __Additional build instructions can be found here:__
 ## Feature Differences
 
 This section lists the major changes to the modding API, including new CON and DEF script commands, and how to use them.
+
+### __General Changes__
+
+* `MAXTILES` increased from 30720 to 44800
+  * Previously was increased to 32512 with AMC 3.5 up to 4.0
+  * The editor now alters the mapversion if there's a sprite with a tile above this value.
+  * This is intended to prevent loading maps with the wrong editor version, which could delete sprites from the map.
+* `MAXGAMEVARS` increased from 2048 to 4096 (also doubles `MAXGAMEARRAYS`).
+  * Doubled from 1024 to 2048 in the editor.
+* Increased MAXLABELS from 16384 to 24576. More script labels can now be defined.
+* Increased MAXQUOTES from 16384 to 32768, due to the large amount of cutscene text required.
+* Add additional startup logging to give better feedback on the slow startup process.
+* Mapster32: The key combination `[' + Y]` enables a pink tile selection background, to improve visibility of tiles in the selector.
+* Looping ambient sounds are now able to overlap with instances of themselves.
+* Added a lower bound for distance between menu items. This allows menus to scroll properly now.
+* Add `PROJECTILE_WORKSLIKE` flag `PROJECTILE_RADIUS_PICNUM_EX`:
+    * Flag value is 1073741824 (0x40000000).
+    * The flag changes the htpicnum of the projectile to the actual picnum, instead of using RADIUSEXPlOSION. However, it also preserves hardcoded behaviors specific to RADIUSEXPLOSION, including destroying spritewalls and spritefloors that have a hitag.
+    * RPG projectiles can only burn trees, tires and boxes if this flag is set. Player will receive the same pushback as with RADIUSEXPLOSION when hit.
+* Hardcoded anti-cheat measure removed from skill 4.
+* Change crosshair size slider to range from 10 to 100.
+* Make save settings menu and reset progress options available.
+* Various smaller changes that affect AMC specifically, in particular to hardcoded Duke3D functions and player clipping behavior.
 
 ### __CON Commands__
 
@@ -140,6 +163,8 @@ Commands that extend the functionality of the CON VM.
 Usage: `definesoundv <soundID> <filename> <pitch_lower> <pitch_upper> <priority> <flags> <distance> <volume>`
 
 Variant of the [definesound](https://wiki.eduke32.com/wiki/Definesound) command, with an added parameter to change the sound's actual volume.
+
+__Note: Since this command was added, the original command has been updated to also support volume adjustments. This command is kept for backwards-compatibility.__
 
 Defines a sound and assigns various properties to it. The maximum number of sounds that can be defined is 16384.
 
@@ -258,28 +283,6 @@ This command is intended to allow scripts to temporarily lower the music volume,
 ### __DEF Commands__
 
 Commands that extend the DEF script functionality.
-
-----
-
-#### __keyconfig__
-
-Allows reordering of gamefunc menu entries.
-
-Usage:
-```
-keyconfig
-{
-    gamefunc_Move_Forward
-    gamefunc_Move_Backward
-    gamefunc_Strafe_Left
-    gamefunc_Strafe_Right
-    ...
-}
-```
-
-List the [gamefunc names](https://wiki.eduke32.com/wiki/Getgamefuncbind) in the order in which you want them to appear inside the keyboard and mouse config menus, separated by newlines or whitespaces. Any omitted gamefuncs will not be listed in the menu.
-
-This command is compatible with the CON commands [definegamefuncname](https://wiki.eduke32.com/wiki/Definegamefuncname) and [undefinegamefunc](https://wiki.eduke32.com/wiki/Undefinegamefunc).
 
 ----
 
@@ -413,19 +416,6 @@ For instance, this can be used to change the default values of the menu, and/or 
 
 ----
 
-#### __EVENT_PREACTORDAMAGE__
-
-This event is called when an actor runs `A_IncurDamage()`, just before decreasing `sprite[].extra` and changing the owner.
-
-i.e. it occurs before the actor has taken damage and its health was updated.
-
-* `sprite[].htextra` stores the damage to be applied, `sprite[].htowner` stores the source of the damage.
-* `sprite[].extra` stores the current health, `sprite[].owner` stores the previous source of damage.
-* Set RETURN to != 0 to cancel damage.
-* Currently, this event is not executed when the player takes damage.
-
-----
-
 #### __EVENT_POSTACTORDAMAGE__
 
 This event is called when an actor runs `A_IncurDamage()`, just after decreasing sprite[].extra, resetting htextra to -1 and updating htowner.
@@ -453,28 +443,6 @@ New struct members added by the fork.
     * IMPORTANT: Uses the index defined inside the DEF, not the ordering of the items!
     * The index will be set to -1 if the index was not defined within the DEF.
 
-### __Misc Changes__
-
-* `MAXTILES` increased from 30720 to 44800
-  * Previously was increased to 32512 with AMC 3.5 up to 4.0
-  * The editor now alters the mapversion if there's a sprite with a tile above this value.
-  * This is intended to prevent loading maps with the wrong editor version, which could delete sprites from the map.
-* `MAXGAMEVARS` increased from 2048 to 4096 (also doubles `MAXGAMEARRAYS`).
-  * Doubled from 1024 to 2048 in the editor.
-* Mapster32: The key combination `[' + Y]` enables a pink tile selection background, to improve visibility of tiles in the selector.
-* Looping ambient sounds are now able to overlap with instances of themselves.
-* Add cvar `cl_keybindmode` to change keyboard config behaviour.
-  * If 0, will allow multiple gamefuncs to be assigned to the same key in the keyboard config menu (original behavior).
-  * If 1, will clear all existing gamefuncs for that key when binding a key to a gamefunc. This prevents accidentally assigning multiple gamefuncs to the same key, e.g. when default values exist.
-* Added a lower bound for distance between menu items. This allows menus to scroll properly now.
-* Add `PROJECTILE_WORKSLIKE` flag `PROJECTILE_RADIUS_PICNUM_EX`:
-    * Flag value is 1073741824 (0x40000000).
-    * The flag changes the htpicnum of the projectile to the actual picnum, instead of using RADIUSEXPlOSION. However, it also preserves hardcoded behaviors specific to RADIUSEXPLOSION, including destroying spritewalls and spritefloors that have a hitag.
-    * RPG projectiles can only burn trees, tires and boxes if this flag is set. Player will receive the same pushback as with RADIUSEXPLOSION when hit.
-* Hardcoded anti-cheat measure removed from skill 4.
-* Change crosshair size slider to range from 10 to 100.
-* Make save settings menu and reset progress options available.
-* Various bugfixes and changes that affected AMC specifically.
 
 ## Credits and Licenses
 
