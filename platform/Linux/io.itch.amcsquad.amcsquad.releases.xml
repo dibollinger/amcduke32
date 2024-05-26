@@ -1,0 +1,56 @@
+<releases>
+    <release version="4.5.0" date="2024-05-26"><url>https://www.moddb.com/games/the-amc-tc/downloads/amc-squad-45</url>
+        <description>
+            <p>This interim release is a massive update and overhaul of the existing 4 episodes, with tons of new content
+                and polish. Changes include:</p>
+            <ul>
+                <li>Projectile Bullets; Enemies no longer fire Hitscan bullets, but projectiles - not only does this make where
+                    gunfire is coming from significantly easier to determine, it also makes fights far more
+                    visually interesting.</li>
+                <li>Overhauled Gameplay balance; there are far more ways to earn resources. You can now directly purchase
+                    ammunition and any speciality ammo from weapon terminals, as long as you have the supplies to do so. You
+                    can also find and air lift supply barrels found throughout the game! Many weapons have received tweaks
+                    to make them more useful and viable throughout all of AMC Squad.</li>
+                <li>Updated Research Terminal; the research terminal has been completely overhauled and is far easier to
+                    use, with filters to easily find what you're looking for. Tech level is also no longer a hard requirement;
+                    you can research a project at any point - but if you're under the minimum tech level, it'll cost more
+                    to research. The opposite is also true; projects become cheaper the more tech level you have.</li>
+                <li>Bestiary system; AMC now has an extensive Bestiary for you to fill - not only will it reveal interesting
+                    information about the enemies you battle, it's also directly tied into the research system now. With
+                    a simple click you can find out what enemies you need to hit with the MIA gun to research a project!
+                    Not only this, but with the precog system base upgrade you'll be able to see exactly what enemies you
+                    might encounter in a mission.</li>
+                <li>Dynamic airstrike and air supply system; originally a simple scripted system, you can now pull out
+                    the AMC PDU whilst outside and order an air strike or an air drop - at a supply cost. You'll only be
+                    able to do this if an Airfield is within distance of the mission's location, so make sure you keep
+                    on top of purchasing air fields and other upgrades wherever possible.</li>
+                <li>Loadout icons that will help you find out what a weapon is effective against; put together a loadout
+                    that caters to the mission you're going on with far more ease!</li>
+                <li>More music! Our musician HiveBoSs has created over a hundred tracks of music, replacing existing
+                    borrowed music. All of the EDF missions have unique music now! You can also find the OST separately
+                    from the game on HiveBoSs' YouTube channel.</li>
+                <li>Even more features; more Chibis to find, base customisation, new FMVs, new weapons, new enemies - even
+                    if you've already played AMC Squad, there will be something new for you to see in AMC Squad 4.5!</li>
+            </ul>
+        </description>
+    </release>
+    <release version="4.1.0" date="2023-01-09"><url>https://www.moddb.com/games/the-amc-tc/downloads/amc-squad-v4-episodes-123-and-4</url></release>
+    <release version="4.0.0" date="2022-10-02">
+        <description>
+            <p>This release contains the brand new episode 4, alongside the original 3. Alongside the new episode, this episode brings brand new original music for many of the original levels by HiveBoSs! As well as new palettes for greater level variety.</p>
+        </description>
+    </release>
+    <release version="3.9.4" date="2022-01-04">
+        <description><p>This release fixes some critical bugs in the original 10th Anniversary Edition.</p></description>
+        <url>https://www.moddb.com/games/the-amc-tc/downloads/the-amc-squad-10th-anniversary-edition-390</url>
+    </release>
+    <release version="3.9.2" date="2021-12-24">
+        <description>
+            <p>The 10th Anniversary Edition of The AMC Squad is a greatly improved version of the first 3 episodes, celebrating the 10 year anniversary of the original Episode 1 release.</p>
+            <p>This release features improved sound design, voice acting, some new music, additional cutscenes, new levels, improved tutorials, updated sprites and textures, a new unlockable character, new weapons, hidden collectibles, and a metric ton of bugfixes and polish.</p>
+    </description>
+    </release>
+    <release version="3.6.5-4" date="2020-10-03"><url>https://www.moddb.com/games/the-amc-tc/downloads/the-amc-tc-episodes-1-2-and-3</url></release>
+    <release version="2.0" date="2015-03-23"><url>https://www.moddb.com/games/the-amc-tc/downloads/amc-tc-episode-two-v10</url></release>
+    <release version="1.0" date="2011-12-24"><description><p>The original release of The AMC Squad, then known as "AMC TC".</p></description></release>
+</releases>

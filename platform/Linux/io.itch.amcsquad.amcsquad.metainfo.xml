@@ -74,7 +74,7 @@
     </screenshot>
     <screenshot>
       <image type="source">https://media.moddb.com/images/games/1/17/16430/amc0001.1.png</image>
-      <caption>The mission control map, showing missions and purchaseable facilities to increase your resource income</caption>
+      <caption>The mission control map, showing missions to play and resource facilities to buy</caption>
     </screenshot>
     <screenshot>
       <image type="source">https://media.moddb.com/images/games/1/17/16430/NEWSPR3.jpg</image>
@@ -85,27 +85,7 @@
     <category>Game</category>
     <category>Shooter</category>
   </categories>
-  <releases>
-      <release version="4.1.0" date="2023-01-09"><url>https://www.moddb.com/games/the-amc-tc/downloads/amc-squad-v4-episodes-123-and-4</url></release>
-      <release version="4.0.0" date="2022-10-02">
-          <description>
-              <p>This release contains the brand new episode 4, alongside the original 3. Alongside the new episode, this episode brings brand new original music for many of the original levels by HiveBoSs! As well as new palettes for greater level variety.</p>
-          </description>
-      </release>
-      <release version="3.9.4" date="2022-01-04">
-          <description><p>This release fixes some critical bugs in the original 10th Anniversary Edition.</p></description>
-          <url>https://www.moddb.com/games/the-amc-tc/downloads/the-amc-squad-10th-anniversary-edition-390</url>
-      </release>
-      <release version="3.9.2" date="2021-12-24">
-          <description>
-              <p>The 10th Anniversary Edition of The AMC Squad is a greatly improved version of the first 3 episodes, celebrating the 10 year anniversary of the original Episode 1 release.</p>
-              <p>This release features improved sound design, voice acting, some new music, additional cutscenes, new levels, improved tutorials, updated sprites and textures, a new unlockable character, new weapons, hidden collectibles, and a metric ton of bugfixes and polish.</p>
-      </description>
-      </release>
-      <release version="3.6.5-4" date="2020-10-03"><url>https://www.moddb.com/games/the-amc-tc/downloads/the-amc-tc-episodes-1-2-and-3</url></release>
-      <release version="2.0" date="2015-03-23"><url>https://www.moddb.com/games/the-amc-tc/downloads/amc-tc-episode-two-v10</url></release>
-      <release version="1.0" date="2011-12-24"><description><p>The original release of The AMC Squad, then known as "AMC TC".</p></description></release>
-  </releases>
+  <releases type="external" />
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">intense</content_attribute>
     <content_attribute id="violence-fantasy">intense</content_attribute>

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Mapster32 (AMC Squad)
+Comment=The map editor for the AMC Squad variant of Eduke32.
+Icon=io.itch.amcsquad.mapster32
+Exec=mapster32
+Categories=Game;ActionGame;Shooter
