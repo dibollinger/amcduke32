@@ -12344,9 +12344,8 @@ int32_t qloadkvx(int32_t voxindex, const char *filename)
     return 0;
 }
 
-void vox_undefine(uint16_t const tile)
+void vox_clearid(int32_t const voxindex)
 {
-    ssize_t voxindex = tiletovox[tile];
     if ((unsigned)voxindex >= MAXVOXELS)
         return;
 
@@ -12367,9 +12366,14 @@ void vox_undefine(uint16_t const tile)
     }
     voxscale[voxindex] = 65536;
     voxflags[voxindex] = 0;
-    tiletovox[tile] = -1;
 
     // TODO: nextvoxid
+}
+
+void vox_undefine(uint16_t const tile)
+{
+    vox_clearid(tiletovox[tile]);
+    tiletovox[tile] = -1;
 }
 
 //
