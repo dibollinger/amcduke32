@@ -1939,7 +1939,7 @@ static int32_t defsparser(scriptfile *script)
             };
 
             if (EDUKE32_PREDICT_FALSE(scriptfile_getstring(script,&fn)))
-                break; //voxel filename
+                break;
 
             if (scriptfile_getbraces(script,&voxelend)) break;
 
@@ -1948,14 +1948,14 @@ static int32_t defsparser(scriptfile *script)
 
             if (EDUKE32_PREDICT_FALSE(nextvoxid == MAXVOXELS))
             {
-                LOG_F(ERROR, "definevoxel: maximum number of voxels (%d) already defined.", MAXVOXELS);
+                LOG_F(ERROR, "voxel: maximum number of voxels (%d) already defined.", MAXVOXELS);
                 script->textptr = voxelend + 1;
                 break;
             }
 
             if (EDUKE32_PREDICT_FALSE(qloadkvx(nextvoxid, fn)))
             {
-                LOG_F(ERROR, "definevoxel: failed loading %s",fn);
+                LOG_F(ERROR, "voxel: failed loading %s",fn);
                 script->textptr = voxelend + 1;
                 break;
             }
@@ -1973,13 +1973,14 @@ static int32_t defsparser(scriptfile *script)
                         break;
 
                     tiletovox[tilex] = lastvoxid;
+
                     break;
 
-                case T_TILE0:
+                case T_TILE0: // 1st tile #
                     scriptfile_getsymbol(script,&tile0);
-                    break; //1st tile #
+                    break;
 
-                case T_TILE1:
+                case T_TILE1: // last tile number (inclusive)
                     scriptfile_getsymbol(script,&tile1);
 
                     if (check_tile_range("voxel", &tile0, &tile1, script, voxeltokptr))
@@ -1987,7 +1988,8 @@ static int32_t defsparser(scriptfile *script)
 
                     for (tilex=tile0; tilex<=tile1; tilex++)
                         tiletovox[tilex] = lastvoxid;
-                    break; //last tile number (inclusive)
+
+                    break;
 
                 case T_SCALE:
                 {
@@ -2009,6 +2011,7 @@ static int32_t defsparser(scriptfile *script)
                 // end downstream
                 }
             }
+
             lastvoxid = -1;
         }
         break;
