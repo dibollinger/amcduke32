@@ -1542,6 +1542,10 @@ static int32_t A_ShootHardcoded(int spriteNum, uint16_t projecTile, int shootAng
 
                 return spawnedSprite;
             }
+
+            // Duke 1.5 behavior: If the hitscan check succeeds, but placing of the tripbomb fails, refund the player's ammo.
+            pPlayer->ammo_amount[pPlayer->curr_weapon]++;
+
             return -1;
         }
 
