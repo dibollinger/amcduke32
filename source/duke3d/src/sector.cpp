@@ -2438,8 +2438,10 @@ void A_DamageObject_Duke3D(int spriteNum, int const dmgSrc)
             {
                 if (sprite[spriteNum].extra > 0)
                 {
+#ifndef AMC_BUILD
                     if ((sprite[spriteNum].cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FACING)
                         SA(spriteNum)          = (sprite[dmgSrc].ang + 1024) & 2047;
+#endif
                     sprite[spriteNum].xvel  = -(sprite[dmgSrc].extra << 2);
 
                     int16_t sectNum = SECT(spriteNum);
@@ -2537,8 +2539,10 @@ void A_DamageObject_Generic(int spriteNum, int const dmgSrc)
                 {
                     if (sprite[spriteNum].extra > 0)
                     {
+#ifndef AMC_BUILD
                         if ((sprite[spriteNum].cstat & CSTAT_SPRITE_ALIGNMENT) == CSTAT_SPRITE_ALIGNMENT_FACING)
                             SA(spriteNum) = (sprite[dmgSrc].ang + 1024) & 2047;
+#endif
                         sprite[spriteNum].xvel  = -(sprite[dmgSrc].extra << 2);
                         int16_t sectNum = SECT(spriteNum);
                         pushmove(&sprite[spriteNum].xyz, &sectNum, 128L, (4L << 8), (4L << 8), CLIPMASK0);
