@@ -287,7 +287,8 @@ void CONFIG_SetDefaults(void)
     ud.config.ShowWeapons     = 0;
     ud.config.SoundToggle     = 1;
     ud.config.VoiceToggle     = 5;  // bitfield, 1 = local, 2 = dummy, 4 = other players in DM
-    ud.config.useprecache     = 1;
+    ud.config.UsePrecache     = 1;
+    ud.config.UseSoundPrecache = 0;
     ud.configversion          = 0;
     ud.crosshair              = 1;
     ud.crosshairscale         = 25;

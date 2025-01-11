@@ -454,10 +454,11 @@ static void cacheExtraTextureMaps(uint16_t tileNum, int type)
 
 void G_CacheMapData(void)
 {
-    if (ud.recstat == 2 || !ud.config.useprecache)
+    if (ud.recstat == 2 || !ud.config.UsePrecache)
         return;
 
-    cacheAllSounds();
+    if (ud.config.UseSoundPrecache)
+        cacheAllSounds();
 
     g_precacheCount = 0;
     Bmemset(gotpic, 0, sizeof(gotpic));

@@ -7042,8 +7042,12 @@ int app_main(int argc, char const* const* argv)
         Xfree(m);
     g_defModules.clear();
 
-    LOG_F(INFO, "Precaching sound files...");
-    cacheAllSounds();
+    if (ud.config.UseSoundPrecache)
+    {
+        LOG_F(INFO, "Precaching sound files...");
+        cacheAllSounds();
+    }
+
 
     if (enginePostInit())
         G_FatalEngineInitError();

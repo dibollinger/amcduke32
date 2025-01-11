@@ -265,7 +265,8 @@ typedef struct {
 
         int32_t CheckForUpdates;
         int32_t LastUpdateCheck;
-        int32_t useprecache;
+        int32_t UsePrecache;
+        int32_t UseSoundPrecache;
     } config;
 
     ud_setup_t setup;
