@@ -549,7 +549,7 @@ void cacheAllSounds(void)
         {
             S_LoadSound(i);
             j += g_sounds[i]->len;
-            if (j >= 4 * 1024 * 1024)
+            if (j >= 1024 * 1024)
                 gameHandleEvents(), j = 0;
         }
     }
@@ -828,7 +828,7 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
 
     if ((unsigned)sndNum < (unsigned)g_highestSoundIdx && g_sounds[sndNum]->ptr == nullptr && g_sounds[sndNum]->filename)
     {
-        DLOG_F(INFO, "Precaching sound #%d (%s)", sndNum, g_sounds[sndNum]->filename);
+        DLOG_F(INFO, "Caching sound #%d (%s)", sndNum, g_sounds[sndNum]->filename);
         S_LoadSound(sndNum);
     }
 
@@ -957,7 +957,7 @@ int S_PlaySound(int num)
 
     if ((unsigned)sndnum < (unsigned)g_highestSoundIdx && g_sounds[sndnum]->ptr == nullptr && g_sounds[sndnum]->filename)
     {
-        DLOG_F(INFO, "Precaching sound #%d (%s)", sndnum, g_sounds[sndnum]->filename);
+        DLOG_F(INFO, "Caching sound #%d (%s)", sndnum, g_sounds[sndnum]->filename);
         S_LoadSound(sndnum);
     }
 
