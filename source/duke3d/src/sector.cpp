@@ -36,7 +36,7 @@ int S_FindMusicSFX(int sectNum, int *sndptr)
         const int32_t snd = sprite[spriteNum].lotag;
         EDUKE32_STATIC_ASSERT(MAXSOUNDS >= 1000);
 
-        if (PN(spriteNum) == MUSICANDSFX && snd && (unsigned)snd < 1000 && S_SoundIsValid(snd))  // XXX: in other places, 999
+        if (PN(spriteNum) == MUSICANDSFX && snd && (unsigned)snd < 1000 && S_SoundIsDefined(snd))  // XXX: in other places, 999
         {
             *sndptr = snd;
             return spriteNum;
@@ -1522,7 +1522,7 @@ int P_ActivateSwitch(int playerNum, int wallOrSprite, int switchType)
 
             if (!hitag && CheckDoorTile(nSwitchPicnum) == 0)
                 S_PlaySound3D(SWITCH_ON, (switchType == SWITCH_SPRITE) ? wallOrSprite : g_player[playerNum].ps->i, davector);
-            else if (hitag && S_SoundIsValid(hitag))
+            else if (hitag && S_SoundIsDefined(hitag))
             {
                 if (switchType == SWITCH_SPRITE && (g_sounds[hitag]->flags & SF_TALK) == 0)
                     S_PlaySound3D(hitag, wallOrSprite, davector);

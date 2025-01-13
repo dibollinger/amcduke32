@@ -76,9 +76,14 @@ extern int32_t g_numEnvSoundsPlaying, g_highestSoundIdx;
 
 extern int32_t MusicIsWaveform, MusicVoice;
 
+static FORCE_INLINE bool S_SoundIsDefined(int soundNum)
+{
+    return (unsigned)soundNum <= (unsigned)g_highestSoundIdx && g_sounds[soundNum] && g_sounds[soundNum] != &nullsound;
+}
+
 static FORCE_INLINE bool S_SoundIsValid(int soundNum)
 {
-    return (unsigned)soundNum <= (unsigned)g_highestSoundIdx && g_sounds[soundNum] && g_sounds[soundNum] != &nullsound && g_sounds[soundNum]->ptr;
+    return S_SoundIsDefined(soundNum) && g_sounds[soundNum]->ptr;
 }
 
 static FORCE_INLINE bool S_IsAmbientSFX(int const spriteNum) { return (sprite[spriteNum].picnum == MUSICANDSFX && sprite[spriteNum].lotag < 999); }

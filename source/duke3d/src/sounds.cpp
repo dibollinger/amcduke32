@@ -826,7 +826,7 @@ int S_PlaySound3D(int num, int spriteNum, const vec3_t& pos)
     if ((sndNum == -1 && num != -1) || !ud.config.SoundToggle || (unsigned)spriteNum >= MAXSPRITES) // check that the user returned -1, but only if -1 wasn't playing already (in which case, warn)
         return -1;
 
-    if ((unsigned)sndNum < (unsigned)g_highestSoundIdx && g_sounds[sndNum]->ptr == nullptr && g_sounds[sndNum]->filename)
+    if (S_SoundIsDefined(sndNum) && g_sounds[sndNum]->ptr == nullptr && g_sounds[sndNum]->filename)
     {
         DLOG_F(INFO, "Caching sound #%d (%s)", sndNum, g_sounds[sndNum]->filename);
         S_LoadSound(sndNum);
@@ -955,7 +955,7 @@ int S_PlaySound(int num)
     if ((sndnum == -1 && num != -1) || !ud.config.SoundToggle) // check that the user returned -1, but only if -1 wasn't playing already (in which case, warn)
         return -1;
 
-    if ((unsigned)sndnum < (unsigned)g_highestSoundIdx && g_sounds[sndnum]->ptr == nullptr && g_sounds[sndnum]->filename)
+    if (S_SoundIsDefined(sndnum) && g_sounds[sndnum]->ptr == nullptr && g_sounds[sndnum]->filename)
     {
         DLOG_F(INFO, "Caching sound #%d (%s)", sndnum, g_sounds[sndnum]->filename);
         S_LoadSound(sndnum);
@@ -1015,7 +1015,7 @@ int A_PlaySound(int soundNum, int spriteNum)
 
 void S_StopEnvSound(int soundNum, int spriteNum)
 {
-    if (/*EDUKE32_PREDICT_FALSE*/(!S_SoundIsValid(soundNum)))
+    if (/*EDUKE32_PREDICT_FALSE*/(!S_SoundIsDefined(soundNum)))
     {
         LOG_F(WARNING, "Invalid sound #%d", soundNum);
         return;
