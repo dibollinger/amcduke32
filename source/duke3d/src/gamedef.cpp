@@ -392,6 +392,7 @@ static tokenmap_t const vm_keywords[] =
     { "ifwasweapon",            CON_IFWASWEAPON },
     { "include",                CON_INCLUDE },
     { "includedefault",         CON_INCLUDEDEFAULT },
+    { "includeoptional",        CON_INCLUDEOPTIONAL },
     { "inittimer",              CON_INITTIMER },
     { "insertspriteq",          CON_INSERTSPRITEQ },
     { "inv",                    CON_INV },
@@ -2044,14 +2045,20 @@ void C_AddFileOffset(int const offset, const char* fileName)
     vmoffset = newofs;
 }
 
-static void C_Include(const char *confile)
+static void C_Include(const char *confile, int optional)
 {
     buildvfs_kfd fp = kopen4loadfrommod(confile, g_loadFromGroupOnly);
 
     if (EDUKE32_PREDICT_FALSE(fp == buildvfs_kfd_invalid))
     {
+        if (EDUKE32_PREDICT_FALSE(optional))
+        {
+            VLOG_F(LOG_CON, "Optional include %s absent. skipping.", confile);
+            return;
+        }
+
         g_errorCnt++;
-        LOG_F(ERROR, "%s:%d: could not find file %s",g_scriptFileName,g_lineNumber,confile);
+        LOG_F(ERROR, "%s:%d: could not find file %s", g_scriptFileName, g_lineNumber, confile);
         return;
     }
 
@@ -3057,6 +3064,7 @@ DO_DEFSTATE:
             continue;
 
         case CON_INCLUDE:
+        case CON_INCLUDEOPTIONAL:
             g_scriptPtr--;
 
             C_SkipComments();
@@ -3069,12 +3077,12 @@ DO_DEFSTATE:
             }
             tempbuf[j] = '\0';
 
-            C_Include(tempbuf);
+            C_Include(tempbuf, (tw == CON_INCLUDEOPTIONAL));
             continue;
 
         case CON_INCLUDEDEFAULT:
             C_SkipComments();
-            C_Include(G_DefaultConFile());
+            C_Include(G_DefaultConFile(), 0);
             continue;
 
         case CON_AI:
@@ -6786,7 +6794,7 @@ void C_Compile(const char *fileName)
 
     for (char * m : g_scriptModules)
     {
-        C_Include(m);
+        C_Include(m, 0);
         Xfree(m);
     }
     g_scriptModules.clear();
