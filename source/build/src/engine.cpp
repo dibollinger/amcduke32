@@ -11073,12 +11073,14 @@ static void check_sprite(int32_t i)
 // AMC-specific: These flags ensure that the map cannot be loaded with an incompatible build.
 static int32_t amc_strip_mapversion_flags(int32_t version)
 {
-    if (version & MAPVERSION_FLAG_AMC5_0)
-        LOG_F(INFO, "Map uses AMC Squad v4.5 format (%d > MAXTILES >= %d).", MAXTILES, AMC4_0_MAXTILES);
+    if (version & MAPVERSION_FLAG_AMC4_5)
+        LOG_F(INFO, "Map uses AMC Squad v5.0 format (%d > MAXTILES >= %d).", MAXTILES, AMC4_5_MAXTILES);
+    else if (version & MAPVERSION_FLAG_AMC4_5)
+        LOG_F(INFO, "Map uses AMC Squad v4.5 format (%d > MAXTILES >= %d).", AMC4_5_MAXTILES, AMC4_0_MAXTILES);
     else if (version & MAPVERSION_FLAG_AMC4_0)
         LOG_F(INFO, "Map uses AMC Squad v3.5 format (%d > MAXTILES >= %d).", AMC4_0_MAXTILES, EDUKE32_MAXTILES);
 
-    return version & ~(MAPVERSION_FLAG_AMC5_0 | MAPVERSION_FLAG_AMC4_0);
+    return version & ~(MAPVERSION_FLAG_AMC5_0 | MAPVERSION_FLAG_AMC4_5 | MAPVERSION_FLAG_AMC4_0);
 }
 
 #ifdef NEW_MAP_FORMAT
@@ -11709,8 +11711,9 @@ int32_t saveboard(const char *filename, const vec3_t *dapos, int16_t daang, int1
 
     // if highest tilenum is greater than MAXTILES of prior versions, flag stored mapversion
     maxpicnum = find_max_sprite_picnum();
-    if (maxpicnum >= AMC4_0_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC5_0;
-    else if (maxpicnum >= EDUKE32_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC4_0;
+    if (maxpicnum >= EDUKE32_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC4_0;
+    if (maxpicnum >= AMC4_0_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC4_5;
+    if (maxpicnum >= AMC4_5_MAXTILES) mapversion |= MAPVERSION_FLAG_AMC5_0;
 
     tl = B_LITTLE32(mapversion);    buildvfs_write(fil,&tl,4);
 
