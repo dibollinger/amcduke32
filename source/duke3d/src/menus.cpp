@@ -231,6 +231,9 @@ MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        
 MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             128<<16,            32768,              0,
                                         MAXTILES,                 10,                 0,                  0,                  2,                  2,                  0,
                                         0,                  0,                  16 };
+MenuFont_t MF_Minifont_Yellow =       { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             128<<16,            32768,              0,
+                                        MAXTILES,                 10,                 0,                  0,                  32,                  32,                  0,
+                                        0,                  0,                  16 };
 #else
 MenuFont_t MF_Redfont =               { { 5<<16, 15<<16 },  { 0, 0 }, 0,        65536,              20<<16,             110<<16,            65536,              TEXT_BIGALPHANUM | TEXT_UPPERCASE,
                                          MAXTILES,                 10,                 0,                  0,                  0,                  0,                  1,
@@ -239,6 +242,9 @@ MenuFont_t MF_Bluefont =              { { 5<<16, 7<<16 },   { 0, 0 }, 0,        
                                          MAXTILES,                 10,                 0,                  0,                  10,                 10,                 16,
                                          0,                  0,                  16 };
 MenuFont_t MF_Minifont =              { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             110<<16,            32768,              0,
+                                         MAXTILES,                 10,                 0,                  0,                  2,                  2,                  0,
+                                         0,                  0,                  16 };
+MenuFont_t MF_Minifont_Yellow =       { { 4<<16, 5<<16 },   { 1<<16, 1<<16 },0, 65536,              10<<16,             110<<16,            32768,              0,
                                          MAXTILES,                 10,                 0,                  0,                  2,                  2,                  0,
                                          0,                  0,                  16 };
 #endif
@@ -1680,7 +1686,7 @@ static MenuTextForm_t M_CHEATENTRY = { NULL, "Enter Cheat Code:", MAXCHEATLEN, 0
 static MenuTextForm_t M_CHEAT_WARP = { NULL, "Enter Warp #:", 4, 0 };
 static MenuTextForm_t M_CHEAT_SKILL = { NULL, "Enter Skill #:", 2, 0 };
 
-#define MAKE_MENUFILESELECT(a, dir, b, c, d) { a, { &MMF_FileSelectLeft, &MMF_FileSelectRight }, { &MF_Minifont, &MF_Minifont }, dir, b, c, d, { NULL, NULL }, { 0, 0 }, { 3<<16, 3<<16 }, FNLIST_INITIALIZER, 0 }
+#define MAKE_MENUFILESELECT(a, dir, b, c, d) { a, { &MMF_FileSelectLeft, &MMF_FileSelectRight }, { &MF_Minifont_Yellow, &MF_Minifont_Yellow }, dir, b, c, d, { NULL, NULL }, { 0, 0 }, { 3<<16, 3<<16 }, FNLIST_INITIALIZER, 0 }
 
 static char lastuserdir[BMAX_PATH];
 static MenuFileSelect_t M_USERMAP = MAKE_MENUFILESELECT( "Select A User Map", "/usermaps/", "*.map", boardfilename, lastuserdir);
@@ -2109,11 +2115,15 @@ void Menu_Init(void)
     if ((unsigned)MF_Redfont.tilenum >= MAXTILES) MF_Redfont.tilenum = BIGALPHANUM;
     if ((unsigned)MF_Bluefont.tilenum >= MAXTILES) MF_Bluefont.tilenum = STARTALPHANUM;
     if ((unsigned)MF_Minifont.tilenum >= MAXTILES) MF_Minifont.tilenum = MINIFONT;
+    if ((unsigned)MF_Minifont_Yellow.tilenum >= MAXTILES) MF_Minifont_Yellow.tilenum = MINIFONT;
     MF_Redfont.emptychar.y = tilesiz[MF_Redfont.tilenum].y<<16;
     MF_Bluefont.emptychar.y = tilesiz[MF_Bluefont.tilenum].y<<16;
     MF_Minifont.emptychar.y = tilesiz[MF_Minifont.tilenum].y<<16;
-    if (!minitext_lowercase)
+    MF_Minifont_Yellow.emptychar.y = tilesiz[MF_Minifont_Yellow.tilenum].y<<16;
+    if (!minitext_lowercase) {
         MF_Minifont.textflags |= TEXT_UPPERCASE;
+        MF_Minifont_Yellow.textflags |= TEXT_UPPERCASE;
+    }
 
     // prepare gamefuncs and keys
     MEOSN_Gamefuncs[0] = MenuGameFuncNone;
@@ -2433,6 +2443,7 @@ void Menu_Init(void)
 
         // hack; should swap out pointers
         MF_Minifont = MF_Bluefont;
+        MF_Minifont_Yellow = MF_Bluefont;
 
         MMF_Top_Main.pos.x = 40<<16;
         MMF_Top_Main.pos.y = 130<<16;
