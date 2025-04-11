@@ -9301,6 +9301,7 @@ enum
 
     T_DEFINESOUND,
     T_INCLUDEDEFAULT,
+    T_INCLUDEOPTIONAL,
 
     T_GLOBALGAMEFLAGS,
 
@@ -9891,13 +9892,19 @@ static int32_t loadtilegroups(const char *fn)
 /// vvv Parse CON files partially to get sound definitions
 static int32_t parseconsounds(scriptfile *script);
 
-static void parseconsounds_include(const char *fn, scriptfile *script, const char *cmdtokptr)
+static void parseconsounds_include(const char *fn, scriptfile *script, const char *cmdtokptr, bool optional)
 {
     scriptfile *included;
 
     included = scriptfile_fromfile(fn);
     if (!included)
     {
+        if (optional)
+        {
+            LOG_F(INFO, "Optional module %s absent, skipping.", fn);
+            return;
+        }
+
         if (!Bstrcasecmp(cmdtokptr,"null"))
             LOG_F(WARNING, "warning: failed including %s as module", fn);
         else
@@ -9929,6 +9936,8 @@ static int32_t parseconsounds(scriptfile *script)
         { "#include",        T_INCLUDE          },
         { "includedefault",  T_INCLUDEDEFAULT   },
         { "#includedefault", T_INCLUDEDEFAULT   },
+        { "includeoptional", T_INCLUDEOPTIONAL  },
+        { "#includeoptional",T_INCLUDEOPTIONAL  },
         { "define",          T_DEFINE           },
         { "#define",         T_DEFINE           },
         { "definesound",     T_DEFINESOUND      },
@@ -9942,16 +9951,17 @@ static int32_t parseconsounds(scriptfile *script)
         cmdtokptr = script->ltextptr;
         switch (tokn)
         {
+        case T_INCLUDEOPTIONAL:
         case T_INCLUDE:
         {
             char *fn;
             if (!scriptfile_getstring(script,&fn))
-                parseconsounds_include(fn, script, cmdtokptr);
+                parseconsounds_include(fn, script, cmdtokptr, (tokn == T_INCLUDEOPTIONAL));
             break;
         }
         case T_INCLUDEDEFAULT:
         {
-            parseconsounds_include(G_DefaultConFile(), script, cmdtokptr);
+            parseconsounds_include(G_DefaultConFile(), script, cmdtokptr, false);
             break;
         }
         case T_DEFINE:
@@ -10054,7 +10064,7 @@ static int32_t loadconsounds(const char *fn)
 
     for (char * m : g_scriptModules)
     {
-        parseconsounds_include(m, NULL, "null");
+        parseconsounds_include(m, NULL, "null", false);
         Xfree(m);
     }
     g_scriptModules.clear();
