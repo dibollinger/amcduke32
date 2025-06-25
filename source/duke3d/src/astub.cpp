@@ -177,6 +177,7 @@ static char sectorshades[MAXSECTORS][2];
 static char spriteshades[MAXSPRITES];
 static char wallpals[MAXWALLS];
 static char sectorpals[MAXSECTORS][2];
+static char selectpals[MAXSECTORS][2];
 static char spritepals[MAXSPRITES];
 static uint8_t wallflag[bitmap_size(MAXWALLS)];
 
@@ -10236,14 +10237,6 @@ void ExtPreCheckKeys(void) // just before drawrooms
     {
         if (shadepreview)
         {
-            for (i=0; i<highlightsectorcnt; i++)
-            {
-                ii = highlightsector[i];
-                sectorpals[ii][0] = sector[ii].floorpal;
-                sectorpals[ii][1] = sector[ii].ceilingpal;
-
-                sector[ii].floorpal = sector[ii].ceilingpal = 6;
-            }
 
 //            int32_t i = 0;
             for (i=0; i<MAXSPRITES; i++)
@@ -10397,6 +10390,14 @@ void ExtPreCheckKeys(void) // just before drawrooms
                     }
 #endif // POLYMER
                 }
+            }
+            for (i=0; i<highlightsectorcnt; i++)
+            {
+                ii = highlightsector[i];
+                selectpals[ii][0] = sector[ii].floorpal;
+                selectpals[ii][1] = sector[ii].ceilingpal;
+
+                sector[ii].floorpal = sector[ii].ceilingpal = 6;
             }
         }
 
@@ -10984,8 +10985,8 @@ void ExtCheckKeys(void)
         for (i=0; i<highlightsectorcnt; i++)
         {
             ii = highlightsector[i];
-            sector[ii].floorpal = sectorpals[ii][0];
-            sector[ii].ceilingpal = sectorpals[ii][1];
+            sector[ii].floorpal = selectpals[ii][0];
+            sector[ii].ceilingpal = selectpals[ii][1];
         }
 
         for (i=0; i<MAXSPRITES; i++)
