@@ -179,6 +179,7 @@ static char wallpals[MAXWALLS];
 static char sectorpals[MAXSECTORS][2];
 static char selectpals[MAXSECTORS][2];
 static char spritepals[MAXSPRITES];
+static uint8_t previewflag[bitmap_size(MAXSECTORS)];
 static uint8_t wallflag[bitmap_size(MAXWALLS)];
 
 #ifdef YAX_ENABLE
@@ -10254,43 +10255,47 @@ void ExtPreCheckKeys(void) // just before drawrooms
                     if (isec<0)
                         continue;
 
-                    start_wall = sector[isec].wallptr;
-                    end_wall = start_wall + sector[isec].wallnum;
-
-                    for (w = start_wall; w < end_wall; w++)
+                    if (!bitmap_test(previewflag, isec))
                     {
-                        if (!bitmap_test(wallflag, w))
+                        start_wall = sector[isec].wallptr;
+                        end_wall = start_wall + sector[isec].wallnum;
+    
+                        for (w = start_wall; w < end_wall; w++)
                         {
-                            wallshades[w] = wall[w].shade;
-                            wallpals[w] = wall[w].pal;
-
-                            wall[w].shade = sprite[i].shade;
-                            wall[w].pal = sprite[i].pal;
-
-                            bitmap_set(wallflag, w);
+                            if (!bitmap_test(wallflag, w))
+                            {
+                                wallshades[w] = wall[w].shade;
+                                wallpals[w] = wall[w].pal;
+    
+                                wall[w].shade = sprite[i].shade;
+                                wall[w].pal = sprite[i].pal;
+    
+                                bitmap_set(wallflag, w);
+                            }
+                            // removed: same thing with nextwalls
                         }
-                        // removed: same thing with nextwalls
-                    }
-                    sectorshades[isec][0] = sector[isec].floorshade;
-                    sectorshades[isec][1] = sector[isec].ceilingshade;
-                    sector[isec].floorshade = sprite[i].shade;
-                    sector[isec].ceilingshade = sprite[i].shade;
-
-                    sectorpals[isec][0] = sector[isec].floorpal;
-                    sectorpals[isec][1] = sector[isec].ceilingpal;
-                    sector[isec].floorpal = sprite[i].pal;
-                    sector[isec].ceilingpal = sprite[i].pal;
-
-                    for (w = headspritesect[isec]; w >= 0; w = nextspritesect[w])
-                    {
-                        if (w == i)
-                            continue;
-
-                        spriteshades[w] = sprite[w].shade;
-                        spritepals[w] = sprite[w].pal;
-
-                        sprite[w].shade = sprite[i].shade;
-                        sprite[w].pal = sprite[i].pal;
+                        sectorshades[isec][0] = sector[isec].floorshade;
+                        sectorshades[isec][1] = sector[isec].ceilingshade;
+                        sector[isec].floorshade = sprite[i].shade;
+                        sector[isec].ceilingshade = sprite[i].shade;
+    
+                        sectorpals[isec][0] = sector[isec].floorpal;
+                        sectorpals[isec][1] = sector[isec].ceilingpal;
+                        sector[isec].floorpal = sprite[i].pal;
+                        sector[isec].ceilingpal = sprite[i].pal;
+    
+                        for (w = headspritesect[isec]; w >= 0; w = nextspritesect[w])
+                        {
+                            if (w == i)
+                                continue;
+    
+                            spriteshades[w] = sprite[w].shade;
+                            spritepals[w] = sprite[w].pal;
+    
+                            sprite[w].shade = sprite[i].shade;
+                            sprite[w].pal = sprite[i].pal;
+                        }
+                        bitmap_set(previewflag, isec);
                     }
                 }
                 else if (sprite[i].picnum == SECTOREFFECTOR && (sprite[i].lotag == 49 || sprite[i].lotag == 50))
@@ -11000,33 +11005,36 @@ void ExtCheckKeys(void)
             isec = sprite[i].sectnum;
             if (isec<0)
                 continue;
-
-            start_wall = sector[isec].wallptr;
-            end_wall = start_wall + sector[isec].wallnum;
-
-            for (w = start_wall; w < end_wall; w++)
+            
+            if (bitmap_test(previewflag, isec))
             {
-                if (bitmap_test(wallflag, w))
+                start_wall = sector[isec].wallptr;
+                end_wall = start_wall + sector[isec].wallnum;
+    
+                for (w = start_wall; w < end_wall; w++)
                 {
-                    wall[w].shade = wallshades[w];
-                    wall[w].pal = wallpals[w];
-                    bitmap_clear(wallflag, w);
+                    if (bitmap_test(wallflag, w))
+                    {
+                        wall[w].shade = wallshades[w];
+                        wall[w].pal = wallpals[w];
+                        bitmap_clear(wallflag, w);
+                    }
+                    // removed: same thing with nextwalls
                 }
-                // removed: same thing with nextwalls
+                sector[isec].floorshade = sectorshades[isec][0];
+                sector[isec].ceilingshade = sectorshades[isec][1];
+                sector[isec].floorpal = sectorpals[isec][0];
+                sector[isec].ceilingpal = sectorpals[isec][1];
+    
+                for (w=headspritesect[isec]; w>=0; w=nextspritesect[w])
+                {
+                    if (w == i)
+                        continue;
+                    sprite[w].shade = spriteshades[w];
+                    sprite[w].pal = spritepals[w];
+                }
+            bitmap_clear(previewflag, isec);
             }
-            sector[isec].floorshade = sectorshades[isec][0];
-            sector[isec].ceilingshade = sectorshades[isec][1];
-            sector[isec].floorpal = sectorpals[isec][0];
-            sector[isec].ceilingpal = sectorpals[isec][1];
-
-            for (w=headspritesect[isec]; w>=0; w=nextspritesect[w])
-            {
-                if (w == i)
-                    continue;
-                sprite[w].shade = spriteshades[w];
-                sprite[w].pal = spritepals[w];
-            }
-
         }
     }
 
