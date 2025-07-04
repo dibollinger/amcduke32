@@ -4608,6 +4608,10 @@ void G_InitTimer(int32_t ticspersec)
         timerInit(ticspersec);
         timerSetCallback(gameTimerHandler);
         g_timerTicsPerSecond = ticspersec;
+
+        g_lastInputTicks = 0;
+        for (bssize_t TRAVERSE_CONNECT(playerNum))
+            g_player[playerNum].lastViewUpdate = 0;
     }
 }
 
