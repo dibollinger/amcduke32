@@ -11073,7 +11073,7 @@ static void check_sprite(int32_t i)
 // AMC-specific: These flags ensure that the map cannot be loaded with an incompatible build.
 static int32_t amc_strip_mapversion_flags(int32_t version)
 {
-    if (version & MAPVERSION_FLAG_AMC4_5)
+    if (version & MAPVERSION_FLAG_AMC5_0)
         LOG_F(INFO, "Map uses AMC Squad v5.0 format (%d > MAXTILES >= %d).", MAXTILES, AMC4_5_MAXTILES);
     else if (version & MAPVERSION_FLAG_AMC4_5)
         LOG_F(INFO, "Map uses AMC Squad v4.5 format (%d > MAXTILES >= %d).", AMC4_5_MAXTILES, AMC4_0_MAXTILES);
