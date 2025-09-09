@@ -477,21 +477,28 @@ int32_t app_main(int32_t argc, char const * const * argv)
     int i, j, k /*, l, fil*/, waitplayers, x1, y1, x2, y2;
     int other, /*packleng, */netparm;
 
+    char logDir[BMAX_PATH];
+    char logPath[BMAX_PATH];
+
+    Bstrncpy(logDir, g_logfile_dir, BMAX_PATH);
+    OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, logDir);
 #ifdef __APPLE__
     if (!g_useCwd)
     {
-        char cwd[BMAX_PATH];
         char *homedir = Bgethomedir();
         if (homedir)
-            Bsnprintf(cwd, sizeof(cwd), "%s/Library/Logs/" APPBASENAME ".log", homedir);
-        else
-            Bstrcpy(cwd, APPBASENAME ".log");
-        OSD_SetLogFile(cwd);
+        {
+            Bsnprintf(logDir, BMAX_PATH, "%s/Library/Logs/", homedir);
+            OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, logDir);
+        }
+        OSD_SetLogFile(logPath);
         Xfree(homedir);
     }
     else
 #endif
-    OSD_SetLogFile(APPBASENAME ".log");
+    OSD_SetLogFile(logPath);
+    OSD_CleanLogDir(APPBASENAME, logDir);
+
 
     LOG_F(INFO, "%s %s", AppProperName, s_buildRev);
     PrintBuildInfo();

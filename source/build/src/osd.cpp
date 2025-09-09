@@ -15,6 +15,7 @@
 #include "xxhash_config.h"
 
 #include "vfs.h"
+#include "common.h"
 
 static osdsymbol_t *osd_addsymbol(const char *name);
 static osdsymbol_t *osd_findsymbol(const char *pszName, osdsymbol_t *pSymbol);
@@ -43,6 +44,9 @@ static uint32_t osdscrtime = 0;
 
 #define OSD_EDIT_LINE_WIDTH (osd->draw.cols - 1 - 3)
 #define OSDMAXERRORS 4096
+
+#define OSDMAXLOGFILES 10
+char g_logfile_dir[BMAX_PATH] = "logs";
 
 static hashtable_t h_osd = { OSDMAXSYMBOLS >> 1, NULL };
 
@@ -859,6 +863,51 @@ void OSD_Init(void)
     OSD_RegisterFunction("listsymbols", "listsymbols: lists all registered functions, cvars and aliases", osdfunc_listsymbols);
     OSD_RegisterFunction("toggle", "toggle: toggles the value of a boolean cvar", osdfunc_toggle);
     OSD_RegisterFunction("unalias", "unalias: removes a command alias", osdfunc_unalias);
+}
+
+//
+// OSD_NewLogFilePath() -- Constructs a new log file path based on the current date & time.
+//   The constructed path has the format: "<logdir>/<prefix>_<yyyyMMdd>_<HHmmss>.log"
+//   Repeatedly invoking this function will return a different filename each time.
+//
+void OSD_NewLogFilePath(char* buf, size_t bufsize, const char* prefix, const char* logdir)
+{
+    Bsnprintf(buf, bufsize, "%s/%s_", logdir, prefix);
+    loguru::write_date_time(buf + strlen(buf), bufsize - strlen(buf) - 1);
+    Bstrncat(buf, ".log", bufsize - strlen(buf) - 1);
+}
+
+
+//
+// OSD_CleanLogDir() -- If the maximum number of logs is reached, this removes the oldest logs with the given prefix.
+//   Assumes that the file list has lexicographic order ascending, and that the filenames contain timestamps.
+//
+void OSD_CleanLogDir(const char* prefix, const char* logdir)
+{
+    // do not search in ZIP or GRP files, don't search cwd if profile dir enabled
+    int32_t opsm = pathsearchmode;
+    pathsearchmode = 1;
+
+    char fn_pattern[BMAX_PATH];
+    Bsnprintf(fn_pattern, BMAX_PATH, "%s_*.log", prefix);
+
+    fnlist_t fnlist = FNLIST_INITIALIZER;
+    fnlist_getnames(&fnlist, logdir, fn_pattern, -1, 0);
+    int32_t filecnt = fnlist.numfiles;
+    BUILDVFS_FIND_REC *rec = fnlist.findfiles;
+
+    char pathbuf[BMAX_PATH];
+    while (rec && (filecnt > OSDMAXLOGFILES))
+    {
+       Bsnprintf(pathbuf, BMAX_PATH, "%s/%s", logdir, rec->name);
+       DLOG_F(INFO, "Removing old log file at '%s'", pathbuf);
+       buildvfs_unlink(pathbuf);
+
+       rec = rec->next;
+       filecnt--;
+    }
+    fnlist_clearnames(&fnlist);
+    pathsearchmode = opsm;
 }
 
 

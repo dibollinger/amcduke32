@@ -728,17 +728,17 @@ namespace loguru
 		set_name_to_verbosity_callback(nullptr);
 	}
 
-	void write_date_time(char* buff, unsigned long long buff_size)
-	{
-		// EDUKE32 MODIFICATION
-		tm time_info;
-		auto ms_since_epoch = get_time_since_epoch(time_info);
-		// END EDUKE32 MODIFICATION
+// EDUKE32 MODIFICATION
+        void write_date_time(char* buff, unsigned long long buff_size)
+        {
+            tm time_info;
+            get_time_since_epoch(time_info);
 
-		snprintf(buff, buff_size, "%04d%02d%02d_%02d%02d%02d.%03lld",
-			1900 + time_info.tm_year, 1 + time_info.tm_mon, time_info.tm_mday,
-			time_info.tm_hour, time_info.tm_min, time_info.tm_sec, ms_since_epoch % 1000);
-	}
+            snprintf(buff, buff_size, "%04d%02d%02d_%02d%02d%02d",
+                1900 + time_info.tm_year, 1 + time_info.tm_mon, time_info.tm_mday,
+                time_info.tm_hour, time_info.tm_min, time_info.tm_sec);
+        }
+// END EDUKE32 MODIFICATION
 
 	const char* argv0_filename()
 	{

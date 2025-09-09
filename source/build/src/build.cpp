@@ -634,10 +634,10 @@ void editorMaybeLockMouse(int lock)
 
 int app_main(int argc, char const* const* argv)
 {
-    Bstrcpy(tempbuf, AppTechnicalName);
-    Bstrcat(tempbuf, ".log");
-
-    engineSetLogFile(tempbuf);
+    char logPath[BMAX_PATH];
+    OSD_NewLogFilePath(logPath, BMAX_PATH, AppTechnicalName, g_logfile_dir);
+    engineSetLogFile(logPath);
+    OSD_CleanLogDir(AppTechnicalName, g_logfile_dir);
 
 #ifdef STARTUP_SETUP_WINDOW
     char cmdsetup = 0;

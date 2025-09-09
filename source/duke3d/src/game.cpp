@@ -6808,22 +6808,27 @@ int app_main(int argc, char const* const* argv)
 
     G_ExtPreInit(argc, argv);
 
-    engineSetLogFile(APPBASENAME ".log", LOG_GAME_MAX);
+    char logPath[BMAX_PATH];
+    OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, g_logfile_dir);
+    engineSetLogFile(logPath, LOG_GAME_MAX);
     engineSetLogVerbosityCallback(dukeVerbosityCallback);
 
+    char logDir[BMAX_PATH];
+    Bstrncpy(logDir, g_logfile_dir, BMAX_PATH);
 #ifdef __APPLE__
     if (!g_useCwd)
     {
-        char cwd[BMAX_PATH];
         char *homedir = Bgethomedir();
         if (homedir)
-            Bsnprintf(cwd, sizeof(cwd), "%s/Library/Logs/" APPBASENAME ".log", homedir);
-        else
-            Bstrcpy(cwd, APPBASENAME ".log");
-        OSD_SetLogFile(cwd);
+	{
+            Bsnprintf(logDir, BMAX_PATH, "%s/Library/Logs/", homedir);
+            OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, logDir);
+	}
+        OSD_SetLogFile(logPath);
         Xfree(homedir);
     }
 #endif
+    OSD_CleanLogDir(APPBASENAME, logDir);
 
 #ifndef NETCODE_DISABLE
     if (enet_initialize() != 0)

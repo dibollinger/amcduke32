@@ -219,6 +219,7 @@ typedef struct
 
 extern osdmain_t *osd;
 extern const char* osdlogfn;
+extern char g_logfile_dir[BMAX_PATH];
 
 enum osdflags_t
 {
@@ -258,6 +259,12 @@ void OSD_Init(void);
 
 // cleans things up. these comments are retarded.
 void OSD_Cleanup(void);
+
+// Constructs a new logfile path based on the current date and time, and stores it inside the provided buffer.
+void OSD_NewLogFilePath(char* buf, size_t bufsize, const char* prefix, const char* logdir);
+
+// Remove oldest log files if the maximum number of log files is exceeded.
+void OSD_CleanLogDir(const char* prefix, const char* logdir);
 
 // sets the file to echo output to
 void OSD_SetLogFile(const char *fn);
