@@ -192,6 +192,7 @@ typedef struct
 
     uint32_t m_lineidx;
     int32_t  maxerrors;
+    int32_t  numfiles;
 } osdlog_t;
 
 typedef struct

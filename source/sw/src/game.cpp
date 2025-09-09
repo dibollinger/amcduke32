@@ -106,6 +106,8 @@ const char* AppTechnicalName = APPBASENAME;
 #define SETUPFILENAME APPBASENAME ".cfg"
 char setupfilename[BMAX_PATH] = SETUPFILENAME;
 
+char currentLogDir[BMAX_PATH];
+
 #if DEBUG
 #define BETA 0
 #endif
@@ -916,6 +918,9 @@ InitGame(int32_t argc, char const * const * argv)
     OSD_SetParameters(0, 0, 0, 4, 2, 4, "^14", "^14", "^14", 0);
 
     InitSetup();
+
+    // must be called only after settings are loaded
+    OSD_CleanLogDir(APPBASENAME, currentLogDir);
 
     InitAutoNet();
 
@@ -3435,19 +3440,17 @@ int32_t app_main(int32_t argc, char const * const * argv)
     }
 #endif
 
-    char logDir[BMAX_PATH];
     char logPath[BMAX_PATH];
-
-    Bstrncpy(logDir, g_logfile_dir, BMAX_PATH);
-    OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, logDir);
+    Bstrncpy(currentLogDir, g_logfile_dir, BMAX_PATH);
+    OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, currentLogDir);
 #ifdef __APPLE__
     if (!g_useCwd)
     {
         char *homedir = Bgethomedir();
         if (homedir)
         {
-            Bsnprintf(logDir, BMAX_PATH, "%s/Library/Logs/", homedir);
-            OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, logDir);
+            Bsnprintf(currentLogDir, BMAX_PATH, "%s/Library/Logs/", homedir);
+            OSD_NewLogFilePath(logPath, BMAX_PATH, APPBASENAME, currentLogDir);
         }
         OSD_SetLogFile(logPath);
         Xfree(homedir);
@@ -3455,7 +3458,6 @@ int32_t app_main(int32_t argc, char const * const * argv)
 	else
 #endif
     OSD_SetLogFile(logPath);
-    OSD_CleanLogDir(APPBASENAME, logDir);
 
     wm_setapptitle(APPNAME);
 

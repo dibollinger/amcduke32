@@ -637,7 +637,6 @@ int app_main(int argc, char const* const* argv)
     char logPath[BMAX_PATH];
     OSD_NewLogFilePath(logPath, BMAX_PATH, AppTechnicalName, g_logfile_dir);
     engineSetLogFile(logPath);
-    OSD_CleanLogDir(AppTechnicalName, g_logfile_dir);
 
 #ifdef STARTUP_SETUP_WINDOW
     char cmdsetup = 0;
@@ -732,6 +731,9 @@ int app_main(int argc, char const* const* argv)
     if ((i = ExtInit()) < 0) return -1;
 
     if (ExtPostStartupWindow() < 0) return -1;
+
+    // placed after ExtInit() to ensure settings are loaded
+    OSD_CleanLogDir(AppTechnicalName, g_logfile_dir);
 
     loadnames(g_namesFileName);
 

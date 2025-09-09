@@ -45,7 +45,7 @@ static uint32_t osdscrtime = 0;
 #define OSD_EDIT_LINE_WIDTH (osd->draw.cols - 1 - 3)
 #define OSDMAXERRORS 4096
 
-#define OSDMAXLOGFILES 10
+#define OSDMAXLOGFILES 100
 char g_logfile_dir[BMAX_PATH] = "logs";
 
 static hashtable_t h_osd = { OSDMAXSYMBOLS >> 1, NULL };
@@ -820,6 +820,7 @@ void OSD_Init(void)
     osd->text.useclipboard = 1;
     osd->draw.cols     = OSDDEFAULTCOLS;
     osd->log.maxerrors = OSDMAXERRORS;
+    osd->log.numfiles  = 10;
 
     osd->history.maxlines = OSDMINHISTORYDEPTH;
 
@@ -848,6 +849,7 @@ void OSD_Init(void)
 
         { "osdlogcutoff", "maximum number of error messages to log to the console", (void *) &osd->log.maxerrors, CVAR_INT, -1, OSDMAXERRORS },
         { "osdhistorydepth", "number of lines of command history to cycle through with the up and down cursor keys", (void *) &osd->history.maxlines, CVAR_INT|CVAR_FUNCPTR, OSDMINHISTORYDEPTH, OSDMAXHISTORYDEPTH },
+        { "osdnumlogfiles", "number of log files to keep before deleting the oldest file", (void *) &osd->log.numfiles, CVAR_INT, 1, OSDMAXLOGFILES },
     };
 
     for (auto & i : cvars_osd)
@@ -897,7 +899,7 @@ void OSD_CleanLogDir(const char* prefix, const char* logdir)
     BUILDVFS_FIND_REC *rec = fnlist.findfiles;
 
     char pathbuf[BMAX_PATH];
-    while (rec && (filecnt > OSDMAXLOGFILES))
+    while (rec && (filecnt > osd->log.numfiles))
     {
        Bsnprintf(pathbuf, BMAX_PATH, "%s/%s", logdir, rec->name);
        DLOG_F(INFO, "Removing old log file at '%s'", pathbuf);

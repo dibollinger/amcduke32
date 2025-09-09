@@ -497,8 +497,6 @@ int32_t app_main(int32_t argc, char const * const * argv)
     else
 #endif
     OSD_SetLogFile(logPath);
-    OSD_CleanLogDir(APPBASENAME, logDir);
-
 
     LOG_F(INFO, "%s %s", AppProperName, s_buildRev);
     PrintBuildInfo();
@@ -570,6 +568,8 @@ int32_t app_main(int32_t argc, char const * const * argv)
     }
 
     Ken_PostStartupWindow();
+
+    OSD_CleanLogDir(APPBASENAME, logDir);
 
     initinput();
     if (option[3] != 0) mouseInit();
