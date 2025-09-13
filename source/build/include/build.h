@@ -102,7 +102,7 @@ enum rendmode_t {
 #define MAXTILES 51200 // Up to TILES199.ART
 #define MAXUSERTILES (MAXTILES-256)  // reserve 256 tiles at the end
 
-#define MAXVOXELS 1024
+#define MAXVOXELS 2048
 #define MAXSTATUS 1024
 #define MAXPLAYERS 16
 // Maximum number of component tiles in a multi-psky:
