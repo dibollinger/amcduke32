@@ -2469,11 +2469,12 @@ void OSD_WriteCvars(buildvfs_FILE fp)
                 buildvfs_fputstrptr(fp, buf);
                 break;
             case CVAR_STRING:
-                if (pData.string && pData.string[0])
+                if (pData.string)
                 {
                     buildvfs_fputstrptr(fp, pData.name);
                     buildvfs_fputstr(fp, " \"");
-                    buildvfs_fputstrptr(fp, pData.string);
+		    if (pData.string[0])
+                        buildvfs_fputstrptr(fp, pData.string);
                     buildvfs_fputstr(fp, "\"\n");
                 }
                 break;
