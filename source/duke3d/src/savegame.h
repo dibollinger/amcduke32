@@ -124,6 +124,8 @@ struct menusave_t
     }
 };
 
+extern char savegame_dir[BMAX_PATH];
+
 extern savebrief_t g_lastautosave, g_lastusersave, g_freshload;
 extern int32_t g_lastAutoSaveArbitraryID;
 extern bool g_saveRequested;

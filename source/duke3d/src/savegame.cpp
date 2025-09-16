@@ -30,6 +30,50 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 static OutputFileCounter savecounter;
 
+char savegame_dir[BMAX_PATH] = "savegames";
+
+// Note: while this uses the moddir to create the directory, it returns the path to the save file without the moddir
+// Assumption: the moddir is added separately in subsequent steps to the savegame path
+static char* getSavegamePath(const char* filename)
+{
+    char dirPath[BMAX_PATH];
+    char filePath[BMAX_PATH];
+
+    if (savegame_dir[0] != 0)
+    {
+        int const len = G_ModDirSnprintfLite(dirPath, ARRAY_SIZE(dirPath), savegame_dir);
+        if (len >= ARRAY_SSIZE(dirPath)-1)
+        {
+            LOG_F(ERROR, "Savegame directory path is too long, using base directory.");
+            Bsnprintf(filePath, sizeof(filePath), "%s", filename);
+        }
+        else
+        {
+            struct Bstat st;
+            if (!Bstat(dirPath, &st) && ((st.st_mode & S_IFMT) == S_IFDIR))
+                Bsnprintf(filePath, sizeof(filePath), "%s/%s", savegame_dir, filename);
+            else if (buildvfs_mkdir(dirPath, S_IRWXU) == 0)
+            {
+#ifndef NDEBUG
+                OSD_Printf("Savegame directory \"%s\" created successfully!\n", dirPath);
+#endif
+                Bsnprintf(filePath, sizeof(filePath), "%s/%s", savegame_dir, filename);
+            }
+            else
+            {
+                OSD_Printf("Failed to create savegame directory \"%s\", using base directory.\n", dirPath);
+                Bsnprintf(filePath, sizeof(filePath), "%s", filename);
+            }
+        }
+    }
+    else
+        Bsnprintf(filePath, sizeof(filePath), "%s", filename);
+
+    char* ret = Xstrdup(filePath);
+
+    return ret;
+}
+
 // For storing pointers in files.
 //  back_p==0: ptr -> "small int"
 //  back_p==1: "small int" -> ptr
@@ -144,14 +188,22 @@ uint16_t g_nummenusaves;
 static menusave_t * g_internalsaves;
 static uint16_t g_numinternalsaves;
 
-static void ReadSaveGameHeaders_CACHE1D(BUILDVFS_FIND_REC *f)
+static void ReadSaveGameHeaders_CACHE1D(BUILDVFS_FIND_REC *f, bool isSavegameDir)
 {
     savehead_t h;
+    char savefn[BMAX_PATH];
+
+    // don't read the base dir twice
+    if (isSavegameDir && !savegame_dir[0])
+        return;
 
     for (; f != nullptr; f = f->next)
     {
-        char const * fn = f->name;
-        buildvfs_kfd fil = kopen4loadfrommod(fn, 0);
+        if (isSavegameDir)
+            Bsnprintf(savefn, BMAX_PATH, "%s/%s", savegame_dir, f->name);
+        else
+            Bstrncpy(savefn, f->name, BMAX_PATH);
+        buildvfs_kfd fil = kopen4loadfrommod(savefn, 0);
         if (fil == buildvfs_kfd_invalid)
             continue;
 
@@ -169,7 +221,7 @@ static void ReadSaveGameHeaders_CACHE1D(BUILDVFS_FIND_REC *f)
                 if (FURY)
                 {
                     char extfn[BMAX_PATH];
-                    snprintf(extfn, ARRAY_SIZE(extfn), "%s.ext", fn);
+                    snprintf(extfn, ARRAY_SIZE(extfn), "%s.ext", savefn);
                     buildvfs_kfd extfil = kopen4loadfrommod(extfn, 0);
                     if (extfil != buildvfs_kfd_invalid)
                     {
@@ -186,7 +238,7 @@ static void ReadSaveGameHeaders_CACHE1D(BUILDVFS_FIND_REC *f)
         msv.isAutoSave = h.isAutoSave();
         msv.isOldScriptVer = h.userbytever < ud.userbytever;
 
-        Bstrncpyz(msv.brief.path, fn, ARRAY_SIZE(msv.brief.path));
+        Bstrncpyz(msv.brief.path, savefn, ARRAY_SIZE(msv.brief.path));
         ++g_numinternalsaves;
 
         if (k >= 0 && h.savename[0] != '\0')
@@ -211,11 +263,14 @@ static int countcache1dfind(BUILDVFS_FIND_REC *f)
 static void ReadSaveGameHeaders_Internal(void)
 {
     static char const DefaultPath[] = "/", SavePattern[] = "*.esv";
-
     BUILDVFS_FIND_REC *findfiles_default = klistpath(DefaultPath, SavePattern, BUILDVFS_FIND_FILE);
 
+    char localSaveDir[BMAX_PATH];
+    Bsnprintf(localSaveDir, BMAX_PATH, "/%s", savegame_dir);
+    BUILDVFS_FIND_REC *findfiles_savegame_dir = klistpath(localSaveDir, SavePattern, BUILDVFS_FIND_FILE);
+
     // potentially overallocating but programmatically simple
-    int const numfiles = countcache1dfind(findfiles_default);
+    int const numfiles = countcache1dfind(findfiles_default) + countcache1dfind(findfiles_savegame_dir);
     size_t const internalsavesize = sizeof(menusave_t) * numfiles;
 
     g_internalsaves = (menusave_t *)Xrealloc(g_internalsaves, internalsavesize);
@@ -224,8 +279,13 @@ static void ReadSaveGameHeaders_Internal(void)
         g_internalsaves[x].clear();
 
     g_numinternalsaves = 0;
-    ReadSaveGameHeaders_CACHE1D(findfiles_default);
+
+    // look for savegames both in the savegame directory, and the base directory for backwards-compatibility
+    ReadSaveGameHeaders_CACHE1D(findfiles_default, false);
+    ReadSaveGameHeaders_CACHE1D(findfiles_savegame_dir, true);
+
     klistfree(findfiles_default);
+    klistfree(findfiles_savegame_dir);
 
     g_nummenusaves = 0;
     for (int x = g_numinternalsaves-1; x >= 0; --x)
@@ -856,7 +916,6 @@ int32_t G_SavePlayer(savebrief_t & sv, bool isAutoSave)
 
     errno = 0;
     buildvfs_FILE fil;
-
     if (sv.isValid())
     {
         if (G_ModDirSnprintf(fn, sizeof(fn), "%s", sv.path))
@@ -868,18 +927,20 @@ int32_t G_SavePlayer(savebrief_t & sv, bool isAutoSave)
     }
     else
     {
-        static char const SaveName[] = "save0000.esv";
-        int const len = G_ModDirSnprintfLite(fn, ARRAY_SIZE(fn), SaveName);
+        char* savegamePath = getSavegamePath("save0000.esv");
+        int const len = G_ModDirSnprintfLite(fn, ARRAY_SIZE(fn), savegamePath);
         if (len >= ARRAY_SSIZE(fn)-1)
         {
             LOG_F(ERROR, "Resulting save filename is too long.");
+            Xfree(savegamePath);
             goto saveproblem;
         }
         char * zeros = fn + (len-8);
         fil = savecounter.opennextfile(fn, zeros);
         savecounter.count++;
         // don't copy the mod dir into sv.path
-        Bstrcpy(sv.path, fn + (len-(ARRAY_SIZE(SaveName)-1)));
+        Bstrcpy(sv.path, fn + (len-(sizeof(savegamePath)-1)));
+        Xfree(savegamePath);
     }
 
     if (!fil)

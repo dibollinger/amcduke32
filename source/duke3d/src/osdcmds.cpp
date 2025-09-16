@@ -1725,6 +1725,7 @@ int32_t registerosdcommands(void)
         { "r_ambientlight", "sets the global map light level",(void *)&r_ambientlight, CVAR_FLOAT|CVAR_FUNCPTR, 0, 10 },
 
         { "r_pr_defaultlights", "default polymer lights:\n 0: off\n 1: on",(void *)&r_pr_defaultlights, CVAR_BOOL, 0, 1 },
+        { "savegame_dir", "Path where savegames are stored (relative to the game content directory)",  (void*)savegame_dir, CVAR_STRING, 0, sizeof(savegame_dir) - 1 },
 
         { "skill","changes the game skill setting", (void *)&ud.m_player_skill, CVAR_INT|CVAR_FUNCPTR|CVAR_NOSAVE/*|CVAR_NOMULTI*/, 0, 5 },
 
