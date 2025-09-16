@@ -448,15 +448,9 @@ int32_t engineLoadClipMaps(void)
                                 tempictoidx[ii] = numclipmaps;
                         }
                         else if (wall[w].lotag>0)
-                        {
-                            if (wall[w].lotag<MAXTILES)
-                                tempictoidx[wall[w].lotag] = numclipmaps;
-                        }
+                            tempictoidx[wall[w].lotag] = numclipmaps;
                         else
-                        {
-                            if (wall[w].hitag<MAXTILES)
-                                tempictoidx[wall[w].hitag] = numclipmaps;
-                        }
+                            tempictoidx[wall[w].hitag] = numclipmaps;
                     }
 
                     CM_WALL_X(w) = wall[w].x;
