@@ -81,7 +81,7 @@ struct savebrief_t
     }
     savebrief_t(char const *n)
     {
-        strncpy(name, n, MAXSAVEGAMENAME);
+        Bstrncpy(name, n, MAXSAVEGAMENAME);
         path[0] = '\0';
     }
 
