@@ -7,13 +7,13 @@
 	<key>CFBundleDisplayName</key>
 	<string>EDuke32</string>
 	<key>CFBundleExecutable</key>
-	<string>eduke32</string>
+	<string>amcsquad</string>
 	<key>CFBundleGetInfoString</key>
 	<string>2.0, Copyright EDuke32 Team</string>
 	<key>CFBundleIconFile</key>
 	<string>eduke32.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<string>com.eduke32.eduke32</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
